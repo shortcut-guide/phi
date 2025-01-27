@@ -101,3 +101,9 @@
 #### 実現方法
 - データベース設計：各ユーザーに関連付けたデータを効率的に管理。
 - プッシュ通知：FirebaseやSNS連携を活用。
+
+#threads
+##API
+
+https://developers.facebook.com/docs/threads
+
