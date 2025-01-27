@@ -112,6 +112,7 @@
 - 住所などを自動入力
 - puppeteerを利用
 - SSOの利用
+- React + Authentication OpenIDConnect 認証
 
 #### コマース
 - マルチチャネルコマース (Multi-channel Commerce)
