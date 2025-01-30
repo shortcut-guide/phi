@@ -139,3 +139,29 @@
 ##API
 
 https://developers.facebook.com/docs/threads
+
+
+# component
+## iframe
+https://qiita.com/hukuryo/items/9c793f89dd9e8efd638c
+
+### terminal
+npm install react-iframe
+
+### package.json
+'''text
+"dependencies": {
+    "react-iframe": "^1.8.5",
+},
+'''
+
+### code
+'''text
+import Iframe from "react-iframe";
+
+<Iframe 
+ url={"https://www3.nhk.or.jp/news/html/20231007/k10014218571000.html"} 
+ width="100%"
+ height="1000px"
+/>
+'''
