@@ -1,0 +1,20 @@
+---
+import { useMaintenance } from '../../context/maintenanceContext.ts';
+const { isMaintenance } = useMaintenance();
+---
+
+{isMaintenance() && (
+  <div class="maintenance-banner">
+    ⚠️ このページは現在メンテナンス中です ⚠️
+  </div>
+)}
+
+<style>
+  .maintenance-banner {
+    background-color: red;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    font-weight: bold;
+  }
+</style>
