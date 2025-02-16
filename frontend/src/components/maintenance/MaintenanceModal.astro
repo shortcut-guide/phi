@@ -1,0 +1,24 @@
+---
+import { useMaintenance } from '../../context/maintenanceContext.ts';
+const { isMaintenance } = useMaintenance();
+---
+
+{isMaintenance() && (
+  <div class="modal">
+    <h2>メンテナンス中</h2>
+    <p>このページは現在メンテナンス中です。</p>
+  </div>
+)}
+
+<style>
+  .modal {
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 20px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 10px;
+  }
+</style>
