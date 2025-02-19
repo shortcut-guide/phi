@@ -1,12 +1,13 @@
 name: add_tag
 
 on:
-  push:
-    branches:
-      - '*'
+  pull_request:
+    types:
+      - closed  # PR がマージされた時に実行
 
 permissions:
   contents: write
+  pull-requests: read  # PR 情報を取得するため
 
 jobs:
   add_tag:
@@ -18,24 +19,47 @@ jobs:
         with:
           fetch-depth: 2
 
-      - name: Extract version and add tag
+      - name: Get PR Title and Extract Version
         uses: actions/github-script@v7
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const { execSync } = require('child_process');
 
-            // 最新のマージメッセージの取得
-            const mergeCommit = execSync('git log --merges -1 --pretty=format:"%s"').toString().trim();
-            console.log(`Merge commit message: ${mergeCommit}`);
+            try {
+              // PR の情報を取得
+              const prNumber = context.payload.pull_request.number;
+              const prTitle = context.payload.pull_request.title;
+              console.log(`PR Number: ${prNumber}`);
+              console.log(`PR Title: "${prTitle}"`);
 
-            // バージョンの抽出
-            const versionMatch = mergeCommit.match(/release\/ver([0-9.]+)/i);
-            if (!versionMatch) {
-              throw new Error('No version extracted.');
+              // PRタイトルからバージョン番号を抽出
+              const versionMatch = prTitle.match(/release\/ver([0-9.]+)/i);
+              
+              if (!versionMatch) {
+                console.log('No version tag found in PR title. Skipping tagging.');
+                return; // タグなしで処理を終了
+              }
+
+              const version = versionMatch[1];
+              console.log(`Extracted version from PR title: ver${version}`);
+
+              // すでに同じタグが存在するかチェック
+              const existingTags = execSync('git tag').toString().trim().split("\n");
+              if (existingTags.includes(`ver${version}`)) {
+                console.log(`Tag ver${version} already exists. Skipping.`);
+                return;
+              }
+
+              // 最新のコミットSHAを取得
+              const latestCommit = execSync('git rev-parse HEAD').toString().trim();
+
+              // タグを作成
+              execSync(`git tag ver${version} ${latestCommit}`);
+              execSync(`git push origin ver${version}`);
+
+              console.log(`Tag ver${version} created and pushed.`);
+            } catch (error) {
+              console.error('Error occurred:', error.message);
+              process.exit(1);
             }
-            const version = versionMatch[1];
-            console.log(`version: ${version}`);
-
-            // タグ付け
-            execSync(`git tag ver${version} ${process.env.GITHUB_SHA}`);
-            execSync(`git push origin ver${version}`);
