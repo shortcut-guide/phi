@@ -29,7 +29,7 @@ jobs:
             console.log(`Merge commit message: ${mergeCommit}`);
 
             // バージョンの抽出
-            const versionMatch = mergeCommit.match(/Merge pull request .* from .*release\/ver(.*)/);
+            const versionMatch = mergeCommit.match(/.*release\/ver(.*)/);
             if (!versionMatch) {
               throw new Error('No version extracted.');
             }
