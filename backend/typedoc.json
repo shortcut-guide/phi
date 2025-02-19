@@ -1,0 +1,6 @@
+{
+    "entryPoints": ["index.ts", "controllers", "services","routes","models","config"],
+    "out": "../docs/backend",
+    "name": "Backend Documentation",
+    "tsconfig": "./tsconfig.json"
+}
