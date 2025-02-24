@@ -1,6 +1,0 @@
-{
-    "entryPoints": ["src/lib/utils.ts", "src/lib/api.ts"],
-    "out": "../docs/frontend",
-    "name": "Frontend Documentation",
-    "tsconfig": "./tsconfig.json"
-}
