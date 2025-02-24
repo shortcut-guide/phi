@@ -412,6 +412,7 @@ lib/helper.js ❌ NG (lib/ は src-index.js に対応していない)
    'src' フォルダのファイルのみコミットできます。
 ~~~
 
+---
 
 # 構成
 
@@ -433,7 +434,6 @@ lib/helper.js ❌ NG (lib/ は src-index.js に対応していない)
 ## system directory
 /root
 │── /backend
-│── /frontend
 │── /scripts
 │── /docs
 │── .env
