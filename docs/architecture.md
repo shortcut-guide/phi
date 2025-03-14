@@ -587,3 +587,18 @@ config-package  # パッケージ管理
 
 # Maintenance (メンテナンス)
 maintenance-mode
+
+
+# 追加機能
+## microCMSにJSONデータを送信するAPI
+```mermaid
+sequenceDiagram
+    participant Client as クライアント（拡張機能等）
+    participant NextAPI as Next.js API
+    participant microCMS as microCMS
+
+    Client->>NextAPI: JSONデータを送信 (POST /api/upload-json)
+    NextAPI->>microCMS: microCMSにデータを保存
+    microCMS->>NextAPI: 保存結果を返す
+    NextAPI->>Client: 保存完了メッセージを返す
+```
