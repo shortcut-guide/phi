@@ -1,0 +1,22 @@
+{
+  "name": "tw-astasy",
+  "version": "1.0.0",
+  "description": "A simple template literal helper for Tailwind CSS",
+  "main": "dist/tw.js",
+  "types": "dist/tw.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "tailwind",
+    "css",
+    "template-literals"
+  ],
+  "author": "astasy",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^22.13.10",
+    "typescript": "^5.8.2"
+  }
+}
