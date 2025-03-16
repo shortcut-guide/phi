@@ -1,5 +1,6 @@
 ---
 import { useEffect, useState } from "preact/hooks";
+import { tw } from "tw-astasy";
 
 const params = new URLSearchParams(window.location.search);
 const id = params.get("id");
@@ -23,32 +24,31 @@ const handleSave = async () => {
     });
     alert("データ更新成功");
 };
+
+const editorContainer = tw`
+  bg-white shadow-md p-6 rounded-md
+`;
+const textAreaStyle = tw`
+  w-full h-60 p-2 border border-gray-300 rounded-md font-mono bg-gray-50
+`;
+const buttonStyle = tw`
+  bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700 transition
+`;
 ---
 
 <html>
     <head>
         <title>JSONデータ編集</title>
-        <style>
-            .editor-container {
-                display: grid;
-                grid-template-rows: auto 1fr auto;
-                gap: 10px;
-                padding: 10px;
-            }
-            textarea {
-                width: 100%;
-                height: 300px;
-                font-family: monospace;
-            }
-        </style>
     </head>
-    <body>
-        <h3>JSONデータ編集</h3>
+    <body class="bg-gray-100 p-6">
+        <h3 class="text-2xl font-bold mb-4 text-gray-800">JSONデータ編集</h3>
         {jsonData && (
-            <div class="editor-container">
-                <textarea value={JSON.stringify(jsonData, null, 2)} onInput={(e) => setJsonData(JSON.parse(e.target.value))}></textarea>
-                <button onClick={handleSave}>保存</button>
-                <a href="/list">戻る</a>
+            <div css={editorContainer}>
+                <textarea css={textAreaStyle} value={JSON.stringify(jsonData, null, 2)} onInput={(e) => setJsonData(JSON.parse(e.target.value))}></textarea>
+                <div class="flex space-x-4 mt-4">
+                    <button css={buttonStyle} onClick={handleSave}>保存</button>
+                    <a href="/list" class="text-blue-500 hover:underline">戻る</a>
+                </div>
             </div>
         )}
     </body>

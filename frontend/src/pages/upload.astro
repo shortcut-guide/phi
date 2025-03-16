@@ -1,5 +1,6 @@
 ---
 import { useState } from "preact/hooks";
+import { tw } from "tw-astasy";
 
 const [file, setFile] = useState(null);
 
@@ -22,25 +23,28 @@ const handleFileUpload = async () => {
 
     reader.readAsText(file);
 };
+
+const uploadContainer = tw`
+  bg-white shadow-md p-6 rounded-md
+`;
+const inputStyle = tw`
+  border border-gray-300 rounded p-2 w-full
+`;
+const buttonStyle = tw`
+  bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-700 transition
+`;
 ---
 
 <html>
     <head>
         <title>JSONアップロード</title>
-        <style>
-            .upload-container {
-                display: grid;
-                gap: 10px;
-                padding: 10px;
-            }
-        </style>
     </head>
-    <body>
-        <h3>JSONファイルをアップロード</h3>
-        <div class="upload-container">
-            <input type="file" accept=".json" onInput={(e) => setFile(e.target.files[0])} />
-            <button onClick={handleFileUpload}>アップロード</button>
-            <a href="/list">リストへ</a>
+    <body class="bg-gray-100 p-6">
+        <h3 class="text-2xl font-bold mb-4 text-gray-800">JSONファイルをアップロード</h3>
+        <div css={uploadContainer}>
+            <input css={inputStyle} type="file" accept=".json" onInput={(e) => setFile(e.target.files[0])} />
+            <button css={buttonStyle} onClick={handleFileUpload}>アップロード</button>
+            <a href="/list" class="text-blue-500 hover:underline">リストへ</a>
         </div>
     </body>
 </html>

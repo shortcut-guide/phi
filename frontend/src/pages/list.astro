@@ -1,5 +1,6 @@
 ---
 import { useEffect, useState } from "preact/hooks";
+import { tw } from "tw-astasy";
 
 const [data, setData] = useState([]);
 const [search, setSearch] = useState("");
@@ -15,57 +16,58 @@ useEffect(() => {
     };
     fetchData();
 }, [search, page, sort, order]);
+
+const gridContainer = tw`
+  grid grid-cols-3 gap-4 p-4 border-b border-gray-300 bg-white shadow-md rounded-md
+`;
+const gridHeader = tw`
+  font-bold bg-gray-100 p-4 text-gray-800
+`;
+const gridItem = tw`
+  p-4 border-b border-gray-200 text-gray-700
+`;
+const actions = tw`
+  flex space-x-4
+`;
+const inputStyle = tw`
+  border border-gray-300 rounded p-2 w-full max-w-md
+`;
+const buttonStyle = tw`
+  bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 transition
+`;
 ---
 
 <html>
     <head>
         <title>Puppeteerデータ管理</title>
-        <style>
-            .grid-container {
-                display: grid;
-                grid-template-columns: repeat(3, 1fr) auto;
-                gap: 10px;
-                padding: 10px;
-                border-bottom: 2px solid #ddd;
-            }
-            .grid-header {
-                font-weight: bold;
-                background: #f4f4f4;
-                padding: 10px;
-            }
-            .grid-item {
-                padding: 10px;
-                border-bottom: 1px solid #ddd;
-            }
-            .actions {
-                display: flex;
-                gap: 10px;
-            }
-        </style>
     </head>
-    <body>
-        <h3>Puppeteer JSONデータ管理</h3>
-        <input type="text" placeholder="検索" onInput={(e) => setSearch(e.target.value)} />
-        <button onClick={() => setOrder(order === "desc" ? "asc" : "desc")}>並び替え: {order}</button>
+    <body class="bg-gray-100 p-6">
+        <h3 class="text-2xl font-bold mb-4 text-gray-800">Puppeteer JSONデータ管理</h3>
+        <div class="flex space-x-4 mb-4">
+            <input css={inputStyle} type="text" placeholder="検索" onInput={(e) => setSearch(e.target.value)} />
+            <button css={buttonStyle} onClick={() => setOrder(order === "desc" ? "asc" : "desc")}>並び替え: {order}</button>
+        </div>
 
-        <div class="grid-container grid-header">
+        <div css={gridContainer} css={gridHeader}>
             <div>ECサイト</div>
             <div>アップロード日時</div>
             <div>操作</div>
         </div>
 
         {data.map(item => (
-            <div class="grid-container">
-                <div class="grid-item">{item.ec_site}</div>
-                <div class="grid-item">{new Date(item.uploaded_at).toLocaleString()}</div>
-                <div class="grid-item actions">
-                    <a href={`/edit?id=${item.id}`}>編集</a>
-                    <button onClick={() => handleDelete(item.id)}>削除</button>
+            <div css={gridContainer}>
+                <div css={gridItem}>{item.ec_site}</div>
+                <div css={gridItem}>{new Date(item.uploaded_at).toLocaleString()}</div>
+                <div css={gridItem} css={actions}>
+                    <a href={`/edit?id=${item.id}`} class="text-blue-500 hover:underline">編集</a>
+                    <button onClick={() => handleDelete(item.id)} class="text-red-500 hover:underline">削除</button>
                 </div>
             </div>
         ))}
 
-        <button onClick={() => setPage(page - 1)} disabled={page <= 1}>前へ</button>
-        <button onClick={() => setPage(page + 1)}>次へ</button>
+        <div class="flex justify-between mt-4">
+            <button css={buttonStyle} onClick={() => setPage(page - 1)} disabled={page <= 1}>前へ</button>
+            <button css={buttonStyle} onClick={() => setPage(page + 1)}>次へ</button>
+        </div>
     </body>
 </html>
