@@ -18,19 +18,19 @@ useEffect(() => {
 }, [search, page, sort, order]);
 
 const gridContainer = tw`
-  grid grid-cols-3 gap-4 p-4 border-b border-gray-300 bg-white shadow-md rounded-md
+  grid grid-cols-3 gap-4 p-4 border-b border-gray-300 bg-white shadow-md rounded-md dark:bg-gray-800
 `;
 const gridHeader = tw`
-  font-bold bg-gray-100 p-4 text-gray-800
+  font-bold bg-gray-100 p-4 text-gray-800 dark:bg-gray-700 dark:text-white
 `;
 const gridItem = tw`
-  p-4 border-b border-gray-200 text-gray-700
+  p-4 border-b border-gray-200 text-gray-700 dark:text-gray-300
 `;
 const actions = tw`
   flex space-x-4
 `;
 const inputStyle = tw`
-  border border-gray-300 rounded p-2 w-full max-w-md
+  formkit-input w-full max-w-md
 `;
 const buttonStyle = tw`
   bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 transition
@@ -41,24 +41,24 @@ const buttonStyle = tw`
     <head>
         <title>Puppeteerデータ管理</title>
     </head>
-    <body class="bg-gray-100 p-6">
-        <h3 class="text-2xl font-bold mb-4 text-gray-800">Puppeteer JSONデータ管理</h3>
+    <body class="bg-gray-100 dark:bg-gray-900 p-6">
+        <h3 class="text-2xl font-bold mb-4 text-gray-800 dark:text-white">Puppeteer JSONデータ管理</h3>
         <div class="flex space-x-4 mb-4">
-            <input css={inputStyle} type="text" placeholder="検索" onInput={(e) => setSearch(e.target.value)} />
-            <button css={buttonStyle} onClick={() => setOrder(order === "desc" ? "asc" : "desc")}>並び替え: {order}</button>
+            <input class={inputStyle} type="text" placeholder="検索" onInput={(e) => setSearch(e.target.value)} />
+            <button class={buttonStyle} onClick={() => setOrder(order === "desc" ? "asc" : "desc")}>並び替え: {order}</button>
         </div>
 
-        <div css={gridContainer} css={gridHeader}>
-            <div>ECサイト</div>
-            <div>アップロード日時</div>
-            <div>操作</div>
+        <div class={gridContainer}>
+            <div class={gridHeader}>ECサイト</div>
+            <div class={gridHeader}>アップロード日時</div>
+            <div class={gridHeader}>操作</div>
         </div>
 
         {data.map(item => (
-            <div css={gridContainer}>
-                <div css={gridItem}>{item.ec_site}</div>
-                <div css={gridItem}>{new Date(item.uploaded_at).toLocaleString()}</div>
-                <div css={gridItem} css={actions}>
+            <div class={gridContainer}>
+                <div class={gridItem}>{item.ec_site}</div>
+                <div class={gridItem}>{new Date(item.uploaded_at).toLocaleString()}</div>
+                <div class={gridItem} class={actions}>
                     <a href={`/edit?id=${item.id}`} class="text-blue-500 hover:underline">編集</a>
                     <button onClick={() => handleDelete(item.id)} class="text-red-500 hover:underline">削除</button>
                 </div>
@@ -66,8 +66,8 @@ const buttonStyle = tw`
         ))}
 
         <div class="flex justify-between mt-4">
-            <button css={buttonStyle} onClick={() => setPage(page - 1)} disabled={page <= 1}>前へ</button>
-            <button css={buttonStyle} onClick={() => setPage(page + 1)}>次へ</button>
+            <button class={buttonStyle} onClick={() => setPage(page - 1)} disabled={page <= 1}>前へ</button>
+            <button class={buttonStyle} onClick={() => setPage(page + 1)}>次へ</button>
         </div>
     </body>
 </html>
