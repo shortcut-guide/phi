@@ -9,6 +9,7 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^5.5.2"
+    "astro": "^5.5.2",
+    "tw-astasy": "^1.0.0"
   }
 }
