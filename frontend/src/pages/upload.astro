@@ -1,0 +1,46 @@
+---
+import { useState } from "preact/hooks";
+
+const [file, setFile] = useState(null);
+
+const handleFileUpload = async () => {
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = async (event) => {
+        const jsonData = JSON.parse(event.target.result);
+
+        const res = await fetch("/api/puppeteer/upload", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ json_data: jsonData })
+        });
+
+        const result = await res.json();
+        alert(result.message);
+    };
+
+    reader.readAsText(file);
+};
+---
+
+<html>
+    <head>
+        <title>JSONアップロード</title>
+        <style>
+            .upload-container {
+                display: grid;
+                gap: 10px;
+                padding: 10px;
+            }
+        </style>
+    </head>
+    <body>
+        <h3>JSONファイルをアップロード</h3>
+        <div class="upload-container">
+            <input type="file" accept=".json" onInput={(e) => setFile(e.target.files[0])} />
+            <button onClick={handleFileUpload}>アップロード</button>
+            <a href="/list">リストへ</a>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,71 @@
+---
+import { useEffect, useState } from "preact/hooks";
+
+const [data, setData] = useState([]);
+const [search, setSearch] = useState("");
+const [page, setPage] = useState(1);
+const [sort, setSort] = useState("uploaded_at");
+const [order, setOrder] = useState("desc");
+
+useEffect(() => {
+    const fetchData = async () => {
+        const res = await fetch(`/api/puppeteer/data?search=${search}&page=${page}&sort=${sort}&order=${order}`);
+        const result = await res.json();
+        setData(result.contents);
+    };
+    fetchData();
+}, [search, page, sort, order]);
+---
+
+<html>
+    <head>
+        <title>Puppeteerデータ管理</title>
+        <style>
+            .grid-container {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr) auto;
+                gap: 10px;
+                padding: 10px;
+                border-bottom: 2px solid #ddd;
+            }
+            .grid-header {
+                font-weight: bold;
+                background: #f4f4f4;
+                padding: 10px;
+            }
+            .grid-item {
+                padding: 10px;
+                border-bottom: 1px solid #ddd;
+            }
+            .actions {
+                display: flex;
+                gap: 10px;
+            }
+        </style>
+    </head>
+    <body>
+        <h3>Puppeteer JSONデータ管理</h3>
+        <input type="text" placeholder="検索" onInput={(e) => setSearch(e.target.value)} />
+        <button onClick={() => setOrder(order === "desc" ? "asc" : "desc")}>並び替え: {order}</button>
+
+        <div class="grid-container grid-header">
+            <div>ECサイト</div>
+            <div>アップロード日時</div>
+            <div>操作</div>
+        </div>
+
+        {data.map(item => (
+            <div class="grid-container">
+                <div class="grid-item">{item.ec_site}</div>
+                <div class="grid-item">{new Date(item.uploaded_at).toLocaleString()}</div>
+                <div class="grid-item actions">
+                    <a href={`/edit?id=${item.id}`}>編集</a>
+                    <button onClick={() => handleDelete(item.id)}>削除</button>
+                </div>
+            </div>
+        ))}
+
+        <button onClick={() => setPage(page - 1)} disabled={page <= 1}>前へ</button>
+        <button onClick={() => setPage(page + 1)}>次へ</button>
+    </body>
+</html>
