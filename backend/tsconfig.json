@@ -1,8 +1,15 @@
 {
-    "extends": "",
-    "include": ["**/*"],
-    "exclude": ["dist"],
+    "include": ["src"],
+    "exclude": ["node_modules","dist"],
     "compilerOptions": {
-      "allowImportingTsExtensions": true
+      "allowImportingTsExtensions": true,
+      "outDir":"./dist",
+      "rootDir":"./src",
+      "target": "ESNext",
+      "module": "NodeNext",
+      "moduleResolution": "NodeNext",
+      "strict": true,
+      "esModuleInterop": true,
+      "resolveJsonModule": true
     }
   }
