@@ -317,31 +317,6 @@ https://95j3wcf8zh.microcms.io/apis/products/
 
 https://developers.facebook.com/docs/threads
 
-# component
-## iframe
-https://qiita.com/hukuryo/items/9c793f89dd9e8efd638c
-
-### terminal
-npm install react-iframe
-
-### package.json
-
-~~~ config
-"dependencies": {
-    "react-iframe": "^1.8.5",
-},
-~~~
-
-### code
-~~~ react
-import Iframe from "react-iframe";
-
-<Iframe 
- url={"https://www3.nhk.or.jp/news/html/20231007/k10014218571000.html"} 
- width="100%"
- height="1000px"
-/>
-~~~
 
 ---
 
@@ -443,151 +418,78 @@ lib/helper.js ❌ NG (lib/ は src-index.js に対応していない)
 │── tsconfig.json
 │── docker-compose.yml
 
+---
+# backend
 ## backend構成
 /backend
-│── /config
-│   │── database.ts        # microCMS、Stripe、Gmail APIの接続設定
-│   │── auth.ts            # 認証関連の設定
-│   │── puppeteer.ts       # Puppeteerの設定と制御
-│
-│── /controllers
-│   │── authController.ts      # ECサイトの認証処理
-│   │── purchaseController.ts  # 購入処理（カート追加、決済）
-│   │── scrapingController.ts  # スクレイピング制御
-│   │── emailController.ts     # Gmail API経由でメール取得・解析
-│   │── pointController.ts     # ECポイント情報管理
-│   │── shippingController.ts  # 配送情報取得
-│   │── cancelController.ts    # キャンセル情報取得
-│   │── apiCheckController.ts  # APIの有無、種類の判定
-│
-│── /models
-│   │── User.ts           # ユーザー情報
-│   │── Product.ts        # 商品情報
-│   │── Purchase.ts       # 購入履歴
-│   │── ECAccount.ts      # ECサイトのアカウント情報
-│   │── Point.ts          # ポイント情報
-│   │── Shipping.ts       # 配送状況
-│   │── Favorite.ts       # お気に入り情報
-│   │── APIStatus.ts      # 各ECサイトのAPI情報
-│
-│── /routes
-│   │── authRoutes.ts          # 認証用APIルート
-│   │── purchaseRoutes.ts      # 購入関連API
-│   │── scrapingRoutes.ts      # スクレイピングAPI
-│   │── emailRoutes.ts         # メール管理API
-│   │── pointRoutes.ts         # ポイント管理API
-│   │── shippingRoutes.ts      # 配送管理API
-│   │── cancelRoutes.ts        # キャンセル管理API
-│   │── apiCheckRoutes.ts      # API判定API
-│   │── recommendationRoutes.ts # 検索レコメンドAPI
-│
-│── /services
-│   │── scrapingService.ts  # 各ECサイトのデータ取得サービス
-│   │── authService.ts      # 認証処理のロジック
-│   │── emailService.ts     # Gmail APIの制御
-│   │── pointService.ts     # ポイントの取得・管理
-│   │── shippingService.ts  # 配送状況の取得
-│   │── cancelService.ts    # キャンセル手続きの処理
-│   │── apiCheckService.ts  # APIの判定処理
-│
-│── /utils
-│   │── puppeteerUtils.ts   # Puppeteerのヘルパー関数
-│   │── emailParser.ts      # メール解析ユーティリティ
-│   │── pointCalculator.ts  # ポイント計算ユーティリティ
-│   │── apiChecker.ts       # APIの有無を判定するユーティリティ
-│
-│── index.ts         # Expressアプリのエントリーポイント
+│── /src
+  │── /api
+  │   │── apiClient.ts        # microCMS APIの接続設定
+  │   │── errorHandling.ts
+  │   │── puppeteerApi.ts
+  │── /config
+  │   │── database.ts        # microCMS、Stripe、Gmail APIの接続設定
+  │   │── auth.ts            # 認証関連の設定
+  │   │── puppeteer.ts       # Puppeteerの設定と制御
+  │
+  │── /controllers
+  │   │── authController.ts      # ECサイトの認証処理
+  │   │── purchaseController.ts  # 購入処理（カート追加、決済）
+  │   │── scrapingController.ts  # スクレイピング制御
+  │   │── emailController.ts     # Gmail API経由でメール取得・解析
+  │   │── pointController.ts     # ECポイント情報管理
+  │   │── shippingController.ts  # 配送情報取得
+  │   │── cancelController.ts    # キャンセル情報取得
+  │   │── apiCheckController.ts  # APIの有無、種類の判定
+  │
+  │── /models
+  │   │── User.ts           # ユーザー情報
+  │   │── Product.ts        # 商品情報
+  │   │── Purchase.ts       # 購入履歴
+  │   │── ECAccount.ts      # ECサイトのアカウント情報
+  │   │── Point.ts          # ポイント情報
+  │   │── Shipping.ts       # 配送状況
+  │   │── Favorite.ts       # お気に入り情報
+  │   │── APIStatus.ts      # 各ECサイトのAPI情報
+  │
+  │── /routes
+  │   │── authRoutes.ts          # 認証用APIルート
+  │   │── purchaseRoutes.ts      # 購入関連API
+  │   │── scrapingRoutes.ts      # スクレイピングAPI
+  │   │── emailRoutes.ts         # メール管理API
+  │   │── pointRoutes.ts         # ポイント管理API
+  │   │── shippingRoutes.ts      # 配送管理API
+  │   │── cancelRoutes.ts        # キャンセル管理API
+  │   │── apiCheckRoutes.ts      # API判定API
+  │   │── recommendationRoutes.ts # 検索レコメンドAPI
+  │
+  │── /services
+  │   │── scrapingService.ts  # 各ECサイトのデータ取得サービス
+  │   │── authService.ts      # 認証処理のロジック
+  │   │── emailService.ts     # Gmail APIの制御
+  │   │── pointService.ts     # ポイントの取得・管理
+  │   │── shippingService.ts  # 配送状況の取得
+  │   │── cancelService.ts    # キャンセル手続きの処理
+  │   │── apiCheckService.ts  # APIの判定処理
+  │
+  │── /utils
+  │   │── puppeteerUtils.ts   # Puppeteerのヘルパー関数
+  │   │── emailParser.ts      # メール解析ユーティリティ
+  │   │── pointCalculator.ts  # ポイント計算ユーティリティ
+  │   │── apiChecker.ts       # APIの有無を判定するユーティリティ
+  │
 │── server.ts        # サーバーの設定・起動スクリプト
 
-## ドキュメント
-/docs
-│── API_Specifications.md # API仕様書
-│── Database_Schema.md     # データベース設計
-│── Setup_Guide.md         # 環境構築手順
-│── Scraping_Guidelines.md # スクレイピングのガイドライン
-
----
-
-# Backend
-backend # prefix
-
-## Config (設定関連)
-backend-config # prefix
-backend-config-database  # データベース設定
-backend-config-auth  # 認証設定
-backend-config-puppeteer  # Puppeteer設定
-
-## Auth
-backend-auth # 認証関係
-backend-auth-auth0 # auth0関係
-
-## Controllers (各機能のコントローラー)
-backend-controllers # prefix
-backend-controllers-auth  # 認証機能
-backend-controllers-purchase  # 購入管理
-backend-controllers-scraping  # スクレイピング
-backend-controllers-email  # メール管理
-backend-controllers-point  # ポイント管理
-backend-controllers-shipping  # 配送管理
-backend-controllers-cancel  # キャンセル処理
-backend-controllers-api-check  # APIチェック
-
-## Models (データベースモデル)
-backend-models # prefix
-backend-models-users  # ユーザーモデル
-backend-models-products  # 商品モデル
-backend-models-purchase  # 購入履歴モデル
-backend-models-ec-accounts  # ECアカウントモデル
-backend-models-points  # ポイント管理モデル
-backend-models-shipping  # 配送モデル
-backend-models-favorites  # お気に入りモデル
-backend-models-api-status  # APIのステータス管理
-
-## Routes (APIルーティング)
-backend-routes # prefix
-backend-routes-auth  # 認証API
-backend-routes-purchase  # 購入API
-backend-routes-scraping  # スクレイピングAPI
-backend-routes-email  # メールAPI
-backend-routes-point  # ポイントAPI
-backend-routes-shipping  # 配送API
-backend-routes-cancel  # キャンセルAPI
-backend-routes-api-check  # APIチェックAPI
-backend-routes-recommendation  # 商品推薦API
-
-## Services (ビジネスロジック層)
-backend-services # prefix
-backend-services-scraping  # スクレイピング機能
-backend-services-auth  # 認証サービス
-backend-services-email  # メール管理サービス
-backend-services-point  # ポイント計算
-backend-services-shipping  # 配送サービス
-backend-services-cancel  # キャンセル管理
-backend-services-api-check  # APIチェックサービス
-
-## Utils (ユーティリティ)
-backend-utils # prefix
-backend-utils-puppeteer  # Puppeteerユーティリティ
-backend-utils-email-parser  # メール解析
-backend-utils-point-calculator  # ポイント計算
-backend-utils-api-checker  # APIチェック
-
-## その他
-backend-core # prefix
-backend-core-index  # メインエントリーポイント
-backend-core-server  # サーバー関連
-
-# Config (設定関連)
-config # prefix
-config-next  # Next.js設定
-config-tailwind  # Tailwind設定
-config-package  # パッケージ管理
+## backend起動方法
+### typescriptをビルド
+npx tsc
 
 ---
 
 # Maintenance (メンテナンス)
 maintenance-mode
 
+---
 
 # 追加機能
 ## microCMSにJSONデータを送信するAPI
