@@ -1,6 +1,9 @@
 module.exports = {
-  contnet:[
-    "./src/**/*.{html,js}", 
+  content: [
+    "./src/**/*.{astro,tsx,ts,js,jsx}",
+    "./components/**/*.{astro,tsx,ts,js,jsx}",
+    "./layouts/**/*.{astro,tsx,ts,js,jsx}",
+    "./pages/**/*.{astro,tsx,ts,js,jsx}",
     "./node_modules/tw-elements/js/**/*.js"
   ],
   theme: {
@@ -11,13 +14,12 @@ module.exports = {
     fontSize: false,
   },
   plugins: [
-    [animations],
     require('@tailwindcss/forms'),
     require('@tailwindcss/typography'),
     require('@tailwindcss/aspect-ratio'),
     require('@tailwindcss/container-queries'),
     require("tw-elements/plugin.cjs"),
-    require('@formkit/tailwindcss'),
+    require('@formkit/themes'),
     require("tailwindcss-radix")(),
     require('tailwindcss-fluid-type'),
     require('tailwindcss-themer'),

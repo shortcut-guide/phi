@@ -23,7 +23,7 @@ const PUPList = () => {
     const actions = clsx("flex space-x-4");
     const inputStyle = clsx("formkit-input w-full max-w-md");
     const buttonStyle = clsx("bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 transition");
-
+    
     return (
         <div className="bg-gray-100 dark:bg-gray-900 p-6">
             <h3 className="text-2xl font-bold mb-4 text-gray-800 dark:text-white">Puppeteer JSONデータ管理</h3>
