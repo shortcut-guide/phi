@@ -14,6 +14,7 @@
     "@midudev/tailwind-animations": "^0.2.0",
     "@tailwindcss/container-queries": "^0.1.1",
     "astro": "^5.5.2",
+    "clsx": "^2.1.1",
     "preact": "^10.26.4",
     "tailwindcss-fluid-type": "^2.0.7",
     "tailwindcss-mixins": "^0.0.11",
