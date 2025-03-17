@@ -25,24 +25,24 @@ const PUPList = () => {
     const buttonStyle = clsx("bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 transition");
 
     return (
-        <div class="bg-gray-100 dark:bg-gray-900 p-6">
-            <h3 class="text-2xl font-bold mb-4 text-gray-800 dark:text-white">Puppeteer JSONデータ管理</h3>
-            <div class="flex space-x-4 mb-4">
-                <input class={inputStyle} type="text" placeholder="検索" onInput={(e) => setSearch(e.target.value)} />
-                <button class={buttonStyle} onClick={() => setOrder(order === "desc" ? "asc" : "desc")}>並び替え: {order}</button>
+        <div className="bg-gray-100 dark:bg-gray-900 p-6">
+            <h3 className="text-2xl font-bold mb-4 text-gray-800 dark:text-white">Puppeteer JSONデータ管理</h3>
+            <div className="flex space-x-4 mb-4">
+                <input className={inputStyle} type="text" placeholder="検索" onInput={(e) => setSearch(e.target.value)} />
+                <button className={buttonStyle} onClick={() => setOrder(order === "desc" ? "asc" : "desc")}>並び替え: {order}</button>
             </div>
 
-            <div class={gridContainer}>
-                <div class={gridHeader}>ECサイト</div>
-                <div class={gridHeader}>アップロード日時</div>
-                <div class={gridHeader}>操作</div>
+            <div className={gridContainer}>
+                <div className={gridHeader}>ECサイト</div>
+                <div className={gridHeader}>アップロード日時</div>
+                <div className={gridHeader}>操作</div>
             </div>
 
             {data.map(item => (
-                <div class={gridContainer}>
-                    <div class={gridItem}>{item.ec_site}</div>
-                    <div class={gridItem}>{new Date(item.uploaded_at).toLocaleString()}</div>
-                    <div class={gridItem} class={actions}>
+                <div className={gridContainer}>
+                    <div className={gridItem}>{item.ec_site}</div>
+                    <div className={gridItem}>{new Date(item.uploaded_at).toLocaleString()}</div>
+                    <div className={gridItem} class={actions}>
                         <a href={`/edit?id=${item.id}`} class="text-blue-500 hover:underline">編集</a>
                         <button onClick={() => handleDelete(item.id)} class="text-red-500 hover:underline">削除</button>
                     </div>
@@ -50,8 +50,8 @@ const PUPList = () => {
             ))}
 
             <div class="flex justify-between mt-4">
-                <button class={buttonStyle} onClick={() => setPage(page - 1)} disabled={page <= 1}>前へ</button>
-                <button class={buttonStyle} onClick={() => setPage(page + 1)}>次へ</button>
+                <button className={buttonStyle} onClick={() => setPage(page - 1)} disabled={page <= 1}>前へ</button>
+                <button className={buttonStyle} onClick={() => setPage(page + 1)}>次へ</button>
             </div>
         </div>
     );
