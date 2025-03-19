@@ -513,12 +513,50 @@ wrangler d1 execute pup --command="SELECT name FROM sqlite_master WHERE type='ta
 wrangler d1 execute pup --command="SELECT name FROM sqlite_master WHERE type='table';"
 ```
 
+## リモートデータベース適用
+```
+wrangler d1 execute pup --file=setup.sql --remote
+```
+
 ## CURL POST 追加
 ```
 curl -X POST http://localhost:8787/api/contents \
      -H "Content-Type: application/json" \
      -d '{"title":"新規データ","body":"これはテストデータです","visible":true}'
 ```
+
+## 削除手順
+### データーベース全体の削除
+※ wrangler からデータベースを削除するコマンドは提供されていない
+	1.	Cloudflare Dashboard にログイン
+	2.	Workers & Pages → D1 を開く
+	3.	pup データベースを選択
+	4.	Delete Database (データベースを削除) をクリック
+	5.	確認プロンプトに pup を入力し削除
+
+### 特定のテーブルを削除する
+```
+wrangler d1 execute pup --command="DROP TABLE contents;"
+```
+
+### テーブル内のデータのみ削除（初期化）
+※ id の AUTOINCREMENT はリセットされない。
+```
+wrangler d1 execute pup --command="DELETE FROM contents;"
+```
+
+### TRUNCATE の代替（完全初期化）
+```
+wrangler d1 execute pup --command="DELETE FROM contents; VACUUM;"
+```
+
+### ローカルデータベースの削除
+```
+rm -rf .wrangler/state/v3/d1
+```
+
+
+
 
 ---
 
