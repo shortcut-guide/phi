@@ -499,6 +499,7 @@ wrangler d1 execute my-database --file=setup.sql
 wrangler d1 list 
 wrangler dev
 wrangler dev src/index.ts
+wrangler dev --config wrangler.toml
 
 ---
 
