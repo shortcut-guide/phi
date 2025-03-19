@@ -85,7 +85,39 @@ https://95j3wcf8zh.microcms.io/apis/products/
 
 ## **1. 概要**
 本システムは、複数のECサイトを横断的に管理し、ユーザーの購買活動を一元化するプラットフォームです。ユーザーが優先するECサイトを設定し、商品検索、注文自動化、メール管理、ポイント管理、売上管理などを統合的に提供します。
+また、代理購入を横断的にシステム機能として提供。
 
+
+```mermaid
+sequenceDiagram
+    participant User as ユーザー
+    participant Frontend as Frontend(astro/react)
+    participant Backend as Backend(nextjs)
+    participant Puppeteer as Puppeteer
+    participant EC_Site as ECサイト
+    participant DB as Cloudflare D1
+    participant Stripe as Stripe API
+
+    User ->> Frontend: 購入依頼(商品URL, 数量, 希望価格)
+    Frontend ->> Backend: 購入依頼APIリクエスト
+    Backend ->> DB: 依頼内容を保存
+    Backend ->> Puppeteer: 商品ページの取得依頼
+    Puppeteer ->> EC_Site: 商品ページをスクレイピング
+    EC_Site -->> Puppeteer: 商品情報を返却
+    Puppeteer -->> Backend: 在庫/価格/配送可否を返却
+    alt 購入可能な場合
+        Backend ->> EC_Site: 認証処理（OAuth/ログイン）
+        EC_Site -->> Backend: 認証成功
+        Backend ->> EC_Site: 商品をカートに追加・購入手続き
+        EC_Site -->> Backend: 注文成功（注文番号, 金額）
+        Backend ->> Stripe: 決済処理
+        Stripe -->> Backend: 決済成功
+        Backend ->> DB: 注文内容を保存
+        Backend ->> User: 購入成功通知
+    else 購入不可の場合
+        Backend ->> User: 購入不可通知
+    end
+``` 
 ---
 
 ## **2. 機能一覧**
