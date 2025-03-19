@@ -479,6 +479,13 @@ lib/helper.js ❌ NG (lib/ は src-index.js に対応していない)
   │   │── apiChecker.ts       # APIの有無を判定するユーティリティ
   │
 │── server.ts        # サーバーの設定・起動スクリプト
+│── docs # ドキュメント
+│   │── API_Specifications.md # API仕様書
+│   │── Database_Schema.md     # データベース設計
+│   │── Setup_Guide.md         # 環境構築手順
+│   │── Scraping_Guidelines.md # スクレイピングのガイドライン
+
+---
 
 ## backend起動方法
 ### typescriptをビルド
@@ -502,5 +509,18 @@ sequenceDiagram
     Client->>NextAPI: JSONデータを送信 (POST /api/upload-json)
     NextAPI->>microCMS: microCMSにデータを保存
     microCMS->>NextAPI: 保存結果を返す
+    NextAPI->>Client: 保存完了メッセージを返す
+```
+
+## D1にJSONデータを送信するAPI
+```mermaid
+sequenceDiagram
+    participant Client as クライアント（拡張機能等）
+    participant NextAPI as Next.js API
+    participant d1 as d1
+
+    Client->>NextAPI: JSONデータを送信 (POST /api/upload-json)
+    NextAPI->>d1: d1にデータを保存
+    d1->>NextAPI: 保存結果を返す
     NextAPI->>Client: 保存完了メッセージを返す
 ```
