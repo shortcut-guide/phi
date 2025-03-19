@@ -25,3 +25,6 @@ pnpm-debug.log*
 
 # vscode history
 .history/
+
+# sqlite cache
+.wrangler/
