@@ -494,12 +494,31 @@ npx tsc
 ---
 
 # D1起動方法
+```
 wrangler d1 create pup 
 wrangler d1 execute my-database --file=setup.sql
 wrangler d1 list 
 wrangler dev
 wrangler dev src/index.ts
 wrangler dev --config wrangler.toml
+```
+
+## テーブルが作成されたか確認
+```
+wrangler d1 execute pup --command="SELECT name FROM sqlite_master WHERE type='table';"
+```
+
+## テーブルデータ確認
+```
+wrangler d1 execute pup --command="SELECT name FROM sqlite_master WHERE type='table';"
+```
+
+## CURL POST 追加
+```
+curl -X POST http://localhost:8787/api/contents \
+     -H "Content-Type: application/json" \
+     -d '{"title":"新規データ","body":"これはテストデータです","visible":true}'
+```
 
 ---
 
