@@ -1,0 +1,1 @@
+{"apiFields":[{"idValue":"kZpqa3NrC9","fieldId":"title","name":"site name","kind":"text","required":true},{"fieldId":"url","name":"URL","kind":"textArea","required":true},{"fieldId":"element","name":"HTML Element","kind":"textArea","required":true}],"customFields":[]}
