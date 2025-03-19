@@ -1,46 +1,43 @@
-import express from "express";
-import { D1Helper } from "./utils/D1Helper";
+import { Hono } from "hono";
+import type { D1Database } from "@cloudflare/workers-types";
 
-const app = express();
-app.use(express.json());
+// Cloudflare Workers の環境変数 (D1 DB の型)
+type Bindings = {
+    DB: D1Database;
+};
 
-// Cloudflare D1 のデータベース接続 (ローカル環境用)
-const db = new D1Helper(globalThis.D1_DATABASE);
+const app = new Hono<{ Bindings: Bindings }>();
 
-// すべてのデータを取得
-app.get("/api/contents", async (req, res) => {
-    try {
-        const data = await db.getAllContents();
-        res.json(data);
-    } catch (error) {
-        res.status(500).json({ error: error instanceof Error ? error.message : "予期しないエラーが発生しました。" });
+// データ取得
+app.get("/api/contents", async (c) => {
+    const { results } = await c.env.DB.prepare("SELECT * FROM contents ORDER BY createdAt DESC").all();
+    return c.json(results);
+});
+
+// データ追加
+app.post("/api/contents", async (c) => {
+    const body = await c.req.json();
+    const { title, body: contentBody, visible } = body;
+
+    const { meta } = await c.env.DB.prepare(
+        "INSERT INTO contents (title, body, visible, createdAt) VALUES (?, ?, ?, datetime('now')) RETURNING id"
+    )
+    .bind(title, contentBody, visible)
+    .run();
+
+    return c.json({ id: meta.last_row_id });
+});
+
+// データ削除
+app.delete("/api/contents/:id", async (c) => {
+    const id = c.req.param("id");
+    const { meta } = await c.env.DB.prepare("DELETE FROM contents WHERE id = ?").bind(id).run();
+
+    if (meta.changes > 0) {
+        return c.json({ message: `削除成功: ${id}` });
+    } else {
+        return c.json({ error: "削除に失敗しました。" }, 500);
     }
 });
 
-// データを追加
-app.post("/api/contents", async (req, res) => {
-    try {
-        const { title, body, visible } = req.body;
-        const id = await db.insertContent(title, body, visible);
-        res.json({ id });
-    } catch (error) {
-        res.status(500).json({ error: error instanceof Error ? error.message : "データの追加に失敗しました。" });
-    }
-});
-
-// データを削除
-app.delete("/api/contents/:id", async (req, res) => {
-    try {
-        const { id } = req.params;
-        const success = await db.deleteContent(Number(id));
-        if (success) {
-            res.json({ message: `削除成功: ${id}` });
-        } else {
-            res.status(500).json({ error: "削除に失敗しました。" });
-        }
-    } catch (error) {
-        res.status(500).json({ error: error instanceof Error ? error.message : "データの削除に失敗しました。" });
-    }
-});
-
-app.listen(3000, () => console.log("Server running on http://localhost:3000"));
+export default app;
