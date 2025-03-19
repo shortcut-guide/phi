@@ -487,9 +487,18 @@ lib/helper.js ❌ NG (lib/ は src-index.js に対応していない)
 
 ---
 
-## backend起動方法
+# backend起動方法
 ### typescriptをビルド
 npx tsc
+
+---
+
+# D1起動方法
+wrangler d1 create pup 
+wrangler d1 execute my-database --file=setup.sql
+wrangler d1 list 
+wrangler dev
+wrangler dev src/index.ts
 
 ---
 
