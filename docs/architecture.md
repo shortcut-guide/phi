@@ -1,12 +1,11 @@
-# asulias-backend
+# phis-admin
 
 ---
 
-## microcms
+## cloudflare d1
 
 ***
 ### 商品管理テーブル
-https://95j3wcf8zh.microcms.io/apis/products/
 
 | 項目 | 説明 |
 |------|------|
@@ -75,11 +74,6 @@ https://95j3wcf8zh.microcms.io/apis/products/
 | `parent_category` | 上位カテゴリ（親カテゴリID）| `string` (relation) |
 | `level` | 階層レベル（大分類＝1, 中分類＝2, 小分類＝3） | `number` |
 | `alternative_names` | 別名（ECサイトごとのカテゴリ名）| `array` |
-
----
-
-## document
-(コンテンツAPI)[https://document.microcms.io/content-api/get-list-contents]
 
 ---
 
@@ -598,16 +592,16 @@ maintenance-mode
 ---
 
 # 追加機能
-## microCMSにJSONデータを送信するAPI
+## cloudflare D1にJSONデータを送信するAPI
 ```mermaid
 sequenceDiagram
     participant Client as クライアント（拡張機能等）
     participant NextAPI as Next.js API
-    participant microCMS as microCMS
+    participant cloudflare D1 as cloudflare D1
 
     Client->>NextAPI: JSONデータを送信 (POST /api/upload-json)
-    NextAPI->>microCMS: microCMSにデータを保存
-    microCMS->>NextAPI: 保存結果を返す
+    NextAPI->>cloudflare D1: cloudflare D1にデータを保存
+    cloudflare D1->>NextAPI: 保存結果を返す
     NextAPI->>Client: 保存完了メッセージを返す
 ```
 
