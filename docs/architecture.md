@@ -617,3 +617,13 @@ sequenceDiagram
     d1->>NextAPI: 保存結果を返す
     NextAPI->>Client: 保存完了メッセージを返す
 ```
+
+## 30日ごとの認可コード再取得
+```mermaid
+graph TD
+    A[起動時にトークン確認] --> B{期限切れか？}
+    B -- Yes --> C[Puppeteerで再取得]
+    B -- No --> D[既存トークン使用]
+    C --> E[DBに新トークン保存]
+    E --> D
+```
