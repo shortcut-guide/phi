@@ -628,6 +628,19 @@ graph TD
     E --> D
 ```
 
+### APIルート
+```mermaid
+graph TD
+    A[Client fetches token] --> B[/api/token GET/]
+    A2[Client saves token] --> C[/api/token POST/]
+    A3[Client updates token] --> D[/api/token PUT/]
+    A4[Client deletes token] --> E[/api/token DELETE/]
+    B --> F[Cloudflare D1 SELECT]
+    C --> G[Cloudflare D1 INSERT]
+    D --> H[Cloudflare D1 UPDATE]
+    E --> I[Cloudflare D1 DELETE]
+```
+
 ## メール確認コードを自動取得・入力する流れ
 ```mermaid
 graph TD
@@ -636,3 +649,15 @@ graph TD
   C --> D[Puppeteerでコード入力欄に自動入力]
   D --> E[ログイン・認可完了]
 ```
+
+### 設計
+```mermaid
+graph TD
+  A[Puppeteer or Frontend] -->|fetch| B[d1Client.ts]
+  B -->|呼び出し| C[Hono API Routes : d1Server.ts]
+  C -->|D1操作| D[Cloudflare D1]
+```
+
+- d1Server.ts: D1のAPIエンドポイント定義 (GET /token, POST /token etc)
+- d1Client.ts: fetch を抽象化して API 経由でデータ操作する（再利用性高）
+- scrape.ts（Puppeteer等）やフロントエンドから d1Client.ts を呼び出す
