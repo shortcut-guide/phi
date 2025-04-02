@@ -1,6 +1,7 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import type { D1Database } from "@cloudflare/workers-types";
+import { tokenRoute } from './routes/token';
 
 type Bindings = {
     DB: D1Database;
@@ -21,6 +22,9 @@ app.use(
 app.get("/", async (c) => {
     return c.text("Hono API is running!");
 });
+
+// ✅ トークン関連のルートを追加
+app.route("/api/token", tokenRoute);
 
 // ✅ すべてのサイトを取得
 app.get("/api/sites", async (c) => {
