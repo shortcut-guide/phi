@@ -661,3 +661,26 @@ graph TD
 - d1Server.ts: D1のAPIエンドポイント定義 (GET /token, POST /token etc)
 - d1Client.ts: fetch を抽象化して API 経由でデータ操作する（再利用性高）
 - scrape.ts（Puppeteer等）やフロントエンドから d1Client.ts を呼び出す
+
+### テスト
+```mermaid
+graph TD
+  A[テストの目的] --> B[Gmail API連携]
+  A --> C[認証コード抽出]
+  A --> D[Puppeteer操作]
+  A --> E[BASE認可コードの取得]
+  A --> F[トークン保存]
+
+  B --> B1[Gmailから正しくメール取得できる]
+  C --> C1[本文から6桁コードを抽出できる]
+  D --> D1[メール・パス・コードが自動入力される]
+  E --> E1[URLから?code=...を取得できる]
+  F --> F1[D1にトークンが保存・更新される]
+```
+
+#### BASE認可コード自動取得処理のテスト手順
+1. `.env` が正しいことを確認（GmailとBASE）
+2. `fetchVerificationCode()` 単体で認証コードを取得
+3. `scrapeBaseAuth()` を実行し、自動ログイン＋認証＋トークン取得を検証
+4. Cloudflare D1 のトークン保存が `/api/token` で確認できること
+5. エラー時は Puppeteer の操作対象セレクタ・Gmailのメール件名などを見直す
