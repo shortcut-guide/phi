@@ -1,5 +1,5 @@
 import { Hono } from 'hono';
-import { getToken, saveToken, updateToken, deleteTokens } from '../services/tokenService';
+import { getToken, saveToken, updateToken, deleteToken } from '../services/tokenService';
 
 export const tokenRoute = new Hono<{ Bindings: { DB: D1Database } }>();
 

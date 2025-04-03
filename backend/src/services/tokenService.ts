@@ -1,3 +1,5 @@
+/// <reference types="@cloudflare/workers-types" />
+
 // D1 クエリラッパー
 export const getToken = async (db: D1Database) => {
   return await db.prepare('SELECT * FROM oauth_tokens ORDER BY id DESC LIMIT 1').first();
