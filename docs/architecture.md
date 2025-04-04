@@ -591,8 +591,7 @@ maintenance-mode
 
 ---
 
-# 追加機能
-## cloudflare D1にJSONデータを送信するAPI
+# cloudflare D1にJSONデータを送信するAPI
 ```mermaid
 sequenceDiagram
     participant Client as クライアント（拡張機能等）
@@ -605,7 +604,7 @@ sequenceDiagram
     NextAPI->>Client: 保存完了メッセージを返す
 ```
 
-## D1にJSONデータを送信するAPI
+# D1にJSONデータを送信するAPI
 ```mermaid
 sequenceDiagram
     participant Client as クライアント（拡張機能等）
@@ -618,7 +617,9 @@ sequenceDiagram
     NextAPI->>Client: 保存完了メッセージを返す
 ```
 
-## 30日ごとの認可コード再取得
+---
+
+# 30日ごとの認可コード再取得
 ```mermaid
 graph TD
     A[起動時にトークン確認] --> B{期限切れか？}
@@ -641,7 +642,9 @@ graph TD
     E --> I[Cloudflare D1 DELETE]
 ```
 
-## メール確認コードを自動取得・入力する流れ
+---
+
+# メール確認コードを自動取得・入力する流れ
 ```mermaid
 graph TD
   A[Puppeteerでログイン試行] --> B[BASEから確認コードがメール送信される]
@@ -684,3 +687,20 @@ graph TD
 3. `scrapeBaseAuth()` を実行し、自動ログイン＋認証＋トークン取得を検証
 4. Cloudflare D1 のトークン保存が `/api/token` で確認できること
 5. エラー時は Puppeteer の操作対象セレクタ・Gmailのメール件名などを見直す
+
+---
+
+# スクレイピングした画像を BASEに登録し、画像をCDNとして再利用する。
+- puppeteer: ECショップから画像取得
+- backend: BASE API 経由で画像登録
+- BASE: 画像ホスティング (CDN的に利用)
+
+```mermaid
+flowchart TD
+  A[スクレイピング対象ECショップ] --> B[puppeteerで画像を取得]
+  B --> C[画像を一時保存]
+  C --> D[BASE APIで画像をアップロード]
+  D --> E[BASE側で画像URL発行]
+  E --> F[Cloudflare D1にURL保存]
+  F --> G[フロントでCDN画像URLとして再利用]
+```
