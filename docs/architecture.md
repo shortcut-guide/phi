@@ -1,12 +1,11 @@
-# asulias-backend
+# phis-admin
 
 ---
 
-## microcms
+## cloudflare d1
 
 ***
 ### 商品管理テーブル
-https://95j3wcf8zh.microcms.io/apis/products/
 
 | 項目 | 説明 |
 |------|------|
@@ -75,11 +74,6 @@ https://95j3wcf8zh.microcms.io/apis/products/
 | `parent_category` | 上位カテゴリ（親カテゴリID）| `string` (relation) |
 | `level` | 階層レベル（大分類＝1, 中分類＝2, 小分類＝3） | `number` |
 | `alternative_names` | 別名（ECサイトごとのカテゴリ名）| `array` |
-
----
-
-## document
-(コンテンツAPI)[https://document.microcms.io/content-api/get-list-contents]
 
 ---
 
@@ -597,21 +591,20 @@ maintenance-mode
 
 ---
 
-# 追加機能
-## microCMSにJSONデータを送信するAPI
+# cloudflare D1にJSONデータを送信するAPI
 ```mermaid
 sequenceDiagram
     participant Client as クライアント（拡張機能等）
     participant NextAPI as Next.js API
-    participant microCMS as microCMS
+    participant cloudflare D1 as cloudflare D1
 
     Client->>NextAPI: JSONデータを送信 (POST /api/upload-json)
-    NextAPI->>microCMS: microCMSにデータを保存
-    microCMS->>NextAPI: 保存結果を返す
+    NextAPI->>cloudflare D1: cloudflare D1にデータを保存
+    cloudflare D1->>NextAPI: 保存結果を返す
     NextAPI->>Client: 保存完了メッセージを返す
 ```
 
-## D1にJSONデータを送信するAPI
+# D1にJSONデータを送信するAPI
 ```mermaid
 sequenceDiagram
     participant Client as クライアント（拡張機能等）
@@ -622,4 +615,92 @@ sequenceDiagram
     NextAPI->>d1: d1にデータを保存
     d1->>NextAPI: 保存結果を返す
     NextAPI->>Client: 保存完了メッセージを返す
+```
+
+---
+
+# 30日ごとの認可コード再取得
+```mermaid
+graph TD
+    A[起動時にトークン確認] --> B{期限切れか？}
+    B -- Yes --> C[Puppeteerで再取得]
+    B -- No --> D[既存トークン使用]
+    C --> E[DBに新トークン保存]
+    E --> D
+```
+
+### APIルート
+```mermaid
+graph TD
+    A[Client fetches token] --> B[/api/token GET/]
+    A2[Client saves token] --> C[/api/token POST/]
+    A3[Client updates token] --> D[/api/token PUT/]
+    A4[Client deletes token] --> E[/api/token DELETE/]
+    B --> F[Cloudflare D1 SELECT]
+    C --> G[Cloudflare D1 INSERT]
+    D --> H[Cloudflare D1 UPDATE]
+    E --> I[Cloudflare D1 DELETE]
+```
+
+---
+
+# メール確認コードを自動取得・入力する流れ
+```mermaid
+graph TD
+  A[Puppeteerでログイン試行] --> B[BASEから確認コードがメール送信される]
+  B --> C[メール受信サーバで確認コードを取得-GmailApi]
+  C --> D[Puppeteerでコード入力欄に自動入力]
+  D --> E[ログイン・認可完了]
+```
+
+### 設計
+```mermaid
+graph TD
+  A[Puppeteer or Frontend] -->|fetch| B[d1Client.ts]
+  B -->|呼び出し| C[Hono API Routes : d1Server.ts]
+  C -->|D1操作| D[Cloudflare D1]
+```
+
+- d1Server.ts: D1のAPIエンドポイント定義 (GET /token, POST /token etc)
+- d1Client.ts: fetch を抽象化して API 経由でデータ操作する（再利用性高）
+- scrape.ts（Puppeteer等）やフロントエンドから d1Client.ts を呼び出す
+
+### テスト
+```mermaid
+graph TD
+  A[テストの目的] --> B[Gmail API連携]
+  A --> C[認証コード抽出]
+  A --> D[Puppeteer操作]
+  A --> E[BASE認可コードの取得]
+  A --> F[トークン保存]
+
+  B --> B1[Gmailから正しくメール取得できる]
+  C --> C1[本文から6桁コードを抽出できる]
+  D --> D1[メール・パス・コードが自動入力される]
+  E --> E1[URLから?code=...を取得できる]
+  F --> F1[D1にトークンが保存・更新される]
+```
+
+#### BASE認可コード自動取得処理のテスト手順
+1. `.env` が正しいことを確認（GmailとBASE）
+2. `fetchVerificationCode()` 単体で認証コードを取得
+3. `scrapeBaseAuth()` を実行し、自動ログイン＋認証＋トークン取得を検証
+4. Cloudflare D1 のトークン保存が `/api/token` で確認できること
+5. エラー時は Puppeteer の操作対象セレクタ・Gmailのメール件名などを見直す
+
+---
+
+# スクレイピングした画像を BASEに登録し、画像をCDNとして再利用する。
+- puppeteer: ECショップから画像取得
+- backend: BASE API 経由で画像登録
+- BASE: 画像ホスティング (CDN的に利用)
+
+```mermaid
+flowchart TD
+  A[スクレイピング対象ECショップ] --> B[puppeteerで画像を取得]
+  B --> C[画像を一時保存]
+  C --> D[BASE APIで画像をアップロード]
+  D --> E[BASE側で画像URL発行]
+  E --> F[Cloudflare D1にURL保存]
+  F --> G[フロントでCDN画像URLとして再利用]
 ```
