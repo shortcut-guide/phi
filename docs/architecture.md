@@ -704,3 +704,23 @@ flowchart TD
   E --> F[Cloudflare D1にURL保存]
   F --> G[フロントでCDN画像URLとして再利用]
 ```
+
+---
+
+# タオバオの国際送料計算機
+```
+project-root/
+├── backend/
+│   ├── controllers/
+│   │   └── shippingController.js
+│   ├── services/
+│   │   ├── taobaoApiService.js
+│   │   └── shippingCalculator.js
+│   └── routes/
+│       └── shippingRoutes.js
+└── frontend/
+    ├── components/
+    │   └── ShippingCalculator.jsx
+    └── pages/
+        └── index.jsx
+```
