@@ -1,35 +1,50 @@
 {
-    "name": "astasy-admin",
+    "name": "phis-admin",
     "version": "1.0.0",
     "private": true,
+    "type": "commonjs",
     "scripts": {
         "build": "tsc",
         "start": "node dist/server.js",
         "dev": "nodemon --ext ts --exec ts-node src/server.ts",
-        "docs": "typedoc --out docs src"
+        "test": "node --experimental-vm-modules node_modules/.bin/jest"
     },
     "dependencies": {
+        "@prisma/client": "^6.5.0",
+        "axios": "^1.8.1",
         "body-parser": "^1.20.0",
         "cors": "^2.8.5",
         "dotenv": "^16.4.7",
         "express": "^4.21.2",
-        "microcms-js-sdk": "^3.2.0",
-        "microcms-lib": "^1.0.4",
-        "microcms-typescript": "^1.0.14",
+        "glob": "^9.3.5",
+        "googleapis": "^148.0.0",
+        "hono": "^4.7.4",
+        "kysely": "^0.27.6",
+        "kysely-d1": "^0.3.0",
         "mongoose": "^6.8.1",
         "node-fetch": "^2.7.0",
+        "puppeteer": "^24.5.0",
+        "rimraf": "^4.4.1",
+        "tailwindcss": "^4.0.9",
         "ts-node": "^10.9.2",
-        "typedoc": "^0.27.8",
         "yarn": "^1.22.22"
     },
     "devDependencies": {
+        "@babel/core": "^7.26.10",
+        "@babel/preset-env": "^7.26.9",
+        "@cloudflare/workers-types": "^4.20250317.0",
         "@mermaid-js/mermaid-cli": "^11.4.2",
         "@types/express": "^5.0.0",
         "@types/node-fetch": "^2.6.12",
+        "babel-jest": "^29.7.0",
         "eslint": "^8.0.0",
         "husky": "^8.0.0",
+        "jest": "^29.7.0",
         "nodemon": "^3.1.9",
         "prettier": "^3.0.0",
-        "puppeteer": "^23.11.1"
+        "prisma": "^6.5.0",
+        "prisma-kysely": "^1.8.0",
+        "puppeteer": "^23.11.1",
+        "supertest": "^7.1.0"
     }
 }
