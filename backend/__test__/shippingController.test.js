@@ -1,11 +1,11 @@
-const request = require('supertest');
-const express = require('express');
-const router = require('../controllers/shippingController');
-const taobaoService = require('../services/taobaoApiService');
-const shippingCalculator = require('../services/shippingCalculator');
+import request from 'supertest';
+import express from 'express';
+import router from '../src/controllers/shippingController';
+import taobaoService from '../src/services/taobaoApiService';
+import shippingCalculator from '../src/utils/shippingCalculator';
 
-jest.mock('../services/taobaoApiService');
-jest.mock('../services/shippingCalculator');
+jest.mock('../src/services/taobaoApiService');
+jest.mock('../src/services/shippingCalculator');
 
 const app = express();
 app.use(express.json());

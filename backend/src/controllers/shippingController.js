@@ -1,7 +1,7 @@
 // タオバオの商品情報を取得し、国際送料を計算するエンドポイントを提供
 const express = require('express');
 const { getProductDetails } = require('../services/taobaoApiService');
-const { calculateShippingCost } = require('../services/shippingCalculator');
+const { calculateShippingCost } = require('../utils/shippingCalculator');
 
 const router = express.Router();
 
