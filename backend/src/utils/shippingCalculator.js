@@ -18,6 +18,26 @@ const calculateVolumeWeight = (length, width, height, divisor) => {
 };
 
 /**
+ * 超過サイズチェック - 個人輸入（ヤマト運輸・佐川急便)
+ * 60cm≤ 3辺の長さ < 140cmの商品は超過料金として10元/件
+ * 3辺の長さ≥140cmの商品は超過料金として20元/件
+**/
+const overSize = (length,width,height) =>{
+  // 合計サイズ（3辺の長さの合計）
+  const totalSize = length + width + height;
+  
+  // サイズが60cm以上140cm未満の場合、超過料金は10元
+  if (totalSize >= 60 && totalSize < 140) return 10;
+
+  // サイズが140cm以上の場合、超過料金は20元
+  if (totalSize >= 140) return 20;
+
+  // サイズが60cm未満の場合、超過料金は0元
+  return 0;
+};
+
+
+/**
  * ヤマト運輸の送料計算
  * 
  * @param {Object} params
