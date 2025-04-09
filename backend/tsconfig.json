@@ -5,6 +5,7 @@
       "allowImportingTsExtensions": true,
       "outDir":"./dist",
       "rootDir":"./src",
+      "typeRoots": ["./node_modules/@types", "./types"],
       "target": "ESNext",
       "module": "NodeNext",
       "moduleResolution": "NodeNext",

@@ -1,0 +1,26 @@
+{
+  "yamato": {
+    "baseWeight": 2,
+    "baseCost": 51,
+    "additionalWeight": 1,
+    "additionalCost": 10
+  },
+  "sagawa": {
+    "baseWeight": 3,
+    "baseCost": 101,
+    "additionalWeight": 1,
+    "additionalCost": 15
+  },
+  "ems": {
+    "baseWeight": 5,
+    "baseCost": 88,
+    "additionalWeight": 2,
+    "additionalCost": 20
+  },
+  "ocs": {
+    "baseWeight": 4,
+    "baseCost": 49,
+    "additionalWeight": 1,
+    "additionalCost": 12
+  }
+}
