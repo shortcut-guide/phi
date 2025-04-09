@@ -1,18 +1,36 @@
 {
   "taobaoshinkansen":{
-    "yamato": {
-      "baseWeight": 2,
-      "baseCost": 51,
-      "additionalWeight": 1,
-      "additionalCost": 10,
-      "divisor": 5000
-    },
-    "sagawa": {
-      "baseWeight": 3,
-      "baseCost": 51,
-      "additionalWeight": 1,
-      "additionalCost": 10,
-      "divisor": 5000
+    "individualImport":{
+      "yamato": {
+        "baseWeight": 2,
+        "baseCost": 51,
+        "additionalWeight": 1,
+        "additionalCost": 10,
+        "divisor": 5000,
+        "baseOverSize": 0,
+        "overSizeMin": 60,
+        "overSizeMax": 140,
+        "overSizeCost": 10,
+        "overSizeCount": 1,
+        "overSizeMinOther": 140,
+        "overSizeCostOther": 20,
+        "overSizeCountOther": 1
+      },
+      "sagawa": {
+        "baseWeight": 3,
+        "baseCost": 51,
+        "additionalWeight": 1,
+        "additionalCost": 10,
+        "divisor": 5000,
+        "baseOverSize": 0,
+        "overSizeMin": 60,
+        "overSizeMax": 140,
+        "overSizeCost": 10,
+        "overSizeCount": 1,
+        "overSizeMinOther": 140,
+        "overSizeCostOther": 20,
+        "overSizeCountOther": 1
+      }
     },
     "ems": {
       "baseWeight": 5,

@@ -18,16 +18,22 @@ const calculateVolumeWeight = (length, width, height, divisor) => {
 };
 
 /**
- * 超過サイズチェック - 個人輸入（ヤマト運輸・佐川急便)
- * 60cm≤ 3辺の長さ < 140cmの商品は超過料金として10元/件
- * 3辺の長さ≥140cmの商品は超過料金として20元/件
+ * 超過サイズチェック
+ * @param {number} length - 荷物の長さ（cm）
+ * @param {number} width - 荷物の幅（cm）
+ * @param {number} height - 荷物の高さ（cm）
+ * @param {Object} rates - 送料適用会社の料金情報
+ * @param {number} rates.overSizeMin - 超過サイズの最小値(cm)
+ * @param {number} rates.overSizeMax - 超過サイズの最大値(cm)
+ * @param {number} rates.overSizeCost - 超過料金（元）
+ * @returns {number} - 超過料金（元）
 **/
-const overSize = (length,width,height) =>{
+const overSize = (items,length,width,height,rates) =>{
   // 合計サイズ（3辺の長さの合計）
   const totalSize = length + width + height;
   
   // サイズが60cm以上140cm未満の場合、超過料金は10元
-  if (totalSize >= 60 && totalSize < 140) return 10;
+  if (totalSize >= rates.overSizeMin && totalSize < rates.overSizeMax) return rates.overSizeCost;
 
   // サイズが140cm以上の場合、超過料金は20元
   if (totalSize >= 140) return 20;
@@ -41,17 +47,26 @@ const overSize = (length,width,height) =>{
  * ヤマト運輸の送料計算
  * 
  * @param {Object} params
+ * @param {number} params.items 商品数
  * @param {number} params.length 長さ(cm)
  * @param {number} params.width 幅(cm)
  * @param {number} params.height 高さ(cm)
  * @param {number} params.actualWeight 実重量(kg)
  * @param {string} params.destination 配送先（例: '北海道', '沖縄・離島', '本州'）
+ * @param {number} params.overSize 超過料金（元）
+ * @param {number} params.volumeWeight 容積重量（kg）
+ * @param {number} params.applicableWeight 適用重量（kg）
+ * @param {number} params.additionalCost 追加料金（元）
+ * @param {number} params.additionalWeight 追加重量（kg）
+ * @param {number} params.baseWeight 基本重量（kg）
+ * @param {number} params.baseCost 基本料金（元）
+ * @param {number} params.divisor 容積重量の除数
  * @returns {number} 合計送料（元）
  * 5000 (5000立方cm)
  */
 // タオバオ新幹線のヤマト運輸の送料計算
 const calculateYamatoShippingCost = async (length, width, height, actualWeight, destination) => {
-  const rates = shippingRates.taobaoshinkansen.yamato;
+  const rates = shippingRates.taobaoshinkansen.individualImport.yamato;
   const volumeWeight = calculateVolumeWeight(length, width, height, rates.divisor);
   const applicableWeight = Math.max(actualWeight, volumeWeight);
 
