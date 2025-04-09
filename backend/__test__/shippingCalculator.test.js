@@ -1,68 +1,54 @@
-import calculateShippingCost from '../src/utils/shippingCalculator.js';
-
-describe('calculateShippingCost', () => {
-  it('東京・標準配送・1kg・1000cm³ → 正常計算', () => {
-    const result = calculateShippingCost({
-      weight: 1,
-      volume: 1000,
-      destination: '東京',
-      express: false,
+import {
+    calculateYamatoShippingCost,
+    calculateSagawaShippingCost,
+    calculateEMSShippingCost,
+    calculateOCSShippingCost
+  } from '../src/utils/shippingCalculator.js';
+  
+  describe('Shipping Cost Calculations', () => {
+    const testCases = [
+        {
+            description: 'ヤマト運輸: 実重量が容積重量より大きい場合',
+            func: calculateYamatoShippingCost,
+            weight: 2,
+            length: 30,
+            width: 20,
+            height: 15,
+            expected: 51
+          },
+          {
+            description: '佐川急便: 実重量が容積重量より小さい場合',
+            func: calculateSagawaShippingCost,
+            weight: 0.3,
+            length: 50,
+            width: 40,
+            height: 20,
+            expected: 176
+          },
+          {
+            description: 'EMS: 基本重量内の場合',
+            func: calculateEMSShippingCost,
+            weight: 0.5,
+            length: 10,
+            width: 10,
+            height: 10,
+            expected: 88
+          },
+          {
+            description: 'OCS: 追加重量が発生する場合',
+            func: calculateOCSShippingCost,
+            weight: 1.2,
+            length: 25,
+            width: 25,
+            height: 25,
+            expected: 49
+          }
+    ];
+  
+    testCases.forEach(({ description, func, weight, length, width, height, expected }) => {
+        test(description, async () => {
+            const cost = await func(weight, length, width, height);
+            expect(cost).toBe(expected);
+        });
     });
-    // base: 600, weight: 100, volume: 50 → 合計 = 750
-    expect(result).toBe(750);
   });
-
-  it('大阪・急ぎ配送・2.3kg・2500cm³ → 割増料金が加算される', () => {
-    const result = calculateShippingCost({
-      weight: 2.3,
-      volume: 2500,
-      destination: '大阪',
-      express: true,
-    });
-    // base: 700, weight: 300, volume: 150 → 小計 = 1150, 割増 1.2倍 = 1380
-    expect(result).toBe(1380);
-  });
-
-  it('北海道・重い荷物・急ぎ便 → 高額送料', () => {
-    const result = calculateShippingCost({
-      weight: 5,
-      volume: 5000,
-      destination: '北海道',
-      express: true,
-    });
-    // base: 1000, weight: 500, volume: 250 → 小計=1750, express=2100
-    expect(result).toBe(2100);
-  });
-
-  it('不明な地域 → "その他" 扱いになる', () => {
-    const result = calculateShippingCost({
-      weight: 1,
-      volume: 1000,
-      destination: '鹿児島',
-      express: false,
-    });
-    // その他: 800, +100 +50 = 950
-    expect(result).toBe(950);
-  });
-
-  it('小数点付き重量・ボリューム → 切り上げされる', () => {
-    const result = calculateShippingCost({
-      weight: 1.2,          // → 切り上げで2kg分
-      volume: 1501,         // → 切り上げで2×50円
-      destination: '東京',
-      express: false,
-    });
-    // base: 600, weight: 200, volume: 100 → 900
-    expect(result).toBe(900);
-  });
-
-  it('急ぎ便フラグが false の場合 → 割増なし', () => {
-    const result = calculateShippingCost({
-      weight: 1,
-      volume: 1000,
-      destination: '東京',
-      express: false,
-    });
-    expect(result).toBe(750); // 割増されていないことを確認
-  });
-});

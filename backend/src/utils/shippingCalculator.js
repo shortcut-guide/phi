@@ -1,38 +1,132 @@
+import fs from 'fs/promises';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import shippingRates from '../data/shippingRates.json';
+
 /**
- * 配送料金を計算するユーティリティ
- *
- * @param {Object} options
- * @param {number} options.weight - 重量（kg単位）
- * @param {number} options.volume - 容積（縦cm × 横cm × 高さcm）
- * @param {string} options.destination - 配送先（都道府県名など）
- * @param {boolean} options.express - 急ぎ便かどうか（trueなら割増）
- * @returns {number} - 計算された送料（円）
+ * 容積重量を計算する関数
+ * 
+ * @param {number} length - 荷物の長さ（cm）
+ * @param {number} width - 荷物の幅（cm）
+ * @param {number} height - 荷物の高さ（cm）
+ * @param {number} divisor - 容積重量の除数（5000や6000など）
+ * @returns {number} - 容積重量（kg）
  */
-const calculateShippingCost = ({ weight, volume, destination, express = false }) => {
-  // 地域による基本料金（例：北海道や沖縄は高め）
-  const regionBaseRate = {
-    東京: 600,
-    大阪: 700,
-    北海道: 1000,
-    沖縄: 1200,
-    その他: 800,
-  };
-
-  const baseRate = regionBaseRate[destination] || regionBaseRate['その他'];
-
-  // 重量加算（1kgごとに+100円）
-  const weightFee = Math.ceil(weight) * 100;
-
-  // 容積加算（1000cm³ごとに+50円）
-  const volumeFee = Math.ceil(volume / 1000) * 50;
-
-  // 急ぎ便割増（20%増し）
-  const expressFeeRate = express ? 1.2 : 1.0;
-
-  // 総合計
-  const total = Math.ceil((baseRate + weightFee + volumeFee) * expressFeeRate);
-
-  return total;
+const calculateVolumeWeight = (length, width, height, divisor = 5000) => {
+  return (length * width * height) / divisor;
 };
 
-export default calculateShippingCost;
+/**
+ * ヤマト運輸の送料計算
+ * 
+ * @param {number} weight - 実重量（kg）
+ * @param {number} length - 荷物の長さ（cm）
+ * @param {number} width - 荷物の幅（cm）
+ * @param {number} height - 荷物の高さ（cm）
+ * @returns {number} - 算出された送料（元）
+ */
+const calculateYamatoShippingCost = async (weight, length, width, height) => {
+  const rates = shippingRates.yamato;
+  console.log('Yamato Rates:', rates);
+
+  const volumeWeight = calculateVolumeWeight(length, width, height, 5000);
+  console.log('Volume Weight:', volumeWeight);
+
+  const applicableWeight = Math.max(weight, volumeWeight);
+  console.log('Applicable Weight:', applicableWeight);
+
+  if (applicableWeight <= rates.baseWeight) {
+    console.log('Base Cost:', rates.baseCost);
+    return rates.baseCost;
+  } else {
+    const additionalCost = Math.ceil((applicableWeight - rates.baseWeight) / rates.additionalWeight) * rates.additionalCost;
+    console.log('Additional Cost:', additionalCost);
+    return rates.baseCost + additionalCost;
+  }
+};
+
+/**
+ * 佐川急便の送料計算
+ * 
+ * @param {number} weight - 実重量（kg）
+ * @param {number} length - 荷物の長さ（cm）
+ * @param {number} width - 荷物の幅（cm）
+ * @param {number} height - 荷物の高さ（cm）
+ * @returns {number} - 算出された送料（元）
+ */
+const calculateSagawaShippingCost = async (weight, length, width, height) => {
+  const rates = shippingRates.sagawa;
+  const volumeWeight = calculateVolumeWeight(length, width, height, 5000);
+  const applicableWeight = Math.max(weight, volumeWeight);
+
+  if (applicableWeight <= rates.baseWeight) {
+    return rates.baseCost;
+  } else {
+    return rates.baseCost + Math.ceil((applicableWeight - rates.baseWeight) / rates.additionalWeight) * rates.additionalCost;
+  }
+};
+
+/**
+ * EMSの送料計算
+ * 
+ * @param {number} weight - 実重量（kg）
+ * @param {number} length - 荷物の長さ（cm）
+ * @param {number} width - 荷物の幅（cm）
+ * @param {number} height - 荷物の高さ（cm）
+ * @returns {number} - 算出された送料（元）
+ */
+const calculateEMSShippingCost = async (weight, length, width, height) => {
+  const rates = shippingRates.ems;
+  console.log('EMS Rates:', rates);
+
+  const volumeWeight = calculateVolumeWeight(length, width, height, 5000);
+  console.log('Volume Weight:', volumeWeight);
+
+  const applicableWeight = Math.max(weight, volumeWeight);
+  console.log('Applicable Weight:', applicableWeight);
+
+  if (applicableWeight <= rates.baseWeight) {
+    console.log('Base Cost:', rates.baseCost);
+    return rates.baseCost;
+  } else {
+    const additionalCost = Math.ceil((applicableWeight - rates.baseWeight) / rates.additionalWeight) * rates.additionalCost;
+    console.log('Additional Cost:', additionalCost);
+    return rates.baseCost + additionalCost;
+  }
+};
+
+/**
+ * OCSの送料計算
+ * 
+ * @param {number} weight - 実重量（kg）
+ * @param {number} length - 荷物の長さ（cm）
+ * @param {number} width - 荷物の幅（cm）
+ * @param {number} height - 荷物の高さ（cm）
+ * @returns {number} - 算出された送料（元）
+ */
+const calculateOCSShippingCost = async (weight, length, width, height) => {
+  const rates = shippingRates.ocs;
+  console.log('OCS Rates:', rates);
+
+  const volumeWeight = calculateVolumeWeight(length, width, height, 5000);
+  console.log('Volume Weight:', volumeWeight);
+
+  const applicableWeight = Math.max(weight, volumeWeight);
+  console.log('Applicable Weight:', applicableWeight);
+
+  if (applicableWeight <= rates.baseWeight) {
+    console.log('Base Cost:', rates.baseCost);
+    return rates.baseCost;
+  } else {
+    const additionalCost = Math.ceil((applicableWeight - rates.baseWeight) / rates.additionalWeight) * rates.additionalCost;
+    console.log('Additional Cost:', additionalCost);
+    return rates.baseCost + additionalCost;
+  }
+};
+
+export {
+  calculateYamatoShippingCost,
+  calculateSagawaShippingCost,
+  calculateEMSShippingCost,
+  calculateOCSShippingCost
+};
