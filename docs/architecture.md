@@ -724,3 +724,16 @@ project-root/
     └── pages/
         └── index.jsx
 ```
+
+---
+
+# JAN CODE API
+```mermaid
+flowchart TD
+  A[カメラ起動] --> B[バーコード検出API]
+  B --> C{JANコード検出}
+  C -- 検出成功 --> D[APIで商品情報取得]
+  D --> E[商品情報表示]
+  C -- 検出失敗 --> B
+```
+
