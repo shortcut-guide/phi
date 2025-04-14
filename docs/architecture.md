@@ -737,3 +737,16 @@ flowchart TD
   C -- 検出失敗 --> B
 ```
 
+- JANCODEをAPIで検索して商品情報を取得する機能を実装。
+- ブラウザからバーコードを読み取り、JANCODEを取得する機能を実装。
+- 使用技術：フロントエンドはReact（Astro）、バックエンドはNode.js、APIは無料の外部JAN検索API、バーコード検出には Barcode Detection API を利用。
+
+	•	JANコード検索API
+	•	GET https://www.jancode.xyz/api/jan/{JANコード}
+	•	レスポンス：商品名、メーカー、カテゴリなど
+
+
+
+---
+
+
