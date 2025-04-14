@@ -3,13 +3,13 @@ import { getToken, saveToken, updateToken, deleteToken, isTokenExpired } from '.
 
 const scrape = async () => {
 
-  const email = process.env.EMAIL ?? (() => { throw new Error('環境変数 EMAIL が設定されていません'); })();
-  const password = process.env.PASSWORD ?? (() => { throw new Error('環境変数 PASSWORD が設定されていません'); })();
+  const email = process.env.BASE_EMAIL ?? (() => { throw new Error('環境変数 EMAIL が設定されていません'); })();
+  const password = process.env.BASE_PASSWORD ?? (() => { throw new Error('環境変数 PASSWORD が設定されていません'); })();
   const baseApiUrl = process.env.BASE_API_URL ?? (() => { throw new Error('環境変数 BASE_API_URL が設定されていません'); })();
-  const clientId = process.env.CLIENT_ID ?? (() => { throw new Error('環境変数 CLIENT_ID が設定されていません'); })();
-  const clientSecret = process.env.CLIENT_SECRET ?? (() => { throw new Error('環境変数 CLIENT_SECRET が設定されていません'); })();
-  const callback = process.env.CALLBACK ?? (() => { throw new Error('環境変数 CALLBACK が設定されていません'); })();
-  const state = process.env.STATE ?? (() => { throw new Error('環境変数 STATE が設定されていません'); })();
+  const clientId = process.env.BASE_CLIENT_ID ?? (() => { throw new Error('環境変数 CLIENT_ID が設定されていません'); })();
+  const clientSecret = process.env.BASE_CLIENT_SECRET ?? (() => { throw new Error('環境変数 CLIENT_SECRET が設定されていません'); })();
+  const callback = process.env.BASE_CALLBACK ?? (() => { throw new Error('環境変数 CALLBACK が設定されていません'); })();
+  const state = process.env.BASE_STATE ?? (() => { throw new Error('環境変数 STATE が設定されていません'); })();
   const token = await getToken();
 
   // トークンが存在し、期限切れでない場合はそのまま返す

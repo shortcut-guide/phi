@@ -6,13 +6,13 @@ import 'dotenv/config';
 
 export const scrapeBaseAuth = async () => {
 
-  const email = process.env.EMAIL ?? (() => { throw new Error('環境変数 EMAIL が設定されていません'); })();
-  const password = process.env.PASSWORD ?? (() => { throw new Error('環境変数 PASSWORD が設定されていません'); })();
+  const email = process.env.BASE_EMAIL ?? (() => { throw new Error('環境変数 EMAIL が設定されていません'); })();
+  const password = process.env.BASE_PASSWORD ?? (() => { throw new Error('環境変数 PASSWORD が設定されていません'); })();
   const baseApiUrl = process.env.BASE_API_URL ?? (() => { throw new Error('環境変数 BASE_API_URL が設定されていません'); })();
-  const clientId = process.env.CLIENT_ID ?? (() => { throw new Error('環境変数 CLIENT_ID が設定されていません'); })();
-  const clientSecret = process.env.CLIENT_SECRET ?? (() => { throw new Error('環境変数 CLIENT_SECRET が設定されていません'); })();
-  const callback = process.env.CALLBACK ?? (() => { throw new Error('環境変数 CALLBACK が設定されていません'); })();
-  const state = process.env.STATE ?? (() => { throw new Error('環境変数 STATE が設定されていません'); })();
+  const clientId = process.env.BASE_CLIENT_ID ?? (() => { throw new Error('環境変数 CLIENT_ID が設定されていません'); })();
+  const clientSecret = process.env.BASE_CLIENT_SECRET ?? (() => { throw new Error('環境変数 CLIENT_SECRET が設定されていません'); })();
+  const callback = process.env.BASE_CALLBACK ?? (() => { throw new Error('環境変数 CALLBACK が設定されていません'); })();
+  const state = process.env.BASE_STATE ?? (() => { throw new Error('環境変数 STATE が設定されていません'); })();
   const token = await getToken();
 
   const token = await getTokenFromDB();
@@ -27,11 +27,11 @@ export const scrapeBaseAuth = async () => {
   const browser = await puppeteer.launch({ headless: true, slowMo: 100 });
   const page = await browser.newPage();
 
-  const authUrl = `${BASE_AUTH_URL}?response_type=code&client_id=${process.env.CLIENT_ID}&client_secret=${process.env.CLIENT_SECRET}&redirect_uri=${process.env.CALLBACK}&scope=read_users%20read_orders&state=hogehoge`;
+  const authUrl = `${BASE_AUTH_URL}?response_type=code&client_id=${process.env.BASE_CLIENT_ID}&client_secret=${process.env.BASE_CLIENT_SECRET}&redirect_uri=${process.env.BASE_CALLBACK}&scope=read_users%20read_orders&state=hogehoge`;
   await page.goto(authUrl, { waitUntil: 'domcontentloaded' });
 
-  await page.type('#UserMailAddress', process.env.EMAIL);
-  await page.type('#UserPassword', process.env.PASSWORD);
+  await page.type('#UserMailAddress', process.env.BASE_EMAIL);
+  await page.type('#UserPassword', process.env.BASE_PASSWORD);
   await page.click('.submitBtn');
 
   await page.waitForSelector('#AuthCodeInput', { timeout: 10000 });
@@ -55,9 +55,9 @@ export const scrapeBaseAuth = async () => {
     body: JSON.stringify({
       grant_type: 'authorization_code',
       code: authCode,
-      client_id: process.env.CLIENT_ID,
-      client_secret: process.env.CLIENT_SECRET,
-      redirect_uri: process.env.CALLBACK,
+      client_id: process.env.BASE_CLIENT_ID,
+      client_secret: process.env.BASE_CLIENT_SECRET,
+      redirect_uri: process.env.BASE_CALLBACK,
     }),
   });
 
