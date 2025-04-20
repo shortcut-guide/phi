@@ -1,0 +1,26 @@
+{
+  "base":{
+    "agentId": "1",
+    "cooperation":"",
+    "url": "https://thebase.com/",
+    "name": "BASE",
+    "nameJp": "ベイス",
+    "description": "ネットショップの作成・開設が無料でかんたんに。個人・法人問わず、どなたでもすぐに開業できます。今までECサイトを作りたくても時間・お金・技術さまざまな理由で始められなかった、そんな全ての方の悩みを解消するサービスです。",
+    "logo": "https://thebase.com/static-asset/base-header-logo-sm.Dy8cLu_s.svg",
+    "company": "BASE株式会社（BASE, Inc.）",
+    "aboutUrl": "https://binc.jp/about",
+    "contactUrl": "https://help.thebase.in/hc/ja/requests/new"
+  },
+  "taobaoshinkansen":{
+    "agentId": "2",
+    "cooperation":"BASE",
+    "url": "https://taobaoshinkansen.com/",
+    "name": "Taobao Shinkansen",
+    "nameJp": "タオバオ新幹線",
+    "description": "タオバオ新幹線が中国最大の淘宝（タオバオ）や阿里巴巴（アリババ）でのお買い物を代行します！",
+    "logo": "https://taobaoshinkansen.com/common/img/logo.png",
+    "company": "株式会社BUSHIDO",
+    "aboutUrl": "https://taobaoshinkansen.com/company/outline.html",
+    "contactUrl": "https://taobaoshinkansen.com/contact/form.php"
+  }
+}
