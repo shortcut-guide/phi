@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "@zxing/browser": "^0.1.5",
-    "next": "^15.3.0"
-  }
-}
