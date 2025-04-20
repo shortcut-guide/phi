@@ -3,7 +3,7 @@ dotenv.config();
 
 // ここからサーバーの処理を実行
 import express from "express";
-import apiHelper from "./utils/apiHelper";
+import apiHelper from "./utils/MicrocmsHelper.ts";
 
 const app = express();
 

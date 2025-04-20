@@ -1,5 +1,5 @@
-import { PuppeteerData } from "../models/PuppeteerData";
-import apiHelper from "../src/utils/apiHelper";
+import { PuppeteerData } from "../models/PuppeteerData.ts";
+import apiHelper from "../utils/microcmsHelper.ts";
 
 const uploadJson = async (jsonData: any): Promise<PuppeteerData> => {
   return await apiHelper.post("/puppeteer-json", { json_data: jsonData });
@@ -19,7 +19,7 @@ const updateData = async (id: string, updatedData: any): Promise<PuppeteerData> 
 };
 
 const deleteData = async (id: string): Promise<void> => {
-    await apiHelper.delete(`/puppeteer-json/${id}`);
+    await apiHelper.delete(`/puppeteer-json/${id}`, {});
 };
 
 export default { uploadJson, getData, updateData, deleteData };
