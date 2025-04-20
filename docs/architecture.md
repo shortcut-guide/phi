@@ -744,9 +744,27 @@ flowchart TD
 	•	JANコード検索API
 	•	GET https://www.jancode.xyz/api/jan/{JANコード}
 	•	レスポンス：商品名、メーカー、カテゴリなど
-
-
-
+  
 ---
 
 
+# 商品存在チェック＋検索数更新
+```mermaid
+flowchart TD
+  A[JANコード検索] --> B[商品情報取得]
+  B --> C[BASE商品検索 (JAN一致)]
+  C -- 既存あり --> D[description から検索回数抽出]
+  D --> E[検索回数 +1 にしてPUT更新]
+  C -- 新規 --> F[description に検索回数: 1回を含めて POST登録]
+  E & F --> G[登録 or 更新完了]
+```
+
+# getBaseCategory
+```mermaid
+flowchart TD
+  A[BASEカテゴリ一覧取得] --> B["親カテゴリ: JAN検索商品 を検索"]
+  B --> C{同名の子カテゴリが存在？}
+  C -- Yes --> D[子カテゴリIDを返却]
+  C -- No --> E[BASE APIで子カテゴリを新規作成]
+  E --> F[新規カテゴリIDを返却]
+```
