@@ -14,4 +14,5 @@ export default {
     '/node_modules/(?!preact|@testing-library/preact)',
   ],
   setupFilesAfterEnv: ['<rootDir>/setupTests.ts'],
+  testMatch: ['**/sys/**/*.test.ts?(x)', '**/sys/**/*.test.js?(x)'],
 };
