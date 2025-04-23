@@ -17,3 +17,14 @@
 .w-screen {
   width: 100vw;
 }
+
+.h-full-available{
+  height: 100vh; // フォールバック
+
+  @supports (height: 100dvh) {
+    height: 100dvh;
+  }
+  @supports (height: -webkit-fill-available) {
+    height: -webkit-fill-available;
+  }
+}
