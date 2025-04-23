@@ -25,7 +25,6 @@
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(12, 1fr);
   grid-gap: var(--gap-default);
   align-items: start;
 
