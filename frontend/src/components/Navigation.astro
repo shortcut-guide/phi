@@ -1,5 +1,6 @@
 ---
 import ResponsiveToggle from './ResponsiveToggle.astro'
+import Logo from '../components/Logo.astro'
 import { Icon } from 'astro-icon/components'
 ---
 
@@ -8,7 +9,7 @@ import { Icon } from 'astro-icon/components'
     <nav>
       <ul>
         <li class="brand-logo">
-          <img src={(await import('../assets/img/logo.svg')).default} >
+          <img src="/assets/img/logo.svg">
           <span class="sr-only">Brand Name</span>
         </li>
         <li class="menu-item">
@@ -34,9 +35,9 @@ import { Icon } from 'astro-icon/components'
     </nav>
   </div>
   <div class="container mobile-menu padding-16">
-    <a href="/">
-      <img src={(await import('../assets/img/logo.svg')).default} alt="Your Logo">
-    </a>
+    <div class="w-10">
+      <Logo />
+    </div>
     <ResponsiveToggle />
     <nav>
       <ul>

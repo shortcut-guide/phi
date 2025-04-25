@@ -1,5 +1,5 @@
 ---
-import '../assets/scss/globals.scss'
+import '@/assets/scss/globals.scss'
 import Navigation from '../components/Navigation.astro'
 import { DarkMode, SkipLink } from 'accessible-astro-components'
 import { Icon } from 'astro-icon/components'
@@ -36,9 +36,6 @@ let subtitle = 'Accessible Astro Dashboard'
     <header>
       <SkipLink />
     </header>
-    <div class="ui-controls">
-      <DarkMode />
-    </div>
     <div class="admin-interface">
       <Navigation>
         <li class="menu-item">
@@ -71,6 +68,12 @@ let subtitle = 'Accessible Astro Dashboard'
             <span class="sr-only">Media</span>
           </a>
         </li>
+        <li class="menu-item">
+          <div class="ui-controls flex items-center gap-2">
+            <DarkMode />
+            <span>Dark mode</span>
+          </div>
+        </li>
       </Navigation>    
       <main id="main-content">
         <slot />
@@ -89,16 +92,6 @@ let subtitle = 'Accessible Astro Dashboard'
 
 <style lang="scss">
   @use '../assets/scss/base/breakpoint' as *;
-
-  .ui-controls {
-    position: absolute;
-    top: 1rem;
-    right: 3.5rem;
-
-    @include breakpoint(medium) {
-      right: 1.15rem;
-    }
-  }
 
   .admin-interface {
     @include breakpoint(medium) {
@@ -121,15 +114,16 @@ let subtitle = 'Accessible Astro Dashboard'
   @use "../assets/scss/base/breakpoint" as *;
   @use "../assets/scss/base/outline" as *;
 
+  #main-navigation nav button.darkmode-toggle{
+    width: 35px;
+  }
   .darkmode-toggle {
     padding: 0;
     border: none;
 
     svg {
-      width: 25px;
 
       @include breakpoint(medium) {
-        width: 30px;
         
         path {
           fill: var(--secondary-500);
