@@ -1,12 +1,11 @@
-# astasy-backend
+# phis-admin
 
 ---
 
-## microcms
+## cloudflare d1
 
 ***
 ### 商品管理テーブル
-https://95j3wcf8zh.microcms.io/apis/products/
 
 | 項目 | 説明 |
 |------|------|
@@ -78,14 +77,41 @@ https://95j3wcf8zh.microcms.io/apis/products/
 
 ---
 
-## document
-(コンテンツAPI)[https://document.microcms.io/content-api/get-list-contents]
-
----
-
 ## **1. 概要**
 本システムは、複数のECサイトを横断的に管理し、ユーザーの購買活動を一元化するプラットフォームです。ユーザーが優先するECサイトを設定し、商品検索、注文自動化、メール管理、ポイント管理、売上管理などを統合的に提供します。
+また、代理購入を横断的にシステム機能として提供。
 
+
+```mermaid
+sequenceDiagram
+    participant User as ユーザー
+    participant Frontend as Frontend(astro/react)
+    participant Backend as Backend(nextjs)
+    participant Puppeteer as Puppeteer
+    participant EC_Site as ECサイト
+    participant DB as Cloudflare D1
+    participant Stripe as Stripe API
+
+    User ->> Frontend: 購入依頼(商品URL, 数量, 希望価格)
+    Frontend ->> Backend: 購入依頼APIリクエスト
+    Backend ->> DB: 依頼内容を保存
+    Backend ->> Puppeteer: 商品ページの取得依頼
+    Puppeteer ->> EC_Site: 商品ページをスクレイピング
+    EC_Site -->> Puppeteer: 商品情報を返却
+    Puppeteer -->> Backend: 在庫/価格/配送可否を返却
+    alt 購入可能な場合
+        Backend ->> EC_Site: 認証処理（OAuth/ログイン）
+        EC_Site -->> Backend: 認証成功
+        Backend ->> EC_Site: 商品をカートに追加・購入手続き
+        EC_Site -->> Backend: 注文成功（注文番号, 金額）
+        Backend ->> Stripe: 決済処理
+        Stripe -->> Backend: 決済成功
+        Backend ->> DB: 注文内容を保存
+        Backend ->> User: 購入成功通知
+    else 購入不可の場合
+        Backend ->> User: 購入不可通知
+    end
+``` 
 ---
 
 ## **2. 機能一覧**
@@ -317,31 +343,6 @@ https://95j3wcf8zh.microcms.io/apis/products/
 
 https://developers.facebook.com/docs/threads
 
-# component
-## iframe
-https://qiita.com/hukuryo/items/9c793f89dd9e8efd638c
-
-### terminal
-npm install react-iframe
-
-### package.json
-
-~~~ config
-"dependencies": {
-    "react-iframe": "^1.8.5",
-},
-~~~
-
-### code
-~~~ react
-import Iframe from "react-iframe";
-
-<Iframe 
- url={"https://www3.nhk.or.jp/news/html/20231007/k10014218571000.html"} 
- width="100%"
- height="1000px"
-/>
-~~~
 
 ---
 
@@ -443,162 +444,296 @@ lib/helper.js ❌ NG (lib/ は src-index.js に対応していない)
 │── tsconfig.json
 │── docker-compose.yml
 
+---
+# backend
 ## backend構成
 /backend
-│── /config
-│   │── database.ts        # microCMS、Stripe、Gmail APIの接続設定
-│   │── auth.ts            # 認証関連の設定
-│   │── puppeteer.ts       # Puppeteerの設定と制御
-│
-│── /controllers
-│   │── authController.ts      # ECサイトの認証処理
-│   │── purchaseController.ts  # 購入処理（カート追加、決済）
-│   │── scrapingController.ts  # スクレイピング制御
-│   │── emailController.ts     # Gmail API経由でメール取得・解析
-│   │── pointController.ts     # ECポイント情報管理
-│   │── shippingController.ts  # 配送情報取得
-│   │── cancelController.ts    # キャンセル情報取得
-│   │── apiCheckController.ts  # APIの有無、種類の判定
-│
-│── /models
-│   │── User.ts           # ユーザー情報
-│   │── Product.ts        # 商品情報
-│   │── Purchase.ts       # 購入履歴
-│   │── ECAccount.ts      # ECサイトのアカウント情報
-│   │── Point.ts          # ポイント情報
-│   │── Shipping.ts       # 配送状況
-│   │── Favorite.ts       # お気に入り情報
-│   │── APIStatus.ts      # 各ECサイトのAPI情報
-│
-│── /routes
-│   │── authRoutes.ts          # 認証用APIルート
-│   │── purchaseRoutes.ts      # 購入関連API
-│   │── scrapingRoutes.ts      # スクレイピングAPI
-│   │── emailRoutes.ts         # メール管理API
-│   │── pointRoutes.ts         # ポイント管理API
-│   │── shippingRoutes.ts      # 配送管理API
-│   │── cancelRoutes.ts        # キャンセル管理API
-│   │── apiCheckRoutes.ts      # API判定API
-│   │── recommendationRoutes.ts # 検索レコメンドAPI
-│
-│── /services
-│   │── scrapingService.ts  # 各ECサイトのデータ取得サービス
-│   │── authService.ts      # 認証処理のロジック
-│   │── emailService.ts     # Gmail APIの制御
-│   │── pointService.ts     # ポイントの取得・管理
-│   │── shippingService.ts  # 配送状況の取得
-│   │── cancelService.ts    # キャンセル手続きの処理
-│   │── apiCheckService.ts  # APIの判定処理
-│
-│── /utils
-│   │── puppeteerUtils.ts   # Puppeteerのヘルパー関数
-│   │── emailParser.ts      # メール解析ユーティリティ
-│   │── pointCalculator.ts  # ポイント計算ユーティリティ
-│   │── apiChecker.ts       # APIの有無を判定するユーティリティ
-│
-│── index.ts         # Expressアプリのエントリーポイント
+│── /src
+  │── /api
+  │   │── apiClient.ts        # microCMS APIの接続設定
+  │   │── errorHandling.ts
+  │   │── puppeteerApi.ts
+  │── /config
+  │   │── database.ts        # microCMS、Stripe、Gmail APIの接続設定
+  │   │── auth.ts            # 認証関連の設定
+  │   │── puppeteer.ts       # Puppeteerの設定と制御
+  │
+  │── /controllers
+  │   │── authController.ts      # ECサイトの認証処理
+  │   │── purchaseController.ts  # 購入処理（カート追加、決済）
+  │   │── scrapingController.ts  # スクレイピング制御
+  │   │── emailController.ts     # Gmail API経由でメール取得・解析
+  │   │── pointController.ts     # ECポイント情報管理
+  │   │── shippingController.ts  # 配送情報取得
+  │   │── cancelController.ts    # キャンセル情報取得
+  │   │── apiCheckController.ts  # APIの有無、種類の判定
+  │
+  │── /models
+  │   │── User.ts           # ユーザー情報
+  │   │── Product.ts        # 商品情報
+  │   │── Purchase.ts       # 購入履歴
+  │   │── ECAccount.ts      # ECサイトのアカウント情報
+  │   │── Point.ts          # ポイント情報
+  │   │── Shipping.ts       # 配送状況
+  │   │── Favorite.ts       # お気に入り情報
+  │   │── APIStatus.ts      # 各ECサイトのAPI情報
+  │
+  │── /routes
+  │   │── authRoutes.ts          # 認証用APIルート
+  │   │── purchaseRoutes.ts      # 購入関連API
+  │   │── scrapingRoutes.ts      # スクレイピングAPI
+  │   │── emailRoutes.ts         # メール管理API
+  │   │── pointRoutes.ts         # ポイント管理API
+  │   │── shippingRoutes.ts      # 配送管理API
+  │   │── cancelRoutes.ts        # キャンセル管理API
+  │   │── apiCheckRoutes.ts      # API判定API
+  │   │── recommendationRoutes.ts # 検索レコメンドAPI
+  │
+  │── /services
+  │   │── scrapingService.ts  # 各ECサイトのデータ取得サービス
+  │   │── authService.ts      # 認証処理のロジック
+  │   │── emailService.ts     # Gmail APIの制御
+  │   │── pointService.ts     # ポイントの取得・管理
+  │   │── shippingService.ts  # 配送状況の取得
+  │   │── cancelService.ts    # キャンセル手続きの処理
+  │   │── apiCheckService.ts  # APIの判定処理
+  │
+  │── /utils
+  │   │── puppeteerUtils.ts   # Puppeteerのヘルパー関数
+  │   │── emailParser.ts      # メール解析ユーティリティ
+  │   │── pointCalculator.ts  # ポイント計算ユーティリティ
+  │   │── apiChecker.ts       # APIの有無を判定するユーティリティ
+  │
 │── server.ts        # サーバーの設定・起動スクリプト
-
-## ドキュメント
-/docs
-│── API_Specifications.md # API仕様書
-│── Database_Schema.md     # データベース設計
-│── Setup_Guide.md         # 環境構築手順
-│── Scraping_Guidelines.md # スクレイピングのガイドライン
+│── docs # ドキュメント
+│   │── API_Specifications.md # API仕様書
+│   │── Database_Schema.md     # データベース設計
+│   │── Setup_Guide.md         # 環境構築手順
+│   │── Scraping_Guidelines.md # スクレイピングのガイドライン
 
 ---
 
-# Backend
-backend # prefix
+# backend起動方法
+### typescriptをビルド
+npx tsc
 
-## Config (設定関連)
-backend-config # prefix
-backend-config-database  # データベース設定
-backend-config-auth  # 認証設定
-backend-config-puppeteer  # Puppeteer設定
+---
 
-## Auth
-backend-auth # 認証関係
-backend-auth-auth0 # auth0関係
+# D1起動方法
+```
+wrangler d1 create pup 
+wrangler d1 execute my-database --file=setup.sql
+wrangler d1 list 
+wrangler dev
+wrangler dev src/index.ts
+wrangler dev --config wrangler.toml
+```
 
-## Controllers (各機能のコントローラー)
-backend-controllers # prefix
-backend-controllers-auth  # 認証機能
-backend-controllers-purchase  # 購入管理
-backend-controllers-scraping  # スクレイピング
-backend-controllers-email  # メール管理
-backend-controllers-point  # ポイント管理
-backend-controllers-shipping  # 配送管理
-backend-controllers-cancel  # キャンセル処理
-backend-controllers-api-check  # APIチェック
+## テーブルが作成されたか確認
+```
+wrangler d1 execute pup --command="SELECT name FROM sqlite_master WHERE type='table';"
+```
 
-## Models (データベースモデル)
-backend-models # prefix
-backend-models-users  # ユーザーモデル
-backend-models-products  # 商品モデル
-backend-models-purchase  # 購入履歴モデル
-backend-models-ec-accounts  # ECアカウントモデル
-backend-models-points  # ポイント管理モデル
-backend-models-shipping  # 配送モデル
-backend-models-favorites  # お気に入りモデル
-backend-models-api-status  # APIのステータス管理
+## テーブルデータ確認
+```
+wrangler d1 execute pup --command="SELECT name FROM sqlite_master WHERE type='table';"
+```
 
-## Routes (APIルーティング)
-backend-routes # prefix
-backend-routes-auth  # 認証API
-backend-routes-purchase  # 購入API
-backend-routes-scraping  # スクレイピングAPI
-backend-routes-email  # メールAPI
-backend-routes-point  # ポイントAPI
-backend-routes-shipping  # 配送API
-backend-routes-cancel  # キャンセルAPI
-backend-routes-api-check  # APIチェックAPI
-backend-routes-recommendation  # 商品推薦API
+## リモートデータベース適用
+```
+wrangler d1 execute pup --file=setup.sql --remote
+```
 
-## Services (ビジネスロジック層)
-backend-services # prefix
-backend-services-scraping  # スクレイピング機能
-backend-services-auth  # 認証サービス
-backend-services-email  # メール管理サービス
-backend-services-point  # ポイント計算
-backend-services-shipping  # 配送サービス
-backend-services-cancel  # キャンセル管理
-backend-services-api-check  # APIチェックサービス
+## CURL POST 追加
+```
+curl -X POST http://localhost:8787/api/contents \
+     -H "Content-Type: application/json" \
+     -d '{"title":"新規データ","body":"これはテストデータです","visible":true}'
+```
 
-## Utils (ユーティリティ)
-backend-utils # prefix
-backend-utils-puppeteer  # Puppeteerユーティリティ
-backend-utils-email-parser  # メール解析
-backend-utils-point-calculator  # ポイント計算
-backend-utils-api-checker  # APIチェック
+## 削除手順
+### データーベース全体の削除
+※ wrangler からデータベースを削除するコマンドは提供されていない
+	1.	Cloudflare Dashboard にログイン
+	2.	Workers & Pages → D1 を開く
+	3.	pup データベースを選択
+	4.	Delete Database (データベースを削除) をクリック
+	5.	確認プロンプトに pup を入力し削除
 
-## その他
-backend-core # prefix
-backend-core-index  # メインエントリーポイント
-backend-core-server  # サーバー関連
+### 特定のテーブルを削除する
+```
+wrangler d1 execute pup --command="DROP TABLE contents;"
+```
 
-# Config (設定関連)
-config # prefix
-config-next  # Next.js設定
-config-tailwind  # Tailwind設定
-config-package  # パッケージ管理
+### テーブル内のデータのみ削除（初期化）
+※ id の AUTOINCREMENT はリセットされない。
+```
+wrangler d1 execute pup --command="DELETE FROM contents;"
+```
+
+### TRUNCATE の代替（完全初期化）
+```
+wrangler d1 execute pup --command="DELETE FROM contents; VACUUM;"
+```
+
+### ローカルデータベースの削除
+```
+rm -rf .wrangler/state/v3/d1
+```
+
+
+
 
 ---
 
 # Maintenance (メンテナンス)
 maintenance-mode
 
+---
 
-# 追加機能
-## microCMSにJSONデータを送信するAPI
+# cloudflare D1にJSONデータを送信するAPI
 ```mermaid
 sequenceDiagram
     participant Client as クライアント（拡張機能等）
     participant NextAPI as Next.js API
-    participant microCMS as microCMS
+    participant cloudflare D1 as cloudflare D1
 
     Client->>NextAPI: JSONデータを送信 (POST /api/upload-json)
-    NextAPI->>microCMS: microCMSにデータを保存
-    microCMS->>NextAPI: 保存結果を返す
+    NextAPI->>cloudflare D1: cloudflare D1にデータを保存
+    cloudflare D1->>NextAPI: 保存結果を返す
     NextAPI->>Client: 保存完了メッセージを返す
 ```
+
+# D1にJSONデータを送信するAPI
+```mermaid
+sequenceDiagram
+    participant Client as クライアント（拡張機能等）
+    participant NextAPI as Next.js API
+    participant d1 as d1
+
+    Client->>NextAPI: JSONデータを送信 (POST /api/upload-json)
+    NextAPI->>d1: d1にデータを保存
+    d1->>NextAPI: 保存結果を返す
+    NextAPI->>Client: 保存完了メッセージを返す
+```
+
+---
+
+# 30日ごとの認可コード再取得
+```mermaid
+graph TD
+    A[起動時にトークン確認] --> B{期限切れか？}
+    B -- Yes --> C[Puppeteerで再取得]
+    B -- No --> D[既存トークン使用]
+    C --> E[DBに新トークン保存]
+    E --> D
+```
+
+### APIルート
+```mermaid
+graph TD
+    A[Client fetches token] --> B[/api/token GET/]
+    A2[Client saves token] --> C[/api/token POST/]
+    A3[Client updates token] --> D[/api/token PUT/]
+    A4[Client deletes token] --> E[/api/token DELETE/]
+    B --> F[Cloudflare D1 SELECT]
+    C --> G[Cloudflare D1 INSERT]
+    D --> H[Cloudflare D1 UPDATE]
+    E --> I[Cloudflare D1 DELETE]
+```
+
+---
+
+# メール確認コードを自動取得・入力する流れ
+```mermaid
+graph TD
+  A[Puppeteerでログイン試行] --> B[BASEから確認コードがメール送信される]
+  B --> C[メール受信サーバで確認コードを取得-GmailApi]
+  C --> D[Puppeteerでコード入力欄に自動入力]
+  D --> E[ログイン・認可完了]
+```
+
+### 設計
+```mermaid
+graph TD
+  A[Puppeteer or Frontend] -->|fetch| B[d1Client.ts]
+  B -->|呼び出し| C[Hono API Routes : d1Server.ts]
+  C -->|D1操作| D[Cloudflare D1]
+```
+
+- d1Server.ts: D1のAPIエンドポイント定義 (GET /token, POST /token etc)
+- d1Client.ts: fetch を抽象化して API 経由でデータ操作する（再利用性高）
+- scrape.ts（Puppeteer等）やフロントエンドから d1Client.ts を呼び出す
+
+### テスト
+```mermaid
+graph TD
+  A[テストの目的] --> B[Gmail API連携]
+  A --> C[認証コード抽出]
+  A --> D[Puppeteer操作]
+  A --> E[BASE認可コードの取得]
+  A --> F[トークン保存]
+
+  B --> B1[Gmailから正しくメール取得できる]
+  C --> C1[本文から6桁コードを抽出できる]
+  D --> D1[メール・パス・コードが自動入力される]
+  E --> E1[URLから?code=...を取得できる]
+  F --> F1[D1にトークンが保存・更新される]
+```
+
+#### BASE認可コード自動取得処理のテスト手順
+1. `.env` が正しいことを確認（GmailとBASE）
+2. `fetchVerificationCode()` 単体で認証コードを取得
+3. `scrapeBaseAuth()` を実行し、自動ログイン＋認証＋トークン取得を検証
+4. Cloudflare D1 のトークン保存が `/api/token` で確認できること
+5. エラー時は Puppeteer の操作対象セレクタ・Gmailのメール件名などを見直す
+
+---
+
+# スクレイピングした画像を BASEに登録し、画像をCDNとして再利用する。
+- puppeteer: ECショップから画像取得
+- backend: BASE API 経由で画像登録
+- BASE: 画像ホスティング (CDN的に利用)
+
+```mermaid
+flowchart TD
+  A[スクレイピング対象ECショップ] --> B[puppeteerで画像を取得]
+  B --> C[画像を一時保存]
+  C --> D[BASE APIで画像をアップロード]
+  D --> E[BASE側で画像URL発行]
+  E --> F[Cloudflare D1にURL保存]
+  F --> G[フロントでCDN画像URLとして再利用]
+```
+
+---
+
+# タオバオの国際送料計算機
+```
+project-root/
+├── backend/
+│   ├── controllers/
+│   │   └── shippingController.js
+│   ├── services/
+│   │   ├── taobaoApiService.js
+│   │   └── shippingCalculator.js
+│   └── routes/
+│       └── shippingRoutes.js
+└── frontend/
+    ├── components/
+    │   └── ShippingCalculator.jsx
+    └── pages/
+        └── index.jsx
+```
+
+---
+
+# JAN CODE API
+```mermaid
+flowchart TD
+  A[カメラ起動] --> B[バーコード検出API]
+  B --> C{JANコード検出}
+  C -- 検出成功 --> D[APIで商品情報取得]
+  D --> E[商品情報表示]
+  C -- 検出失敗 --> B
+```
+
