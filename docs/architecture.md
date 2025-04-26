@@ -768,3 +768,19 @@ flowchart TD
   C -- No --> E[BASE APIで子カテゴリを新規作成]
   E --> F[新規カテゴリIDを返却]
 ```
+
+# 再設定リンク送信　API
+```mermaid
+sequenceDiagram
+    participant User as ユーザー
+    participant Frontend as フロントエンド
+    participant Backend as バックエンド
+    participant DB as データベース
+    participant MailServer as メールサーバ
+
+    User ->> Frontend: 再設定リクエスト（メールアドレス）
+    Frontend ->> Backend: POST /api/auth/request-reset
+    Backend ->> DB: リセットトークン生成・保存
+    Backend ->> MailServer: リセットリンクを送信
+    MailServer -->> User: リセットリンク受信
+```
