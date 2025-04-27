@@ -25,6 +25,7 @@
         "kysely-d1": "^0.3.0",
         "mongoose": "^6.8.1",
         "node-fetch": "^2.7.0",
+        "nodemailer": "^6.10.1",
         "puppeteer": "^24.5.0",
         "rimraf": "^4.4.1",
         "tailwindcss": "^4.0.9",
