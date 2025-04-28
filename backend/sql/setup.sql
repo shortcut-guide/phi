@@ -13,3 +13,10 @@ CREATE TABLE oauth_tokens (
   expires_at INTEGER, -- UNIX timestamp
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE IF NOT EXISTS password_resets (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  email TEXT NOT NULL,
+  token TEXT NOT NULL,
+  expires_at TEXT NOT NULL
+);
