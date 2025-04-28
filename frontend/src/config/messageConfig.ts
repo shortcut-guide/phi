@@ -82,5 +82,85 @@ export const messages = {
       ],
       lastUpdated: "最終更新日：2025年4月28日"
     }
-  }
+  },
+  privacyPolicy: {
+    en: {
+      title: "Privacy Policy",
+      heading: "Privacy Policy",
+      description: "This Privacy Policy explains how we collect, use, and share your personal information in connection with our services.",
+      sections: {
+        introduction: {
+          title: "Introduction",
+          description: "We value your privacy and are committed to protecting your personal information."
+        },
+        informationCollection: {
+          title: "Information We Collect",
+          description: "We collect information you provide directly to us, information about your usage of our services, and information from third parties."
+        },
+        informationUse: {
+          title: "How We Use Your Information",
+          description: "We use your information to provide, maintain, and improve our services, communicate with you, and comply with legal obligations."
+        },
+        informationSharing: {
+          title: "Sharing of Your Information",
+          description: "We may share your information with service providers, legal authorities, or other third parties as necessary."
+        },
+        yourRights: {
+          title: "Your Rights",
+          description: "You have the right to access, correct, delete, or restrict the use of your personal information."
+        },
+        security: {
+          title: "Security",
+          description: "We implement security measures designed to protect your information."
+        },
+        changes: {
+          title: "Changes to This Policy",
+          description: "We may update this Privacy Policy from time to time. We will notify you of any changes as required by law."
+        },
+        contact: {
+          title: "Contact Us",
+          description: "If you have any questions, please contact us at [your contact email]."
+        },
+      }
+    },
+    ja: {
+      title: "プライバシーポリシー",
+      heading: "プライバシーポリシー",
+      description: "このプライバシーポリシーは、当社のサービスに関連してお客様の個人情報を収集、利用、共有する方法について説明します。",
+      sections: {
+        introduction: {
+          title: "はじめに",
+          description: "当社はお客様のプライバシーを尊重し、個人情報の保護に努めています。"
+        },
+        informationCollection: {
+          title: "収集する情報",
+          description: "お客様から提供される情報、サービス利用状況に関する情報、第三者から取得する情報を収集します。"
+        },
+        informationUse: {
+          title: "情報の利用目的",
+          description: "サービスの提供、維持、改善、連絡、法令遵守のために情報を利用します。"
+        },
+        informationSharing: {
+          title: "情報の共有",
+          description: "必要に応じて、サービス提供者、法的機関、その他第三者と情報を共有する場合があります。"
+        },
+        yourRights: {
+          title: "お客様の権利",
+          description: "お客様は自身の個人情報へのアクセス、修正、削除、利用制限を求める権利があります。"
+        },
+        security: {
+          title: "セキュリティ",
+          description: "当社はお客様の情報を保護するためのセキュリティ対策を実施しています。"
+        },
+        changes: {
+          title: "プライバシーポリシーの変更",
+          description: "本ポリシーは適宜更新されることがあり、変更時には必要に応じてお知らせします。"
+        },
+        contact: {
+          title: "お問い合わせ",
+          description: "ご不明点がございましたら、[your contact email]までお問い合わせください。"
+        },
+      }
+    },
+  },
 };
