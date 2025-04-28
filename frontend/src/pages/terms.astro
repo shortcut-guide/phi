@@ -1,0 +1,21 @@
+---
+import DefaultLayout from '../layouts/DefaultLayout.astro'
+import { messages } from '../config/messageConfig';
+
+const lang = (Astro.url.searchParams.get('lang') ?? 'ja') as 'en' | 'ja';
+const terms = messages.terms[lang];
+---
+<DefaultLayout title={terms.title}>
+  <main class="max-w-3xl mx-auto px-4 py-12 text-neutral-800">
+    <h1 class="text-3xl font-bold mb-8">{terms.title}</h1>
+
+    {terms.sections.map((section) => (
+      <section class="mt-10 space-y-4">
+        <h2 class="text-2xl font-semibold">{section.heading}</h2>
+        <p>{section.content}</p>
+      </section>
+    ))}
+
+    <p class="text-sm text-neutral-500 mt-12">{terms.lastUpdated}</p>
+  </main>
+</DefaultLayout>

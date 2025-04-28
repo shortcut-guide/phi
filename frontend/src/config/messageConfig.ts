@@ -48,5 +48,39 @@ export const messages = {
       { title: "返品送料", description: "返品が行えません。" },
       { title: "その他", description: "詳細は利用規約をご確認ください。" },
     ]
+  },
+  terms: {
+    en: {
+      title: "Terms of Service",
+      sections: [
+        { heading: "1. Application", content: "These Terms of Service (\"Terms\") govern your use of our service (\"Service\")." },
+        { heading: "2. Registration", content: "You must follow our procedures to register for the Service." },
+        { heading: "3. Account Management", content: "Users must properly manage their user ID and password." },
+        { heading: "4. Prohibited Actions", content: "You may not engage in illegal acts or interfere with the Service." },
+        { heading: "5. Suspension", content: "We may suspend or terminate Service without notice under certain circumstances." },
+        { heading: "6. Restrictions and Termination", content: "We may restrict use or delete registrations for violations." },
+        { heading: "7. Disclaimer", content: "We are not liable except in cases of intentional or gross negligence." },
+        { heading: "8. Changes", content: "Service content may change without prior notice." },
+        { heading: "9. Changes to Terms", content: "We may change these Terms without notice." },
+        { heading: "10. Governing Law", content: "Japanese law governs these Terms, with the Tokyo District Court as exclusive jurisdiction." }
+      ],
+      lastUpdated: "Last updated: April 28, 2025"
+    },
+    ja: {
+      title: "利用規約",
+      sections: [
+        { heading: "第1条（適用）", content: "この利用規約（以下、「本規約」といいます。）は、【サービス名】（以下、「本サービス」といいます。）の利用条件を定めるものです。" },
+        { heading: "第2条（利用登録）", content: "登録希望者は運営者の定める方法により利用登録を申請し、運営者がこれを承認することで利用登録が完了します。" },
+        { heading: "第3条（アカウント管理）", content: "ユーザーは自己責任でユーザーIDおよびパスワードを管理するものとします。" },
+        { heading: "第4条（禁止事項）", content: "ユーザーは法令違反やサービス運営妨害などを行ってはなりません。" },
+        { heading: "第5条（提供停止）", content: "一定の事由により、事前通知なくサービスの全部または一部を停止できます。" },
+        { heading: "第6条（利用制限・登録抹消）", content: "規約違反等の場合、サービスの利用制限または登録抹消が行われることがあります。" },
+        { heading: "第7条（免責事項）", content: "天災地変等による場合など、故意または重過失がない限り責任を負いません。" },
+        { heading: "第8条（サービス内容の変更）", content: "ユーザーへの通知なくサービス内容を変更・中止できるものとします。" },
+        { heading: "第9条（規約変更）", content: "運営者は、本規約を随時変更でき、変更後は掲示時点から効力を持ちます。" },
+        { heading: "第10条（準拠法・裁判管轄）", content: "本規約は日本法を準拠法とし、東京地方裁判所を専属的合意管轄とします。" }
+      ],
+      lastUpdated: "最終更新日：2025年4月28日"
+    }
   }
 };
