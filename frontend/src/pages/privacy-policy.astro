@@ -1,0 +1,25 @@
+---
+import DefaultLayout from '../layouts/DefaultLayout.astro'
+import { messages } from '../config/messageConfig';
+
+const lang = (Astro.url.searchParams.get('lang') ?? 'ja') as 'en' | 'ja';
+const privacyPolicy = messages.privacyPolicy[lang];
+---
+
+<html lang={lang}>
+  <head>
+    <title>{privacyPolicy.title}</title>
+    <meta name="description" content={privacyPolicy.description} />
+  </head>
+  <body class="p-8 max-w-4xl mx-auto space-y-8">
+    <h1 class="text-4xl font-bold">{privacyPolicy.heading}</h1>
+    <p>{privacyPolicy.description}</p>
+
+    {Object.entries(privacyPolicy.sections).map(([key, section]) => (
+      <section>
+        <h2 class="text-2xl font-semibold">{section.title}</h2>
+        <p>{section.description}</p>
+      </section>
+    ))}
+  </body>
+</html>
