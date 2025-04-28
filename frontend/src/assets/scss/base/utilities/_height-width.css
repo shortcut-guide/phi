@@ -1,0 +1,31 @@
+.h-full {
+  height: 100%;
+}
+
+.h-screen {
+  height: 100vh;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.w-screen {
+  width: 100vw;
+}
+
+.h-full-available {
+  height: 100vh;
+}
+
+@supports (height: 100dvh) {
+  .h-full-available {
+    height: 100dvh;
+  }
+}
+
+@supports (height: -webkit-fill-available) {
+  .h-full-available {
+    height: -webkit-fill-available;
+  }
+}
