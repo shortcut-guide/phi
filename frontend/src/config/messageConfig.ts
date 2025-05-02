@@ -163,4 +163,22 @@ export const messages = {
       }
     },
   },
+  productCard: {
+    en: {
+      detail: "View Details",
+      currency: "¥"
+    },
+    ja: {
+      detail: "詳細を見る",
+      currency: "¥"
+    }
+  },
+  productListPage: {
+    en: {
+      title: "Product List"
+    },
+    ja: {
+      title: "商品一覧"
+    }
+  }
 };
