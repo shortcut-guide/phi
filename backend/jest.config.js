@@ -8,4 +8,8 @@ module.exports = {
   testMatch: ['**/__test__/**/*.[jt]s?(x)', '**/?(*.)+(spec|test).[tj]s?(x)'],
   setupFilesAfterEnv: ['jest-fetch-mock'],
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
+  moduleNameMapper: {
+    '^@/b/(.*)$': '<rootDir>/src/$1',
+    '^@/f/(.*)$': '<rootDir>/../frontend/src/$1',
+  },
 };
