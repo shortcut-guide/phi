@@ -20,13 +20,3 @@ CREATE TABLE IF NOT EXISTS password_resets (
   token TEXT NOT NULL,
   expires_at TEXT NOT NULL
 );
-
-CREATE TABLE products (
-  id TEXT PRIMARY KEY,
-  name TEXT,
-  price INTEGER,
-  imageUrl TEXT,
-  description TEXT,
-  category TEXT,
-  is_own INTEGER DEFAULT 0
-);
