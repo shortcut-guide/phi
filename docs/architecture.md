@@ -768,3 +768,30 @@ flowchart TD
   C -- No --> E[BASE APIで子カテゴリを新規作成]
   E --> F[新規カテゴリIDを返却]
 ```
+
+# frontend
+## frontend構成
+frontend
+│   ├── /.astro
+│   ├── /.vscode
+│   ├── /node_modules
+│   ├── /public
+│   ├── /src
+    │   ├── /assets
+    │   ├── /components
+    │   ├── /config
+    │   ├── /layouts
+    │   ├── /pages
+    │   ├── /styles
+    │   ├── /types
+
+## Search component
+```
+graph TD
+  A[検索実行] --> B[検索ワードで商品DB検索]
+  A --> C[検索語ログをD1に保存]
+  B --> D[検索結果表示]
+  D --> E[ユーザーが商品クリック]
+  E --> F[検索語 + 商品IDをD1に保存]
+  G[管理画面で人気ワード表示] --> H[search_logsから集計]
+```
