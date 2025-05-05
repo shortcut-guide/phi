@@ -1,28 +1,22 @@
 ---
-import DefaultLayout from '../layouts/DefaultLayout.astro'
-import EmpyState from '../components/EmpyState.astro'
-import { Modal } from 'accessible-astro-components'
+import DefaultLayout from '@/f/layouts/DefaultLayout.astro'
+import { fetchAllProducts } from '@/b/services/productService';
+import { ProductCard } from '@/f/components/ProductCard';
+import { messages } from '@/f/config/messageConfig';
+import type { Product } from '@/f/types/product';
+
+const products: Product[] = await fetchAllProducts();
+const lang = (Astro.url.searchParams.get('lang') ?? 'ja') as 'en' | 'ja';
+const texts = messages.forgotPassword[lang];
 ---
 
-<DefaultLayout title="Products">
-  <section>
-    <h1>Products</h1><br>
-    <p class="size-20">Lorem ipsum dolor sit amet.</p>
-  </section>
-  <section class="margin-32">
-    <div class="space-content">
-      <h2>Product overview</h2>
-      <EmpyState>
-        You haven't added any products yet. Start by adding some.
-      </EmpyState>
-      <button id="modal-trigger" class="button color-secondary">Add your first product</button>
-      <Modal
-        triggerId="modal-trigger"
-        title="Add product"
-        closeText="Cancel"
-      >
-        <p>You can use this component to include a form that adds a new product to the list.</p>
-      </Modal>
+<DefaultLayout title={texts.title}>
+  <main class="max-w-3xl mx-auto px-4 py-12 text-neutral-800">
+    <h1 class="text-2xl font-bold mb-6">{texts.title}</h1>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+      {products.map((product: Product) => (
+        <ProductCard {...product} lang={lang} />
+      ))}
     </div>
-  </section>
+  </main>
 </DefaultLayout>
