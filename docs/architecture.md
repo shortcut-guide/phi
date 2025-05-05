@@ -586,8 +586,13 @@ wrangler d1 execute pup --command="DELETE FROM contents; VACUUM;"
 rm -rf .wrangler/state/v3/d1
 ```
 
+# TEST
+backend/__test__/**
 
-
+```
+npm run test
+npm run test __test__/products.ts
+```
 
 ---
 
