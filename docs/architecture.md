@@ -793,4 +793,29 @@ sequenceDiagram
     Backend ->> DB: リセットトークン生成・保存
     Backend ->> MailServer: リセットリンクを送信
     MailServer -->> User: リセットリンク受信
+    
+# 商品管理ページ（登録・更新・削除）
+/frontend/
+┗ pages/
+   ┗ products.astro  ← 商品一覧・登録・編集UI
+
+/backend/
+┗ api/
+   ┣ products/
+   ┃  ┣ index.ts         ← GET一覧 / POST新規
+   ┃  ┗ [id].ts          ← PUT更新 / DELETE削除
+┗ models/
+   ┗ productModel.ts     ← D1クエリ操作
+┗ types/
+   ┗ product.ts          ← 型定義
+┗ utils/
+   ┗ d1.ts               ← D1接続ヘルパー
+
+```
+flowchart TD
+  UI[商品管理画面] -->|一覧取得| API1[/api/products GET/]
+  UI -->|新規登録| API2[/api/products POST/]
+  UI -->|更新| API3[/api/products/:id PUT/]
+  UI -->|削除| API4[/api/products/:id DELETE/]
+  API1 & API2 & API3 & API4 -->|D1接続| DB[(Cloudflare D1)]
 ```
