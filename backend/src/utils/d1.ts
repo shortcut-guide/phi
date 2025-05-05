@@ -1,0 +1,1 @@
+export const getDB = (env: any) => env.CLOUDFLARE_D1_DATABASE_PRODUCTS;
