@@ -544,6 +544,11 @@ wrangler d1 execute pup --command="SELECT name FROM sqlite_master WHERE type='ta
 wrangler d1 execute pup --file=setup.sql --remote
 ```
 
+## マルチアカウントデータベース
+```
+wrangler d1 execute DB --env=products-production --local --config=/Users/user/phis-admin/backend/src/wrangler.toml --file='/Users/user/phis-admin/backend/sql/products.sql'
+```
+
 ## CURL POST 追加
 ```
 curl -X POST http://localhost:8787/api/contents \
