@@ -779,7 +779,36 @@ flowchart TD
   E --> F[新規カテゴリIDを返却]
 ```
 
-# 再設定リンク送信　API
+# frontend
+## frontend構成
+frontend
+│   ├── /.astro
+│   ├── /.vscode
+│   ├── /node_modules
+│   ├── /public
+│   ├── /src
+    │   ├── /assets
+    │   ├── /components
+    │   ├── /config
+    │   ├── /layouts
+    │   ├── /pages
+    │   ├── /styles
+    │   ├── /types
+
+## Search component
+
+```mermaid
+graph TD
+  A[検索実行] --> B[検索ワードで商品DB検索]
+  A --> C[検索語ログをD1に保存]
+  B --> D[検索結果表示]
+  D --> E[ユーザーが商品クリック]
+  E --> F[検索語 + 商品IDをD1に保存]
+  G[管理画面で人気ワード表示] --> H[search_logsから集計]
+```
+
+## 再設定リンク送信　API
+
 ```mermaid
 sequenceDiagram
     participant User as ユーザー
@@ -793,8 +822,9 @@ sequenceDiagram
     Backend ->> DB: リセットトークン生成・保存
     Backend ->> MailServer: リセットリンクを送信
     MailServer -->> User: リセットリンク受信
-    
-# 商品管理ページ（登録・更新・削除）
+```
+
+## 商品管理ページ（登録・更新・削除）
 /frontend/
 ┗ pages/
    ┗ products.astro  ← 商品一覧・登録・編集UI
@@ -811,7 +841,7 @@ sequenceDiagram
 ┗ utils/
    ┗ d1.ts               ← D1接続ヘルパー
 
-```
+```mermaid
 flowchart TD
   UI[商品管理画面] -->|一覧取得| API1[/api/products GET/]
   UI -->|新規登録| API2[/api/products POST/]
