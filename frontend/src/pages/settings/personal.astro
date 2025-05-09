@@ -1,0 +1,25 @@
+---
+// frontend/src/pages/settings/personal.astro
+import { messages } from "@/f/config/messageConfig";
+import SlideMenu from "@/f/components/SlideMenu.astro";
+
+const lang = "ja"; // TODO: ユーザー選択で動的に切り替え
+const msg = messages.personalSettings[lang];
+---
+
+<h1 class="text-xl font-bold mb-4">{msg.title}</h1>
+
+<section class="mb-6">
+  <h2 class="text-lg font-semibold">{msg.account}</h2>
+  <SlideMenu items={[msg.profile, msg.address, msg.payment, msg.emailPassword, msg.phone]} />
+</section>
+
+<section class="mb-6">
+  <h2 class="text-lg font-semibold">{msg.personal}</h2>
+  <SlideMenu items={[msg.nameDobAddress, msg.region, msg.verification, msg.others]} />
+</section>
+
+<section class="mb-6">
+  <h2 class="text-lg font-semibold">{msg.security}</h2>
+  <SlideMenu items={[msg.blockedList]} />
+</section>
