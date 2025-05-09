@@ -544,6 +544,11 @@ wrangler d1 execute pup --command="SELECT name FROM sqlite_master WHERE type='ta
 wrangler d1 execute pup --file=setup.sql --remote
 ```
 
+## マルチアカウントデータベース
+```
+wrangler d1 execute DB --env=products-production --local --config=/Users/user/phis-admin/backend/src/wrangler.toml --file='/Users/user/phis-admin/backend/sql/products.sql'
+```
+
 ## CURL POST 追加
 ```
 curl -X POST http://localhost:8787/api/contents \
@@ -581,8 +586,13 @@ wrangler d1 execute pup --command="DELETE FROM contents; VACUUM;"
 rm -rf .wrangler/state/v3/d1
 ```
 
+# TEST
+backend/__test__/**
 
-
+```
+npm run test
+npm run test __test__/products.ts
+```
 
 ---
 
@@ -767,4 +777,45 @@ flowchart TD
   C -- Yes --> D[子カテゴリIDを返却]
   C -- No --> E[BASE APIで子カテゴリを新規作成]
   E --> F[新規カテゴリIDを返却]
+```
+
+# 再設定リンク送信　API
+```mermaid
+sequenceDiagram
+    participant User as ユーザー
+    participant Frontend as フロントエンド
+    participant Backend as バックエンド
+    participant DB as データベース
+    participant MailServer as メールサーバ
+
+    User ->> Frontend: 再設定リクエスト（メールアドレス）
+    Frontend ->> Backend: POST /api/auth/request-reset
+    Backend ->> DB: リセットトークン生成・保存
+    Backend ->> MailServer: リセットリンクを送信
+    MailServer -->> User: リセットリンク受信
+    
+# 商品管理ページ（登録・更新・削除）
+/frontend/
+┗ pages/
+   ┗ products.astro  ← 商品一覧・登録・編集UI
+
+/backend/
+┗ api/
+   ┣ products/
+   ┃  ┣ index.ts         ← GET一覧 / POST新規
+   ┃  ┗ [id].ts          ← PUT更新 / DELETE削除
+┗ models/
+   ┗ productModel.ts     ← D1クエリ操作
+┗ types/
+   ┗ product.ts          ← 型定義
+┗ utils/
+   ┗ d1.ts               ← D1接続ヘルパー
+
+```
+flowchart TD
+  UI[商品管理画面] -->|一覧取得| API1[/api/products GET/]
+  UI -->|新規登録| API2[/api/products POST/]
+  UI -->|更新| API3[/api/products/:id PUT/]
+  UI -->|削除| API4[/api/products/:id DELETE/]
+  API1 & API2 & API3 & API4 -->|D1接続| DB[(Cloudflare D1)]
 ```
