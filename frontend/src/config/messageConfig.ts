@@ -210,6 +210,7 @@ export const messages = {
       setButton: "設定する",
       fee: "手数料",
       selected: "選択中",
+      notVerifiedWarning: "※本人確認が完了していないため、支払い方法の設定はできません"
     },
     en: {
       title: "Payment Method",
@@ -220,6 +221,7 @@ export const messages = {
       setButton: "Save",
       fee: "Fee",
       selected: "Selected",
+      notVerifiedWarning: "※ You must complete identity verification before setting a payment method"
     }
   }
 };
