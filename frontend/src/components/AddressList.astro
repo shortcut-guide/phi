@@ -1,0 +1,28 @@
+---
+const { addresses, lang } = Astro.props;
+import { messages } from "@/f/config/messageConfig";
+
+const msg = messages.addressList[lang];
+---
+
+<div class="flex justify-between items-center mb-4">
+  <h1 class="text-xl font-bold">{msg.title}</h1>
+  <a href="/settings/address/edit" class="text-blue-500">{msg.edit}</a>
+</div>
+
+<ul class="space-y-4">
+  {addresses.map(addr => (
+    <li class="p-4 border rounded">
+      <p class="font-bold">{addr.name}（{addr.kana}）</p>
+      <p>{addr.zip}</p>
+      <p>{addr.address}</p>
+      {addr.is_default && <p class="text-blue-600 mt-1">● {msg.selected}</p>}
+    </li>
+  ))}
+</ul>
+
+<div class="mt-6">
+  <a href="/settings/address/new" class="text-blue-600 underline">
+    + {msg.registerNew}
+  </a>
+</div>
