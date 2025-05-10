@@ -8,3 +8,7 @@ export interface SavePaymentMethodInput {
   user_id: string;
   method: string;
 }
+
+export interface PaymentMethodResult {
+  selectedMethod: string;
+}

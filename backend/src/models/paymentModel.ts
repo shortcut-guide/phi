@@ -1,10 +1,14 @@
-import type { PaymentMethod, SavePaymentMethodInput } from "@/b/types/payment";
+import type { PaymentMethod, SavePaymentMethodInput, PaymentMethodResult } from "@/b/types/payment";
 
-export async function getPaymentMethod(DB: D1Database, user_id: Pick<PaymentMethod, "user_id">): Promise<PaymentMethod | null> {
+export async function getPaymentMethod(
+  DB: D1Database,
+  { user_id }: Pick<PaymentMethod, "user_id">
+): Promise<PaymentMethodResult> {
   const result = await DB.prepare(
     `SELECT user_id, method, updated_at FROM payment_methods WHERE user_id = ?`
   ).bind(user_id).first<PaymentMethod>();
-  return result ?? null;
+
+  return { selectedMethod: result?.method ?? "paypal" };
 }
 
 export async function savePaymentMethod(DB: D1Database, { user_id, method }: SavePaymentMethodInput) {
