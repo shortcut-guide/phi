@@ -21,8 +21,10 @@ const msg = messages.addressList[lang];
   ))}
 </ul>
 
-<div class="mt-6">
-  <a href="/settings/address/new" class="text-blue-600 underline">
-    + {msg.registerNew}
-  </a>
-</div>
+{addresses.length < 3 && (
+  <div class="mt-6">
+    <a href="/settings/address/new" class="text-blue-600 underline">
+      + {msg.registerNew}
+    </a>
+  </div>
+)}
