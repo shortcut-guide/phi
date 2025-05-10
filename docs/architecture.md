@@ -849,3 +849,15 @@ flowchart TD
   UI -->|削除| API4[/api/products/:id DELETE/]
   API1 & API2 & API3 & API4 -->|D1接続| DB[(Cloudflare D1)]
 ```
+
+# PayPal OAuthを用いた本人認証
+```mermaid
+flowchart TD
+  A[ユーザーが認証ページにアクセス] --> B[PayPal認証リンクをクリック]
+  B --> C[PayPalでOAuth認証]
+  C --> D[code付きでリダイレクト]
+  D --> E[access_token取得]
+  E --> F[ユーザー情報取得]
+  F --> G[DBでverified=trueに更新]
+  G --> H[成功画面へリダイレクト]
+```
