@@ -199,5 +199,21 @@ export const messages = {
       security: "セキュリティ",
       blockedList: "ブロックした一覧"
     }
+  },
+  verifyPaypal: {
+    ja: {
+      title: "PayPal認証",
+      description: "PayPalと連携して本人確認を行います。",
+      button: "PayPalで認証",
+      success: "本人確認が完了しました",
+      failure: "本人確認に失敗しました"
+    },
+    en: {
+      title: "PayPal Verification",
+      description: "Authenticate with PayPal to verify your identity.",
+      button: "Verify with PayPal",
+      success: "Verification successful",
+      failure: "Verification failed"
+    }
   }
 };
