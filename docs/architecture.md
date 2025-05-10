@@ -849,3 +849,13 @@ flowchart TD
   UI -->|削除| API4[/api/products/:id DELETE/]
   API1 & API2 & API3 & API4 -->|D1接続| DB[(Cloudflare D1)]
 ```
+
+# paypal OAuth
+```mermaid
+flowchart TD
+  A[ユーザーが電話番号変更を希望] --> B[PayPal OAuth によるログイン認証開始]
+  B --> C{OAuth認証 成功？}
+  C -- No --> D[変更不可：中断または失敗]
+  C -- Yes --> E[PayPalから<br/>verified_account + 電話番号 取得]
+  E --> F[認証情報を元に<br/>Cloudflare D1の電話番号を更新]
+```
