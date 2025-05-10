@@ -199,5 +199,27 @@ export const messages = {
       security: "セキュリティ",
       blockedList: "ブロックした一覧"
     }
+  },
+  payment: {
+    ja: {
+      title: "支払い方法",
+      edit: "編集",
+      postpayCredit: "あと払い・クレジットカード払い",
+      otherMethods: "その他の支払い方法",
+      registerCard: "新しいクレジットカードを登録する",
+      setButton: "設定する",
+      fee: "手数料",
+      selected: "選択中",
+    },
+    en: {
+      title: "Payment Method",
+      edit: "Edit",
+      postpayCredit: "Postpay / Credit Card",
+      otherMethods: "Other payment methods",
+      registerCard: "Register new credit card",
+      setButton: "Save",
+      fee: "Fee",
+      selected: "Selected",
+    }
   }
 };

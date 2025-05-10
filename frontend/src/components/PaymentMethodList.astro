@@ -1,0 +1,61 @@
+---
+const { selectedMethod, lang } = Astro.props;
+import { messages } from "@/f/config/messageConfig";
+
+const msg = messages.payment[lang];
+
+const paymentOptions = [
+  {
+    id: "mpay",
+    label: "メルペイのあと払い",
+    description: "手数料 ¥0 残高、自動引落しで清算\n手数料 ¥220 - ¥880 コンビニ/ATMで清算"
+  },
+  {
+    id: "card",
+    label: msg.registerCard,
+    description: ""
+  }
+];
+
+const otherOptions = [
+  { id: "docomo", label: "d払い（ドコモ）", fee: "¥100 - ¥880" },
+  { id: "au", label: "au / UQ mobile", fee: "¥100 - ¥880" },
+  { id: "softbank", label: "ソフトバンクまとめて支払い", fee: "¥100 - ¥880" },
+  { id: "famipay", label: "FamiPay", fee: "¥0" },
+  { id: "convenience", label: "コンビニ / ATM払い", fee: "¥100 - ¥880" }
+];
+---
+
+<section class="mb-6">
+  <h2 class="font-bold">{msg.postpayCredit}</h2>
+  <ul class="mt-2 space-y-4">
+    {paymentOptions.map(opt => (
+      <li>
+        <label class="flex items-start gap-2">
+          <input type="radio" name="payment" value={opt.id} checked={selectedMethod === opt.id} />
+          <div>
+            <p class="font-semibold">{opt.label}</p>
+            <p class="text-sm whitespace-pre-line">{opt.description}</p>
+          </div>
+        </label>
+      </li>
+    ))}
+  </ul>
+</section>
+
+<section class="mb-6">
+  <h2 class="font-bold">{msg.otherMethods}</h2>
+  <ul class="mt-2 space-y-4">
+    {otherOptions.map(opt => (
+      <li>
+        <label class="flex items-start gap-2">
+          <input type="radio" name="payment" value={opt.id} checked={selectedMethod === opt.id} />
+          <div>
+            <p class="font-semibold">{opt.label}</p>
+            <p class="text-sm">{msg.fee}: {opt.fee}</p>
+          </div>
+        </label>
+      </li>
+    ))}
+  </ul>
+</section>
