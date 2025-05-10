@@ -861,3 +861,13 @@ flowchart TD
   F --> G[DBでverified=trueに更新]
   G --> H[成功画面へリダイレクト]
 ```
+
+┗ routes/
+   ┗ verify/
+      ┣ status/
+      ┃  ┗ [userId].ts         # 認証状態取得
+      ┣ expired/
+      ┃  ┗ [userId].ts         # 再認証が必要か
+      ┣ start/
+      ┃  ┗ [userId].ts         # 認証開始（OAuth連携）
+      ┗ complete.ts            # 認証完了処理（PayPalコールバック）

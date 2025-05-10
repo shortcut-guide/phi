@@ -12,3 +12,22 @@ export async function getVerifiedStatus(userId: string) {
     .first();
   return result?.verified === 1;
 }
+
+export async function insertVerifyToken(tokenId: string, userId: string, email: string) {
+  return await DB.prepare(`
+    INSERT INTO verify_tokens (id, user_id, email)
+    VALUES (?, ?, ?)
+  `).bind(tokenId, userId, email).run();
+}
+
+export async function getVerifyToken(tokenId: string) {
+  return await DB.prepare(`
+    SELECT * FROM verify_tokens WHERE id = ?
+  `).bind(tokenId).first();
+}
+
+export async function deleteVerifyToken(tokenId: string) {
+  return await DB.prepare(`
+    DELETE FROM verify_tokens WHERE id = ?
+  `).bind(tokenId).run();
+}
