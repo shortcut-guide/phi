@@ -2,6 +2,10 @@
 import { messages } from "@/f/config/messageConfig";
 const lang = Astro.url.searchParams.get("lang") ?? "ja";
 const t = messages.verifyPaypal[lang];
+
+const userId = "user-id-placeholder"; // Cookieなどから取得する想定
+const res = await fetch(`/api/verify/status/${userId}`);
+const { verified } = await res.json();
 ---
 
 <html lang={lang}>
@@ -9,7 +13,9 @@ const t = messages.verifyPaypal[lang];
     <section>
       <h1>{t.title}</h1>
       <p>{t.description}</p>
-      <a href="/api/verify/paypal" class="btn">{t.button}</a>
+      {verified
+        ? <p class="text-green-600">{t.success}</p>
+        : <a href="/api/verify/paypal" class="btn">{t.button}</a>}
     </section>
   </body>
 </html>
