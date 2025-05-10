@@ -223,5 +223,31 @@ export const messages = {
       selected: "Selected",
       notVerifiedWarning: "※ You must complete identity verification before setting a payment method"
     }
+  },
+  emailPassword: {
+    ja: {
+      title: "メール・パスワード",
+      email: "メールアドレス",
+      currentPassword: "現在のパスワード",
+      newPassword: "新しいパスワード",
+      confirmPassword: "新しいパスワード（確認）",
+      note: "パスワードを設定したい場合は上記をすべて入力してください。",
+      update: "更新する",
+      emailChangeNotice: "メールアドレスを変更すると確認メールが送信されます。メール内のURLをクリックすると変更が完了します。",
+      mismatch: "新しいパスワードが一致しません",
+      success: "変更を受け付けました。確認メールをご確認ください"
+    },
+    en: {
+      title: "Email & Password",
+      email: "Email address",
+      currentPassword: "Current password",
+      newPassword: "New password",
+      confirmPassword: "Confirm new password",
+      note: "To change your password, please fill out all the fields above.",
+      update: "Update",
+      emailChangeNotice: "A confirmation email will be sent to the new address. Please click the URL in the email to complete the change.",
+      mismatch: "New passwords do not match",
+      success: "Your changes have been saved. Please check the confirmation email."
+    }
   }
 };
