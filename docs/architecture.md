@@ -881,3 +881,7 @@ flowchart TD
   C -- Yes --> E[PayPalから<br/>verified_account + 電話番号 取得]
   E --> F[認証情報を元に<br/>Cloudflare D1の電話番号を更新]
 ```
+PayPal OAuthを用いた本人認証機能を以下の構成で実装：
+- フロントエンド：Astro、国際化対応 (messageConfig.ts)
+- バックエンド：TypeScript、OAuth連携・本人認証状態の更新
+- 認証完了後、「本人認証OK」のステータスに更新
