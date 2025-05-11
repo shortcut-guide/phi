@@ -15,3 +15,14 @@ export const getD1SearchLogs = (): D1Database => {
   }
   return d1Client;
 };
+
+export const getD1UserProfile = (): D1Database => {
+  if (!d1Client) {
+    // @ts-ignore - D1 は Cloudflare Worker 上で自動でバインドされる
+    d1Client = globalThis.env.CLOUDFLARE_D1_DATABASE_PROFILE;
+    if (!d1Client) {
+      throw new Error("D1 クライアントがバインドされていません (globalThis.env.DB が未定義)");
+    }
+  }
+  return d1Client;
+};
