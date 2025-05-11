@@ -849,3 +849,28 @@ flowchart TD
   UI -->|削除| API4[/api/products/:id DELETE/]
   API1 & API2 & API3 & API4 -->|D1接続| DB[(Cloudflare D1)]
 ```
+
+# profile
+```mermaid
+erDiagram
+  user_profiles ||--o{ external_accounts : has
+
+  user_profiles {
+    TEXT user_id PK
+    TEXT nickname
+    TEXT bio
+    TEXT avatar_url
+    TEXT updated_at
+  }
+
+  external_accounts {
+    TEXT id PK
+    TEXT user_id FK
+    TEXT provider
+    TEXT external_user_id
+    TEXT access_token
+    TEXT refresh_token
+    TEXT expires_at
+    TEXT linked_at
+  }
+```
