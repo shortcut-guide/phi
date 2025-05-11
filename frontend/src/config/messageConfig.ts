@@ -18,7 +18,7 @@ export const messages = {
     }
   },
   commerceInfo: {
-    時計en: [
+    en: [
         { "title": "Seller", "description": "Shortcut" },
         { "title": "Responsible Person", "description": "Taisei Fukui" },
         { "title": "Address", "description": "1-6-4 Kita-Aoyama, Minato-ku, Tokyo 107-0061, Japan" },
@@ -214,6 +214,46 @@ export const messages = {
       button: "Verify with PayPal",
       success: "Verification successful",
       failure: "Verification failed"
+    }
+  },
+  payment: {
+    ja: {
+      title: "支払い方法",
+      edit: "編集",
+      postpayCredit: "あと払い・クレジットカード払い",
+      otherMethods: "その他の支払い方法",
+      registerCard: "新しいクレジットカードを登録する",
+      setButton: "設定する",
+      fee: "手数料",
+      selected: "選択中",
+      notVerifiedWarning: "※本人確認が完了していないため、支払い方法の設定はできません"
+    },
+    en: {
+      title: "Payment Method",
+      edit: "Edit",
+      postpayCredit: "Postpay / Credit Card",
+      otherMethods: "Other payment methods",
+      registerCard: "Register new credit card",
+      setButton: "Save",
+      fee: "Fee",
+      selected: "Selected",
+      notVerifiedWarning: "※ You must complete identity verification before setting a payment method"
+    }
+  },
+  addressList: {
+    ja: {
+      title: "住所一覧",
+      edit: "編集",
+      registerNew: "新しい住所を登録する",
+      selected: "選択中",
+      limitError: "住所の登録は3件までです"
+    },
+    en: {
+      title: "Address List",
+      edit: "Edit",
+      registerNew: "Register new address",
+      selected: "Selected",
+      limitError: "You can register up to 3 addresses"
     }
   }
 };
