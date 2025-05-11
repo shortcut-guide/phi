@@ -18,7 +18,7 @@ export const messages = {
     }
   },
   commerceInfo: {
-    時計en: [
+    en: [
         { "title": "Seller", "description": "Shortcut" },
         { "title": "Responsible Person", "description": "Taisei Fukui" },
         { "title": "Address", "description": "1-6-4 Kita-Aoyama, Minato-ku, Tokyo 107-0061, Japan" },
@@ -198,6 +198,22 @@ export const messages = {
       others: "その他",
       security: "セキュリティ",
       blockedList: "ブロックした一覧"
+    }
+  },
+  addressList: {
+    ja: {
+      title: "住所一覧",
+      edit: "編集",
+      registerNew: "新しい住所を登録する",
+      selected: "選択中",
+      limitError: "住所の登録は3件までです"
+    },
+    en: {
+      title: "Address List",
+      edit: "Edit",
+      registerNew: "Register new address",
+      selected: "Selected",
+      limitError: "You can register up to 3 addresses"
     }
   }
 };
