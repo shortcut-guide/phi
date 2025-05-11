@@ -549,6 +549,11 @@ wrangler d1 execute pup --file=setup.sql --remote
 wrangler d1 execute DB --env=products-production --local --config=/Users/user/phis-admin/backend/src/wrangler.toml --file='/Users/user/phis-admin/backend/sql/products.sql'
 ```
 
+## PROFILE_DB
+```
+wrangler d1 execute PROFILE_DB --env=profile --local --config=backend/src/d1-worker/profile/wrangler-production.toml --command="SELECT name FROM sqlite_master WHERE type='table';"
+```
+
 ## CURL POST 追加
 ```
 curl -X POST http://localhost:8787/api/contents \
