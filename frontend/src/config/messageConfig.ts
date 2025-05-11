@@ -180,5 +180,24 @@ export const messages = {
     ja: {
       title: "商品一覧"
     }
+  },
+  personalSettings: {
+    ja: {
+      title: "個人情報設定",
+      account: "アカウント",
+      profile: "プロフィール設定",
+      address: "住所一覧",
+      payment: "支払い方法",
+      emailPassword: "メール・パスワード",
+      phone: "電話番号",
+      registered: "登録済み",
+      personal: "本人情報",
+      nameDobAddress: "氏名・生年月日・現住所",
+      region: "国籍・地域",
+      verification: "本人確認",
+      others: "その他",
+      security: "セキュリティ",
+      blockedList: "ブロックした一覧"
+    }
   }
 };
