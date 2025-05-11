@@ -874,3 +874,39 @@ erDiagram
     TEXT linked_at
   }
 ```
+
+# PayPal OAuthを用いた本人認証
+```mermaid
+flowchart TD
+  A[ユーザーが認証ページにアクセス] --> B[PayPal認証リンクをクリック]
+  B --> C[PayPalでOAuth認証]
+  C --> D[code付きでリダイレクト]
+  D --> E[access_token取得]
+  E --> F[ユーザー情報取得]
+  F --> G[DBでverified=trueに更新]
+  G --> H[成功画面へリダイレクト]
+```
+
+┗ routes/
+   ┗ verify/
+      ┣ status/
+      ┃  ┗ [userId].ts         # 認証状態取得
+      ┣ expired/
+      ┃  ┗ [userId].ts         # 再認証が必要か
+      ┣ start/
+      ┃  ┗ [userId].ts         # 認証開始（OAuth連携）
+      ┗ complete.ts            # 認証完了処理（PayPalコールバック）
+      
+# paypal OAuth
+```mermaid
+flowchart TD
+  A[ユーザーが電話番号変更を希望] --> B[PayPal OAuth によるログイン認証開始]
+  B --> C{OAuth認証 成功？}
+  C -- No --> D[変更不可：中断または失敗]
+  C -- Yes --> E[PayPalから<br/>verified_account + 電話番号 取得]
+  E --> F[認証情報を元に<br/>Cloudflare D1の電話番号を更新]
+```
+PayPal OAuthを用いた本人認証機能を以下の構成で実装：
+- フロントエンド：Astro、国際化対応 (messageConfig.ts)
+- バックエンド：TypeScript、OAuth連携・本人認証状態の更新
+- 認証完了後、「本人認証OK」のステータスに更新
