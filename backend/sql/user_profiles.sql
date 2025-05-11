@@ -1,4 +1,4 @@
-CREATE TABLE user_profiles (
+CREATE TABLE IF NOT EXISTS user_profiles (
   user_id TEXT PRIMARY KEY,            -- 内部ユーザーID（UUID等）
   nickname TEXT,                       -- 表示名
   bio TEXT,                            -- 自己紹介
