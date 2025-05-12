@@ -2,11 +2,11 @@
     "name": "phis-admin",
     "version": "1.0.0",
     "private": true,
-    "type": "commonjs",
+    "type": "module",
     "scripts": {
         "build": "tsc",
         "start": "node dist/server.js",
-        "dev": "nodemon --ext ts --exec ts-node src/server.ts",
+        "dev": "nodemon --ext ts --exec \"tsc && node dist/server.js\"",
         "test": "node --max-old-space-size=4096 --experimental-vm-modules node_modules/.bin/jest"
     },
     "dependencies": {
