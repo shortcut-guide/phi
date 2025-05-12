@@ -1,4 +1,4 @@
-import { getProducts, createProduct } from "@/b/models/Product";
+import { getProducts, createProduct } from "@/b/models/ProductModel";
 import { getDB } from "@/b/utils/d1";
 
 export const onRequestGet = async ({ env }: any) => {
