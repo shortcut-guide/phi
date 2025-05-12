@@ -1,0 +1,9 @@
+name = "products"
+compatibility_date = "2025-05-7"
+
+[env.staging]
+account_id = "668ea9059163f3fd8df3b6f512d3ab3f"
+[[env.staging.d1_databases]]
+binding = "PRODUCTS_DB"
+database_name = "products"
+database_id = "a34d8aaf-ce52-4b85-b76b-9807bd58476a"

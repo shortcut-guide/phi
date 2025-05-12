@@ -1,3 +1,4 @@
+import type { D1Database } from '@cloudflare/workers-types';
 import {
   insertVerifyToken,
   getVerifyToken,
@@ -5,13 +6,14 @@ import {
   updateVerifiedStatus,
   getVerifiedStatus,
   isVerificationExpired
-} from "@/b/models/verifyModel";
+} from "@/b/models/VerifyModel";
 import { nanoid } from "nanoid";
+import { Env } from "@/b/types/env";
+import { getAndAssertUserId } from "@/b/utils/auth";
 
 // ✅ 認証状態を取得
-export async function handleGetVerifiedStatus(context: any) {
-  const userId = context.params.userId;
-  const verified = await getVerifiedStatus(userId);
+export async function handleGetVerifiedStatus({ params, env }: { params: any; env: Env }) {
+  const verified = await getVerifiedStatus(params.userId);
   return new Response(JSON.stringify({ verified }), {
     headers: { "Content-Type": "application/json" }
   });
@@ -19,8 +21,8 @@ export async function handleGetVerifiedStatus(context: any) {
 
 // ✅ 認証期限切れかを判定
 export async function handleCheckVerificationExpiry(context: any) {
-  const userId = context.params.userId;
-  const days = parseInt(context.url.searchParams.get("days") || "30", 10);
+  const userId = await getAndAssertUserId(context.request, context.env);
+  const days = parseInt(new URL(context.request.url).searchParams.get("days") || "30", 10);
   const expired = await isVerificationExpired(userId, days);
   return new Response(JSON.stringify({ expired }), {
     headers: { "Content-Type": "application/json" }
@@ -46,14 +48,14 @@ export async function startVerification(context: any) {
 
 // ✅ 認証完了処理（PayPalからのコールバック）
 export async function completeVerification(context: any) {
-  const state = new URL(context.request.url).searchParams.get("state");
-  if (!state) return new Response("Invalid state", { status: 400 });
+  const tokenId = new URL(context.request.url).searchParams.get("state");
+  if (!tokenId) return new Response("Invalid state", { status: 400 });
 
-  const tokenRecord = await getVerifyToken(state);
+  const tokenRecord = await getVerifyToken(tokenId);
   if (!tokenRecord) return new Response("Token expired or invalid", { status: 400 });
 
   await updateVerifiedStatus(tokenRecord.email);
-  await deleteVerifyToken(state);
+  await deleteVerifyToken(tokenId);
 
   return Response.redirect(`/verify/paypal?status=success`);
 }

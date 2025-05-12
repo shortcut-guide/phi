@@ -1,5 +1,5 @@
 import { getAccessTokenFromCode, getUserInfoFromToken } from "@/b/services/oauthService";
-import { markUserAsVerified } from "@/b/utils/verifyHelper";
+import { markUserAsVerified } from "@/b/models/VerifyModel";
 
 export const paypalOAuthHandler = async (context: any) => {
   const code = new URL(context.request.url).searchParams.get("code");
@@ -7,11 +7,12 @@ export const paypalOAuthHandler = async (context: any) => {
 
   try {
     const token = await getAccessTokenFromCode(code);
-    const userInfo = await getUserInfoFromToken(token);
+    const userInfo = await getUserInfoFromToken(token) as { email: string };
 
     await markUserAsVerified(userInfo.email);
     return Response.redirect("/verify/paypal?status=success");
   } catch (err) {
+    console.error("PayPal OAuth error:", err);
     return Response.redirect("/verify/paypal?status=failure");
   }
 };

@@ -1,21 +1,23 @@
-import { countUserAddresses } from "@/b/models/addressModel";
+import { countUserAddresses,getUserAddresses,insertUserAddress } from "@/b/models/addressModel";
+import type { Env } from "@/b/types/env";
 import type { CreateAddressInput } from "@/b/types/address";
+import { getAndAssertUserId } from "@/b/utils/auth";
 
-export async function handleCreateAddress(req: Request, env: Env): Promise<Response> {
-  const userId = "user123";
+export async function GetAddresses(req: Request, env: Env): Promise<Response> {
+  const user_id = (await getAndAssertUserId(req, env));
+  const result = await getUserAddresses(env.DB, { user_id: user_id });
+  return new Response(JSON.stringify(result), { status: 200 });
+}
 
-  const countResult = await countUserAddresses(env.DB, userId);
+export async function CreateAddress(req: Request, env: Env): Promise<Response> {
+  const user_id = (await getAndAssertUserId(req, env));
+  const countResult = await countUserAddresses(env.DB, { user_id: user_id });
   if (countResult?.count >= 3) {
     return new Response("住所の登録は3件までです", { status: 403 });
   }
 
-  const { name, kana, zip, address }: CreateAddressInput = await req.json();
-  const id = crypto.randomUUID();
-
-  await env.DB.prepare(`
-    INSERT INTO user_addresses (id, user_id, name, kana, zip, address)
-    VALUES (?, ?, ?, ?, ?, ?)
-  `).bind(id, userId, name, kana, zip, address).run();
+  const { name, kana, zip, address }: Omit<CreateAddressInput, "user_id"> = await req.json();
+  await insertUserAddress(env.DB, { user_id, name, kana, zip, address });
 
   return new Response(null, { status: 201 });
 }

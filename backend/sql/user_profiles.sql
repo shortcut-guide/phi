@@ -1,19 +1,33 @@
+-- ユーザープロフィール
 CREATE TABLE IF NOT EXISTS user_profiles (
-  user_id TEXT PRIMARY KEY,            -- 内部ユーザーID（UUID等）
-  nickname TEXT,                       -- 表示名
-  bio TEXT,                            -- 自己紹介
-  avatar_url TEXT,                     -- プロフィール画像
+  user_id TEXT PRIMARY KEY,
+  nickname TEXT,
+  bio TEXT,
+  avatar_url TEXT,
+  verified INTEGER DEFAULT 0,
+  verified_at TEXT,
   updated_at TEXT DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE external_accounts (
-  id TEXT PRIMARY KEY,                 -- 内部ID
-  user_id TEXT NOT NULL,               -- user_profiles.user_id と紐づけ
-  provider TEXT NOT NULL,              -- 例: 'paypal', 'google', 'line'
-  external_user_id TEXT NOT NULL,      -- PayPalなどの外部ID
-  access_token TEXT,                   -- OAuthアクセストークン（必要であれば）
-  refresh_token TEXT,                  -- リフレッシュトークン（必要であれば）
-  expires_at TEXT,                     -- トークン有効期限
+-- 外部アカウント連携（PayPalなど）
+CREATE TABLE IF NOT EXISTS external_accounts (
+  id TEXT PRIMARY KEY,
+  user_id TEXT NOT NULL,
+  provider TEXT NOT NULL,
+  external_user_id TEXT NOT NULL,
+  access_token TEXT,
+  refresh_token TEXT,
+  expires_at TEXT,
   linked_at TEXT DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (user_id) REFERENCES user_profiles(user_id)
 );
+
+-- 認証トークン（PayPal OAuth連携中の一時データ）
+CREATE TABLE IF NOT EXISTS verify_tokens (
+  id TEXT PRIMARY KEY,
+  user_id TEXT NOT NULL,
+  email TEXT NOT NULL,
+  created_at TEXT DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_verify_tokens_user_id ON verify_tokens(user_id);

@@ -51,7 +51,7 @@ d1Route.delete('/api/token', async (c) => {
     if (!body || !body.token) {
       return c.json({ error: 'トークンが必要です。' }, 400);
     }
-    await deleteTokens(c.env.DB);
+    await deleteToken(c.env.DB);
   } catch (error) {
     return c.json({ error: error instanceof Error ? error.message : "トークンの削除に失敗しました。" }, 500);
   }

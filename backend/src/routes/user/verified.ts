@@ -1,7 +1,20 @@
+import type { D1Database } from '@cloudflare/workers-types';
 import { isUserVerified } from "@/b/models/userModel";
 
-export const onRequestGet = async ({ env }: { env: Env }) => {
-  const userId = "user123";
-  const verified = await isUserVerified(env.DB, userId);
-  return new Response(JSON.stringify({ isVerified: verified }), { status: 200 });
+type Env = {
+  CLOUDFLARE_D1_DATABASE_PROFILE: D1Database;
+};
+
+export default {
+  async fetch(request: Request, env: Env) {
+    // クエリパラメータから userId を取得
+    // /api/user/verified?userId=xxxx
+    const url = new URL(request.url);
+    const userId = url.searchParams.get("userId");
+    if (!userId) {
+      return new Response(JSON.stringify({ error: "userId is required" }), { status: 400 });
+    }
+    const verified = await isUserVerified(env.CLOUDFLARE_D1_DATABASE_PROFILE, userId);
+    return new Response(JSON.stringify({ isVerified: verified }), { status: 200 });
+  }
 };

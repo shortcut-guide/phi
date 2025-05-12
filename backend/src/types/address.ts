@@ -10,6 +10,7 @@ export interface Address {
 }
 
 export interface CreateAddressInput {
+  user_id?: string;
   name: string;
   kana: string;
   zip: string;

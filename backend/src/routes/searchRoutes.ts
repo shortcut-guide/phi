@@ -1,11 +1,11 @@
 import { Router } from 'express';
-import { handleSearch, handleClickLog, handleAnalytics, handleSuggest } from '@/b/controllers/searchController';
+import { Search, ClickLog, Analytics, Suggest } from '@/b/controllers/searchController';
 
 const router = Router();
 
-router.get('/search', handleSearch);
-router.post('/search/click', handleClickLog);
-router.get('/search/analytics', handleAnalytics);
-router.get('/search/suggest', handleSuggest);
+router.get('/search', Search);
+router.post('/search/click', ClickLog);
+router.get('/search/analytics', Analytics);
+router.get('/search/suggest', Suggest);
 
 export default router;

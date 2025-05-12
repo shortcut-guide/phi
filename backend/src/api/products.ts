@@ -1,35 +1,11 @@
-import { Hono } from 'hono';
+import { Context } from 'hono';
+import { getFilteredProducts } from '@/b/models/ProductModel';
 
-const app = new Hono<{ Bindings: { DB: D1Database } }>();
+export async function handleGetProducts(c: Context) {
+  const shop = c.req.query('shop');
+  const limit = Number(c.req.query('limit') ?? 100);
+  const ownOnly = c.req.query('ownOnly') === 'true';
 
-app.get('/api/products', async (c) => {
-  const shop = c.req.query('shop');        // ECサイト名フィルタ（例: "楽天")
-  const limit = Number(c.req.query('limit') ?? 100); // 最大件数
-  const ownOnly = c.req.query('ownOnly') === 'true'; // 自社商品のみ
-
-  let query = 'SELECT * FROM products';
-  const conditions: string[] = [];
-  const bindings: any[] = [];
-
-  if (ownOnly) {
-    conditions.push('shop_name = ?');
-    bindings.push('自社');
-  }
-
-  if (shop) {
-    conditions.push('site_name = ?');
-    bindings.push(shop);
-  }
-
-  if (conditions.length > 0) {
-    query += ' WHERE ' + conditions.join(' AND ');
-  }
-
-  query += ' ORDER BY updated_at DESC LIMIT ?';
-  bindings.push(limit);
-
-  const { results } = await c.env.DB.prepare(query).bind(...bindings).all();
+  const results = await getFilteredProducts(c.env,{ shop, limit, ownOnly });
   return c.json(results);
-});
-
-export default app;
+}

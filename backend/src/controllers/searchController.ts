@@ -1,5 +1,5 @@
 // backend/src/controllers/searchController.ts
-import { Request, Response } from 'express';
+import type { Request, Response } from 'express';
 import { findSuggestedKeywords } from '@/b/models/SearchLog';
 import {
   insertSearchLog,
@@ -7,38 +7,43 @@ import {
   getPopularKeywords
 } from '@/b/services/searchService';
 
-export const handleSearch = async (req: Request, res: Response) => {
+export async function Search(req: Request, res: Response) {
   const q = typeof req.query.q === 'string' ? req.query.q.trim() : null;
   const uid = typeof req.query.uid === 'string' ? req.query.uid.trim() : null;
 
-  if (!q) return res.status(400).send('Missing query');
+  if (!q) {
+    res.status(400).send('Missing query');
+    return;
+  }
 
   await insertSearchLog(q, uid);
+  res.json([]);
+}
 
-  // 検索処理は別途。仮に空配列を返す。
-  return res.json([]);
-};
-
-export const handleClickLog = async (req: Request, res: Response) => {
+export async function ClickLog(req: Request, res: Response) {
   const { keyword, user_id, product_id } = req.body;
 
   if (!keyword || !product_id) {
-    return res.status(400).send('Missing keyword or product_id');
+    res.status(400).send('Missing keyword or product_id');
+    return;
   }
 
   await insertClickLog(keyword, user_id ?? 'anonymous', product_id);
-  return res.status(200).send('OK');
-};
+  res.status(200).send('OK');
+}
 
-export const handleAnalytics = async (_req: Request, res: Response) => {
+export async function Analytics(req: Request, res: Response) {
   const result = await getPopularKeywords();
-  return res.status(200).json(result);
-};
+  res.status(200).json(result);
+}
 
-export const handleSuggest = async (req: Request, res: Response) => {
+export async function Suggest(req: Request, res: Response) {
   const prefix = typeof req.query.prefix === 'string' ? req.query.prefix.trim() : null;
-  if (!prefix) return res.status(400).send('Missing prefix');
+  if (!prefix) {
+    res.status(400).send('Missing prefix');
+    return;
+  }
 
   const suggestions = await findSuggestedKeywords(prefix);
-  return res.status(200).json(suggestions);
-};
+  res.status(200).json(suggestions);
+}

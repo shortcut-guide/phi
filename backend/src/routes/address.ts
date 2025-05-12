@@ -1,3 +1,3 @@
-import { handleGetAddresses } from "@/b/controllers/addressController";
+import { GetAddresses } from "@/b/controllers/addressController";
 
-export const onRequestGet = handleGetAddresses;
+export const onRequestGet = GetAddresses;
