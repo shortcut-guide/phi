@@ -1,4 +1,4 @@
-import { updateProduct, deleteProduct } from "@/b/models/Product";
+import { updateProduct, deleteProduct } from "@/b/models/ProductModel";
 import { getDB } from "@/b/utils/d1";
 
 export const onRequestPut = async ({ request, params, env }: any) => {
