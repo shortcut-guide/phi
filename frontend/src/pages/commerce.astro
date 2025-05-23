@@ -1,7 +1,7 @@
 ---
-import DefaultLayout from '../layouts/DefaultLayout.astro'
+import DefaultLayout from '@/f/layouts/DefaultLayout.astro'
 // Ensure the correct path to messageConfig.ts
-import { messages } from "../config/messageConfig.ts";
+import { messages } from "@/f/config/messageConfig";
 
 const lang = (Astro.url.searchParams.get('lang') ?? 'ja') as 'en' | 'ja';
 const texts = messages.commerceInfo[lang];
