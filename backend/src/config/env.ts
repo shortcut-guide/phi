@@ -12,7 +12,7 @@ const required = (key: string): string => {
 export const PORT = process.env.PORT || 3000;
 export const NODE_ENV = process.env.NODE_ENV || 'development';
 export const SEARCHLOGS_DB = required("CLOUDFLARE_D1_DATABASE_SEARCH_LOGS");
-export const PRODUCTS_DB = required("CLOUDFLARE_D1_DATABASE_SEARCH_LOGS");
+export const PRODUCTS_DB = required("CLOUDFLARE_D1_DATABASE_PRODUCTS");
 export const PROFILE_DB = required("CLOUDFLARE_D1_DATABASE_PROFILE");
 export const PUP_DB = required("CLOUDFLARE_D1_DATABASE_PUP");
 export const PAYPAL_CLIENT_ID = required("PAYPAL_CLIENT_ID");
