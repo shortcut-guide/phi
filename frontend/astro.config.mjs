@@ -3,6 +3,7 @@ import { defineConfig } from 'astro/config';
 import tailwind from '@astrojs/tailwind';
 import preact from '@astrojs/preact';
 import icon from "astro-icon";
+import path from 'path';
 
 // 相対パスに変換するプラグイン
 import relativeLinks from "astro-relative-links";
@@ -13,7 +14,7 @@ export default defineConfig({
   vite: {
     resolve: {
       alias: {
-        '@': '/src'
+        '@': path.resolve('./src'),
       },
     },
   },
