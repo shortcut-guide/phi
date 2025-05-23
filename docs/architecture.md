@@ -1035,3 +1035,30 @@ sequenceDiagram
   PayPal API-->>Backend: ステータス返却
   Backend-->>Frontend: 完了ステータス返却
 ```
+
+---
+
+# PDAPI(phis db api)
+## CDN + API + SQL
+```
+vps-app/
+├── public/
+├── src/
+│   ├── api/              # REST APIエンドポイント
+│   ├── cache/            # CDN風キャッシュ処理（Redis等）
+│   ├── db/               # SQLite操作ラッパー（D1風）
+│   ├── pages/            # ページ（Next.js or Astro）
+│   ├── utils/            # 共通ユーティリティ
+├── scripts/              # バッチやCLIツール
+├── config/               # 設定ファイル（DB・Redis）
+├── .env
+├── package.json
+└── sqlite.db             # SQLite DBファイル
+```
+
+- CDN風キャッシュ : Redis（node-redis） or Edge Cache風処理
+- API処理 : Fastify / Express / Hono
+- DB : SQLite（better-sqlite3 or prisma）
+- DB高速化 : Indexed Redis or LRUキャッシュ
+- セキュリティ : APIキー + RateLimiter
+
