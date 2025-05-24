@@ -39,11 +39,11 @@ import { ProductDetail } from '@/f/components/ProductDetail';
 
     // 2. レンダリング後に対象位置へスクロール
     requestAnimationFrame(() => {
-      const targetIndex = (initialPage - 1) * 30;
-      const targetEl = document.querySelectorAll('[data-pin]')?.[0]; // 最初のitem
-      if (targetEl) {
-        const offsetTop = (targetEl as HTMLElement).offsetTop;
-        window.scrollTo({ top: offsetTop - 20, behavior: 'smooth' });
+      const el = document.querySelectorAll('[data-pin]')[0];
+      if (el) {
+        const rect = el.getBoundingClientRect();
+        const centerY = window.scrollY + rect.top - window.innerHeight / 2 + rect.height / 2;
+        window.scrollTo({ top: centerY, behavior: 'smooth' });
       }
     });
 
