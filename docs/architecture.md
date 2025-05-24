@@ -804,6 +804,43 @@ project-root/
 │       └── types/                # 型定義（フロント用）
 ```
 
+## 無限スクロール + pushState
+```mermaid
+sequenceDiagram
+  User->>Browser: Scroll to bottom
+  Browser->>Frontend: loadPage(page+1)
+  Frontend->>history: pushState({page})
+  User->>Browser: Click Back
+  Browser->>Frontend: popstate → loadInitial
+  Frontend->>API: fetch offset=(page-1)*30
+```
+
+### 戻る操作でスクロール位置＋一覧内容を復元
+- 履歴復元: popstate 時にスクロール位置とアイテムリストを完全復元
+- 技術: history.pushState(state) に items + scrollY を含めて保存
+- スクロール: window.scrollTo(0, scrollY) で自動復元
+```mermaid
+sequenceDiagram
+  User->>Browser: scrolls & loads page 2
+  Frontend->>History: pushState({ page: 2, items: [...], scrollY: 1800 })
+  User->>Browser: clicks back
+  Browser->>Frontend: popstate
+  Frontend->>DOM: restore items
+  Frontend->>Window: scrollTo(scrollY)
+```
+
+### ダイレクトアクセス時の 対象位置スクロール＋優先読み込み 対応
+- /page/3 直アクセス: ページ3のアイテムを優先して取得
+- スクロール位置復元: ページ3の開始位置（＝ピンN件目）へスクロール
+- 技術構成: window.scrollTo + await loadPage(p) + レンダリング完了検知
+```mermaid
+sequenceDiagram
+  User->>Browser: /page/3 にアクセス
+  Frontend->>API: loadPage(1), loadPage(2), loadPage(3)
+  Frontend->>DOM: render items
+  Frontend->>Window: scrollTo(N件目位置)
+```
+
 ## Search component
 
 ```mermaid

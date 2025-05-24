@@ -10,9 +10,10 @@ interface Item {
 interface Props {
   items: Item[];
   loadMore: () => void;
+  onSelect: (item: Item) => void;
 }
 
-export function PinGrid({ items, loadMore }: Props) {
+export function PinGrid({ items, loadMore, onSelect }: Props) {
   const loadRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -28,7 +29,7 @@ export function PinGrid({ items, loadMore }: Props) {
     <>
       <div className="columns-3 sm:columns-4 md:columns-5 lg:columns-6 xl:columns-7 gap-4 p-4">
         {items.map((item) => (
-          <div key={item.id} className="mb-4 break-inside-avoid">
+          <div key={item.id} data-pin className="mb-4 break-inside-avoid cursor-pointer" onClick={() => onSelect(item)}>
             <img
               src={item.imageUrl}
               alt={item.title}
