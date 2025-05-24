@@ -851,6 +851,17 @@ sequenceDiagram
   Frontend-->>API: async fetch page 1, 2
 ```
 
+### SSR & SPA統合構成
+```mermaid
+graph TD
+  route1[/page/3 (SSR)] -->|最初のHTML描画| astro[Astro Server]
+  astro -->|fetch pins| api[/api/pins]
+  astro --> html[生成済みHTML]
+
+  html -->|Hydration| SPA[Client-side React + PinGrid]
+  SPA -->|scroll| more[/api/pins?offset=...]
+```
+
 ## Search component
 
 ```mermaid
