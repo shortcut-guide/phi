@@ -862,6 +862,21 @@ graph TD
   SPA -->|scroll| more[/api/pins?offset=...]
 ```
 
+### SSR Meta / OGP, 詳細導線, 中央スクロール
+- SSR Meta / OGP: <meta> や OGPタグ、JSON-LDを page/[page].astro に埋め込み
+- 詳細導線: /products/[id] 詳細ページへリンクまたは遷移
+- 中央スクロール: 優先アイテムが 画面中央に表示されるようにスクロール調整
+
+```mermaid
+graph TD
+  SSR[/page/[page].astro] --> HTML[OGP + JSON-LD + title]
+  HTML --> PinGrid
+  PinGrid -->|click| ProductDetail
+  ProductDetail -->|詳細| /products/[id]
+  /page/[page] -->|scroll| scrollToCenter
+```
+---
+
 ## Search component
 
 ```mermaid

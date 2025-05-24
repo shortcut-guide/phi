@@ -1,26 +1,44 @@
 ---
+import { PinGrid } from "@/f/components/PinGrid";
+
 const page = Number(Astro.params.page || "1");
 const limit = 30;
 const offset = (page - 1) * limit;
 
-const res = await fetch(`/api/pins?offset=${offset}`);
-const items = await res.json();
+const pins = await fetch(`/api/pins?offset=${offset}`);
+const items = await pins.json();
+const first = pins?.[0];
+const ogImage = first?.imageUrl || '/default-og.jpg';
+const ogTitle = `Page ${page} 商品一覧`;
 ---
 
 <html lang="ja">
   <head>
-    <title>ページ {page} | 商品一覧</title>
+    <title>{ogTitle}</title>
+    <meta name="description" content={`商品一覧 Page ${page}`} />
+    <meta property="og:title" content={ogTitle} />
+    <meta property="og:description" content="今人気の商品一覧ページです" />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={`https://yourdomain.com/page/${page}`} />
+
+    <script type="application/ld+json">
+      {JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        "name": `商品一覧 Page ${page}`,
+        "mainEntity": items.map((p) => ({
+          "@type": "Product",
+          "name": p.title,
+          "image": p.imageUrl,
+          "url": `https://yourdomain.com/products/${p.id}`,
+        })),
+      })}
+    </script>
   </head>
   <body class="p-6">
     <h1 class="text-xl font-bold mb-4">ページ {page}</h1>
 
-    <section class="grid grid-cols-3 gap-4">
-      {items.map(item => (
-        <div class="border rounded shadow p-2" key={item.id}>
-          <img src={item.imageUrl} alt={item.title} loading="lazy" class="w-full h-auto" />
-          <h2 class="mt-2 text-sm font-semibold">{item.title}</h2>
-        </div>
-      ))}
-    </section>
+    <PinGrid items={items} loadMore={() => {}} onSelect={() => {}} />
   </body>
 </html>
