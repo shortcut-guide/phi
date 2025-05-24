@@ -1,5 +1,6 @@
 // PinGrid.tsx
 import { useEffect, useRef } from 'react';
+import { trackGAEvent } from '@/f/utils/trackGA';
 
 interface Item {
   id: string;
@@ -18,7 +19,10 @@ export function PinGrid({ items, loadMore, onSelect }: Props) {
   useEffect(() => {
     if (!loadRef.current) return;
     const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) loadMore();
+      if (entry.isIntersecting) {
+        trackGAEvent("scroll_page_load", { page_number: currentPage + 1 }); // 次ページ読み込み時
+        loadMore();
+      }
     });
     observer.observe(loadRef.current);
     return () => observer.disconnect();

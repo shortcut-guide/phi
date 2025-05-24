@@ -877,6 +877,22 @@ graph TD
 ```
 ---
 
+## analytics
+| 対象項目    | GA4 イベント名例         | トリガータイミング        |
+| ------- | ------------------ | ---------------- |
+| 初期表示    | `page_view`        | `/page/:id` 到達時  |
+| スクロール読み | `scroll_page_load` | 次ページ読み込み成功後      |
+| 商品クリック  | `product_click`    | ピン選択時            |
+| 詳細表示    | `product_expand`   | 詳細パネル展開ボタンを押したとき |
+
+```mermaid
+graph TD
+  UI[無限スクロールUI] -->|scroll| track("scroll_page")
+  UI -->|click| track("click_product")
+  track --> /api/analytics
+  /api/analytics --> analytics[(Cloudflare D1)]
+```
+
 ## Search component
 
 ```mermaid

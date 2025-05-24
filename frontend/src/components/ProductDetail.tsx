@@ -1,5 +1,6 @@
 // ProductDetail.tsx
 import { useState } from 'react';
+import { trackGAEvent } from "@/f/utils/track";
 
 interface Product {
   id: string;
@@ -16,6 +17,11 @@ interface Props {
 }
 
 export function ProductDetail({ product, onExpand, onClose }: Props) {
+  trackGAEvent("product_expand", {
+    product_id: product.id,
+    onExpand
+  });
+
   if (!product) return null;
 
   return (

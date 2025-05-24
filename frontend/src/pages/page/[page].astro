@@ -1,7 +1,10 @@
 ---
 import { PinGrid } from "../../components/PinGrid";
+import { trackGAEvent } from "../../utils/track";
 
 const page = Number(Astro.params.page || "1");
+track("scroll_page", { page: {page} });
+
 const limit = 30;
 const offset = (page - 1) * limit;
 
