@@ -32,8 +32,8 @@ export function PinGrid({ items, loadMore }: Props) {
             <img
               src={item.imageUrl}
               alt={item.title}
-              className="w-full rounded-lg shadow-md"
               loading="lazy"
+              className="w-full rounded-lg shadow-md"
             />
             <div className="mt-1 text-sm text-center text-gray-700">{item.title}</div>
           </div>
