@@ -8,19 +8,20 @@ import { ProductDetail } from '../components/ProductDetail';
     const [page, setPage] = useState(1);
     const [selected, setSelected] = useState(null);
     const [expanded, setExpanded] = useState(false);
+  };
 
-    const loadPage = async (p: number) => {
+  const loadPage = async (p: number, overwrite = false) => {
     const res = await fetch(`/api/pins?offset=${(p - 1) * 30}`);
     const more = await res.json();
-    setItems(prev => [...prev, ...more]);
-    setPage(p);
 
-    // pushState: `/page/2`
-    history.pushState(
-      { page: p, items, scrollY: window.scrollY },
-      '',
-      `/page/${p}`
-    );
+    if (overwrite) {
+      setItems(more); // 優先ページは一度上書き
+    } else {
+      setItems(prev => [...prev, ...more]);
+    }
+
+    setPage(p);
+    history.replaceState({ page: p, items, scrollY: 0 }, '', `/page/${p}`);
   };
 
   // ページ番号取得
@@ -32,19 +33,24 @@ import { ProductDetail } from '../components/ProductDetail';
   // 対象ページの先まで 優先して読み込む
   const loadInitial = async () => {
     const initialPage = getInitialPageFromPath();
-    for (let i = 1; i <= initialPage; i++) {
-      await loadPage(i);
-    }
 
-    // スクロール復元（レンダリング後に実行）
+    // 1. 対象ページのみを優先読み込み
+    await loadPage(initialPage, true); // true = 優先的に上書き
+
+    // 2. レンダリング後に対象位置へスクロール
     requestAnimationFrame(() => {
-      const targetIndex = (initialPage - 1) * 30; // 各ページ30件前提
-      const targetEl = document.querySelectorAll('[data-pin]')?.[targetIndex];
+      const targetIndex = (initialPage - 1) * 30;
+      const targetEl = document.querySelectorAll('[data-pin]')?.[0]; // 最初のitem
       if (targetEl) {
         const offsetTop = (targetEl as HTMLElement).offsetTop;
         window.scrollTo({ top: offsetTop - 20, behavior: 'smooth' });
       }
     });
+
+    // 3. 残りの前ページを順次ロード（非同期に）
+    for (let i = 1; i < initialPage; i++) {
+      loadPage(i, false);
+    }
   };
 
   useEffect(() => {

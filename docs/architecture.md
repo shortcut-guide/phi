@@ -830,15 +830,25 @@ sequenceDiagram
 ```
 
 ### ダイレクトアクセス時の 対象位置スクロール＋優先読み込み 対応
-- /page/3 直アクセス: ページ3のアイテムを優先して取得
-- スクロール位置復元: ページ3の開始位置（＝ピンN件目）へスクロール
+- /page/3 直アクセス時: ページ3のみを最初に読み込む（1〜2ページは後回し）
+- スクロール: ページ3の先頭位置へ（レンダリング後に）スムーズにスクロール
 - 技術構成: window.scrollTo + await loadPage(p) + レンダリング完了検知
+  - loadPage(3) → scrollTo(item_60) → 後続でloadPage(1), (2), ...
 ```mermaid
 sequenceDiagram
   User->>Browser: /page/3 にアクセス
   Frontend->>API: loadPage(1), loadPage(2), loadPage(3)
   Frontend->>DOM: render items
   Frontend->>Window: scrollTo(N件目位置)
+```
+### 対象ページのみを優先して先に読み込む
+```mermaid
+sequenceDiagram
+  User->>Browser: アクセス /page/3
+  Frontend->>API: fetch page 3 only
+  Frontend->>DOM: render items (page 3)
+  Frontend->>Window: scrollTo(top of page 3)
+  Frontend-->>API: async fetch page 1, 2
 ```
 
 ## Search component
