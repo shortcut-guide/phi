@@ -871,6 +871,14 @@ graph TD
   controller --> model[models/productModel.ts]
 ```
 
+## ec_data json構成
+- 価格差/priceDiff
+- 自動値下げフラグ/autoDiscount
+- カート追加数/cartCount
+- 売上件数/salesCount
+- ユーザー設定優先度/userPriority
+- カテゴリ優先度/categoryPriority
+
 ---
 
 # profile
@@ -1061,4 +1069,6 @@ vps-app/
 - DB : SQLite（better-sqlite3 or prisma）
 - DB高速化 : Indexed Redis or LRUキャッシュ
 - セキュリティ : APIキー + RateLimiter
+
+---
 
