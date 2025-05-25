@@ -1,10 +1,11 @@
 // backend/models/pinModel.ts
+import { Product } from "@/b/types/product";
 import { getD1Product } from "@/b/utils/d1";
 
 export async function getPins(offset = 0, limit = 30) {
-  const DB = getD1Product();
+  const db = getD1Product();
 
-  const stmt = DB.prepare(`
+  const stmt = await db.prepare(`
     SELECT
       p.id,
       json_extract(p.ec_data, '$.image_url') AS imageUrl,
@@ -32,19 +33,7 @@ export async function getPins(offset = 0, limit = 30) {
       json_extract(p.ec_data, '$.sales_count') DESC,
       p.updated_at DESC
     LIMIT ? OFFSET ?
-  `).bind(limit, offset);
+  `).bind(limit, offset).all();
 
-  const result = await stmt.all();
-
-  return result.results as {
-    id: string;
-    imageUrl: string;
-    title: string;
-    priceDiff?: number;
-    autoDiscount?: number;
-    cartCount?: number;
-    salesCount?: number;
-    userPriority?: number;
-    categoryPriority?: number;
-  }[];
+  return stmt.results;
 }

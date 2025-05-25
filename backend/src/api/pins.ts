@@ -3,16 +3,16 @@ import type { APIRoute } from "astro";
 import { getPins } from "@/b/models/pinModel";
 import { setCORSHeaders } from "@/b/utils/cors";
 
-export const GET: APIRoute = async ({ url }) => {
-  const offset = Number(url.searchParams.get("offset") || "0");
-  const limit = 30; // 1回で30件取得
-
+export async function handleGetPins(c: Context){
+  const offset = Number(c.req.query('offset') ?? 0);
+  const limit = Number(c.req.query('limit') ?? 30);
   const items = await getPins(offset, limit);
 
   return setCORSHeaders(
-    new Response(JSON.stringify(items), {
+    new Response(c.json(items), {
       status: 200,
       headers: { "Content-Type": "application/json" },
     })
   );
-};
+
+}
