@@ -1,6 +1,6 @@
 // PinGrid.tsx
 import { useEffect, useRef } from 'react';
-import { trackGAEvent } from '@/f/utils/trackGA';
+import { trackGAEvent } from '@/f/utils/track';
 
 interface Item {
   id: string;
@@ -14,10 +14,11 @@ interface Props {
   onSelect: (item: Item) => void;
 }
 
-export function PinGrid({ items, loadMore, onSelect }: Props) {
+export function PinGrid({ items, loadMore, onSelect }: Readonly<Props>) {
   const loadRef = useRef<HTMLDivElement | null>(null);
   const currentPage = Math.floor(items.length / 30); // 30件/ページで仮定
 
+  // 無限スクロール＋GA
   useEffect(() => {
     if (!loadRef.current) return;
     const observer = new IntersectionObserver(([entry]) => {
@@ -30,8 +31,14 @@ export function PinGrid({ items, loadMore, onSelect }: Props) {
     return () => observer.disconnect();
   }, [loadRef.current, currentPage]);
 
+  // スクロールして中央寄せ
+  useEffect(() => {
+    requestAnimationFrame(() => scrollToCenter(0)); // 初回中央寄せ
+  }, []);
+  
+  // 中央スクロール補助
   const scrollToCenter = (index: number) => {
-  const el = document.querySelectorAll('[data-pin]')?.[index];
+    const el = document.querySelectorAll('[data-pin]')?.[index];
     if (el) {
       const rect = (el as HTMLElement).getBoundingClientRect();
       const scrollTop = window.scrollY + rect.top - window.innerHeight / 2 + rect.height / 2;
@@ -39,9 +46,20 @@ export function PinGrid({ items, loadMore, onSelect }: Props) {
     }
   };
 
-  useEffect(() => {
-    requestAnimationFrame(() => scrollToCenter(0)); // 初回中央寄せ
-  }, []);
+  // 商品クリック & 詳細パネル展開
+  const handleClick = (item: Item) => {
+    trackGAEvent("product_click", {
+      item_id: item.id,
+      item_name: item.title
+    });
+
+    trackGAEvent("product_expand", {
+      item_id: item.id,
+      expanded: true
+    });
+
+    onSelect(item);
+  };
 
   return (
     <>
@@ -52,10 +70,10 @@ export function PinGrid({ items, loadMore, onSelect }: Props) {
             data-pin
             type="button"
             className="mb-4 break-inside-avoid cursor-pointer w-full text-left bg-transparent border-none p-0"
-            onClick={() => onSelect(item)}
+            onClick={() => handleClick(item)}
             aria-label={`Select ${item.title}`}
           >
-            <a href={`/products/${item.id}`} className="block">
+            <div className="block">
               <img
                 src={item.imageUrl}
                 alt={item.title}
@@ -63,7 +81,7 @@ export function PinGrid({ items, loadMore, onSelect }: Props) {
                 className="w-full rounded-lg shadow-md"
               />
               <div className="mt-1 text-sm text-center text-gray-700">{item.title}</div>
-            </a>
+            </div>
           </button>
         ))}
       </div>
