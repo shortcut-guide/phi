@@ -3,37 +3,37 @@ import { getD1Product } from "@/b/utils/d1";
 
 export async function getProducts(){
   const db = getD1Product();
-  const result = await db.prepare("SELECT * FROM products").all();
-  return result.results;
+  const stmt = await db.prepare("SELECT * FROM products").all();
+  return stmt.results;
 };
 
 export async function createProduct(product: Product){
   const db = getD1Product();
-  const result = await db.prepare(`
+  const stmt = await db.prepare(`
     INSERT INTO products (id, name, shop_name, platform, base_price, ec_data)
     VALUES (?, ?, ?, ?, ?, ?)
   `)
   .bind(product.id, product.name, product.shop_name, product.platform, product.base_price, product.ec_data)
   .run();
-  return result.results;
+  return stmt.results;
 };
 
 export async function updateProduct(product: Product){
     const db = getD1Product();
-    const result = await db.prepare(`
+    const stmt = await db.prepare(`
       UPDATE products SET
         name = ?, shop_name = ?, platform = ?, base_price = ?, ec_data = ?, updated_at = CURRENT_TIMESTAMP
       WHERE id = ?
     `)
     .bind(product.name, product.shop_name, product.platform, product.base_price, product.ec_data, product.id)
     .run();
-    return result.results;
+    return stmt.results;
 };
 
 export async function deleteProduct(id: string){
   const db = getD1Product();
-  const result = await db.prepare("DELETE FROM products WHERE id = ?").bind(id).run();
-  return result.results;
+  const stmt = await db.prepare("DELETE FROM products WHERE id = ?").bind(id).run();
+  return stmt.results;
 };
 
 export async function getFilteredProducts({ shop, limit, ownOnly }: { shop?: string; limit: number; ownOnly: boolean; }){
@@ -59,6 +59,6 @@ export async function getFilteredProducts({ shop, limit, ownOnly }: { shop?: str
   query += ' ORDER BY updated_at DESC LIMIT ?';
   bindings.push(limit);
 
-  const result = await db.prepare(query).bind(...bindings).all();
-  return result.results;
+  const stmt = await db.prepare(query).bind(...bindings).all();
+  return stmt.results;
 }
