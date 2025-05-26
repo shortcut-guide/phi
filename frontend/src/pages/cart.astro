@@ -1,6 +1,11 @@
 ---
 import { generateCSRFToken } from "@/b/utils/csrf";
 import { paypalClientId } from "@/f/config/paypalConfig";
+import { messages } from "@/config/messageConfig";
+
+// Choose your language, e.g., from context or user settings
+const lang = "ja";
+const cart = messages.cartPage[lang];
 
 const token = generateCSRFToken();
 Astro.cookies.set("csrf_token", token, {
@@ -44,7 +49,7 @@ Astro.cookies.set("csrf_token", token, {
             body: JSON.stringify({ orderID: data.orderID }),
           });
           const result = await res.json();
-          alert("決済完了: " + result.status);
+          alert(cart.success + ": " + result.status);
         },
       }).render("#paypal-button-container");
     </script>

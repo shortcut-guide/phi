@@ -359,5 +359,15 @@ export const messages = {
       modalCloseText: "Cancel",
       modalBody: "You can use this component to include a form that adds a new media item to the list."
     }
+  },
+  cartPage: {
+    ja: {
+      success: "決済完了",
+      error: "エラーが発生しました"
+    },
+    en: {
+      success: "Payment successful",
+      error: "An error occurred"
+    }
   }
 };
