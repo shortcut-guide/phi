@@ -383,5 +383,31 @@ export const messages = {
       description: "This page does not exist.",
       back: "Go back to the homepage"
     }
+  },
+  puppeteerPage: {
+    ja: {
+      title: "Puppeteer JSONデータ管理",
+      placeholder: "検索",
+      sortLabel: "並び替え",
+      ecSite: "ECサイト",
+      uploadedAt: "アップロード日時",
+      actions: "操作",
+      edit: "編集",
+      delete: "削除",
+      prev: "前へ",
+      next: "次へ"
+    },
+    en: {
+      title: "Puppeteer JSON Data Manager",
+      placeholder: "Search",
+      sortLabel: "Sort",
+      ecSite: "EC Site",
+      uploadedAt: "Uploaded At",
+      actions: "Actions",
+      edit: "Edit",
+      delete: "Delete",
+      prev: "Previous",
+      next: "Next"
+    }
   }
 };

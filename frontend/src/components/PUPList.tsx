@@ -1,5 +1,8 @@
 import { useState, useEffect } from "preact/hooks";
 import clsx from "clsx";
+import { messages } from "@/f/config/messageConfig";
+import { lang } from "@/f/config/lang";
+const t = messages.puppeteerPage[lang];
 
 const PUPList = () => {
     const [data, setData] = useState([]);
@@ -26,16 +29,16 @@ const PUPList = () => {
     
     return (
         <div className="bg-gray-100 dark:bg-gray-900 p-6">
-            <h3 className="text-2xl font-bold mb-4 text-gray-800 dark:text-white">Puppeteer JSONデータ管理</h3>
+            <h3 className="text-2xl font-bold mb-4 text-gray-800 dark:text-white">{t.title}</h3>
             <div className="flex space-x-4 mb-4">
-                <input className={inputStyle} type="text" placeholder="検索" onInput={(e) => setSearch(e.target.value)} />
-                <button className={buttonStyle} onClick={() => setOrder(order === "desc" ? "asc" : "desc")}>並び替え: {order}</button>
+                <input className={inputStyle} type="text" placeholder={t.placeholder} onInput={(e) => setSearch(e.target.value)} />
+                <button className={buttonStyle} onClick={() => setOrder(order === "desc" ? "asc" : "desc")}>{t.sortLabel}: {order}</button>
             </div>
 
             <div className={gridContainer}>
-                <div className={gridHeader}>ECサイト</div>
-                <div className={gridHeader}>アップロード日時</div>
-                <div className={gridHeader}>操作</div>
+                <div className={gridHeader}>{t.ecSite}</div>
+                <div className={gridHeader}>{t.uploadedAt}</div>
+                <div className={gridHeader}>{t.actions}</div>
             </div>
 
             {data.map(item => (
@@ -43,15 +46,15 @@ const PUPList = () => {
                     <div className={gridItem}>{item.ec_site}</div>
                     <div className={gridItem}>{new Date(item.uploaded_at).toLocaleString()}</div>
                     <div className={gridItem} class={actions}>
-                        <a href={`/edit?id=${item.id}`} class="text-blue-500 hover:underline">編集</a>
-                        <button onClick={() => handleDelete(item.id)} class="text-red-500 hover:underline">削除</button>
+                        <a href={`/edit?id=${item.id}`} class="text-blue-500 hover:underline">{t.edit}</a>
+                        <button onClick={() => handleDelete(item.id)} class="text-red-500 hover:underline">{t.delete}</button>
                     </div>
                 </div>
             ))}
 
             <div class="flex justify-between mt-4">
-                <button className={buttonStyle} onClick={() => setPage(page - 1)} disabled={page <= 1}>前へ</button>
-                <button className={buttonStyle} onClick={() => setPage(page + 1)}>次へ</button>
+                <button className={buttonStyle} onClick={() => setPage(page - 1)} disabled={page <= 1}>{t.prev}</button>
+                <button className={buttonStyle} onClick={() => setPage(page + 1)}>{t.next}</button>
             </div>
         </div>
     );
