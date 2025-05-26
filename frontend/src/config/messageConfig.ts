@@ -255,5 +255,19 @@ export const messages = {
       selected: "Selected",
       limitError: "You can register up to 3 addresses"
     }
+  },
+  users: {
+    ja: {
+      title: "ユーザー",
+      overview: "ユーザーの概要",
+      emptyMessage: "まだユーザーが追加されていません。まずは追加してみましょう。",
+      addButton: "ユーザーを追加"
+    },
+    en: {
+      title: "Users",
+      overview: "Users overview",
+      emptyMessage: "You haven't added any users yet. Start by adding some.",
+      addButton: "Add your user"
+    }
   }
 };
