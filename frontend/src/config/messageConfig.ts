@@ -269,5 +269,21 @@ export const messages = {
       emptyMessage: "You haven't added any users yet. Start by adding some.",
       addButton: "Add your user"
     }
+  },
+  settings: {
+    ja: {
+      title: "設定",
+      heading: "設定",
+      overview: "Lorem ipsum dolor sit amet.",
+      sectionTitle: "設定概要",
+      sectionDescription: "タイムゾーン、カラーパレット、プロフィール画像などの設定を変更できます。"
+    },
+    en: {
+      title: "Settings",
+      heading: "Settings",
+      overview: "Lorem ipsum dolor sit amet.",
+      sectionTitle: "Settings overview",
+      sectionDescription: "Change your preferences like timezone, color palette and profile picture."
+    }
   }
 };
