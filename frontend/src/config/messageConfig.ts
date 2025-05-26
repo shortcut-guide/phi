@@ -1,4 +1,20 @@
 export const messages = {
+  login: {
+    ja: {
+      title: "ログイン",
+      hint: "以下のログイン情報をご利用ください：",
+      email: "admin@astro.demo",
+      password: "Astronaut570",
+      heading: "ログイン"
+    },
+    en: {
+      title: "Login",
+      hint: "Log in using:",
+      email: "admin@astro.demo",
+      password: "Astronaut570",
+      heading: "Login"
+    }
+  },
   forgotPassword: {
     en: {
       title: "Forgot Password",
