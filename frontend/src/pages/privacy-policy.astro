@@ -1,6 +1,6 @@
 ---
-import DefaultLayout from '../layouts/DefaultLayout.astro'
-import { messages } from '../config/messageConfig';
+import DefaultLayout from '@/f/layouts/DefaultLayout.astro'
+import { messages } from '@/f/config/messageConfig';
 
 const lang = (Astro.url.searchParams.get('lang') ?? 'ja') as 'en' | 'ja';
 const privacyPolicy = messages.privacyPolicy[lang];
