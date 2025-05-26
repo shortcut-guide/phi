@@ -1,11 +1,14 @@
 ---
 import DefaultLayout from '../layouts/DefaultLayout.astro'
+import { messages } from '@/f/config/messageConfig'
+import { lang } from '@/f/config/lang'
+const t = messages.notFoundPage[lang]
 ---
 
-<DefaultLayout title="404">
+<DefaultLayout title={t.title}>
   <section>
-    <h1>404</h1><br>
-    <p class="size-20">This page does not exist.</p><br>
-    <a class="button color-secondary" href="/">Go back to the homepage</a>
+    <h1>{t.heading}</h1><br>
+    <p class="size-20">{t.description}</p><br>
+    <a class="button color-secondary" href="/">{t.back}</a>
   </section>
 </DefaultLayout>

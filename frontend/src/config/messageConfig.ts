@@ -369,5 +369,19 @@ export const messages = {
       success: "Payment successful",
       error: "An error occurred"
     }
+  },
+  notFoundPage: {
+    ja: {
+      title: "404",
+      heading: "404",
+      description: "お探しのページは存在しません。",
+      back: "ホームページに戻る"
+    },
+    en: {
+      title: "404",
+      heading: "404",
+      description: "This page does not exist.",
+      back: "Go back to the homepage"
+    }
   }
 };
