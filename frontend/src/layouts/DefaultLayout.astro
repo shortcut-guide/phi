@@ -1,9 +1,9 @@
 ---
 import '@/assets/scss/globals.scss'
-import Navigation from '../components/Navigation.astro'
+import Navigation from '@/f/components/Navigation.astro'
 import { DarkMode, SkipLink } from 'accessible-astro-components'
 import { Icon } from 'astro-icon/components'
-import { trackGAEvent } from "../utils/track";
+import { trackGAEvent } from "@/f/utils/track";
 
 const {title} = Astro.props
 let subtitle = 'Accessible Astro Dashboard'
@@ -95,14 +95,14 @@ let subtitle = 'Accessible Astro Dashboard'
     trackGAEvent("page_view", { page_location: location.href });
   });
 
-  let isLoggedIn = await localStorage.getItem('isLoggedIn');
+  let isLoggedIn = localStorage.getItem('isLoggedIn');
   if (isLoggedIn === null) {
     window.location.href = '/login';
   }
 </script>
 
 <style lang="scss">
-  @use '../assets/scss/base/breakpoint' as *;
+  @use '@/f/assets/scss/base/breakpoint' as *;
 
   .admin-interface {
     @include breakpoint(medium) {
@@ -122,8 +122,8 @@ let subtitle = 'Accessible Astro Dashboard'
 </style>
 
 <style lang="scss" is:global>
-  @use "../assets/scss/base/breakpoint" as *;
-  @use "../assets/scss/base/outline" as *;
+  @use "@/f/assets/scss/base/breakpoint" as *;
+  @use "@/f/assets/scss/base/outline" as *;
 
   #main-navigation nav button.darkmode-toggle{
     width: 35px;
