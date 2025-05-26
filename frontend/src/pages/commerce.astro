@@ -1,15 +1,15 @@
 ---
 import DefaultLayout from '@/f/layouts/DefaultLayout.astro'
-// Ensure the correct path to messageConfig.ts
 import { messages } from "@/f/config/messageConfig";
 
 const lang = (Astro.url.searchParams.get('lang') ?? 'ja') as 'en' | 'ja';
 const texts = messages.commerceInfo[lang];
+const pageText = messages.commercePage[lang];
 ---
 
-<DefaultLayout title="特定商取引法に基づく表記">
+<DefaultLayout title={pageText.title}>
   <section class="max-w-4xl mx-auto p-6 space-y-8">
-    <h1 class="text-3xl font-bold text-center">特定商取引法に基づく表記</h1>
+    <h1 class="text-3xl font-bold text-center">{pageText.heading}</h1>
     <dl class="space-y-6">
       {texts.map((item) => (
         <div class="border-b pb-4">

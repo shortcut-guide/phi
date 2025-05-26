@@ -49,6 +49,16 @@ export const messages = {
       { title: "その他", description: "詳細は利用規約をご確認ください。" },
     ]
   },
+  commercePage: {
+    ja: {
+      title: "特定商取引法に基づく表記",
+      heading: "特定商取引法に基づく表記"
+    },
+    en: {
+      title: "Legal Notice under the Act on Specified Commercial Transactions",
+      heading: "Legal Notice"
+    }
+  },
   terms: {
     en: {
       title: "Terms of Service",
