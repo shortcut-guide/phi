@@ -285,5 +285,29 @@ export const messages = {
       sectionTitle: "Settings overview",
       sectionDescription: "Change your preferences like timezone, color palette and profile picture."
     }
+  },
+  messagesPage: {
+    ja: {
+      title: "メッセージ",
+      heading: "メッセージ",
+      overview: "Lorem ipsum dolor sit amet.",
+      sectionTitle: "メッセージ概要",
+      emptyMessage: "まだメッセージが追加されていません。まずは追加してみましょう。",
+      addButton: "最初のメッセージを追加",
+      modalTitle: "メッセージを追加",
+      modalCloseText: "キャンセル",
+      modalBody: "このコンポーネントを使用して、メッセージをリストに追加するフォームを組み込めます。"
+    },
+    en: {
+      title: "Messages",
+      heading: "Messages",
+      overview: "Lorem ipsum dolor sit amet.",
+      sectionTitle: "Messages overview",
+      emptyMessage: "You haven't added any messages yet. Start by adding some.",
+      addButton: "Add your first message",
+      modalTitle: "Add message",
+      modalCloseText: "Cancel",
+      modalBody: "You can use this component to include a form that adds a new message to the list."
+    }
   }
 };
