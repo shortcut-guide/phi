@@ -1,26 +1,30 @@
 ---
-import DefaultLayout from '../layouts/DefaultLayout.astro'
 import { Media, Modal, Pagination } from 'accessible-astro-components'
+import DefaultLayout from '../layouts/DefaultLayout.astro'
+import { messages } from '@/f/config/messageConfig';
+
+const lang = (Astro.url.searchParams.get('lang') ?? 'ja') as 'en' | 'ja';
+const media = messages.mediaPage[lang];
 ---
 
-<DefaultLayout title="Media">
+<DefaultLayout title={media.title}>
   <section>
-    <h1>Media</h1><br>
-    <p class="size-20">Lorem ipsum dolor sit amet.</p>
+    <h1>{media.heading}</h1><br>
+    <p class="size-20">{media.overview}</p>
   </section>
   <section class="margin-32">
     <div class="space-content">
       <div class="contents">
-        <h2>Media overview</h2>
-        <p><em>Results: 1-6 of 24</em></p>
+        <h2>{media.sectionTitle}</h2>
+        <p><em>{media.resultInfo}</em></p>
       </div>
-      <button id="modal-trigger" class="button color-secondary">Add new media item</button>
+      <button id="modal-trigger" class="button color-secondary">{media.addButton}</button>
       <Modal
         triggerId="modal-trigger"
-        title="Add media"
-        closeText="Cancel"
+        title={media.modalTitle}
+        closeText={media.modalCloseText}
       >
-        <p>You can use this component to include a form that adds a new media item to the list.</p>
+        <p>{media.modalBody}</p>
       </Modal>
       <div class="grid small-grid-1 medium-grid-2 large-grid-3 equal-height">
         <Media 

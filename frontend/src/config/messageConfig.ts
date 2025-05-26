@@ -335,5 +335,29 @@ export const messages = {
       modalCloseText: "Cancel",
       modalBody: "You can use this component to include a form that adds a new message to the list."
     }
+  },
+  mediaPage: {
+    ja: {
+      title: "メディア",
+      heading: "メディア",
+      overview: "Lorem ipsum dolor sit amet.",
+      sectionTitle: "メディア概要",
+      resultInfo: "結果: 1-6 / 全24件",
+      addButton: "メディアを追加",
+      modalTitle: "メディアを追加",
+      modalCloseText: "キャンセル",
+      modalBody: "このコンポーネントを使用して、メディアアイテムをリストに追加するフォームを組み込めます。"
+    },
+    en: {
+      title: "Media",
+      heading: "Media",
+      overview: "Lorem ipsum dolor sit amet.",
+      sectionTitle: "Media overview",
+      resultInfo: "Results: 1-6 of 24",
+      addButton: "Add new media item",
+      modalTitle: "Add media",
+      modalCloseText: "Cancel",
+      modalBody: "You can use this component to include a form that adds a new media item to the list."
+    }
   }
 };
