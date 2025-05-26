@@ -1,5 +1,5 @@
 // ProductDetail.tsx
-import { useState } from 'react';
+import { useState } from 'preact/hooks';
 import { trackGAEvent } from "@/f/utils/track";
 
 interface Product {
@@ -17,12 +17,12 @@ interface Props {
 }
 
 export function ProductDetail({ product, onExpand, onClose }: Props) {
+  if (!product) return null;
+  
   trackGAEvent("product_expand", {
     product_id: product.id,
     onExpand
   });
-
-  if (!product) return null;
 
   return (
     <div className="w-full h-full bg-white border-t shadow-lg p-4 transition-all duration-300">
