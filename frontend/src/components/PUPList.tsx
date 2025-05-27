@@ -1,12 +1,14 @@
 import { useState, useEffect } from "preact/hooks";
+import type { PuppeteerItem } from "@/f/types/puppeteer";
 import clsx from "clsx";
 import { messages } from "@/f/config/messageConfig";
 import { getLang } from "@/f/utils/lang";
+
 const lang = getLang();
 const t = messages.puppeteerPage[lang];
 
 const PUPList = () => {
-    const [data, setData] = useState([]);
+    const [data, setData] = useState<PuppeteerItem[]>([]);
     const [search, setSearch] = useState("");
     const [page, setPage] = useState(1);
     const [sort, setSort] = useState("uploaded_at");
@@ -20,6 +22,18 @@ const PUPList = () => {
         };
         fetchData();
     }, [search, page, sort, order]);
+
+    const handleDelete = async (id: string) => {
+        if (!confirm(t.confirmDelete)) return;
+        try {
+            const res = await fetch(`/api/puppeteer/delete?id=${id}`, { method: 'DELETE' });
+            if (!res.ok) throw new Error('Delete failed');
+            setData(prev => prev.filter(item => item.id !== id));
+        } catch (error) {
+            console.error("Delete error:", error);
+            alert(t.deleteError || "Failed to delete item.");
+        }
+    };
 
     const gridContainer = clsx("grid grid-cols-3 gap-4 p-4 border-b border-gray-300 bg-white shadow-md rounded-md dark:bg-gray-800");
     const gridHeader = clsx("font-bold bg-gray-100 p-4 text-gray-800 dark:bg-gray-700 dark:text-white");
@@ -43,7 +57,7 @@ const PUPList = () => {
             </div>
 
             {data.map(item => (
-                <div className={gridContainer}>
+                <div key={item.id} className={gridContainer}>
                     <div className={gridItem}>{item.ec_site}</div>
                     <div className={gridItem}>{new Date(item.uploaded_at).toLocaleString()}</div>
                     <div className={gridItem} class={actions}>

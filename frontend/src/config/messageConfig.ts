@@ -476,7 +476,9 @@ export const messages = {
       edit: "編集",
       delete: "削除",
       prev: "前へ",
-      next: "次へ"
+      next: "次へ",
+      confirmDelete: "本当に削除しますか？",
+      deleteError: "削除に失敗しました",
     },
     en: {
       title: "Puppeteer JSON Data Manager",
@@ -488,7 +490,9 @@ export const messages = {
       edit: "Edit",
       delete: "Delete",
       prev: "Previous",
-      next: "Next"
+      next: "Next",
+      confirmDelete: "Are you sure you want to delete this?",
+      deleteError: "Failed to delete item",
     }
   }
 };
