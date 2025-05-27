@@ -1,7 +1,8 @@
 import { useState, useEffect } from "preact/hooks";
 import clsx from "clsx";
 import { messages } from "@/f/config/messageConfig";
-import { lang } from "@/f/config/lang";
+import { getLang } from "@/f/utils/lang";
+const lang = getLang();
 const t = messages.puppeteerPage[lang];
 
 const PUPList = () => {
