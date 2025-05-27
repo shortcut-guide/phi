@@ -2,7 +2,7 @@ import { useState, useEffect } from "preact/hooks";
 import { messages } from "@/f/config/messageConfig";
 import { getLang } from "@/f/utils/lang";
 const lang = getLang();
-const t = messages.puppeteerPage[lang];
+const t = messages.profileForm[lang];
 
 export default function ProfileForm() {
   const [nickname, setNickname] = useState("");

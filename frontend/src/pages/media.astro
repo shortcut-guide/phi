@@ -1,30 +1,30 @@
 ---
 import { Media, Modal, Pagination } from 'accessible-astro-components'
 import DefaultLayout from '../layouts/DefaultLayout.astro'
-import { messages } from '@/f/config/messageConfig';
-
-const lang = (Astro.url.searchParams.get('lang') ?? 'ja') as 'en' | 'ja';
-const media = messages.mediaPage[lang];
+import { messages } from "@/f/config/messageConfig";
+import { getLang } from "@/f/utils/lang";
+const lang = getLang();
+const t = messages.mediaPage[lang];
 ---
 
-<DefaultLayout title={media.title}>
+<DefaultLayout title={t.title}>
   <section>
-    <h1>{media.heading}</h1><br>
-    <p class="size-20">{media.overview}</p>
+    <h1>{t.heading}</h1><br>
+    <p class="size-20">{t.overview}</p>
   </section>
   <section class="margin-32">
     <div class="space-content">
       <div class="contents">
-        <h2>{media.sectionTitle}</h2>
-        <p><em>{media.resultInfo}</em></p>
+        <h2>{t.sectionTitle}</h2>
+        <p><em>{t.resultInfo}</em></p>
       </div>
-      <button id="modal-trigger" class="button color-secondary">{media.addButton}</button>
+      <button id="modal-trigger" class="button color-secondary">{t.addButton}</button>
       <Modal
         triggerId="modal-trigger"
-        title={media.modalTitle}
-        closeText={media.modalCloseText}
+        title={t.modalTitle}
+        closeText={t.modalCloseText}
       >
-        <p>{media.modalBody}</p>
+        <p>{t.modalBody}</p>
       </Modal>
       <div class="grid small-grid-1 medium-grid-2 large-grid-3 equal-height">
         <Media 

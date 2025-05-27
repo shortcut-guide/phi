@@ -1,4 +1,28 @@
 export const messages = {
+  DefaultLayout:{
+    ja:{
+      subtitle: "管理画面",
+      description: "管理画面へようこそ。ここでは、商品やユーザーの管理ができます。",
+    },
+    en:{
+      subtitle: "Admin Panel",
+      description: "Welcome to the admin panel. Here you can manage products and users."
+    }
+  },
+  loginLayout:{
+    ja: {
+      subtitle: "ログイン",
+      description: "管理画面にログインしてください。",
+      loginButton: "ログイン",
+      forgotPassword: "パスワードをお忘れですか？"
+    },
+    en: {
+      subtitle: "Login",
+      description: "Please log in to the admin panel.",
+      loginButton: "Login",
+      forgotPassword: "Forgot your password?"
+    }
+  },
   profileForm: {
     ja: {
       nickname: "ニックネーム",
@@ -13,9 +37,18 @@ export const messages = {
       updated: "Updated"
     }
   },
+  profileSettingsPage:{
+    ja: {
+      title: "プロフィール設定"
+    },
+    en: {
+      title: "Profile Settings"
+    },
+  },
   login: {
     ja: {
       title: "ログイン",
+      pageName: "ダッシュボード",
       hint: "以下のログイン情報をご利用ください：",
       email: "admin@astro.demo",
       password: "Astronaut570",
@@ -23,6 +56,7 @@ export const messages = {
     },
     en: {
       title: "Login",
+      pageName: "Dashboard",
       hint: "Log in using:",
       email: "admin@astro.demo",
       password: "Astronaut570",
@@ -30,24 +64,41 @@ export const messages = {
     }
   },
   forgotPassword: {
-    en: {
-      title: "Forgot Password",
-      heading: "Forgot your password?",
-      description: "Enter your email address\nand we’ll send you a link to reset your password.",
-      email: "Email address",
-      send: "Send reset link",
-      back: "Back to login"
-    },
     ja: {
       title: "パスワードをお忘れですか？",
       heading: "パスワードをお忘れですか？",
       description: "メールアドレスを入力してください。\nパスワード再設定用のリンクをお送りします。",
       email: "メールアドレス",
       send: "再設定リンクを送信",
-      back: "ログイン画面に戻る"
-    }
+      back: "ログイン画面に戻る",
+      alertComplete: "完了しました"
+    },
+    en: {
+      title: "Forgot Password",
+      heading: "Forgot your password?",
+      description: "Enter your email address\nand we’ll send you a link to reset your password.",
+      email: "Email address",
+      send: "Send reset link",
+      back: "Back to login",
+      alertComplete: "Done"
+    },
   },
   commerceInfo: {
+    ja: [
+      { title: "販売業者", description: "ショートカット" },
+      { title: "運営責任者", description: "福井 太星" },
+      { title: "所在地", description: "〒107-0061 東京都港区北青山1-6-4" },
+      { title: "電話番号", description: "070-6648-8093 ※お電話での問い合わせは受け付けておりません。" },
+      { title: "メールアドレス", description: "phis.shop.dev@gmail.com" },
+      { title: "販売価格", description: "各商品ページに記載" },
+      { title: "商品代金以外の必要料金", description: "消費税、関税、送料（商品ページに記載）、振込手数料（銀行振込の場合）、決済手数料" },
+      { title: "支払方法", description: "クレジットカード決済、銀行振込、コンビニ決済" },
+      { title: "支払時期", description: "注文確定時にお支払いが発生します。" },
+      { title: "商品引渡し時期", description: "ご入金確認後、通常3営業日以内に発送いたします。" },
+      { title: "返品・交換・キャンセル", description: "海外輸入の為、返品・交換・キャンセルは行えません。ご注意ください。" },
+      { title: "返品送料", description: "返品が行えません。" },
+      { title: "その他", description: "詳細は利用規約をご確認ください。" },
+    ],
     en: [
         { "title": "Seller", "description": "Shortcut" },
         { "title": "Responsible Person", "description": "Taisei Fukui" },
@@ -63,21 +114,6 @@ export const messages = {
         { "title": "Return Shipping Fees", "description": "Returns are not accepted." },
         { "title": "Others", "description": "For more details, please refer to our Terms of Service." }
     ],
-    ja: [
-      { title: "販売業者", description: "ショートカット" },
-      { title: "運営責任者", description: "福井 太星" },
-      { title: "所在地", description: "〒107-0061 東京都港区北青山1-6-4" },
-      { title: "電話番号", description: "070-6648-8093 ※お電話での問い合わせは受け付けておりません。" },
-      { title: "メールアドレス", description: "phis.shop.dev@gmail.com" },
-      { title: "販売価格", description: "各商品ページに記載" },
-      { title: "商品代金以外の必要料金", description: "消費税、関税、送料（商品ページに記載）、振込手数料（銀行振込の場合）、決済手数料" },
-      { title: "支払方法", description: "クレジットカード決済、銀行振込、コンビニ決済" },
-      { title: "支払時期", description: "注文確定時にお支払いが発生します。" },
-      { title: "商品引渡し時期", description: "ご入金確認後、通常3営業日以内に発送いたします。" },
-      { title: "返品・交換・キャンセル", description: "海外輸入の為、返品・交換・キャンセルは行えません。ご注意ください。" },
-      { title: "返品送料", description: "返品が行えません。" },
-      { title: "その他", description: "詳細は利用規約をご確認ください。" },
-    ]
   },
   commercePage: {
     ja: {
@@ -221,7 +257,7 @@ export const messages = {
       title: "商品一覧"
     }
   },
-  personalSettings: {
+  personalSettingsPage: {
     ja: {
       title: "個人情報設定",
       account: "アカウント",
@@ -238,9 +274,26 @@ export const messages = {
       others: "その他",
       security: "セキュリティ",
       blockedList: "ブロックした一覧"
+    },
+    en:{
+      title: "Personal Settings",
+      account: "Account",
+      profile: "Profile Settings",
+      address: "Address List",
+      payment: "Payment Method",
+      emailPassword: "Email & Password",
+      phone: "Phone Number",
+      registered: "Registered",
+      personal: "Personal Information",
+      nameDobAddress: "Name, Date of Birth, and Address",
+      region: "Region",
+      verification: "Identity Verification",
+      others: "Others",
+      security: "Security",
+      blockedList: "Blocked List"
     }
   },
-  verifyPaypal: {
+  verifyPaypalPage: {
     ja: {
       title: "PayPal認証",
       description: "PayPalと連携して本人確認を行います。",
@@ -256,7 +309,7 @@ export const messages = {
       failure: "Verification failed"
     }
   },
-  payment: {
+  paymentSettingsPage: {
     ja: {
       title: "支払い方法",
       edit: "編集",
@@ -280,7 +333,7 @@ export const messages = {
       notVerifiedWarning: "※ You must complete identity verification before setting a payment method"
     }
   },
-  addressList: {
+  addressSettingsPage: {
     ja: {
       title: "住所一覧",
       edit: "編集",
@@ -294,6 +347,20 @@ export const messages = {
       registerNew: "Register new address",
       selected: "Selected",
       limitError: "You can register up to 3 addresses"
+    }
+  },
+  pageListPage: {
+    ja: {
+      title: (page: number) => `ページ ${page}`,
+      ogTitle: (page: number) => `Page ${page} 商品一覧`,
+      description: (page: number) => `商品一覧 Page ${page}`,
+      ogDescription: "今人気の商品一覧ページです"
+    },
+    en: {
+      title: (page: number) => `Page ${page}`,
+      ogTitle: (page: number) => `Page ${page} Product List`,
+      description: (page: number) => `Product list Page ${page}`,
+      ogDescription: "This is the popular product listing page"
     }
   },
   users: {

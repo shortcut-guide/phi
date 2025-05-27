@@ -1,8 +1,9 @@
 ---
 import DefaultLayout from '../layouts/DefaultLayout.astro'
-import { messages } from '@/f/config/messageConfig'
-import { lang } from '@/f/config/lang'
-const t = messages.notFoundPage[lang]
+import { messages } from "@/f/config/messageConfig";
+import { getLang } from "@/f/utils/lang";
+const lang = getLang();
+const t = messages.notFoundPage[lang];
 ---
 
 <DefaultLayout title={t.title}>

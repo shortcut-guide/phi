@@ -4,9 +4,11 @@ import Navigation from '@/f/components/Navigation.astro'
 import { DarkMode, SkipLink } from 'accessible-astro-components'
 import { Icon } from 'astro-icon/components'
 import { trackGAEvent } from "@/f/utils/track";
-
-const {title} = Astro.props
-let subtitle = 'Accessible Astro Dashboard'
+import { messages } from "@/f/config/messageConfig";
+import { getLang } from "@/f/utils/lang";
+const lang = getLang();
+const t = messages.loginLayout[lang];
+const { title } = Astro.props;
 ---
 
 <html lang="ja" dir="ltr">
@@ -24,14 +26,14 @@ let subtitle = 'Accessible Astro Dashboard'
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;800&display=swap" rel="stylesheet">
 
     <!-- open graph -->
-    <meta property="og:title" content="Accessible Astro Dashboard">
-    <meta property="og:description" content="An Accessible Dashboard Theme for Astro including a login page, a dashboard page and several other pages and components.">
+    <meta property="og:title" content={t.subtitle}>
+    <meta property="og:description" content={t.description}>
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://dashboard.accessible-astro.dev">
     <meta property="og:image" content="/social-preview-image.png">
 
     <!-- page title -->
-    <title>{title} - {subtitle}</title>
+    <title>{title} - {t.subtitle}</title>
   </head>
   <body>
     <header>

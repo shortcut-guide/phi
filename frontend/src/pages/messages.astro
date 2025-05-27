@@ -2,25 +2,28 @@
 import { Modal } from 'accessible-astro-components'
 import DefaultLayout from '@/f/layouts/DefaultLayout.astro'
 import EmptyState from '@/f/components/EmptyState.astro'
-import { messagesPage, lang } from '@/f/config/messageConfig.ts'
+import { messages } from "@/f/config/messageConfig";
+import { getLang } from "@/f/utils/lang";
+const lang = getLang();
+const t = messages.messagesPage[lang];
 ---
 
-<DefaultLayout title={messagesPage[lang].title}>
+<DefaultLayout title={t.title}>
   <section>
-    <h1>{messagesPage[lang].heading}</h1><br>
-    <p class="size-20">{messagesPage[lang].overview}</p>
+    <h1>{t.heading}</h1><br>
+    <p class="size-20">{t.overview}</p>
   </section>
   <section class="margin-32">
     <div class="space-content">
-      <h2>{messagesPage[lang].sectionTitle}</h2>
-      <EmptyState>{messagesPage[lang].emptyMessage}</EmptyState>
-      <button id="modal-trigger" class="button color-secondary">{messagesPage[lang].addButton}</button>
+      <h2>{t.sectionTitle}</h2>
+      <EmptyState>{t.emptyMessage}</EmptyState>
+      <button id="modal-trigger" class="button color-secondary">{t.addButton}</button>
       <Modal
         triggerId="modal-trigger"
-        title={messagesPage[lang].modalTitle}
-        closeText={messagesPage[lang].modalCloseText}
+        title={t.modalTitle}
+        closeText={t.modalCloseText}
       >
-        <p>{messagesPage[lang].modalBody}</p>
+        <p>{t.modalBody}</p>
       </Modal>
     </div>
   </section>

@@ -3,13 +3,13 @@ import { Notification } from 'accessible-astro-components'
 import { Icon } from 'astro-icon/components'
 import LoginLayout from '@/f/layouts/LoginLayout.astro'
 import LoginForm from '@/f/components/LoginForm.astro'
-import { messages } from '@/f/config/messageConfig';
-
-const lang = (Astro.url.searchParams.get('lang') ?? 'ja') as 'en' | 'ja';
-const login = messages.login[lang];
+import { messages } from "@/f/config/messageConfig";
+import { getLang } from "@/f/utils/lang";
+const lang = getLang();
+const t = messages.login[lang];
 ---
 
-<LoginLayout title={login.title}>
+<LoginLayout title={t.title}>
   <section class="bg-neutral-100">
     <div class="login grid grid-cols-1 md:!grid-cols-[550px_2fr]">
       <div class="login__inner animate-reveal min-h-screen flex flex-col justify-between gap-12 p-6 z-10 md:p-12 md:shadow-[0_0_40px_rgba(0,0,0,0.15)]">
@@ -22,16 +22,16 @@ const login = messages.login[lang];
             >
           </div>
           <div class="brand__text flex flex-col gap-0.5">
-            <span class="font-bold text-[20px]">Dashboard</span>
+            <span class="font-bold text-[20px]">{t.pageName}</span>
           </div>
         </div>
         <div class="inner__form flex flex-col gap-8">
           <Notification>
             <Icon name="majesticons:information-circle-line" />
-            <p class="w-full">{login.hint} <strong>{login.email}</strong> and <strong>{login.password}</strong>.</p>
+            <p class="w-full">{t.hint} <strong>{t.email}</strong> and <strong>{t.password}</strong>.</p>
           </Notification>
           <div class="flex flex-col gap-4">
-            <h1>{login.heading}</h1>
+            <h1>{t.heading}</h1>
             <LoginForm />
           </div>
         </div>
