@@ -1,7 +1,11 @@
 import React from 'react';
-import { messages } from '@/f/config/messageConfig';
 import { trackGAEvent } from "@/f/utils/track";
 import { Icon } from 'astro-icon/components'
+import { messages } from "@/f/config/messageConfig";
+import { getLang } from "@/f/utils/lang";
+
+const lang = getLang();
+const t = messages.productDetail[lang];
 
 type Props = {
   id: string;
