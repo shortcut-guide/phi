@@ -1,6 +1,11 @@
 // ProductDetail.tsx
 import { useState } from 'preact/hooks';
 import { trackGAEvent } from "@/f/utils/track";
+import { messages } from "@/f/config/messageConfig";
+import { getLang } from "@/f/utils/lang";
+
+const lang = getLang();
+const t = messages.productDetail[lang];
 
 interface Product {
   id: string;
@@ -31,18 +36,18 @@ export function ProductDetail({ product, onExpand, onClose }: Props) {
         <button onClick={onClose} className="text-sm text-gray-500">×</button>
       </div>
       <img src={product.imageUrl} alt={product.title} className="w-full mt-2 rounded" />
-      <p className="text-sm mt-2">価格: ¥{product.price}</p>
-      <p className="text-sm text-red-500">Amazonとの差: ¥{product.diff}</p>
+      <p className="text-sm mt-2">{t.price}: ¥{product.price}</p>
+      <p className="text-sm text-red-500">{t.diffAmazon}: ¥{product.diff}</p>
 
       <div className="flex justify-between mt-4 gap-2">
-        <button className="bg-blue-500 text-white px-4 py-1 rounded">カートに入れる</button>
-        <button className="bg-yellow-400 text-black px-4 py-1 rounded">お気に入り</button>
-        <button className="text-blue-600 underline text-sm">商品情報</button>
+        <button className="bg-blue-500 text-white px-4 py-1 rounded">{t.addToCart}</button>
+        <button className="bg-yellow-400 text-black px-4 py-1 rounded">{t.favorite}</button>
+        <button className="text-blue-600 underline text-sm">{t.productInfo}</button>
       </div>
 
       <div className="flex justify-between mt-4 gap-2">
         <button className="text-sm text-blue-700 underline" onClick={() => location.href = `/products/${product.id}`}>詳細ページ</button>
-        <button className="text-sm text-green-600 underline" onClick={onExpand}>広げる</button>
+        <button className="text-sm text-green-600 underline" onClick={onExpand}>{t.expand}</button>
       </div>
     </div>
   );

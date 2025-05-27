@@ -494,5 +494,46 @@ export const messages = {
       confirmDelete: "Are you sure you want to delete this?",
       deleteError: "Failed to delete item",
     }
-  }
+  },
+  productDetail: {
+    ja: {
+      price: "価格",
+      diffAmazon: "Amazonとの差",
+      addToCart: "カートに入れる",
+      favorite: "お気に入り",
+      productInfo: "商品情報",
+      expand: "詳細を表示"
+    },
+    en: {
+      price: "Price",
+      diffAmazon: "Difference from Amazon",
+      addToCart: "Add to Cart",
+      favorite: "Favorite",
+      productInfo: "Product Info",
+      expand: "Expand Details"
+    }
+  },
+  paymentMethodList: {
+    ja:{
+      paypal: 'Paypal',
+      paypalDescription: 'PayPal決済は3.6%の手数料が掛かります。',
+      pageTitle: '支払い方法一覧',
+      add: '追加',
+      edit: '編集',
+      delete: '削除',
+      confirm: '確認',
+      confirmDelete: '本当に削除しますか？',
+      deleteError: '削除に失敗しました',
+    },
+    en:{
+      paypal: 'Paypal',
+      pageTitle: 'Payment Method List',
+      add: 'Add',
+      edit: 'Edit',
+      delete: 'Delete',
+      confirm: 'Confirm',
+      confirmDelete: 'Are you sure you want to delete this?',
+      deleteError: 'Failed to delete item',
+    }
+  },
 };
