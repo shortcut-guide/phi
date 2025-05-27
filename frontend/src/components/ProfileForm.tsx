@@ -1,4 +1,8 @@
 import { useState, useEffect } from "preact/hooks";
+import { messages } from "@/f/config/messageConfig";
+import { getLang } from "@/f/utils/lang";
+const lang = getLang();
+const t = messages.puppeteerPage[lang];
 
 export default function ProfileForm() {
   const [nickname, setNickname] = useState("");
@@ -19,12 +23,12 @@ export default function ProfileForm() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ nickname, bio })
     });
-    alert("更新しました");
+    alert(t.updated);
   }
 
   return (
     <div>
-      <label htmlFor="nickname">ニックネーム</label>
+      <label htmlFor="nickname">{t.nickname}</label>
       <input
         id="nickname"
         value={nickname}
@@ -32,7 +36,7 @@ export default function ProfileForm() {
         class="input"
       />
 
-      <label htmlFor="bio">自己紹介文</label>
+      <label htmlFor="bio">{t.bio}</label>
       <textarea
         id="bio"
         value={bio}
@@ -40,7 +44,7 @@ export default function ProfileForm() {
         class="textarea"
       />
 
-      <button onClick={updateProfile} class="btn-red">更新する</button>
+      <button onClick={updateProfile} class="btn-red">{t.updateButton}</button>
     </div>
   );
 }

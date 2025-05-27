@@ -1,4 +1,18 @@
 export const messages = {
+  profileForm: {
+    ja: {
+      nickname: "ニックネーム",
+      bio: "自己紹介文",
+      updateButton: "更新する",
+      updated: "更新しました"
+    },
+    en: {
+      nickname: "Nickname",
+      bio: "Bio",
+      updateButton: "Update",
+      updated: "Updated"
+    }
+  },
   login: {
     ja: {
       title: "ログイン",
