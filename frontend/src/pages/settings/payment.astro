@@ -1,9 +1,9 @@
 ---
 import PaymentMethodList from "@/f/components/PaymentMethodList.astro";
 import { messages } from "@/f/config/messageConfig";
-
-const lang = "ja"; // 必要に応じて動的切替可
-const msg = messages.payment[lang];
+import { getLang } from "@/f/utils/lang";
+const lang = getLang();
+const t = messages.paymentSettingsPage[lang];
 
 const [res1, res2] = await Promise.all([
   fetch("/api/payment"),
@@ -13,14 +13,14 @@ const { selectedMethod } = await res1.json();
 const { isVerified } = await res2.json();
 
 async function save() {
-  const selected = document.querySelector("input[name=payment]:checked")?.value;
+  const selected = (document.querySelector("input[name=payment]:checked") as HTMLInputElement | null)?.value;
   if (selected) {
     await fetch("/api/payment", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ method: selected })
     });
-    alert("✅ " + msg.setButton + " 完了");
+    alert("✅ " + t.setButton + " 完了");
   }
 }
 ---

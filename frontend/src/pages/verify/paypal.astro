@@ -1,7 +1,8 @@
 ---
 import { messages } from "@/f/config/messageConfig";
-const lang = Astro.url.searchParams.get("lang") ?? "ja";
-const t = messages.verifyPaypal[lang];
+import { getLang } from "@/f/utils/lang";
+const lang = getLang();
+const t = messages.verifyPaypalPage[lang];
 
 const userId = "user-id-placeholder"; // Cookieなどから取得する想定
 const res = await fetch(`/api/verify/status/${userId}`);

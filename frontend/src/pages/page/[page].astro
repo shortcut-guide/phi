@@ -1,26 +1,30 @@
 ---
-import { PinGrid } from "../../components/PinGrid";
-import { trackGAEvent } from "../../utils/track";
+import { PinGrid } from "@/f/components/PinGrid";
+import { trackGAEvent } from "@/f/utils/track";
+import { messages } from "@/f/config/messageConfig";
+import { getLang } from "@/f/utils/lang";
+const lang = getLang();
+const t = messages.pageListPage[lang];
 
 const page = Number(Astro.params.page || "1");
-track("scroll_page", { page: {page} });
+trackGAEvent("scroll_page", { page: {page} });
 
 const limit = 30;
 const offset = (page - 1) * limit;
-
 const pins = await fetch(`/api/pins?offset=${offset}`);
 const items = await pins.json();
-const first = pins?.[0];
+const first = items?.[0];
 const ogImage = first?.imageUrl || '/default-og.jpg';
-const ogTitle = `Page ${page} 商品一覧`;
+const ogTitle = t.ogTitle(page);
+const ogDescription = t.ogDescription;
 ---
 
 <html lang="ja">
   <head>
     <title>{ogTitle}</title>
-    <meta name="description" content={`商品一覧 Page ${page}`} />
+    <meta name="description" content={t.description(page)} />
     <meta property="og:title" content={ogTitle} />
-    <meta property="og:description" content="今人気の商品一覧ページです" />
+    <meta property="og:description" content={ogDescription} />
     <meta property="og:image" content={ogImage} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={`https://yourdomain.com/page/${page}`} />
@@ -32,7 +36,7 @@ const ogTitle = `Page ${page} 商品一覧`;
       {JSON.stringify({
         "@context": "https://schema.org",
         "@type": "CollectionPage",
-        "name": `商品一覧 Page ${page}`,
+        "name": t.ogTitle(page),
         "mainEntity": items.map((p) => ({
           "@type": "Product",
           "name": p.title,
@@ -43,7 +47,7 @@ const ogTitle = `Page ${page} 商品一覧`;
     </script>
   </head>
   <body class="p-6">
-    <h1 class="text-xl font-bold mb-4">ページ {page}</h1>
+    <h1 class="text-xl font-bold mb-4">{t.title(page)}</h1>
 
     <PinGrid items={items} loadMore={() => {}} onSelect={() => {}} />
   </body>

@@ -2,24 +2,24 @@
 import { Modal } from 'accessible-astro-components'
 import DefaultLayout from '@/f/layouts/DefaultLayout.astro'
 import EmptyState from '@/f/components/EmptyState.astro'
-import { messages } from '@/f/config/messageConfig';
-
-const lang = (Astro.url.searchParams.get('lang') ?? 'ja') as 'en' | 'ja';
-const texts = messages.users[lang];
+import { messages } from "@/f/config/messageConfig";
+import { getLang } from "@/f/utils/lang";
+const lang = getLang();
+const t = messages.users[lang];
 ---
 
 <DefaultLayout title="Users">
   <section>
-    <h1>{texts.title}</h1><br>
+    <h1>{t.title}</h1><br>
     <p class="size-20">Lorem ipsum dolor sit amet.</p>
   </section>
   <section class="margin-32">
     <div class="space-content">
-      <h2>{texts.overview}</h2>
+      <h2>{t.overview}</h2>
       <EmptyState>
-        {texts.emptyMessage}
+        {t.emptyMessage}
       </EmptyState>
-      <button id="modal-trigger" class="button color-secondary">{texts.addButton}</button>
+      <button id="modal-trigger" class="button color-secondary">{t.addButton}</button>
       <Modal
         triggerId="modal-trigger"
         title="Add user"

@@ -1,8 +1,9 @@
 ---
 import AddressList from "@/f/components/AddressList.astro";
-
-// TODO: APIから取得する想定
-const lang = "ja";
+import { messages } from "@/f/config/messageConfig";
+import { getLang } from "@/f/utils/lang";
+const lang = getLang();
+const t = messages.addressSettingsPage[lang];
 const addresses = await fetch("/api/address").then(res => res.json());
 ---
 
