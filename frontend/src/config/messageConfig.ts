@@ -558,4 +558,24 @@ export const messages = {
       deleteError: 'Failed to delete item',
     }
   },
+  addressList: {
+    ja:{
+      title: '配送先一覧',
+      addButton: '新しい住所を追加',
+      edit: '編集',
+      delete: '削除',
+      noAddress: '登録された住所がありません',
+      registerNew: '新しい住所を登録',
+      selected: '選択中',
+    },
+    en:{
+      title: 'Shipping Addresses',
+      addButton: 'Add New Address',
+      edit: 'Edit',
+      delete: 'Delete',
+      noAddress: 'No address registered',
+      registerNew: 'Register New Address',
+      selected: 'Selected',
+    }
+  }
 };

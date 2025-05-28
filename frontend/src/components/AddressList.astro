@@ -1,22 +1,25 @@
 ---
-const { addresses, lang } = Astro.props;
+const { addresses } = Astro.props;
+import type { Address } from '@/f/types/address';
 import { messages } from "@/f/config/messageConfig";
+import { getLang } from "@/f/utils/lang";
 
-const msg = messages.addressList[lang];
+const lang = getLang();
+const t = messages.addressList[lang];
 ---
 
 <div class="flex justify-between items-center mb-4">
-  <h1 class="text-xl font-bold">{msg.title}</h1>
-  <a href="/settings/address/edit" class="text-blue-500">{msg.edit}</a>
+  <h1 class="text-xl font-bold">{t.title}</h1>
+  <a href="/settings/address/edit" class="text-blue-500">{t.edit}</a>
 </div>
 
 <ul class="space-y-4">
-  {addresses.map(addr => (
+  {addresses.map((addr: Address) => (
     <li class="p-4 border rounded">
       <p class="font-bold">{addr.name}（{addr.kana}）</p>
       <p>{addr.zip}</p>
       <p>{addr.address}</p>
-      {addr.is_default && <p class="text-blue-600 mt-1">● {msg.selected}</p>}
+      {addr.is_default && <p class="text-blue-600 mt-1">● {t.selected}</p>}
     </li>
   ))}
 </ul>
@@ -24,7 +27,7 @@ const msg = messages.addressList[lang];
 {addresses.length < 3 && (
   <div class="mt-6">
     <a href="/settings/address/new" class="text-blue-600 underline">
-      + {msg.registerNew}
+      + {t.registerNew}
     </a>
   </div>
 )}
