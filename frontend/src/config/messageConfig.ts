@@ -1,4 +1,26 @@
 export const messages = {
+  loginForm: {
+    ja: {
+      title: "ログイン",
+      email: "メールアドレス",
+      password: "パスワード",
+      loginButton: "ログインする",
+      forgotPassword: "パスワードをお忘れですか？",
+      signUpLink: "新規登録はこちら",
+      rememberMe: "ログイン状態を保持する",
+      errorMessage: "メールアドレスまたはパスワードが正しくありません。",
+    },
+    en: {
+      title: "Login",
+      email: "Email",
+      password: "Password",
+      loginButton: "Log In",
+      forgotPassword: "Forgot your password?",
+      signUpLink: "Sign up here",
+      rememberMe: "Remember me",
+      errorMessage: "Incorrect email or password combination. Please try again.",
+    }
+  },
   DefaultLayout:{
     ja:{
       subtitle: "管理画面",

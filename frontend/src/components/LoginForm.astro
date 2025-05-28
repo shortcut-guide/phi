@@ -1,54 +1,65 @@
 ---
 import { Notification } from 'accessible-astro-components'
 import { Icon } from 'astro-icon/components'
+import { messages } from "@/f/config/messageConfig";
+import { getLang } from "@/f/utils/lang";
+
+const lang = getLang();
+const t = messages.loginForm?.[lang];
+
 ---
 
 <form class="login-form space-content" method="post">
   <Notification type="warning">
-    <Icon name="majesticons:emoji-sad-line" /><p class="size-12">Incorrect email and password combination. Please try again.</p>
+    <Icon name="majesticons:emoji-sad-line" /><p class="size-12">{t.errorMessage}</p>
   </Notification>
   <div class="login-form__controls">
-    <label for="email">Email</label>
+    <label for="email">{t.email}</label>
     <input type="email" name="email" required>
   </div>
   <div class="login-form__controls">
-    <label for="password">Password</label>
+    <label for="password">{t.password}</label>
     <input type="password" name="password" required>
   </div>
-  <button class="button color-secondary behavior-full" type="submit">Login</button>
+  <button class="button color-secondary behavior-full" type="submit">{t.loginButton}</button>
   <label class="checkbox">
     <input type="checkbox" name="remember">
-    <span>Remember me</span>
+    <span>{t.rememberMe}</span>
   </label>
-  <a href="/forgot-password">Forgot password?</a>
-</form> 
+  <a href="/forgot-password">{t.forgotPassword}</a>
+  <a href="/register">{t.signUpLink}</a>
+</form>
 
 <script>
   // variables
   const form = document.querySelector('.login-form')
-  const notification = form.querySelector('.notification')
-  const emailInput = form.querySelector('input[name="email"]')
-  const passwordInput = form.querySelector('input[name="password"]')
-  const submitButton = form.querySelector('button')
+  if (form) {
+    const notification = form.querySelector('.notification')
+    const emailInput = form.querySelector('input[name="email"]') as HTMLInputElement
+    const passwordInput = form.querySelector('input[name="password"]') as HTMLInputElement
+    const submitButton = form.querySelector('button')
 
-  // execution
-  notification.style.display = 'none'
+    // execution
+    if (notification) (notification as HTMLElement).style.display = 'none'
 
-  submitButton.addEventListener('click', event => {
-    event.preventDefault()
+    if (submitButton && emailInput && passwordInput && notification) {
+      submitButton.addEventListener('click', event => {
+        event.preventDefault()
 
-    if (emailInput.value === 'admin@astro.demo' && passwordInput.value === 'Astronaut570') {
-      localStorage.setItem('isLoggedIn', 'true')
-      window.location.href = '/'
-    } else {
-      notification.style.display = 'flex'
+        if (emailInput.value === 'admin@astro.demo' && passwordInput.value === 'Astronaut570') {
+          localStorage.setItem('isLoggedIn', 'true')
+          window.location.href = '/'
+        } else {
+          (notification as HTMLElement).style.display = 'flex'
+        }
+      })
     }
-  })
+  }
 </script>
 
 <style lang="scss" is:global>
-  @use '../assets/scss/base/border' as *;
-  @use '../assets/scss/base/space' as *;
+  @use '@/f/assets/scss/base/border' as *;
+  @use '@/f/assets/scss/base/space' as *;
 
   .login-form {
     label {
