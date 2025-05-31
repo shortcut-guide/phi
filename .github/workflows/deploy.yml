@@ -36,10 +36,15 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
-            cd /var/www/${{ steps.vars.outputs.dir }}
+            git config --global --add safe.directory /var/www/phis-develop
+            cd /var/www/phis-develop
             git fetch origin
-            git reset --hard origin/${{ steps.vars.outputs.branch }}
-            cp .env.${{ steps.vars.outputs.branch }} .env
+            git reset --hard origin/develop
+
+            # .envの配置
+            cp backend/.env.develop backend/.env
+
+            # バックエンド起動
+            cd ../backend
             npm install
-            npm run build
-            pm2 restart ${{ steps.vars.outputs.dir }} || pm2 start npm --name "${{ steps.vars.outputs.dir }}" -- start
+            pm2 restart phis-develop || pm2 start npm --name "phis-develop" -- start
