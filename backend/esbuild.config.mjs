@@ -13,7 +13,7 @@ esbuild.build({
   platform: 'node',
   target: 'node20',
   format: 'esm',
-  outdir: 'dist/src',
+  outdir: 'public/src',
   sourcemap: true,
   external: ['@hono/node-server'],
   plugins: [

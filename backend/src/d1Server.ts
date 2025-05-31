@@ -9,7 +9,10 @@ type Bindings = {
     DB: D1Database;
 };
 
-const app = new Hono<{ Bindings: Bindings }>();
+const publicApp = new Hono<{ Bindings: Bindings }>();
+publicApp.route('/api', productRoutes);
+
+const app = new Hono<{ Bindings: Bindings }>().basePath('/admin');
 
 // ✅ CORS を有効化
 app.use(
@@ -145,8 +148,8 @@ app.delete("/api/sites/:id", async (c) => {
 
 // ✅ トークン関連のルートを追加
 app.route("/api/token", d1Route);
-app.route('/api', productRoutes);
 
-export default app;
-
-serve(app);
+const rootApp = new Hono<{ Bindings: Bindings }>();
+rootApp.route('/api', publicApp);
+rootApp.route('/', app);
+serve(rootApp);

@@ -198,6 +198,14 @@ node    12345 user   20u  IPv4 0x12345678      0t0  TCP *:3000 (LISTEN)
 
 ---
 
+# git デプロイ
+```mermaid
+graph TD
+  A[Git Repo: develop] -->|push| R[bare repo (hooks/post-receive)] --> D1[/var/www/phis-develop]
+  B[Git Repo: staging] -->|push| R --> D2[/var/www/phis-staging]
+  C[Git Repo: main] -->|push| R --> D3[/var/www/phis-production]
+```
+
 # cloudflare d1
 
 ## 必要な商品管理テーブル項目
