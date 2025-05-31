@@ -42,13 +42,7 @@ jobs:
             git reset --hard origin/develop
 
             # .envの配置
-            cp frontend/.env.develop frontend/.env
             cp backend/.env.develop backend/.env
-
-            # フロントビルド
-            cd frontend
-            npm install
-            npm run build
 
             # バックエンド起動
             cd ../backend
