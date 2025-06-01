@@ -48,7 +48,7 @@ jobs:
 
             cp backend/.env.${{ steps.vars.outputs.env }} backend/.env
 
-            cd ../backend
+            cd backend
             npm install
             pm2 restart ${{ steps.vars.outputs.dir }} || \
             pm2 start npm --name "${{ steps.vars.outputs.dir }}" -- start
