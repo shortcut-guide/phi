@@ -34,7 +34,6 @@ jobs:
           GH_TOKEN: ${{ secrets.GH_TOKEN_WRITE }}
           REPO: shortcut-guide/phis
         run: |
-          curl -H "Authorization: token $GH_TOKEN" https://api.github.com/user/repos
           git tag $TAG
           git remote remove phis 2>/dev/null || true
           git remote add phis https://x-access-token:${GH_TOKEN}@github.com/${REPO}.git
