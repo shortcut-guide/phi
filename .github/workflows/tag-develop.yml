@@ -33,5 +33,5 @@ jobs:
         run: |
           git tag $TAG
           git remote remove phis 2>/dev/null || true
-          git remote set-url phis https://x-access-token:${GH_TOKEN}@github.com/${REPO}.git
+          git remote add phis https://x-access-token:${GH_TOKEN}@github.com/${REPO}.git
           git push phis $TAG
