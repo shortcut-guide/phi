@@ -33,7 +33,7 @@ jobs:
 
       - name: Deploy via SSH
         run: |
-          ssh -i key.pem -o StrictHostKeyChecking=no ${{secrets.VPS_USER}}@${{ secrets.VPS_HOST }} << EOF
+          ssh -i key.pem -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << EOF
             set -e
             git config --global --add safe.directory /var/www/${{ steps.vars.outputs.dir }}
             cd /var/www/${{ steps.vars.outputs.dir }}
@@ -44,7 +44,7 @@ jobs:
             npm install
             pm2 restart ${{ steps.vars.outputs.dir }} || pm2 start npm --name "${{ steps.vars.outputs.dir }}" -- start
           EOF
-      
+
       - name: Deploy maintenance
         uses: appleboy/ssh-action@v1.0.0
         with:
@@ -52,11 +52,52 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
-            set -e
-            cd /var/www/maintenance
-            git pull phis develop
-            bash ./deploy-config.sh
-            
+            set -eux
+            echo "Start deployment to maintenance..."
+            cd /var/tmp || { echo "FATAL: /var/tmp not accessible"; df -h; exit 1; }
+
+            if ! command -v git &> /dev/null; then
+              echo "FATAL: git not installed"
+              exit 1
+            fi
+
+            if [ -z "${{ secrets.GH_TOKEN_WRITE }}" ]; then
+              echo "GH_TOKEN_WRITE secret is not set"
+              exit 1
+            fi
+
+            GH_TOKEN=$(echo "${{ secrets.GH_TOKEN_WRITE }}" | sed 's/+/%2B/g')
+            GIT_REPO="https://${GH_TOKEN}@github.com/shortcut-guide/phis.git"
+
+            echo "Using repository: $GIT_REPO"
+            rm -rf /var/tmp/phis-temp
+            git clone --depth=1 -b develop "$GIT_REPO" /var/tmp/phis-temp
+
+            cd /var/tmp/phis-temp/maintenance || {
+              echo "FATAL: maintenance dir not found"
+              exit 1
+            }
+
+            if [ ! -f ./deploy-config.sh ]; then
+              echo "FATAL: deploy-config.sh not found"
+              exit 1
+            fi
+
+            chmod +x ./deploy-config.sh
+
+            TMP_SCRIPT=$(mktemp /var/tmp/deploy-config-XXXXXX.sh)
+            cat <<EOS > "$TMP_SCRIPT"
+#!/bin/bash
+set -eux
+export GH_TOKEN="${GH_TOKEN}"
+export GIT_REPO="${GIT_REPO}"
+cd /var/tmp/phis-temp/maintenance
+bash ./deploy-config.sh
+EOS
+
+            chmod +x "$TMP_SCRIPT"
+            sudo bash "$TMP_SCRIPT"
+
       - name: Deploy webhook scripts
         uses: appleboy/scp-action@master
         with:
