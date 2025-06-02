@@ -30,8 +30,8 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN_WRITE }}
           REPO: shortcut-guide/phis
-          REMOTE: phis
         run: |
           git tag $TAG
-          git remote set-url $REMOTE https://x-access-token:${GH_TOKEN}@github.com/${REPO}.git
-          git push $REMOTE $TAG
+          git remote remove phis 2>/dev/null || true
+          git remote set-url phis https://x-access-token:${GH_TOKEN}@github.com/${REPO}.git
+          git push phis $TAG
