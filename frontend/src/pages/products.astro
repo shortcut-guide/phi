@@ -1,0 +1,23 @@
+---
+import DefaultLayout from '@/f/layouts/DefaultLayout.astro'
+import { fetchAllProducts } from '@/b/services/productService';
+import { ProductCard } from '@/f/components/ProductCard';
+import type { Product } from '@/f/types/product';
+import { messages } from "@/f/config/messageConfig";
+import { getLang } from "@/f/utils/lang";
+const lang = getLang();
+const t = messages.products[lang];
+
+const products: Product[] = await fetchAllProducts();
+---
+
+<DefaultLayout title={t.title}>
+  <main class="max-w-3xl mx-auto px-4 py-12 text-neutral-800">
+    <h1 class="text-2xl font-bold mb-6">{t.title}</h1>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+      {products.map((product: Product) => (
+        <ProductCard {...product} lang={lang} />
+      ))}
+    </div>
+  </main>
+</DefaultLayout>

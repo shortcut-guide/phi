@@ -1,0 +1,11 @@
+---
+// frontend/src/pages/settings/profile.astro
+import ProfileForm from "@/f/components/ProfileForm.astro";
+import { messages } from "@/f/config/messageConfig";
+import { getLang } from "@/f/utils/lang";
+const lang = getLang();
+const t = messages.profilePage[lang];
+---
+
+<h1 class="text-xl font-bold">{t.title}</h1>
+<ProfileForm />

@@ -1,0 +1,10 @@
+---
+import AddressList from "@/f/components/AddressList.astro";
+import { messages } from "@/f/config/messageConfig";
+import { getLang } from "@/f/utils/lang";
+const lang = getLang();
+const t = messages.addressSettingsPage[lang];
+const addresses = await fetch("/api/address").then(res => res.json());
+---
+
+<AddressList addresses={addresses} lang={lang} />

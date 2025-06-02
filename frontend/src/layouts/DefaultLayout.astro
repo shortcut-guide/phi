@@ -1,0 +1,173 @@
+---
+import '@/assets/scss/globals.scss'
+import Navigation from '@/f/components/Navigation.astro'
+import { DarkMode, SkipLink } from 'accessible-astro-components'
+import { Icon } from 'astro-icon/components'
+import { trackGAEvent } from "@/f/utils/track";
+import { messages } from "@/f/config/messageConfig";
+import { getLang } from "@/f/utils/lang";
+const lang = getLang();
+const t = messages.loginLayout[lang];
+const { title } = Astro.props;
+---
+
+<html lang="ja" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <!-- favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
+    <!-- google fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+
+    <!-- open graph -->
+    <meta property="og:title" content={t.subtitle}>
+    <meta property="og:description" content={t.description}>
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://dashboard.accessible-astro.dev">
+    <meta property="og:image" content="/social-preview-image.png">
+
+    <!-- page title -->
+    <title>{title} - {t.subtitle}</title>
+  </head>
+  <body>
+    <header>
+      <SkipLink />
+    </header>
+    <div class="admin-interface">
+      <Navigation>
+        <li class="menu-item">
+          <a href="/">
+            <Icon name="majesticons:home-line" /> 
+            <span class="sr-only">Dashboard</span>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="/products/">
+            <Icon name="majesticons:shopping-cart-line" /> 
+            <span class="sr-only">Products</span>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="/users/">
+            <Icon name="majesticons:users-line" /> 
+            <span class="sr-only">Users</span>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="/messages/">
+            <Icon name="majesticons:messages-line" /> 
+            <span class="sr-only">Messages</span>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="/media/">
+            <Icon name="majesticons:image-line" /> 
+            <span class="sr-only">Media</span>
+          </a>
+        </li>
+        <li class="menu-item">
+          <div class="ui-controls flex items-center gap-2">
+            <DarkMode />
+            <span>Dark mode</span>
+          </div>
+        </li>
+      </Navigation>    
+      <main id="main-content">
+        <slot />
+      </main>
+    </div>
+  </body>
+</html>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-XXXXXXXXXX'); // GA4 Measurement ID
+
+  window.addEventListener("load", () => {
+    trackGAEvent("page_view", { page_location: location.href });
+  });
+
+  let isLoggedIn = localStorage.getItem('isLoggedIn');
+  if (isLoggedIn === null) {
+    window.location.href = '/login';
+  }
+</script>
+
+<style lang="scss">
+  @use '@/f/assets/scss/base/breakpoint' as *;
+
+  .admin-interface {
+    @include breakpoint(medium) {
+      display: grid;
+      grid-template-columns: 1fr auto;
+    }
+
+    main {
+      padding: 2rem;
+
+      @include breakpoint(medium) {
+        margin-left: 60px;
+        padding: 6rem;
+      }
+    }
+  }
+</style>
+
+<style lang="scss" is:global>
+  @use "@/f/assets/scss/base/breakpoint" as *;
+  @use "@/f/assets/scss/base/outline" as *;
+
+  #main-navigation nav button.darkmode-toggle{
+    width: 35px;
+  }
+  .darkmode-toggle {
+    padding: 0;
+    border: none;
+
+    svg {
+
+      @include breakpoint(medium) {
+        
+        path {
+          fill: var(--secondary-500);
+        }
+      }
+    
+      path {
+        transition: fill 0.2s ease-in-out;
+      }
+    }
+
+    &:hover {
+      svg path {
+        fill: var(--primary-400);
+      }
+    }
+
+    &:focus {
+      @include outline;
+    }
+  }
+
+  .darkmode .darkmode-toggle {
+    svg path {
+      fill: var(--secondary-100);
+    }
+
+    &:hover {
+      svg path {
+        fill: var(--primary-400);
+      }
+    }
+  }
+</style>

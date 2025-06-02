@@ -1,0 +1,2 @@
+// YOUR_SANDBOX_OR_LIVE_CLIENT_ID
+export const paypalClientId = "AZvGDvMsfSlwm5UJsTFgzuBv_iYQnTMRN8sILYPLpFj_c2oclCM__15NKs7PY1BHCEyXNBcdQd0AnRx3";

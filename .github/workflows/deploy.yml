@@ -1,0 +1,46 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches: [develop, staging, main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Set variables by branch
+        id: vars
+        run: |
+          if [[ "${{ github.ref }}" == "refs/heads/develop" ]]; then
+            echo "dir=phis-develop" >> $GITHUB_OUTPUT
+            echo "env=develop" >> $GITHUB_OUTPUT
+            echo "branch=develop" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.ref }}" == "refs/heads/staging" ]]; then
+            echo "dir=phis-staging" >> $GITHUB_OUTPUT
+            echo "env=staging" >> $GITHUB_OUTPUT
+            echo "branch=staging" >> $GITHUB_OUTPUT
+          else
+            echo "dir=phis-production" >> $GITHUB_OUTPUT
+            echo "env=production" >> $GITHUB_OUTPUT
+            echo "branch=main" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Write SSH key
+        run: |
+          echo "${{ secrets.VPS_SSH_KEY }}" > key.pem
+          chmod 600 key.pem
+
+      - name: Deploy via SSH
+        run: |
+          ssh -i key.pem -o StrictHostKeyChecking=no ${{secrets.VPS_USER}}@${{ secrets.VPS_HOST }} << EOF
+            set -e
+            git config --global --add safe.directory /var/www/${{ steps.vars.outputs.dir }}
+            cd /var/www/${{ steps.vars.outputs.dir }}
+            git fetch origin
+            git reset --hard origin/${{ steps.vars.outputs.branch }}
+            cp backend/.env.${{ steps.vars.outputs.env }} backend/.env
+            cd backend
+            npm install
+            pm2 restart ${{ steps.vars.outputs.dir }} || pm2 start npm --name "${{ steps.vars.outputs.dir }}" -- start
+          EOF

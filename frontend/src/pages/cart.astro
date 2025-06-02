@@ -1,0 +1,56 @@
+---
+import { generateCSRFToken } from "@/b/utils/csrf";
+import { paypalClientId } from "@/f/config/paypalConfig";
+import { messages } from "@/f/config/messageConfig";
+import { getLang } from "@/f/utils/lang";
+const lang = getLang();
+const t = messages.cartPage[lang];
+
+const token = generateCSRFToken();
+Astro.cookies.set("csrf_token", token, {
+  httpOnly: true,
+  secure: true,
+  path: "/",
+  sameSite: "strict",
+});
+---
+
+<html>
+  <head>
+    <script src={`https://www.paypal.com/sdk/js?client-id=${paypalClientId}&currency=USD`}></script>
+  </head>
+  <body>
+    <div id="paypal-button-container"></div>
+
+    <script type="module">
+      const csrfToken = `${token}`;
+
+      paypal.Buttons({
+        createOrder: async () => {
+          const res = await fetch("/api/paypal/create-order", {
+            method: "POST",
+            headers: {
+              "X-CSRF-Token": csrfToken,
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ productId: "product-001" }) // 仮の商品ID
+          });
+          const { orderID } = await res.json();
+          return orderID;
+        },
+        onApprove: async (data) => {
+          const res = await fetch("/api/paypal/capture-order", {
+            method: "POST",
+            headers: { 
+              "X-CSRF-Token": csrfToken,
+              "Content-Type": "application/json" 
+            },
+            body: JSON.stringify({ orderID: data.orderID }),
+          });
+          const result = await res.json();
+          alert(t.success + ": " + result.status);
+        },
+      }).render("#paypal-button-container");
+    </script>
+  </body>
+</html>

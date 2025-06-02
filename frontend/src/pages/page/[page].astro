@@ -1,0 +1,54 @@
+---
+import { PinGrid } from "@/f/components/PinGrid";
+import { trackGAEvent } from "@/f/utils/track";
+import { messages } from "@/f/config/messageConfig";
+import { getLang } from "@/f/utils/lang";
+const lang = getLang();
+const t = messages.pageListPage[lang];
+
+const page = Number(Astro.params.page || "1");
+trackGAEvent("scroll_page", { page: {page} });
+
+const limit = 30;
+const offset = (page - 1) * limit;
+const pins = await fetch(`/api/pins?offset=${offset}`);
+const items = await pins.json();
+const first = items?.[0];
+const ogImage = first?.imageUrl || '/default-og.jpg';
+const ogTitle = t.ogTitle(page);
+const ogDescription = t.ogDescription;
+---
+
+<html lang="ja">
+  <head>
+    <title>{ogTitle}</title>
+    <meta name="description" content={t.description(page)} />
+    <meta property="og:title" content={ogTitle} />
+    <meta property="og:description" content={ogDescription} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={`https://yourdomain.com/page/${page}`} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={ogTitle} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <script type="application/ld+json">
+      {JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        "name": t.ogTitle(page),
+        "mainEntity": items.map((p) => ({
+          "@type": "Product",
+          "name": p.title,
+          "image": p.imageUrl,
+          "url": `https://yourdomain.com/products/${p.id}`,
+        })),
+      })}
+    </script>
+  </head>
+  <body class="p-6">
+    <h1 class="text-xl font-bold mb-4">{t.title(page)}</h1>
+
+    <PinGrid items={items} loadMore={() => {}} onSelect={() => {}} />
+  </body>
+</html>

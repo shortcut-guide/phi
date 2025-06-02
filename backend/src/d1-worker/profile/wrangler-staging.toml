@@ -1,0 +1,11 @@
+name = "profile"
+compatibility_date = "2025-05-7"
+
+# Search logs environment
+[env.staging]
+account_id = "1fea45390402b8410d4e794d724e1e2c"
+[[env.staging.d1_databases]]
+binding = "PROFILE_DB"
+database_name = "profile"
+database_id = "bfe56e92-3cef-4d98-82ab-8135b2190d79"
+

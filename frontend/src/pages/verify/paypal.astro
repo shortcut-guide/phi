@@ -1,0 +1,22 @@
+---
+import { messages } from "@/f/config/messageConfig";
+import { getLang } from "@/f/utils/lang";
+const lang = getLang();
+const t = messages.verifyPaypalPage[lang];
+
+const userId = "user-id-placeholder"; // Cookieなどから取得する想定
+const res = await fetch(`/api/verify/status/${userId}`);
+const { verified } = await res.json();
+---
+
+<html lang={lang}>
+  <body>
+    <section>
+      <h1>{t.title}</h1>
+      <p>{t.description}</p>
+      {verified
+        ? <p class="text-green-600">{t.success}</p>
+        : <a href="/api/verify/paypal" class="btn">{t.button}</a>}
+    </section>
+  </body>
+</html>

@@ -1,0 +1,25 @@
+---
+// frontend/src/pages/settings/personal.astro
+import SlideMenu from "@/f/components/SlideMenu.astro";
+import { messages } from "@/f/config/messageConfig";
+import { getLang } from "@/f/utils/lang";
+const lang = getLang();
+const t = messages.personalSettingsPage[lang];
+---
+
+<h1 class="text-xl font-bold mb-4">{t.title}</h1>
+
+<section class="mb-6">
+  <h2 class="text-lg font-semibold">{t.account}</h2>
+  <SlideMenu items={[t.profile, t.address, t.payment, t.emailPassword, t.phone]} />
+</section>
+
+<section class="mb-6">
+  <h2 class="text-lg font-semibold">{t.personal}</h2>
+  <SlideMenu items={[t.nameDobAddress, t.region, t.verification, t.others]} />
+</section>
+
+<section class="mb-6">
+  <h2 class="text-lg font-semibold">{t.security}</h2>
+  <SlideMenu items={[t.blockedList]} />
+</section>

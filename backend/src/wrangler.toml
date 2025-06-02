@@ -1,7 +1,0 @@
-name = "pup"
-compatibility_date = "2024-03-16"
-main = "d1Server.ts"
-[[ d1_databases ]]
-binding = "DB" # D1 の接続名 (アプリケーション内で `globalThis.DB` で参照)
-database_name = "pup" # `wrangler d1 create` で作成したDBの名前
-"database_id" = "409eddf6-14f1-4bfe-9d5d-82fc7dfa84e4"
