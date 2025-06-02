@@ -13,8 +13,8 @@ sudo chmod +x /usr/local/bin/switch_maintenance.sh
 echo "✅ switch_maintenance.sh を更新 & 実行権限付与"
 
 # maintenance.html 配置
-sudo mkdir -p /var/www/maintenance
-sudo cp ./assets/maintenance.html /var/www/maintenance/maintenance.html
+sudo mkdir -p /var/www/maintenance/assets
+sudo cp ./assets/maintenance.html /var/www/maintenance/assets/maintenance.html
 echo "✅ maintenance.html を配置"
 
 # systemd 再読み込み + 再起動
