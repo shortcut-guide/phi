@@ -206,6 +206,30 @@ graph TD
   C[Git Repo: main] -->|push| R --> D3[/var/www/phis-production]
 ```
 
+# system deploy
+```mermaid
+graph TD
+  GitRepo[Git 管理リポジトリ]
+  DeployScript[deploy-config.sh]
+  VPSSystemd[/etc/systemd/system/backend.service]
+  VPSBin[/usr/local/bin/switch_maintenance.sh]
+
+  GitRepo -->|変更検知| DeployScript
+  DeployScript --> VPSSystemd
+  DeployScript --> VPSBin
+  DeployScript -->|再読み込み| Reload[systemctl daemon-reload + restart]
+```
+
+## directory
+```
+config-repo/
+├── systemd/
+│   └── backend.service
+├── scripts/
+│   └── switch_maintenance.sh
+├── deploy-config.sh ← 自動設置スクリプト
+```
+
 # cloudflare d1
 
 ## 必要な商品管理テーブル項目

@@ -1,0 +1,21 @@
+[Unit]
+Description=Phis Backend Service
+After=network.target
+StartLimitIntervalSec=30
+StartLimitBurst=3
+
+[Service]
+Type=simple
+WorkingDirectory=/var/www/backend
+ExecStart=/usr/bin/node dist/index.js
+Restart=always
+RestartSec=5
+
+# 正常起動時にメンテナンス解除
+ExecStartPost=/usr/local/bin/switch_maintenance.sh stop_maintenance
+# 異常終了時にメンテナンス有効化
+ExecStopPost=/usr/local/bin/switch_maintenance.sh start_maintenance
+OnFailure=switch-maintenance.service
+
+[Install]
+WantedBy=multi-user.target
