@@ -44,3 +44,14 @@ jobs:
             npm install
             pm2 restart ${{ steps.vars.outputs.dir }} || pm2 start npm --name "${{ steps.vars.outputs.dir }}" -- start
           EOF
+      
+      - name: Deploy maintenance
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            cd /var/www/maintenance
+            git pull phis develop
+            bash ./deploy-config.sh
