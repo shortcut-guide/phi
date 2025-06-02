@@ -1,5 +1,8 @@
 name: Tag Develop Branch
 
+permissions:
+  contents: write
+
 on:
   push:
     branches:
