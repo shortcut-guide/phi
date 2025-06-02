@@ -28,7 +28,7 @@ jobs:
 
       - name: Create and Push Tag
         env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN_WRITE }}
         run: |
           git tag $TAG
           git remote set-url origin https://x-access-token:${GH_TOKEN}@github.com/shortcut-guide/phis.git
