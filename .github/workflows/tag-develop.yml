@@ -14,7 +14,7 @@ jobs:
 
       - name: Setup Git
         run: |
-          git config user.name "github-actions"
+          git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
 
       - name: Generate Tag
@@ -26,7 +26,10 @@ jobs:
           TAG="${TODAY}-${NEXT}"
           echo "TAG=$TAG" >> $GITHUB_ENV
 
-      - name: Create Tag
+      - name: Create and Push Tag
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           git tag $TAG
+          git remote set-url origin https://x-access-token:${GH_TOKEN}@github.com/shortcut-guide/phis.git
           git push origin $TAG
