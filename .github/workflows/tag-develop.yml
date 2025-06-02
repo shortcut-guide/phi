@@ -34,7 +34,11 @@ jobs:
           GH_TOKEN: ${{ secrets.GH_TOKEN_WRITE }}
           REPO: shortcut-guide/phis
         run: |
-          git tag $TAG
-          git remote remove phis 2>/dev/null || true
-          git remote add phis https://x-access-token:${GH_TOKEN}@github.com/${REPO}.git
-          git push phis $TAG
+          if git ls-remote --tags https://x-access-token:${GH_TOKEN}@github.com/${REPO}.git | grep -q "refs/tags/$TAG"; then
+            echo "Tag $TAG already exists on remote. Skipping push."
+          else
+            git tag $TAG
+            git remote remove phis 2>/dev/null || true
+            git remote add phis https://x-access-token:${GH_TOKEN}@github.com/${REPO}.git
+            git push phis $TAG
+          fi
