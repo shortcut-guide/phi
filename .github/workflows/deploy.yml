@@ -90,7 +90,9 @@ jobs:
 
             echo "export GH_TOKEN='$GH_TOKEN'" >> "$TMP_SCRIPT"
             echo "export GIT_REPO='$GIT_REPO'" >> "$TMP_SCRIPT"
-            echo "cd $(pwd)" >> "$TMP_SCRIPT"
+            echo "echo \"Using token: \$GH_TOKEN\"" >> "$TMP_SCRIPT"
+            echo "git clone \"\$GIT_REPO\" /tmp/phis-temp" >> "$TMP_SCRIPT"
+            echo "cd /tmp/phis-temp/maintenance" >> "$TMP_SCRIPT"
             echo "bash ./deploy-config.sh" >> "$TMP_SCRIPT"
 
             sudo -E bash "$TMP_SCRIPT"
