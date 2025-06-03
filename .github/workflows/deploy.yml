@@ -1,5 +1,8 @@
 name: Deploy to VPS
 
+permissions:
+  contents: write
+
 on:
   push:
     branches: [develop, staging, main]
@@ -7,8 +10,10 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
       - name: Set variables by branch
         id: vars
         run: |
@@ -33,7 +38,7 @@ jobs:
 
       - name: Deploy via SSH
         run: |
-          ssh -i key.pem -o StrictHostKeyChecking=no ${{secrets.VPS_USER}}@${{ secrets.VPS_HOST }} << EOF
+          ssh -i key.pem -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << EOF
             set -e
             git config --global --add safe.directory /var/www/${{ steps.vars.outputs.dir }}
             cd /var/www/${{ steps.vars.outputs.dir }}
@@ -44,14 +49,52 @@ jobs:
             npm install
             pm2 restart ${{ steps.vars.outputs.dir }} || pm2 start npm --name "${{ steps.vars.outputs.dir }}" -- start
           EOF
-      
+
       - name: Deploy maintenance
-        uses: appleboy/ssh-action@v1.0.0
+        env:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN_WRITE }}
+          REPO: shortcut-guide/phis
+        run: |
+          if git ls-remote --tags https://x-access-token:${GH_TOKEN}@github.com/${REPO}.git; then
+            echo "Tag $TAG already exists on remote. Skipping push."
+          else
+            rm -rf /var/tmp/phis-temp
+            if ! git clone --depth=1 -b develop "$GIT_REPO" /var/tmp/phis-temp; then
+              echo "Git clone failed"
+              exit 1
+            fi
+
+            cd /var/tmp/phis-temp/maintenance || {
+              echo "FATAL: maintenance dir not found"
+              exit 1
+            }
+
+            if [ ! -f ./deploy-config.sh ]; then
+              echo "FATAL: deploy-config.sh not found"
+              exit 1
+            fi
+
+            chmod +x ./deploy-config.sh
+            cp ./deploy-config.sh /var/tmp/deploy-config.sh
+            chmod +x /var/tmp/deploy-config.sh
+
+            sudo bash /var/tmp/deploy-config.sh "${GH_TOKEN}" "${REPO}"
+            rm -f /var/tmp/deploy-config.sh
+          fi
+      
+      - name: Debug workspace
+        run: |
+          echo "Checking workspace root:"
+          ls -R /home/runner/work/phis/phis
+
+      - name: Deploy webhook scripts
+        uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
-          script: |
-            cd /var/www/maintenance
-            git pull phis develop
-            bash ./deploy-config.sh
+          source: "/home/runner/work/phis/phis/maintenance/webhook/maintenance.js"
+          target: "/var/www/webhook/"
