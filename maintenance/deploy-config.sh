@@ -1,4 +1,8 @@
 #!/bin/bash
+if [[ -z "$GH_TOKEN" ]]; then
+  echo "❌ GH_TOKEN が未設定です"
+  exit 1
+fi
 set -e
 
 SCRIPT_PATH=$(realpath "$0")
@@ -8,7 +12,7 @@ cp "$SCRIPT_PATH" "$TMP_SCRIPT"
 
 # 一時ディレクトリでsparse-checkoutして maintenance/ ディレクトリのみを展開
 sudo rm -rf /tmp/phis-temp
-sudo git clone --filter=blob:none --no-checkout https://github.com/shortcut-guide/phis.git /tmp/phis-temp
+sudo git clone --filter=blob:none --no-checkout https://x-access-token:${GH_TOKEN}@github.com/shortcut-guide/phis.git /tmp/phis-temp
 cd /tmp/phis-temp
 sudo git sparse-checkout init --cone
 sudo git sparse-checkout set .
