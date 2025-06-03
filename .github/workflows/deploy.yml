@@ -57,6 +57,11 @@ jobs:
             echo "Start deployment to maintenance..."
             cd /var/tmp || { echo "FATAL: /var/tmp not accessible"; df -h; exit 1; }
 
+            if ! command -v git &> /dev/null; then
+              echo "FATAL: git not installed"
+              exit 1
+            fi
+
             export GH_TOKEN="${{ secrets.GH_TOKEN_WRITE }}"
             if [ -z "$GH_TOKEN" ]; then
               echo "GH_TOKEN is not set"
@@ -68,10 +73,10 @@ jobs:
 
             rm -rf /var/tmp/phis-temp
             echo "Cloning repository..."
-            git clone --depth=1 -b develop "$GIT_REPO" /var/tmp/phis-temp || {
+            if ! git clone --depth=1 -b develop "$GIT_REPO" /var/tmp/phis-temp; then
               echo "Git clone failed"
               exit 1
-            }
+            fi
 
             echo "Checking directory contents after clone:"
             ls -al /var/tmp/phis-temp
@@ -82,7 +87,15 @@ jobs:
               exit 1
             fi
 
-            cd /var/tmp/phis-temp/maintenance
+            cd /var/tmp/phis-temp/maintenance || {
+              echo "FATAL: failed to cd into /var/tmp/phis-temp/maintenance"
+              exit 1
+            }
+
+            if [ ! -f ./deploy-config.sh ]; then
+              echo "FATAL: deploy-config.sh not found"
+              exit 1
+            fi
 
             TMP_SCRIPT="/var/tmp/deploy-config-$$.sh"
             cp ./deploy-config.sh "$TMP_SCRIPT"
@@ -91,9 +104,14 @@ jobs:
             echo "export GH_TOKEN='$GH_TOKEN'" >> "$TMP_SCRIPT"
             echo "export GIT_REPO='$GIT_REPO'" >> "$TMP_SCRIPT"
             echo "echo \"Using token: \$GH_TOKEN\"" >> "$TMP_SCRIPT"
-            echo "git clone \"\$GIT_REPO\" /tmp/phis-temp" >> "$TMP_SCRIPT"
+            echo 'git clone --depth=1 -b develop "$GIT_REPO" /tmp/phis-temp' >> "$TMP_SCRIPT"
             echo "cd /tmp/phis-temp/maintenance" >> "$TMP_SCRIPT"
             echo "bash ./deploy-config.sh" >> "$TMP_SCRIPT"
+
+            if ! command -v sudo &> /dev/null; then
+              echo "FATAL: sudo not installed"
+              exit 1
+            fi
 
             sudo -E bash "$TMP_SCRIPT"
             rm -f "$TMP_SCRIPT"
