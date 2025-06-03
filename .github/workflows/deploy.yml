@@ -54,7 +54,7 @@ jobs:
           script: |
             set -e
             cd /var/www/maintenance
-            sudo git pull phis develop
+            git pull phis develop
             # maientenance/maintenance配下をmaintenance直下に移動（隠しファイルも含めて）
             if [ -d maintenance ]; then
               shopt -s dotglob
