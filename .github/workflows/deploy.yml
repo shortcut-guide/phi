@@ -64,13 +64,10 @@ jobs:
 
             export GIT_REPO="https://x-access-token:${GH_TOKEN}@github.com/shortcut-guide/phis.git"
 
-            cd /var/www/maintenance
+            rm -rf /tmp/phis-temp
+            git clone "$GIT_REPO" /tmp/phis-temp
 
-            git remote remove phis 2>/dev/null || true
-            git remote add phis "$GIT_REPO"
-            git fetch phis develop
-            git checkout -B develop phis/develop
-            git push phis develop
+            cd /tmp/phis-temp/maintenance
 
             TMP_SCRIPT="/tmp/deploy-config-$$.sh"
             sudo cp ./deploy-config.sh $TMP_SCRIPT
