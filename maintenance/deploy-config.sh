@@ -1,30 +1,44 @@
 #!/bin/bash
 set -e
 
-# カレントディレクトリ固定
-DIR="$(cd "$(dirname "$0")" && pwd)"
-cd "$DIR"
+
+# 一時ディレクトリでsparse-checkoutして maintenance/ ディレクトリのみを展開
+TEMP_DIR="/tmp/phis-temp"
+TARGET_DIR="/var/www/maintenance"
+
+rm -rf "$TEMP_DIR"
+git clone --filter=blob:none --no-checkout https://github.com/shortcut-guide/phis.git "$TEMP_DIR"
+cd "$TEMP_DIR"
+git sparse-checkout init --cone
+git sparse-checkout set maintenance
+git checkout develop
+
+rm -rf "$TARGET_DIR"
+mkdir -p "$TARGET_DIR"
+cp -r maintenance/* "$TARGET_DIR"
+cd "$TARGET_DIR"
+
 
 echo "🔄 デプロイ開始"
 
 # systemd 設定更新
-sudo cp "$DIR/systemd/backend.service" /etc/systemd/system/backend.service
-sudo cp "$DIR/systemd/maintenance.service" /etc/systemd/system/maintenance.service
+sudo cp "$TARGET_DIR/systemd/backend.service" /etc/systemd/system/backend.service
+sudo cp "$TARGET_DIR/systemd/maintenance.service" /etc/systemd/system/maintenance.service
 echo "✅ systemd ファイルを更新"
 
 # メンテナンス切替スクリプト
-sudo cp "$DIR/scripts/switch_maintenance.sh" /usr/local/bin/switch_maintenance.sh
+sudo cp "$TARGET_DIR/scripts/switch_maintenance.sh" /usr/local/bin/switch_maintenance.sh
 sudo chmod +x /usr/local/bin/switch_maintenance.sh
 echo "✅ switch_maintenance.sh を更新 & 実行権限付与"
 
 # maintenance.html 配置
 sudo mkdir -p /var/www/maintenance/assets
-sudo cp "$DIR/assets/maintenance.html" /var/www/maintenance/assets/maintenance.html
+sudo cp "$TARGET_DIR/assets/maintenance.html" /var/www/maintenance/assets/maintenance.html
 echo "✅ maintenance.html を配置"
 
 # Webhook用スクリプト設置
 sudo mkdir -p /var/www/webhook
-sudo cp "$DIR/webhook/maintenance.js" /var/www/webhook/maintenance.js
+sudo cp "$TARGET_DIR/webhook/maintenance.js" /var/www/webhook/maintenance.js
 sudo chmod +x /var/www/webhook/maintenance.js
 echo "✅ maintenance.js を /var/www/webhook/ に配置"
 
