@@ -55,16 +55,16 @@ jobs:
             set -e
             cd /var/www/maintenance
             git pull phis develop
-            # maintenance/maintenance配下をmaintenance直下に移動
+            # maintenance/maintenance配下をmaintenance直下に移動（隠しファイルも含めて）
             if [ -d maintenance ]; then
+              shopt -s dotglob
               mv maintenance/* .
+              shopt -u dotglob
               rm -rf maintenance
             fi
-            # deploy-config.shを一時ディレクトリにコピーして実行
-            if [ "$(realpath deploy-config.sh)" != "/tmp/deploy-config.sh" ]; then
-              rm -f /tmp/deploy-config.sh
-              cp deploy-config.sh /tmp/deploy-config.sh
-            fi
+            # deploy-config.shを一時ディレクトリにコピーして実行（絶対パス指定）
+            rm -f /tmp/deploy-config.sh
+            cp /var/www/maintenance/deploy-config.sh /tmp/deploy-config.sh
             bash /tmp/deploy-config.sh
             
       - name: Deploy webhook scripts
