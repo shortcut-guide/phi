@@ -61,8 +61,10 @@ jobs:
               rm -rf maintenance
             fi
             # deploy-config.shを一時ディレクトリにコピーして実行
-            rm -f /tmp/deploy-config.sh
-            cp deploy-config.sh /tmp/deploy-config.sh
+            if [ "$(realpath deploy-config.sh)" != "/tmp/deploy-config.sh" ]; then
+              rm -f /tmp/deploy-config.sh
+              cp deploy-config.sh /tmp/deploy-config.sh
+            fi
             bash /tmp/deploy-config.sh
             
       - name: Deploy webhook scripts
