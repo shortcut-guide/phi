@@ -1,0 +1,12 @@
+[Unit]
+Description=Phis Maintenance Webhook
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/node /var/www/webhook/maintenance.js
+Restart=always
+User=ubuntu
+Environment=NODE_ENV=production
+
+[Install]
+WantedBy=multi-user.target
