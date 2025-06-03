@@ -70,7 +70,7 @@ jobs:
             if [ ! -f /tmp/deploy-config.sh.bak ]; then
               sudo cp /var/www/maintenance/deploy-config.sh /tmp/deploy-config.sh.bak
             fi
-            sudo cp /tmp/deploy-config.sh.bak /tmp/deploy-config.sh
+            sudo cp /var/www/maintenance/deploy-config.sh /tmp/deploy-config.sh
             sudo bash /tmp/deploy-config.sh
             
       - name: Deploy webhook scripts
