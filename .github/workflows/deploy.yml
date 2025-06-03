@@ -54,18 +54,21 @@ jobs:
           script: |
             set -e
             cd /var/www/maintenance
-            git pull phis develop
-            # maintenance/maintenance配下をmaintenance直下に移動（隠しファイルも含めて）
+            sudo git pull phis develop
+            # maientenance/maintenance配下をmaintenance直下に移動（隠しファイルも含めて）
             if [ -d maintenance ]; then
               shopt -s dotglob
-              mv maintenance/* .
+              for f in maintenance/*; do
+                [ "$f" = "maintenance/deploy-config.sh" ] && continue
+                mv "$f" .
+              done
               shopt -u dotglob
-              rm -rf maintenance
+              sudo rm -rf maintenance
             fi
             # deploy-config.shを一時ディレクトリにコピーして実行（絶対パス指定）
-            rm -f /tmp/deploy-config.sh
-            cp /var/www/maintenance/deploy-config.sh /tmp/deploy-config.sh
-            bash /tmp/deploy-config.sh
+            sudo rm -f /tmp/deploy-config.sh
+            sudo cp /var/www/maintenance/deploy-config.sh /tmp/deploy-config.sh
+            sudo bash /tmp/deploy-config.sh
             
       - name: Deploy webhook scripts
         uses: appleboy/scp-action@master
