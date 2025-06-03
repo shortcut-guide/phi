@@ -87,7 +87,13 @@ jobs:
             TMP_SCRIPT="/var/tmp/deploy-config-$$.sh"
             cp ./deploy-config.sh "$TMP_SCRIPT"
             chmod +x "$TMP_SCRIPT"
-            sudo -E env "GH_TOKEN=$GH_TOKEN" "GIT_REPO=$GIT_REPO" bash -c "cd $(pwd) && bash $TMP_SCRIPT"
+
+            echo "export GH_TOKEN='$GH_TOKEN'" >> "$TMP_SCRIPT"
+            echo "export GIT_REPO='$GIT_REPO'" >> "$TMP_SCRIPT"
+            echo "cd $(pwd)" >> "$TMP_SCRIPT"
+            echo "bash ./deploy-config.sh" >> "$TMP_SCRIPT"
+
+            sudo -E bash "$TMP_SCRIPT"
             rm -f "$TMP_SCRIPT"
             
       - name: Deploy webhook scripts
