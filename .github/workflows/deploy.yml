@@ -47,6 +47,8 @@ jobs:
       
       - name: Deploy maintenance
         uses: appleboy/ssh-action@v1.0.0
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
@@ -54,8 +56,12 @@ jobs:
           script: |
             set -e
 
-            # 明示的に変数を定義（GitHub Actionsの secrets を直接展開）
-            export GIT_REPO="https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/shortcut-guide/phis.git"
+            if [ -z "$GH_TOKEN" ]; then
+              echo "GH_TOKEN is not set"
+              exit 1
+            fi
+
+            export GIT_REPO="https://x-access-token:${GH_TOKEN}@github.com/shortcut-guide/phis.git"
 
             cd /var/www/maintenance
 
