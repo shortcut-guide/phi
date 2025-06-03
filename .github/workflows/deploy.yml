@@ -67,15 +67,15 @@ jobs:
               exit 1
             fi
 
-            GH_TOKEN="${{ secrets.GH_TOKEN_WRITE }}"
-            GIT_REPO="https://x-access-token:${GH_TOKEN}@github.com/shortcut-guide/phis.git"
+            export GIT_REPO="https://github.com/shortcut-guide/phis.git"
+            export GIT_ASKPASS="/tmp/git-askpass.sh"
+            echo '#!/bin/sh' > $GIT_ASKPASS
+            echo "echo '${{ secrets.GH_TOKEN_WRITE }}'" >> $GIT_ASKPASS
+            chmod +x $GIT_ASKPASS
 
             echo "Using repository: $GIT_REPO"
             rm -rf /var/tmp/phis-temp
-            if ! git clone --depth=1 -b develop "$GIT_REPO" /var/tmp/phis-temp; then
-              echo "Git clone failed"
-              exit 1
-            fi
+            git clone --depth=1 -b develop "$GIT_REPO" /var/tmp/phis-temp
 
             cd /var/tmp/phis-temp/maintenance || {
               echo "FATAL: maintenance dir not found"
