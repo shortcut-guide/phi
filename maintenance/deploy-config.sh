@@ -9,7 +9,7 @@ cp "$SCRIPT_PATH" "$TMP_SCRIPT"
 
 # 一時ディレクトリでsparse-checkoutして maintenance/ ディレクトリのみを展開
 sudo rm -rf /tmp/phis-temp
-env GH_TOKEN="$GH_TOKEN_WRITE" sudo -E git clone --filter=blob:none --no-checkout "https://x-access-token:${GH_TOKEN}@github.com/shortcut-guide/phis.git" /tmp/phis-temp
+sudo -E env GH_TOKEN="$GH_TOKEN_WRITE" git clone --filter=blob:none --no-checkout "https://x-access-token:${GH_TOKEN_WRITE}@github.com/shortcut-guide/phis.git" /tmp/phis-temp
 cd /tmp/phis-temp
 sudo git sparse-checkout init --cone
 sudo git sparse-checkout set .
