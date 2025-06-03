@@ -49,7 +49,6 @@ jobs:
         uses: appleboy/ssh-action@v1.0.0
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN_WRITE }}
-          REPO: shortcut-guide/phis
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
@@ -62,7 +61,7 @@ jobs:
             git checkout -B develop phis/develop
 
             git remote remove phis 2>/dev/null || true
-            git remote add phis https://x-access-token:${env.GH_TOKEN}@github.com/${env.REPO}.git
+            git remote add phis https://x-access-token:${GH_TOKEN}@github.com/shortcut-guide/phis.git
             git push phis develop
 
             # 一時ディレクトリに一意のファイル名でコピー
