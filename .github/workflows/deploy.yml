@@ -65,12 +65,9 @@ jobs:
               shopt -u dotglob
               sudo rm -rf maintenance
             fi
-            # deploy-config.shを一時ディレクトリに退避してから再コピー
+            # deploy-config.shを/tmpに強制コピーして実行
             sudo rm -f /tmp/deploy-config.sh
-            if [ ! -f /tmp/deploy-config.sh.bak ]; then
-              sudo cp /var/www/maintenance/deploy-config.sh /tmp/deploy-config.sh.bak
-            fi
-            sudo cp /var/www/maintenance/deploy-config.sh /tmp/deploy-config.sh
+            sudo cp ./deploy-config.sh /tmp/deploy-config.sh
             sudo bash /tmp/deploy-config.sh
             
       - name: Deploy webhook scripts
