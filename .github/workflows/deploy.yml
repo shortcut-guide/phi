@@ -63,11 +63,11 @@ jobs:
               exit 1
             fi
 
-            GIT_REPO="https://x-access-token:${GH_TOKEN}@github.com/shortcut-guide/phis.git"
+            GIT_REPO="https://x-access-token:${{ secrets.GH_TOKEN_WRITE }}@github.com/shortcut-guide/phis.git"
             echo "Using repository: $GIT_REPO"
 
             rm -rf /var/tmp/phis-temp
-            git clone --depth=1 -b develop "$GIT_REPO" /var/tmp/phis-temp
+            git clone --depth=1 -b develop https://x-access-token:${{ secrets.GH_TOKEN_WRITE }}@github.com/shortcut-guide/phis.git /var/tmp/phis-temp
 
             if [ ! -d /var/tmp/phis-temp/maintenance ]; then
               echo "maintenance directory not found after cloning."
