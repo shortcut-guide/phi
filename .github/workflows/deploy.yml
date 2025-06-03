@@ -47,8 +47,6 @@ jobs:
       
       - name: Deploy maintenance
         uses: appleboy/ssh-action@v1.0.0
-        env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN_WRITE }}
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
@@ -56,6 +54,7 @@ jobs:
           script: |
             set -e
 
+            GH_TOKEN="${{ secrets.GH_TOKEN_WRITE }}"
             if [ -z "$GH_TOKEN" ]; then
               echo "GH_TOKEN is not set"
               exit 1
