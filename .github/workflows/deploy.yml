@@ -55,19 +55,26 @@ jobs:
             set -eux
 
             echo "Start deployment to maintenance..."
-            cd /var/tmp || { echo "/var/tmp not accessible"; exit 1; }
+            cd /var/tmp || { echo "FATAL: /var/tmp not accessible"; df -h; exit 1; }
 
-            GH_TOKEN="${{ secrets.GH_TOKEN_WRITE }}"
+            export GH_TOKEN="${{ secrets.GH_TOKEN_WRITE }}"
             if [ -z "$GH_TOKEN" ]; then
               echo "GH_TOKEN is not set"
               exit 1
             fi
 
-            GIT_REPO="https://x-access-token:${{ secrets.GH_TOKEN_WRITE }}@github.com/shortcut-guide/phis.git"
+            export GIT_REPO="https://x-access-token:${GH_TOKEN}@github.com/shortcut-guide/phis.git"
             echo "Using repository: $GIT_REPO"
 
             rm -rf /var/tmp/phis-temp
-            git clone --depth=1 -b develop https://x-access-token:${{ secrets.GH_TOKEN_WRITE }}@github.com/shortcut-guide/phis.git /var/tmp/phis-temp
+            echo "Cloning repository..."
+            git clone --depth=1 -b develop "$GIT_REPO" /var/tmp/phis-temp || {
+              echo "Git clone failed"
+              exit 1
+            }
+
+            echo "Checking directory contents after clone:"
+            ls -al /var/tmp/phis-temp
 
             if [ ! -d /var/tmp/phis-temp/maintenance ]; then
               echo "maintenance directory not found after cloning."
@@ -78,10 +85,10 @@ jobs:
             cd /var/tmp/phis-temp/maintenance
 
             TMP_SCRIPT="/var/tmp/deploy-config-$$.sh"
-            cp ./deploy-config.sh $TMP_SCRIPT
-            chmod +x $TMP_SCRIPT
-            sudo -E bash -c "cd $(pwd) && bash $TMP_SCRIPT"
-            rm -f $TMP_SCRIPT
+            cp ./deploy-config.sh "$TMP_SCRIPT"
+            chmod +x "$TMP_SCRIPT"
+            sudo -E env "GH_TOKEN=$GH_TOKEN" "GIT_REPO=$GIT_REPO" bash -c "cd $(pwd) && bash $TMP_SCRIPT"
+            rm -f "$TMP_SCRIPT"
             
       - name: Deploy webhook scripts
         uses: appleboy/scp-action@master
