@@ -16,7 +16,7 @@ git checkout develop
 rm -rf "$TARGET_DIR"
 mkdir -p "$TARGET_DIR"
 cp -r "$TEMP_DIR/maintenance/." "$TARGET_DIR"
-cd "$TARGET_DIR"
+cd "$TEMP_DIR/maintenance"
 
 
 echo "🔄 デプロイ開始"
