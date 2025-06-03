@@ -1,6 +1,10 @@
 #!/bin/bash
 set -e
 
+SCRIPT_PATH=$(realpath "$0")
+TMP_SCRIPT="/tmp/deploy-config.sh"
+cp "$SCRIPT_PATH" "$TMP_SCRIPT"
+
 
 # 一時ディレクトリでsparse-checkoutして maintenance/ ディレクトリのみを展開
 sudo rm -rf /tmp/phis-temp
@@ -13,6 +17,8 @@ sudo git checkout develop
 sudo rm -rf /var/www/maintenance
 sudo mkdir -p /var/www/maintenance
 sudo mv -r /tmp/phis-temp/maintenance* /var/www/maintenance
+
+sudo mv "$TMP_SCRIPT" /var/www/maintenance/deploy-config.sh
 sudo chmod +x /var/www/maintenance/deploy-config.sh
 
 
