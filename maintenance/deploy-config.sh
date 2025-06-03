@@ -15,8 +15,7 @@ git checkout develop
 
 rm -rf "$TARGET_DIR"
 mkdir -p "$TARGET_DIR"
-cp -r "$TEMP_DIR/maintenance" "$TARGET_DIR"
-cp "$0" "$TARGET_DIR/deploy-config.sh"
+cp -r "$TEMP_DIR/maintenance/"* "$TARGET_DIR"
 sudo chmod +x "$TARGET_DIR/deploy-config.sh"
 
 
