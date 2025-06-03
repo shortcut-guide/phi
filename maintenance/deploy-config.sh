@@ -15,7 +15,7 @@ git checkout develop
 
 rm -rf "$TARGET_DIR"
 mkdir -p "$TARGET_DIR"
-cp -r . "$TARGET_DIR"
+cp -r maintenance/* "$TARGET_DIR"
 cd "$TARGET_DIR"
 
 
