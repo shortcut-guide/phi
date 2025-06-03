@@ -57,6 +57,15 @@ jobs:
           script: |
             set -e
             cd /var/www/maintenance
+
+            if git show-ref --verify --quiet refs/heads/develop; then
+              git checkout develop
+              git pull origin develop
+            else
+              echo "ローカルにdevelopブランチが存在しません"
+              exit 1
+            fi
+
             git remote remove phis 2>/dev/null || true
             git remote add phis https://x-access-token:${GH_TOKEN}@github.com/${REPO}.git
             git push phis develop
