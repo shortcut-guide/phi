@@ -3,42 +3,39 @@ set -e
 
 
 # 一時ディレクトリでsparse-checkoutして maintenance/ ディレクトリのみを展開
-TEMP_DIR="/tmp/phis-temp"
-TARGET_DIR="/var/www/maintenance"
-
-sudo rm -rf "$TEMP_DIR"
-sudo git clone --filter=blob:none --no-checkout https://github.com/shortcut-guide/phis.git "$TEMP_DIR"
-cd "$TEMP_DIR"
+sudo rm -rf /tmp/phis-temp
+sudo git clone --filter=blob:none --no-checkout https://github.com/shortcut-guide/phis.git /tmp/phis-temp
+cd /tmp/phis-temp
 sudo git sparse-checkout init --cone
 sudo git sparse-checkout set .
 sudo git checkout develop
 
-sudo rm -rf "$TARGET_DIR"
-sudo mkdir -p "$TARGET_DIR"
-sudo cp -r "$TEMP_DIR/maintenance"* "$TARGET_DIR"
-sudo chmod +x "$TARGET_DIR/deploy-config.sh"
+sudo rm -rf /var/www/maintenance
+sudo mkdir -p /var/www/maintenance
+sudo mv -r /tmp/phis-temp/maintenance* /var/www/maintenance
+sudo chmod +x /var/www/maintenance/deploy-config.sh
 
 
 echo "🔄 デプロイ開始"
 
 # systemd 設定更新
-sudo cp "$TARGET_DIR/systemd/backend.service" /etc/systemd/system/backend.service
-sudo cp "$TARGET_DIR/systemd/maintenance.service" /etc/systemd/system/maintenance.service
+sudo cp /var/www/maintenance/systemd/backend.service /etc/systemd/system/backend.service
+sudo cp /var/www/maintenance/systemd/maintenance.service /etc/systemd/system/maintenance.service
 echo "✅ systemd ファイルを更新"
 
 # メンテナンス切替スクリプト
-sudo cp "$TARGET_DIR/scripts/switch_maintenance.sh" /usr/local/bin/switch_maintenance.sh
+sudo cp /var/www/maintenance/scripts/switch_maintenance.sh /usr/local/bin/switch_maintenance.sh
 sudo chmod +x /usr/local/bin/switch_maintenance.sh
 echo "✅ switch_maintenance.sh を更新 & 実行権限付与"
 
 # maintenance.html 配置
 sudo mkdir -p /var/www/maintenance/assets
-sudo cp "$TARGET_DIR/assets/maintenance.html" /var/www/maintenance/assets/maintenance.html
+sudo cp /var/www/maintenance/assets/maintenance.html /var/www/maintenance/assets/maintenance.html
 echo "✅ maintenance.html を配置"
 
 # Webhook用スクリプト設置
 sudo mkdir -p /var/www/webhook
-sudo cp "$TARGET_DIR/webhook/maintenance.js" /var/www/webhook/maintenance.js
+sudo cp /var/www/maintenance/webhook/maintenance.js /var/www/webhook/maintenance.js
 sudo chmod +x /var/www/webhook/maintenance.js
 echo "✅ maintenance.js を /var/www/webhook/ に配置"
 
