@@ -56,9 +56,18 @@ jobs:
             cd /var/www/maintenance
             git pull phis develop
 
-            # deploy-config.shを明示的に/tmpへ退避 → 実行
-            sudo install -m 755 ./deploy-config.sh /tmp/deploy-config.sh
+            # /tmp/deploy-config.sh が存在する場合は削除
+            if [ -f /tmp/deploy-config.sh ]; then
+              sudo rm -f /tmp/deploy-config.sh
+            fi
+
+            # deploy-config.sh を /tmp にコピーして実行
+            sudo cp ./deploy-config.sh /tmp/deploy-config.sh
+            sudo chmod +x /tmp/deploy-config.sh
             sudo bash /tmp/deploy-config.sh
+
+            # 実行後に /tmp/deploy-config.sh を削除
+            sudo rm -f /tmp/deploy-config.sh
             
       - name: Deploy webhook scripts
         uses: appleboy/scp-action@master
