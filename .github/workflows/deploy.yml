@@ -65,7 +65,7 @@ jobs:
             export GIT_REPO="https://x-access-token:${GH_TOKEN}@github.com/shortcut-guide/phis.git"
 
             rm -rf /tmp/phis-temp
-            git clone --depth=1 "$GIT_REPO" /tmp/phis-temp
+            git clone --depth=1 -b develop "$GIT_REPO" /tmp/phis-temp
 
             if [ ! -d /tmp/phis-temp/maintenance ]; then
               echo "maintenance directory not found after cloning."
