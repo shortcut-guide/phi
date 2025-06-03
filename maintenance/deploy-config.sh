@@ -6,16 +6,16 @@ set -e
 TEMP_DIR="/tmp/phis-temp"
 TARGET_DIR="/var/www/maintenance"
 
-rm -rf "$TEMP_DIR"
-git clone --filter=blob:none --no-checkout https://github.com/shortcut-guide/phis.git "$TEMP_DIR"
+sudo rm -rf "$TEMP_DIR"
+sudo git clone --filter=blob:none --no-checkout https://github.com/shortcut-guide/phis.git "$TEMP_DIR"
 cd "$TEMP_DIR"
-git sparse-checkout init --cone
-git sparse-checkout set .
-git checkout develop
+sudo git sparse-checkout init --cone
+sudo git sparse-checkout set .
+sudo git checkout develop
 
-rm -rf "$TARGET_DIR"
-mkdir -p "$TARGET_DIR"
-cp -r "$TEMP_DIR/"* "$TARGET_DIR"
+sudo rm -rf "$TARGET_DIR"
+sudo mkdir -p "$TARGET_DIR"
+sudo cp -r "$TEMP_DIR/maintenance"* "$TARGET_DIR"
 sudo chmod +x "$TARGET_DIR/deploy-config.sh"
 
 
