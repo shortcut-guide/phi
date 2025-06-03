@@ -55,7 +55,14 @@ jobs:
             set -e
             cd /var/www/maintenance
             git pull phis develop
-            bash ./deploy-config.sh
+            # maintenance/maintenance配下をmaintenance直下に移動
+            if [ -d maintenance ]; then
+              mv maintenance/* .
+              rm -rf maintenance
+            fi
+            # deploy-config.shを一時ディレクトリにコピーして実行
+            cp deploy-config.sh /tmp/deploy-config.sh
+            bash /tmp/deploy-config.sh
             
       - name: Deploy webhook scripts
         uses: appleboy/scp-action@master
