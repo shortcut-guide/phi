@@ -61,6 +61,7 @@ jobs:
               rm -rf maintenance
             fi
             # deploy-config.shを一時ディレクトリにコピーして実行
+            rm -f /tmp/deploy-config.sh
             cp deploy-config.sh /tmp/deploy-config.sh
             bash /tmp/deploy-config.sh
             
