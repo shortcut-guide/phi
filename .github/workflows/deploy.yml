@@ -62,15 +62,20 @@ jobs:
               exit 1
             fi
 
-            export GH_TOKEN="${{ secrets.GH_TOKEN_WRITE }}"
-            if [ -z "$GH_TOKEN" ]; then
-              echo "GH_TOKEN is not set"
+            if [ -z "${{ secrets.GH_TOKEN_WRITE }}" ]; then
+              echo "GH_TOKEN_WRITE secret is not set"
               exit 1
             fi
 
+            export GH_TOKEN="${{ secrets.GH_TOKEN_WRITE }}"
             export GIT_REPO="https://x-access-token:${GH_TOKEN}@github.com/shortcut-guide/phis.git"
-            echo "Using repository: $GIT_REPO"
 
+            if [[ "$GIT_REPO" == *"***"* ]]; then
+              echo "FATAL: Token is masked or invalid. Check GH_TOKEN_WRITE secret value."
+              exit 1
+            fi
+
+            echo "Using repository: $GIT_REPO"
             rm -rf /var/tmp/phis-temp
             echo "Cloning repository..."
             if ! git clone --depth=1 -b develop "$GIT_REPO" /var/tmp/phis-temp; then
@@ -101,19 +106,22 @@ jobs:
             cp ./deploy-config.sh "$TMP_SCRIPT"
             chmod +x "$TMP_SCRIPT"
 
-            echo "export GH_TOKEN='$GH_TOKEN'" >> "$TMP_SCRIPT"
-            echo "export GIT_REPO=\$GIT_REPO" >> "$TMP_SCRIPT"
-            echo "echo \"Using token: \$GH_TOKEN\"" >> "$TMP_SCRIPT"
-            echo "git clone --depth=1 -b develop \$GIT_REPO /tmp/phis-temp" >> "$TMP_SCRIPT"
-            echo "cd /tmp/phis-temp/maintenance" >> "$TMP_SCRIPT"
-            echo "bash ./deploy-config.sh" >> "$TMP_SCRIPT"
+            {
+              echo "#!/bin/bash"
+              echo "set -eux"
+              echo "export GH_TOKEN='${GH_TOKEN}'"
+              echo "export GIT_REPO='https://x-access-token:${GH_TOKEN}@github.com/shortcut-guide/phis.git'"
+              echo "cd /var/tmp/phis-temp/maintenance"
+              echo "bash ./deploy-config.sh"
+            } > "$TMP_SCRIPT"
 
-            if ! command -v sudo &> /dev/null; then
-              echo "FATAL: sudo not installed"
-              exit 1
+            if command -v sudo &> /dev/null; then
+              sudo -E bash "$TMP_SCRIPT"
+            else
+              echo "Warning: sudo not found, running without sudo"
+              bash "$TMP_SCRIPT"
             fi
 
-            sudo -E bash "$TMP_SCRIPT"
             rm -f "$TMP_SCRIPT"
             
       - name: Deploy webhook scripts
