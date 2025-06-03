@@ -605,7 +605,49 @@ rm -rf .wrangler/state/v3/d1
 ---
 
 # Maintenance (メンテナンス)
-maintenance-mode
+
+```mermaid
+flowchart TD
+  Deploy[deploy-config.sh] -->|指定時刻を登録| Schedule[cron or systemd-timer]
+  Schedule -->|時刻到達| StartScript[switch_maintenance.sh start_maintenance]
+  Schedule -->|時刻到達| StopScript[switch_maintenance.sh stop_maintenance]
+```
+
+## 使用方法
+```
+bash ./deploy-config.sh 21:00 22:00
+```
+
+## 指定時刻にメンテナンスモードを自動的に起動・解除
+- Git のブランチへの Push or Merge（例: maintenance/start-21-00_end-22-00）をトリガー
+
+```mermaid
+flowchart TD
+    Developer[GitHub: 特定ブランチにPush/Merge]
+    Webhook[GitHub Webhook]
+    VPS[Webhook受信API (VPS)]
+    CronGen[メンテ時間を抽出 & cron登録]
+    ExecMaint[/usr/local/bin/switch_maintenance.sh 実行]
+
+    Developer --> Webhook
+    Webhook --> VPS
+    VPS --> CronGen
+    CronGen --> ExecMaint
+```
+
+### 実行方法
+```
+git checkout -b maintenance/start-21-00_end-22-00
+git push origin maintenance/start-21-00_end-22-00
+```
+
+### GitHub Webhook を設定
+GitHubリポジトリの Settings → Webhooks に以下を設定：
+- Payload URL: https://your-vps-domain/api/webhook/maintenance
+- Content-Type: application/json
+- Events: push
+
+
 
 ---
 
