@@ -10,12 +10,12 @@ rm -rf "$TEMP_DIR"
 git clone --filter=blob:none --no-checkout https://github.com/shortcut-guide/phis.git "$TEMP_DIR"
 cd "$TEMP_DIR"
 git sparse-checkout init --cone
-git sparse-checkout set maintenance
+git sparse-checkout set .
 git checkout develop
 
 rm -rf "$TARGET_DIR"
 mkdir -p "$TARGET_DIR"
-cp -r "$TEMP_DIR/maintenance/"* "$TARGET_DIR"
+cp -r "$TEMP_DIR/"* "$TARGET_DIR"
 sudo chmod +x "$TARGET_DIR/deploy-config.sh"
 
 
