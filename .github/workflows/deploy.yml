@@ -47,24 +47,25 @@ jobs:
       
       - name: Deploy maintenance
         uses: appleboy/ssh-action@v1.0.0
-        env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN_WRITE }}
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
+          envs: GH_TOKEN
           script: |
             set -e
+
+            # 明示的に変数を定義
+            export GIT_REPO="https://x-access-token:${GH_TOKEN}@github.com/shortcut-guide/phis.git"
+
             cd /var/www/maintenance
 
+            git remote remove phis 2>/dev/null || true
+            git remote add phis "$GIT_REPO"
             git fetch phis develop
             git checkout -B develop phis/develop
-
-            git remote remove phis 2>/dev/null || true
-            git remote add phis https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.git
             git push phis develop
 
-            # 一時ディレクトリに一意のファイル名でコピー
             TMP_SCRIPT="/tmp/deploy-config-$$.sh"
             sudo cp ./deploy-config.sh $TMP_SCRIPT
             sudo chmod +x $TMP_SCRIPT
