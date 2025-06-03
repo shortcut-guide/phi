@@ -54,21 +54,26 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
-            set -e
+            set -eux
 
-            GH_TOKEN="${{ secrets.GH_TOKEN_WRITE }}"
+            echo "Start deployment to maintenance..."
+            cd /tmp || { echo "/tmp not accessible"; exit 1; }
+
+            export GH_TOKEN="${{ secrets.GH_TOKEN_WRITE }}"
             if [ -z "$GH_TOKEN" ]; then
               echo "GH_TOKEN is not set"
               exit 1
             fi
 
             export GIT_REPO="https://x-access-token:${GH_TOKEN}@github.com/shortcut-guide/phis.git"
+            echo "Using repository: $GIT_REPO"
 
             rm -rf /tmp/phis-temp
             git clone --depth=1 -b develop "$GIT_REPO" /tmp/phis-temp
 
             if [ ! -d /tmp/phis-temp/maintenance ]; then
               echo "maintenance directory not found after cloning."
+              ls -al /tmp/phis-temp || true
               exit 1
             fi
 
@@ -77,7 +82,7 @@ jobs:
             TMP_SCRIPT="/tmp/deploy-config-$$.sh"
             sudo cp ./deploy-config.sh $TMP_SCRIPT
             sudo chmod +x $TMP_SCRIPT
-            sudo bash $TMP_SCRIPT
+            sudo -E bash $TMP_SCRIPT
             sudo rm -f $TMP_SCRIPT
             
       - name: Deploy webhook scripts
