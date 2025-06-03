@@ -88,7 +88,11 @@ jobs:
             fi
 
             chmod +x ./deploy-config.sh
-            env GH_TOKEN="$GH_TOKEN" GIT_REPO="$GIT_REPO" bash ./deploy-config.sh
+
+            TMP_SCRIPT=$(mktemp /tmp/deploy-config-XXXXXX.sh)
+            cp ./deploy-config.sh "$TMP_SCRIPT"
+            chmod +x "$TMP_SCRIPT"
+            sudo -E bash "$TMP_SCRIPT"
             
       - name: Deploy webhook scripts
         uses: appleboy/scp-action@master
