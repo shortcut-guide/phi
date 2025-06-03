@@ -28,10 +28,11 @@ sudo cp "$DIR/webhook/maintenance.js" /var/www/webhook/maintenance.js
 sudo chmod +x /var/www/webhook/maintenance.js
 echo "✅ maintenance.js を /var/www/webhook/ に配置"
 
-# systemd 再読み込み + backend.service 再起動
+# systemd reload + backend.service reboot + maintenance.service reboot
 sudo systemctl daemon-reexec
 sudo systemctl daemon-reload
 sudo systemctl restart backend.service || echo "⚠️ backend.service の再起動に失敗"
+sudo systemctl restart maintenance.service || echo "⚠️ backend.service の再起動に失敗"
 
 # --- cron ---
 
