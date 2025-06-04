@@ -62,7 +62,7 @@ jobs:
               exit 1
             fi
 
-            if [ -z "${{ secrets.GH_TOKEN_WRITE }}" ]; then
+            [if -z "${{ secrets.GH_TOKEN_WRITE }}" ]; then
               echo "GH_TOKEN_WRITE secret is not set"
               exit 1
             fi
@@ -92,7 +92,8 @@ jobs:
             TMP_SCRIPT=$(mktemp /var/tmp/deploy-config-XXXXXX.sh)
             cp ./deploy-config.sh "$TMP_SCRIPT"
             chmod +x "$TMP_SCRIPT"
-            sudo bash -c "export GH_TOKEN='${GH_TOKEN}'; export GIT_REPO='${GIT_REPO}'; bash '${TMP_SCRIPT}'"
+            # sudo を用いて引数として GH_TOKEN と GIT_REPO を渡す
+            sudo bash "$TMP_SCRIPT" "${GH_TOKEN}" "${GIT_REPO}"
             rm -f "$TMP_SCRIPT"
 
       - name: Deploy webhook scripts
