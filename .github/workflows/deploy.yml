@@ -98,5 +98,5 @@ jobs:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
-          source: "/runner/work/phis-admin/phis-admin/maintenance/webhook/maintenance.js"
+          source: "/home/runner/work/phis/phis/maintenance/webhook/maintenance.js"
           target: "/var/www/webhook/"
