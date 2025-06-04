@@ -62,7 +62,7 @@ jobs:
               exit 1
             fi
 
-            [if -z "${{ secrets.GH_TOKEN_WRITE }}" ]; then
+            if [-z "${{ secrets.GH_TOKEN_WRITE }}" ]; then
               echo "GH_TOKEN_WRITE secret is not set"
               exit 1
             fi
