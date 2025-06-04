@@ -92,7 +92,7 @@ jobs:
             TMP_SCRIPT=$(mktemp /var/tmp/deploy-config-XXXXXX.sh)
             cp ./deploy-config.sh "$TMP_SCRIPT"
             chmod +x "$TMP_SCRIPT"
-            sudo -E env GH_TOKEN="${GH_TOKEN}" GIT_REPO="${GIT_REPO}" bash "$TMP_SCRIPT"
+            sudo -E bash -c "GH_TOKEN='${GH_TOKEN}' GIT_REPO='${GIT_REPO}' bash '${TMP_SCRIPT}'"
             rm -f "$TMP_SCRIPT"
 
       - name: Deploy webhook scripts
