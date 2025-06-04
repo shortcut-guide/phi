@@ -33,7 +33,7 @@ jobs:
 
       - name: Deploy via SSH
         run: |
-          ssh -i key.pem -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << EOF
+          ssh -i key.pem -o StrictHostKeyChecking=no ${{secrets.VPS_USER}}@${{ secrets.VPS_HOST }} << EOF
             set -e
             git config --global --add safe.directory /var/www/${{ steps.vars.outputs.dir }}
             cd /var/www/${{ steps.vars.outputs.dir }}
@@ -53,6 +53,7 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
             set -eux
+
             echo "Start deployment to maintenance..."
             cd /var/tmp || { echo "FATAL: /var/tmp not accessible"; df -h; exit 1; }
 
@@ -66,12 +67,16 @@ jobs:
               exit 1
             fi
 
-            GH_TOKEN=$(echo "${{ secrets.GH_TOKEN_WRITE }}" | sed 's/+/%2B/g')
-            GIT_REPO="https://${GH_TOKEN}@github.com/shortcut-guide/phis.git"
+            GH_TOKEN="${{ secrets.GH_TOKEN_WRITE }}"
+            GH_TOKEN_ESCAPED=$(echo "$GH_TOKEN" | sed 's/+/%2B/g')
+            GIT_REPO="https://${GH_TOKEN_ESCAPED}@github.com/shortcut-guide/phis.git"
 
             echo "Using repository: $GIT_REPO"
             rm -rf /var/tmp/phis-temp
-            git clone --depth=1 -b develop "$GIT_REPO" /var/tmp/phis-temp
+            if ! git clone --depth=1 -b develop "$GIT_REPO" /var/tmp/phis-temp; then
+              echo "Git clone failed"
+              exit 1
+            fi
 
             cd /var/tmp/phis-temp/maintenance || {
               echo "FATAL: maintenance dir not found"
@@ -85,18 +90,10 @@ jobs:
 
             chmod +x ./deploy-config.sh
 
-            TMP_SCRIPT=$(mktemp /var/tmp/deploy-config-XXXXXX.sh)
-            cat <<EOS > "$TMP_SCRIPT"
-#!/bin/bash
-set -eux
-export GH_TOKEN="${GH_TOKEN}"
-export GIT_REPO="${GIT_REPO}"
-cd /var/tmp/phis-temp/maintenance
-bash ./deploy-config.sh
-EOS
-
+            TMP_SCRIPT=$(mktemp /tmp/deploy-config-XXXXXX.sh)
+            cp ./deploy-config.sh "$TMP_SCRIPT"
             chmod +x "$TMP_SCRIPT"
-            sudo bash "$TMP_SCRIPT"
+            sudo -E bash "$TMP_SCRIPT"
 
       - name: Deploy webhook scripts
         uses: appleboy/scp-action@master
