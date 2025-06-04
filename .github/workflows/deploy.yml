@@ -1,5 +1,8 @@
 name: Deploy to VPS
 
+permissions:
+  contents: write
+
 on:
   push:
     branches: [develop, staging, main]
@@ -7,7 +10,6 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
       - name: Set variables by branch
         id: vars
@@ -46,32 +48,16 @@ jobs:
           EOF
 
       - name: Deploy maintenance
-        uses: appleboy/ssh-action@v1.0.0
-        with:
+        env:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
-          script: |
-            set -eux
-
-            echo "Start deployment to maintenance..."
-            cd /var/tmp || { echo "FATAL: /var/tmp not accessible"; df -h; exit 1; }
-
-            if ! command -v git &> /dev/null; then
-              echo "FATAL: git not installed"
-              exit 1
-            fi
-
-            if [-z "${{ secrets.GH_TOKEN_WRITE }}" ]; then
-              echo "GH_TOKEN_WRITE secret is not set"
-              exit 1
-            fi
-
-            GH_TOKEN="${{ secrets.GH_TOKEN_WRITE }}"
-            GH_TOKEN_ESCAPED=$(echo "$GH_TOKEN" | sed 's/+/%2B/g')
-            GIT_REPO="https://${GH_TOKEN_ESCAPED}@github.com/shortcut-guide/phis.git"
-
-            echo "Using repository: $GIT_REPO"
+          GH_TOKEN: ${{ secrets.GH_TOKEN_WRITE }}
+          REPO: shortcut-guide/phis
+        run: |
+          if git ls-remote --tags https://x-access-token:${GH_TOKEN}@github.com/${REPO}.git; then
+            echo "Tag $TAG already exists on remote. Skipping push."
+          else
             rm -rf /var/tmp/phis-temp
             if ! git clone --depth=1 -b develop "$GIT_REPO" /var/tmp/phis-temp; then
               echo "Git clone failed"
@@ -89,12 +75,12 @@ jobs:
             fi
 
             chmod +x ./deploy-config.sh
-            TMP_SCRIPT=$(mktemp /var/tmp/deploy-config-XXXXXX.sh)
-            cp ./deploy-config.sh "$TMP_SCRIPT"
-            chmod +x "$TMP_SCRIPT"
-            # sudo を用いて引数として GH_TOKEN と GIT_REPO を渡す
-            sudo bash "$TMP_SCRIPT" "${GH_TOKEN}" "${GIT_REPO}"
-            rm -f "$TMP_SCRIPT"
+            cp ./deploy-config.sh /var/tmp/deploy-config.sh
+            chmod +x /var/tmp/deploy-config.sh
+
+            sudo bash /var/tmp/deploy-config.sh "${GH_TOKEN}" "${REPO}"
+            rm -f /var/tmp/deploy-config.sh
+          fi
 
       - name: Deploy webhook scripts
         uses: appleboy/scp-action@master
