@@ -87,7 +87,10 @@ jobs:
       
       - name: Debug workspace
         run: |
-          ls -R /runner/work/phis-admin/phis-admin
+          echo "Checking workspace root:"
+          ls -R $GITHUB_WORKSPACE
+          echo "Contents of workspace:"
+          find $GITHUB_WORKSPACE
 
       - name: Deploy webhook scripts
         uses: appleboy/scp-action@master
