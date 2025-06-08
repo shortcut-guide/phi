@@ -491,27 +491,36 @@ npx tsc
 
 # D1起動方法
 ```
-wrangler d1 create pup 
-wrangler d1 execute my-database --file=setup.sql
-wrangler d1 list 
-wrangler dev
-wrangler dev src/index.ts
-wrangler dev --config wrangler.toml
+npx wrangler d1 create pup 
+npx wrangler d1 execute my-database --file=setup.sql
+npx wrangler d1 list 
+npx wrangler dev
+npx wrangler dev src/index.ts
+npx wrangler dev --config wrangler.toml
+```
+
+## カラム情報の確認
+```
+npx wrangler d1 execute <DATABASE_NAME> \
+  --local \
+  --command "PRAGMA table_info('products')"
+
+npx wrangler d1 execute products --local --command "PRAGMA table_info('products')"
 ```
 
 ## テーブルが作成されたか確認
 ```
-wrangler d1 execute pup --command="SELECT name FROM sqlite_master WHERE type='table';"
+npx wrangler d1 execute pup --command="SELECT name FROM sqlite_master WHERE type='table';"
 ```
 
 ## テーブルデータ確認
 ```
-wrangler d1 execute pup --command="SELECT name FROM sqlite_master WHERE type='table';"
+npx wrangler d1 execute pup --command="SELECT name FROM sqlite_master WHERE type='table';"
 ```
 
 ## リモートデータベース適用
 ```
-wrangler d1 execute pup --file=setup.sql --remote
+npx wrangler d1 execute pup --file=setup.sql --remote
 ```
 
 ---
@@ -520,7 +529,7 @@ wrangler d1 execute pup --file=setup.sql --remote
 
 ## 接続確認用
 ```
-wrangler d1 execute PRODUCTS_DB \
+npx wrangler d1 execute PRODUCTS_DB \
   --local \
   --config src/d1-worker/products/wrangler-develop.toml \
   --env develop \
@@ -537,8 +546,10 @@ npx wrangler d1 execute PROFILE_DB \
 ```
 
 ## PROFILE_DB
+
+develop DB 確認
 ```
-npx wrangler d1 execute PROFILE_DB --env=profile --local --config=backend/src/d1-worker/profile/wrangler-production.toml --command="SELECT name FROM sqlite_master WHERE type='table';"
+npx wrangler d1 execute PROFILE_DB --env=develop --local --config=src/d1-worker/profile/wrangler-develop.toml --command="SELECT name FROM sqlite_master WHERE type='table';"
 ```
 
 ```
@@ -563,6 +574,20 @@ npx wrangler d1 migrations create <DATABASE_NAME> <MIGRATION_NAME>
 npx wrangler d1 migrations create PROFILE_DB create_profile_table \
   --config ./src/d1-worker/profile/wrangler-production.toml \
   --env production
+```
+
+## PRODUCT_DB
+develop DB 確認
+```
+npx wrangler d1 execute PRODUCTS_DB --env=develop --local --config=src/d1-worker/products/wrangler-develop.toml --command="SELECT name FROM sqlite_master WHERE type='table';"
+```
+
+SQL実行
+```
+npx wrangler d1 execute PRODUCTS_DB \
+  --config=src/d1-worker/products/wrangler-develop.toml \
+  --env=develop \
+  --file ./sql/products.sql
 ```
 
 ## CURL POST 追加
