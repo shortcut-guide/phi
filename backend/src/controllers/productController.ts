@@ -9,9 +9,12 @@ import type { Product } from "@/b/types/product";
 /**
  * Parse and extract image and product data from the request
  */
-async function parseRequestBody(request: Request): Promise<{ image_base64_list: string[]; productData: Record<string, unknown> }> {
+async function parseRequestBody(request: Request): Promise<{ image_base64_list: string[]; productData: Record<string, any> }> {
   const body = await request.json();
-  const { image_base64_list, ...productData } = body;
+  if (typeof body !== "object" || body === null) {
+    throw new Error("Invalid request body: expected an object");
+  }
+  const { image_base64_list, ...productData } = body as Record<string, any>;
   return { image_base64_list, productData };
 }
 
