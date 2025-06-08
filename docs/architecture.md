@@ -585,9 +585,19 @@ npx wrangler d1 execute PRODUCTS_DB --env=develop --local --config=src/d1-worker
 SQL実行
 ```
 npx wrangler d1 execute PRODUCTS_DB \
+  --local \
   --config=src/d1-worker/products/wrangler-develop.toml \
   --env=develop \
   --file ./sql/products.sql
+```
+
+テーブル確認
+```
+npx wrangler d1 execute PRODUCTS_DB \
+  --local \
+  --config=src/d1-worker/products/wrangler-develop.toml \
+  --env=develop \
+  --command "PRAGMA table_info(products);"
 ```
 
 ## CURL POST 追加

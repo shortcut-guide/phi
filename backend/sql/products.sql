@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS products;
 CREATE TABLE products (
   id TEXT PRIMARY KEY,             -- 商品ID
   name TEXT NOT NULL,              -- 商品名
