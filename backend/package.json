@@ -7,7 +7,7 @@
         "build": "node esbuild.config.mjs",
         "start": "node public/src/d1Server.js",
         "dev": "nodemon --ext ts --exec \"tsc && node public/d1Server.js\"",
-        "test": "node --max-old-space-size=4096 --experimental-vm-modules node_modules/.bin/jest"
+        "test": "node --max-old-space-size=4096 --experimental-vm-modules node_modules/.bin/jest --config ./jest.config.mjs"
     },
     "dependencies": {
         "@hono/node-server": "^1.14.1",

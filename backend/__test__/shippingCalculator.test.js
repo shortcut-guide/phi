@@ -11,10 +11,10 @@ import {
             description: 'ヤマト運輸: 実重量が容積重量より大きい場合',
             func: calculateYamatoShippingCost,
             weight: 2,
-            length: 30,
+            length: 20,
             width: 20,
             height: 15,
-            expected: 51
+            expected: 181
           },
           {
             description: '佐川急便: 実重量が容積重量より小さい場合',
@@ -23,7 +23,7 @@ import {
             length: 50,
             width: 40,
             height: 20,
-            expected: 176
+            expected: 101
           },
           {
             description: 'EMS: 基本重量内の場合',

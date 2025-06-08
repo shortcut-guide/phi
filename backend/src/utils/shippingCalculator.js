@@ -88,7 +88,7 @@ const calculateYamatoShippingCost = async (length, width, height, actualWeight, 
  * @returns {number} - 算出された送料（元）
  */
 const calculateSagawaShippingCost = async (weight, length, width, height) => {
-  const rates = shippingRates.taobaoshinkansen.sagawa;
+  const rates = shippingRates.taobaoshinkansen.individualImport.sagawa;
   const volumeWeight = calculateVolumeWeight(length, width, height, rates.divisor);
   const applicableWeight = Math.max(weight, volumeWeight);
 
