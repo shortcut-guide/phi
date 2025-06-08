@@ -1,7 +1,7 @@
 // backend/controllers/productController.ts
 import { cMessages } from "@/b/config/consoleMessage.ts";
 import { uploadImagesToImgur } from "@/b/services/imgurService";
-import { upsertProduct } from "@/b/models/productModel";
+import { upsertProduct } from "@/b/models/ProductModel";
 import { validateProduct } from "@/b/utils/validateProduct";
 import type { APIRoute } from "astro";
 import type { Product } from "@/b/types/product";
@@ -9,7 +9,7 @@ import type { Product } from "@/b/types/product";
 /**
  * Parse and extract image and product data from the request
  */
-async function parseRequestBody(request: Request) {
+async function parseRequestBody(request: Request): Promise<{ image_base64_list: string[]; productData: Record<string, unknown> }> {
   const body = await request.json();
   const { image_base64_list, ...productData } = body;
   return { image_base64_list, productData };
@@ -22,7 +22,7 @@ function buildProduct(productData: any, imageUrls: string[]): Product {
   return {
     ...productData,
     ec_data: {
-      ...(productData.ec_data || {}),
+      ...(productData.ec_data ?? {}),
       images: imageUrls,
     },
   };
