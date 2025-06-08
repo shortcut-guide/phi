@@ -3,7 +3,7 @@ import { getD1Product } from "@/b/utils/d1";
 
 async function executeQuery(query: string, bindings: any[] = [], isSelect = false) {
   const db = getD1Product();
-  const stmt = await db.prepare(query).bind(...bindings);
+  const stmt = db.prepare(query).bind(...bindings);
   const result = isSelect ? await stmt.all() : await stmt.run();
   return result.results;
 }

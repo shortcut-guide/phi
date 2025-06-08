@@ -38,7 +38,7 @@ export const POST: APIRoute = async ({ request }: { request: Request }) => {
     const product = buildProduct(productData, imageUrls);
 
     if (!validateProduct(product)) {
-      return new Response(JSON.stringify({ status: "error", message: "Invalid product data" }), {
+      return new Response(JSON.stringify({ status: "error", message: cMessages[2] }), {
         status: 400,
         headers: { "Content-Type": "application/json" },
       });
@@ -46,14 +46,14 @@ export const POST: APIRoute = async ({ request }: { request: Request }) => {
 
     await upsertProduct(product);
 
-    return new Response(JSON.stringify({ status: "success", message: cMessages.success }), {
+    return new Response(JSON.stringify({ status: "success", message: cMessages[1] }), {
       status: 200,
       headers: { "Content-Type": "application/json" },
     });
     
   } catch (error) {
     console.error("[POST /product] Error:", error);
-    return new Response(JSON.stringify({ status: "error", message: "Internal server error" }), {
+    return new Response(JSON.stringify({ status: "error", message: cMessages[4] }), {
       status: 500,
       headers: { "Content-Type": "application/json" },
     });
