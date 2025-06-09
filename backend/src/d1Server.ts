@@ -139,4 +139,6 @@ app.route("/api/token", d1Route);
 const rootApp = new Hono<{ Bindings: Bindings }>();
 rootApp.route('/api', publicApp);
 rootApp.route('/', app);
-serve(rootApp);
+const PORT = Number(process.env.PORT) || 3000;
+console.log(`🚀 Server listening on http://localhost:${PORT}`);
+serve({ fetch: rootApp.fetch, port: PORT });

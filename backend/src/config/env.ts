@@ -18,3 +18,4 @@ export const PUP_DB = required("CLOUDFLARE_D1_DATABASE_PUP");
 export const PAYPAL_CLIENT_ID = required("PAYPAL_CLIENT_ID");
 export const PAYPAL_SECRET = required("PAYPAL_SECRET");
 export const PAYPAL_API_BASE = required("PAYPAL_API_BASE");
+export const IMGUR_CLIENT_ID = required("IMGUR_CLIENT_ID");
