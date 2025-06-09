@@ -1,52 +1,34 @@
-import type { Env } from "@/b/types/env";
-import type {
-  Address,
-  CreateAddressInput,
-  UpdateAddressInput,
-  SetDefaultAddressInput,
-  AddressCount
-} from "@/b/types/address";
-import { getD1UserProfile } from "@/b/utils/d1";
+import { executeQuery } from "@/b/utils/executeQuery";
+import type { Address, AddressCount } from "@/b/types/address";
 
-async function executeQuery<T = Record<string, unknown>>(query: string, bindings: any[] = [], isSelect = false): Promise<T[]> {
-  const db = getD1UserProfile();
-  const stmt = db.prepare(query).bind(...bindings);
-  const result = isSelect ? await stmt.all() : await stmt.run();
-  return isSelect ? ((result.results ?? []) as T[]) : ([] as T[]);
-}
-
-export async function fetchAddresses(
-  user_id: string
-): Promise<Address[]> {
+export async function fetchAddresses(db: D1Database, user_id: string): Promise<Address[]> {
   const query = `
     SELECT id, name, kana, zip, address, is_default 
     FROM user_addresses 
     WHERE user_id = ? 
     ORDER BY created_at DESC
   `;
-  const rows = await executeQuery<Address>(query, [user_id], true);
-  return rows;
+  const result = await executeQuery<Address>(db, query, [user_id], true);
+  if (!Array.isArray(result)) {
+    throw new Error("Failed to fetch addresses");
+  }
+  return result;
 }
 
-export async function countAddresses(
-  user_id: string
-): Promise<AddressCount> {
+export async function countAddresses(db: D1Database, user_id: string): Promise<AddressCount> {
   const query = `
     SELECT COUNT(*) as count 
     FROM user_addresses 
     WHERE user_id = ?
   `;
-  const result = await executeQuery(query, [user_id], true);
-  if (!result || result.length === 0) {
+  const rows = await executeQuery<{ count: number }>(db, query, [user_id], true);
+  if (!Array.isArray(rows) || rows.length === 0) {
     throw new Error("Failed to count user addresses");
   }
-  return { count: Number(result[0].count) };
+  return { count: rows[0].count };
 }
 
-export async function setDefaultAddress(
-  user_id: string,
-  address_id: string
-): Promise<void> {
+export async function setDefaultAddress(db: D1Database, user_id: string, address_id: string): Promise<void> {
   const queries = [
     {
       query: `UPDATE user_addresses SET is_default = 0 WHERE user_id = ?`,
@@ -58,38 +40,23 @@ export async function setDefaultAddress(
     },
   ];
   for (const { query, bindings } of queries) {
-    await executeQuery(query, bindings);
+    await executeQuery(db, query, bindings);
   }
 }
 
-export async function updateAddress(
-  id: string,
-  user_id: string,
-  data: UpdateAddressInput
-): Promise<void> {
+export async function insertAddress(db: D1Database, address: Address): Promise<void> {
   const query = `
-    UPDATE user_addresses 
-    SET name = ?, kana = ?, zip = ?, address = ?
-    WHERE id = ? AND user_id = ?
-  `;
-  const bindings = [data.name, data.kana, data.zip, data.address, id, user_id];
-  await executeQuery(query, bindings);
-}
-
-export async function insertAddress(
-  data: CreateAddressInput
-): Promise<void> {
-  const query = `
-    INSERT INTO user_addresses (id, user_id, name, kana, zip, address)
-    VALUES (?, ?, ?, ?, ?, ?)
+    INSERT INTO user_addresses (id, user_id, name, kana, zip, address, is_default)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
   `;
   const bindings = [
-    crypto.randomUUID(),
-    data.user_id,
-    data.name,
-    data.kana,
-    data.zip,
-    data.address,
+    address.id,
+    address.user_id,
+    address.name,
+    address.kana,
+    address.zip,
+    address.address,
+    address.is_default,
   ];
-  await executeQuery(query, bindings);
+  await executeQuery(db, query, bindings);
 }

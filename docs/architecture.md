@@ -600,6 +600,15 @@ npx wrangler d1 execute PRODUCTS_DB \
   --command "PRAGMA table_info(products);"
 ```
 
+カラム更新
+```
+npx wrangler d1 execute PRODUCTS_DB \
+  --local  \
+  --env=develop \
+  --config=src/d1-worker/products/wrangler-develop.toml \
+  --command "ALTER TABLE products ADD COLUMN own BOOLEAN DEFAULT 0;"
+```
+
 ## CURL POST 追加
 ```
 curl -X POST http://localhost:8787/api/contents \

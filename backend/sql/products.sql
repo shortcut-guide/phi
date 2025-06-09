@@ -6,6 +6,7 @@ CREATE TABLE products (
   platform TEXT NOT NULL,          -- プラットフォーム（例：amazon, rakuten, base）
   base_price INTEGER,              -- 参考価格
   ec_data TEXT NOT NULL,           -- 各EC用詳細データ(JSON)
+  own BOOLEAN DEFAULT 0,           -- 自社商品かどうか
   created_at TEXT DEFAULT CURRENT_TIMESTAMP, 
   updated_at TEXT DEFAULT CURRENT_TIMESTAMP  -- 最終更新日時
 );

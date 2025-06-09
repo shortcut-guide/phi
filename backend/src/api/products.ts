@@ -1,11 +1,6 @@
-import { Context } from 'hono';
-import { getFilteredProducts } from '@/b/models/ProductModel';
+import { handleGetFilteredProducts } from "@/b/controllers/productController";
+import type { Context } from "hono";
 
-export async function handleGetProducts(c: Context) {
-  const shop = c.req.query('shop');
-  const limit = Number(c.req.query('limit') ?? 100);
-  const ownOnly = c.req.query('ownOnly') === 'true';
-
-  const results = await getFilteredProducts(c.env,{ shop, limit, ownOnly });
-  return c.json(results);
+export async function handleGetProducts(c: Context): Promise<Response> {
+  return await handleGetFilteredProducts(c);
 }
