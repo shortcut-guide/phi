@@ -4,6 +4,8 @@ import { serve } from '@hono/node-server';
 import type { D1Database } from "@cloudflare/workers-types";
 import { d1Route } from '@/b/routes/token';
 import productRoutes from '@/b/routes/products';
+import { renderIndex } from "@/b/views/index";
+import { messages } from '@/b/config/messageConfig';
 
 type Bindings = {
     DB: D1Database;
@@ -34,23 +36,8 @@ app.use("*", async (c, next) => {
 });
 
 app.get("/", async (c) => {
-  return c.html(`
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-      <meta charset="UTF-8" />
-      <title>Hono API</title>
-      <meta http-equiv="Content-Security-Policy" content="default-src 'self'; font-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self';">
-      <style>
-        body { font-family: sans-serif; margin: 2rem; }
-      </style>
-    </head>
-    <body>
-      <h1>✅ Hono API is running</h1>
-      <p>You can now access your API endpoints.</p>
-    </body>
-    </html>
-  `);
+    const html = renderIndex();
+    return c.html(html);
 });
 
 // ✅ すべてのサイトを取得
@@ -59,7 +46,7 @@ app.get("/api/sites", async (c) => {
         const { results } = await c.env.DB.prepare("SELECT * FROM sites ORDER BY createdAt DESC").all();
         return c.json(results);
     } catch (error) {
-        return c.json({ error: error instanceof Error ? error.message : "データの取得に失敗しました。" }, 500);
+        return c.json({ error: error instanceof Error ? error.message : messages.api.sites.fetchError.ja }, 500);
     }
 });
 
@@ -70,7 +57,7 @@ app.post("/api/sites", async (c) => {
         const { title, url, element } = body;
 
         if (!title || !url) {
-            return c.json({ error: "title と url は必須です。" }, 400);
+            return c.json({ error: messages.api.sites.validateTitleUrl.ja }, 400);
         }
 
         const jsonElement = element ? JSON.stringify(element) : "{}";
@@ -82,7 +69,7 @@ app.post("/api/sites", async (c) => {
 
         return c.json({ id: meta.last_row_id });
     } catch (error) {
-        return c.json({ error: error instanceof Error ? error.message : "データの追加に失敗しました。" }, 500);
+        return c.json({ error: error instanceof Error ? error.message : messages.api.sites.insertError.ja }, 500);
     }
 });
 
@@ -93,12 +80,12 @@ app.get("/api/sites/:id", async (c) => {
         const { results } = await c.env.DB.prepare("SELECT * FROM sites WHERE id = ?").bind(id).all();
 
         if (results.length === 0) {
-            return c.json({ error: "サイトが見つかりません。" }, 404);
+            return c.json({ error: messages.api.sites.notFound.ja }, 404);
         }
 
         return c.json(results[0]);
     } catch (error) {
-        return c.json({ error: error instanceof Error ? error.message : "データの取得に失敗しました。" }, 500);
+        return c.json({ error: error instanceof Error ? error.message : messages.api.sites.fetchError.ja }, 500);
     }
 });
 
@@ -110,7 +97,7 @@ app.put("/api/sites/:id", async (c) => {
         const { title, url, element } = body;
 
         if (!title || !url) {
-            return c.json({ error: "title と url は必須です。" }, 400);
+            return c.json({ error: messages.api.sites.validateTitleUrl.ja }, 400);
         }
 
         const jsonElement = element ? JSON.stringify(element) : "{}";
@@ -121,12 +108,12 @@ app.put("/api/sites/:id", async (c) => {
         .run();
 
         if (meta.changes === 0) {
-            return c.json({ error: "更新するデータが見つかりません。" }, 404);
+            return c.json({ error: messages.api.sites.noUpdateData.ja }, 404);
         }
 
-        return c.json({ message: "更新成功" });
+        return c.json({ message: messages.api.sites.updateSuccess.ja });
     } catch (error) {
-        return c.json({ error: error instanceof Error ? error.message : "データの更新に失敗しました。" }, 500);
+        return c.json({ error: error instanceof Error ? error.message : messages.api.sites.updateError.ja }, 500);
     }
 });
 
@@ -137,12 +124,12 @@ app.delete("/api/sites/:id", async (c) => {
         const { meta } = await c.env.DB.prepare("DELETE FROM sites WHERE id = ?").bind(id).run();
 
         if (meta.changes === 0) {
-            return c.json({ error: "削除するデータが見つかりません。" }, 404);
+            return c.json({ error: messages.api.sites.deleteNotFound.ja }, 404);
         }
 
-        return c.json({ message: `削除成功: ${id}` });
+        return c.json({ message: messages.api.sites.deleteSuccessPrefix.ja + id });
     } catch (error) {
-        return c.json({ error: error instanceof Error ? error.message : "データの削除に失敗しました。" }, 500);
+        return c.json({ error: error instanceof Error ? error.message : messages.api.sites.deleteError.ja }, 500);
     }
 });
 
