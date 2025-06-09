@@ -15,5 +15,39 @@ export const messages = {
       ErrorSearch: 'Failed to search products',
       ErrorSuggest: 'Failed to fetch suggestions'
     }
+  },
+  api: {
+    sites: {
+      fetchError: {
+        ja: 'データの取得に失敗しました。',
+      },
+      validateTitleUrl: {
+        ja: 'title と url は必須です。',
+      },
+      insertError: {
+        ja: 'データの追加に失敗しました。',
+      },
+      notFound: {
+        ja: 'サイトが見つかりません。',
+      },
+      updateError: {
+        ja: 'データの更新に失敗しました。',
+      },
+      noUpdateData: {
+        ja: '更新するデータが見つかりません。',
+      },
+      updateSuccess: {
+        ja: '更新成功',
+      },
+      deleteError: {
+        ja: 'データの削除に失敗しました。',
+      },
+      deleteNotFound: {
+        ja: '削除するデータが見つかりません。',
+      },
+      deleteSuccessPrefix: {
+        ja: '削除成功: ',
+      },
+    }
   }
 };
