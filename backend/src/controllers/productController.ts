@@ -8,7 +8,7 @@ import type { APIRoute, APIContext } from "astro";
 import type { Product } from "@/b/types/product";
 
 
-/**
+/**d
  * Parse and validate the request body
  */
 async function parseAndValidateRequestBody(request: Request): Promise<Product> {
@@ -150,32 +150,22 @@ export const DELETE: APIRoute = async ({ params }: APIContext) => {
 /**
  * Handle GET requests for filtered products using Hono
  */
-export async function handleGetFilteredProducts(c?: Context) {
+export async function handleGetFilteredProducts(c: Context): Promise<Response> {
   try {
-    // Context が渡されている場合はクエリパラメータを取得
-    const shop = c?.req.query("shop") ?? undefined;
-    const limit = Number(c?.req.query("limit") ?? 100);
-    const ownOnly = c?.req.query("ownOnly") === "true";
+    // クエリパラメータを取得
+    const shop = c.req.query("shop") ?? undefined;
+    const limit = Number(c.req.query("limit") ?? 100);
+    const ownOnly = c.req.query("ownOnly") === "true";
 
     // モデルからデータを取得
     const results = await getFilteredProducts({ shop, limit, ownOnly });
 
-    // Context が渡されている場合は JSON レスポンスを返す
-    if (c) {
-      return c.json(results, 200);
-    }
-
-    // Context がない場合は結果をそのまま返す
-    return results;
+    // 成功レスポンスを返す
+    return c.json(results, 200);
   } catch (error) {
     console.error("[GET /products] Error:", error instanceof Error ? error.message : error);
 
-    // Context が渡されている場合はエラーレスポンスを返す
-    if (c) {
-      return c.json({ status: "error", message: cMessages[4] }, 500); // Internal server error
-    }
-
-    // Context がない場合はエラーをスロー
-    throw new Error(cMessages[4]);
+    // エラーレスポンスを返す
+    return c.json({ status: "error", message: cMessages[4] }, 500); // Internal server error
   }
 }
