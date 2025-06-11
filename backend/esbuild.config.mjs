@@ -1,5 +1,4 @@
 import esbuild from 'esbuild';
-import alias from 'esbuild-plugin-alias';
 import pkg from './package.json' assert { type: "json" };
 
 const dependencies = Object.keys(pkg.dependencies || {});
@@ -13,12 +12,7 @@ esbuild.build({
   platform: 'node',
   target: 'node20',
   format: 'esm',
-  outdir: 'public/src',
+  outdir: 'public',
   sourcemap: true,
   external: ['@hono/node-server'],
-  plugins: [
-    alias({
-      '@': './src'
-    })
-  ]
 }).catch(() => process.exit(1));
