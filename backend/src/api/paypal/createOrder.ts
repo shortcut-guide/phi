@@ -53,8 +53,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
     priceInfo = await getProductPrice(productId);
   } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
     return setCORSHeaders(
-      new Response(JSON.stringify({ error: err.message }), {
+      new Response(JSON.stringify({ error: message }), {
         status: 403,
         headers: { "Content-Type": "application/json" },
       })
