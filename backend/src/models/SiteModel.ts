@@ -6,3 +6,4 @@ export async function getSites() {
   const db = getD1Site();
   return await executeQuery<Site>(db, "SELECT * FROM sites", [], true);
 }
+
