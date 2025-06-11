@@ -17,6 +17,7 @@ const required = (key: string): string => {
 
 export const PORT = process.env.PORT || 3000;
 export const NODE_ENV = ENV;
+export const SITE_DB = required("CLOUDFLARE_D1_DATABASE_SITES");
 export const SEARCHLOGS_DB = required("CLOUDFLARE_D1_DATABASE_SEARCH_LOGS");
 export const PRODUCTS_DB = required("CLOUDFLARE_D1_DATABASE_PRODUCTS");
 export const PROFILE_DB = required("CLOUDFLARE_D1_DATABASE_PROFILE");

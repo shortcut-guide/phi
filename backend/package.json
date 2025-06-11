@@ -6,7 +6,7 @@
     "scripts": {
         "clean": "rimraf public",
         "build": "npm run clean && node --experimental-json-modules esbuild.config.mjs",
-        "start": "node public/src/d1Server.js",
+        "start": "node public/d1Server.js",
         "dev": "tsc && node public/d1Server.js",
         "test": "node --max-old-space-size=4096 --experimental-vm-modules node_modules/.bin/jest --config ./jest.config.mjs"
     },

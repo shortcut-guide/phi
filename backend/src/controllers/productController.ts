@@ -1,12 +1,12 @@
 // backend/controllers/productController.ts
-import { createProduct, updateProduct, deleteProduct, getFilteredProducts } from "@/b/models/ProductModel";
-import { cMessages } from "@/b/config/consoleMessage.ts";
-import { validateProduct } from "@/b/utils/validateProduct";
-import { Context } from "hono";
-
+import type { Context } from "hono";
 import type { APIRoute, APIContext } from "astro";
 import type { Product } from "@/b/types/product";
 
+import { cMessages } from "@/b/config/consoleMessage.ts";
+
+import { createProduct, updateProduct, deleteProduct, getFilteredProducts } from "@/b/models/ProductModel";
+import { validateProduct } from "@/b/utils/validateProduct";
 
 /**d
  * Parse and validate the request body

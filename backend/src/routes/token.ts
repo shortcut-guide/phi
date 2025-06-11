@@ -1,10 +1,10 @@
 import { Hono } from 'hono';
 import { getToken, saveToken, updateToken, deleteToken } from '@/b/services/token';
 
-export const d1Route = new Hono<{ Bindings: { DB: D1Database } }>();
+export const tokenRoutes = new Hono<{ Bindings: { DB: D1Database } }>();
 
 // ✅ トークンを取得
-d1Route.get('/api/token', async (c) => {
+tokenRoutes.get('/api/token', async (c) => {
   try {
     const token = await getToken(c.env.DB);
     if (!token || !token.token) {
@@ -17,7 +17,7 @@ d1Route.get('/api/token', async (c) => {
 });
 
 // ✅ トークンを保存
-d1Route.post('/api/token', async (c) => {
+tokenRoutes.post('/api/token', async (c) => {
   try {
     const body = await c.req.json();
     if (!body || !body.token) {
@@ -31,7 +31,7 @@ d1Route.post('/api/token', async (c) => {
 });
 
 // ✅ トークンを更新
-d1Route.put('/api/token', async (c) => {
+tokenRoutes.put('/api/token', async (c) => {
   try {
     const body = await c.req.json();
     if (!body || !body.token) {
@@ -45,7 +45,7 @@ d1Route.put('/api/token', async (c) => {
 });
 
 // ✅ トークンを削除
-d1Route.delete('/api/token', async (c) => {
+tokenRoutes.delete('/api/token', async (c) => {
   try {
     const body = await c.req.json();
     if (!body || !body.token) {
