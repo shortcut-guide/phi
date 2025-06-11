@@ -1,7 +1,13 @@
 // backend/src/config/env.ts
-import {config} from 'dotenv';
+import { config } from 'dotenv';
+import { resolve } from 'path';
 
-config();
+// 環境に応じた .env ファイルを選択
+const ENV = process.env.NODE_ENV || 'develop';
+const envFile = resolve(process.cwd(), `.env.${ENV}`);
+
+// .env ファイルを読み込む
+config({ path: envFile });
 
 const required = (key: string): string => {
   const value = process.env[key];
@@ -10,7 +16,7 @@ const required = (key: string): string => {
 };
 
 export const PORT = process.env.PORT || 3000;
-export const NODE_ENV = process.env.NODE_ENV || 'development';
+export const NODE_ENV = ENV;
 export const SEARCHLOGS_DB = required("CLOUDFLARE_D1_DATABASE_SEARCH_LOGS");
 export const PRODUCTS_DB = required("CLOUDFLARE_D1_DATABASE_PRODUCTS");
 export const PROFILE_DB = required("CLOUDFLARE_D1_DATABASE_PROFILE");
