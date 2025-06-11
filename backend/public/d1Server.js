@@ -76,7 +76,10 @@ import { Hono as Hono2 } from "hono";
 
 // src/config/env.ts
 import { config } from "dotenv";
-config();
+import { resolve } from "path";
+var ENV = process.env.NODE_ENV || "develop";
+var envFile = resolve(process.cwd(), `.env.${ENV}`);
+config({ path: envFile });
 var required = (key) => {
   const value = process.env[key];
   if (!value)
@@ -84,7 +87,6 @@ var required = (key) => {
   return value;
 };
 var PORT = process.env.PORT || 3e3;
-var NODE_ENV = process.env.NODE_ENV || "development";
 var SEARCHLOGS_DB = required("CLOUDFLARE_D1_DATABASE_SEARCH_LOGS");
 var PRODUCTS_DB = required("CLOUDFLARE_D1_DATABASE_PRODUCTS");
 var PROFILE_DB = required("CLOUDFLARE_D1_DATABASE_PROFILE");
