@@ -577,5 +577,19 @@ export const messages = {
       registerNew: 'Register New Address',
       selected: 'Selected',
     }
-  }
+  },
+  products:{
+    ja: {
+      title: 'おすすめ',
+      ErrorProductNotFound: '商品が見つかりません',
+      ErrorProductSearch: '商品検索に失敗しました',
+      ErrorProductSuggest: '商品サジェスト取得に失敗しました'
+    },
+    en: {
+      title: 'Recommended',
+      ErrorProductNotFound: 'Product not found',
+      ErrorProductSearch: 'Failed to search products',
+      ErrorProductSuggest: 'Failed to fetch product suggestions'
+    }
+  },
 };
