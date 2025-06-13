@@ -56,7 +56,7 @@ jobs:
             set -e
             cd /var/www/${{ steps.vars.outputs.dir }}/frontend
             npm install
-            astro build
+            npm run build
             # Astro build 出力は通常 ./dist 以下
             cp -r public/* /var/www/${{ steps.vars.outputs.dir }}/frontend/public/
           EOF
