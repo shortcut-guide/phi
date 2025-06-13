@@ -1,6 +1,9 @@
 # generated types
 .astro/
 
+frontend/package-lock.json
+backend/package-lock.json
+
 # dependencies
 node_modules/
 
@@ -28,6 +31,8 @@ backend/src/.wrangler/*
 
 backend/public
 backend/public/*
+frontend/public
+frontend/public/*
 
 # sqlite cache
 .wrangler/
