@@ -1,21 +1,42 @@
 import { setCORSHeaders } from "@/b/utils/cors";
 import { validateCSRF } from "@/b/utils/csrf";
+import { getFilteredProducts } from "@/b/models/ProductModel";
+import { parse } from "json5";
 
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import fetch from "node-fetch";
 import { PAYPAL_API_BASE, PAYPAL_CLIENT_ID, PAYPAL_SECRET } from "@/b/config/env";
 
-// 仮の価格取得関数（DBなどから取得する想定）
-async function getProductPrice(productId: string): Promise<{ price: number, currency: string }> {
-  const dummyDB: { [key: string]: { price: number, currency: string } } = {
-    "product-001": { price: 25.0, currency: "USD" },
-    "product-002": { price: 40.0, currency: "USD" },
-  };
-  return dummyDB[productId];
+async function getProductPrice(productId: string): Promise<{ price: number; currency: string }> {
+  const productsResult = await getFilteredProducts({ ownOnly: true, limit: 100 });
+  const products = Array.isArray(productsResult) ? productsResult : [];
+  const product = products.find((p) => p.id === productId);
+
+  if (!product) {
+    throw new Error("Invalid product or not own product");
+  }
+
+  const ecData = typeof product.ec_data === "string"
+    ? JSON.parse(product.ec_data)
+    : product.ec_data;
+
+  if (!ecData.payment_methods?.includes("paypal")) {
+    throw new Error("PayPal is not available for this product");
+  }
+
+  return { price: product.base_price / 100, currency: ecData.currency || "USD" };
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  if (!validateCSRF(req)) {
+  // Convert VercelRequest to Fetch API Request for CSRF validation
+  const url = `https://${req.headers.host}${req.url}`;
+  const fetchRequest = new Request(url, {
+    method: req.method,
+    headers: req.headers as HeadersInit,
+    body: typeof req.body === "string" ? req.body : JSON.stringify(req.body),
+  });
+
+  if (!validateCSRF(fetchRequest)) {
     return setCORSHeaders(new Response("Invalid CSRF Token", { status: 403 }));
   }
   const { productId } = req.body;
@@ -28,7 +49,19 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     );
   }
 
-  const { price, currency } = await getProductPrice(productId);
+  let priceInfo;
+  try {
+    priceInfo = await getProductPrice(productId);
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    return setCORSHeaders(
+      new Response(JSON.stringify({ error: message }), {
+        status: 403,
+        headers: { "Content-Type": "application/json" },
+      })
+    );
+  }
+
   const auth = await getAccessToken();
 
   const order = await fetch(`${PAYPAL_API_BASE}/v2/checkout/orders`, {
@@ -42,8 +75,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       purchase_units: [
         {
           amount: {
-            currency_code: currency,
-            value: price.toFixed(2),
+            currency_code: priceInfo.currency,
+            value: priceInfo.price.toFixed(2),
           },
         },
       ],

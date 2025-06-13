@@ -1,18 +1,14 @@
-import { Product } from "@/b/types/product";
 import { getD1Product } from "@/b/utils/d1";
-
-async function executeQuery(query: string, bindings: any[] = [], isSelect = false) {
-  const db = getD1Product();
-  const stmt = await db.prepare(query).bind(...bindings);
-  const result = isSelect ? await stmt.all() : await stmt.run();
-  return result.results;
-}
+import { executeQuery } from "@/b/utils/executeQuery";
+import { Product } from "@/b/types/product";
 
 export async function getProducts() {
-  return await executeQuery("SELECT * FROM products", [], true);
+  const db = getD1Product();
+  return await executeQuery<Product>(db, "SELECT * FROM products", [], true);
 }
 
 export async function createProduct(product: Product) {
+  const db = getD1Product();
   const query = `
     INSERT INTO products (id, name, shop_name, platform, base_price, ec_data)
     VALUES (?, ?, ?, ?, ?, ?)`;
@@ -24,10 +20,11 @@ export async function createProduct(product: Product) {
     product.base_price,
     product.ec_data,
   ];
-  return await executeQuery(query, bindings);
+  return await executeQuery(db, query, bindings);
 }
 
 export async function updateProduct(product: Product) {
+  const db = getD1Product();
   const query = `
     UPDATE products SET
       name = ?, shop_name = ?, platform = ?, base_price = ?, ec_data = ?, updated_at = CURRENT_TIMESTAMP
@@ -40,23 +37,28 @@ export async function updateProduct(product: Product) {
     product.ec_data,
     product.id,
   ];
-  return await executeQuery(query, bindings);
+  return await executeQuery(db, query, bindings);
 }
 
 export async function deleteProduct(id: string) {
+  const db = getD1Product();
   const query = "DELETE FROM products WHERE id = ?";
-  return await executeQuery(query, [id]);
+  return await executeQuery(db, query, [id]);
 }
 
-export async function getFilteredProducts({
-  shop,
-  limit,
-  ownOnly,
-}: {
-  shop?: string;
-  limit: number;
-  ownOnly: boolean;
-}) {
+export async function getFilteredProducts(
+  {
+    shop,
+    limit,
+    ownOnly,
+  }: {
+    shop?: string;
+    limit: number;
+    ownOnly: boolean;
+  }
+) {
+
+  const db = getD1Product();
   let query = "SELECT * FROM products";
   const conditions: string[] = [];
   const bindings: any[] = [];
@@ -77,10 +79,11 @@ export async function getFilteredProducts({
   query += " ORDER BY updated_at DESC LIMIT ?";
   bindings.push(limit);
 
-  return await executeQuery(query, bindings, true);
+  return await executeQuery<Product>(db, query, bindings, true);
 }
 
 export async function upsertProduct(product: Product) {
+  const db = getD1Product();
   const query = `
     INSERT INTO products (id, name, shop_name, platform, base_price, ec_data)
     VALUES (?, ?, ?, ?, ?, ?)
@@ -100,5 +103,5 @@ export async function upsertProduct(product: Product) {
     product.base_price,
     product.ec_data,
   ];
-  return await executeQuery(query, bindings);
+  return await executeQuery(db, query, bindings);
 }

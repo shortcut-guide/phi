@@ -50,6 +50,17 @@ jobs:
             pm2 restart ${{ steps.vars.outputs.dir }} || pm2 start npm --name "${{ steps.vars.outputs.dir }}" -- start
           EOF
 
+      - name: Build frontend and deploy
+        run: |
+          ssh -i key.pem -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << EOF
+            set -e
+            cd /var/www/${{ steps.vars.outputs.dir }}/frontend
+            npm install
+            astro build
+            # Astro build 出力は通常 ./dist 以下
+            cp -r public/* /var/www/${{ steps.vars.outputs.dir }}/frontend/public/
+          EOF
+
       - name: Deploy maintenance
         env:
           host: ${{ secrets.VPS_HOST }}

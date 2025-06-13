@@ -1,58 +1,171 @@
 // backend/controllers/productController.ts
-import { cMessages } from "@/b/config/consoleMessage.ts";
-import { uploadImagesToImgur } from "@/b/services/imgurService";
-import { upsertProduct } from "@/b/models/productModel";
-import { validateProduct } from "@/b/utils/validateProduct";
-import type { APIRoute } from "astro";
+import type { Context } from "hono";
+import type { APIRoute, APIContext } from "astro";
 import type { Product } from "@/b/types/product";
 
-/**
- * Parse and extract image and product data from the request
- */
-async function parseRequestBody(request: Request) {
-  const body = await request.json();
-  const { image_base64_list, ...productData } = body;
-  return { image_base64_list, productData };
-}
+import { cMessages } from "@/b/config/consoleMessage.ts";
 
-/**
- * Merge product data with image URLs into Product type
+import { createProduct, updateProduct, deleteProduct, getFilteredProducts } from "@/b/models/ProductModel";
+import { validateProduct } from "@/b/utils/validateProduct";
+
+/**d
+ * Parse and validate the request body
  */
-function buildProduct(productData: any, imageUrls: string[]): Product {
-  return {
-    ...productData,
-    ec_data: {
-      ...(productData.ec_data || {}),
-      images: imageUrls,
-    },
+async function parseAndValidateRequestBody(request: Request): Promise<Product> {
+  const body: any = await request.json();
+
+  if (typeof body !== "object" || body === null) {
+    throw new Error("Invalid request body: expected an object");
+  }
+
+  const id = crypto.randomUUID();
+  const product: Product = {
+    id,
+    name: body.name ?? "Unknown Product",
+    shop_name: body.shop_name ?? "Unknown Shop",
+    platform: body.platform ?? "Unknown Platform",
+    base_price: body.base_price ?? 0,
+    ec_data: typeof body.ec_data === "string" ? body.ec_data : JSON.stringify(body.ec_data ?? {}),
   };
+
+  if (!validateProduct(product)) {
+    throw new Error(cMessages[2]); // Invalid product data
+  }
+
+  return product;
 }
 
+/**
+ * Handle POST requests for creating a product
+ */
 export const POST: APIRoute = async ({ request }: { request: Request }) => {
   try {
-    const { image_base64_list, productData } = await parseRequestBody(request);
-    const imageUrls = await uploadImagesToImgur(image_base64_list);
-    const product = buildProduct(productData, imageUrls);
+    const product = await parseAndValidateRequestBody(request);
+    await createProduct(product);
 
-    if (!validateProduct(product)) {
-      return new Response(JSON.stringify({ status: "error", message: "Invalid product data" }), {
+    return new Response(JSON.stringify({ status: "success", message: cMessages[1] }), {
+      status: 201,
+      headers: { "Content-Type": "application/json" },
+    });
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error("[POST /product] Error:", error.message);
+      const message = error.message || cMessages[4]; // Internal server error
+      return new Response(JSON.stringify({ status: "error", message }), {
+        status: error.message === cMessages[2] ? 400 : 500,
+        headers: { "Content-Type": "application/json" },
+      });
+    } else {
+      console.error("[POST /product] Error:", error);
+      return new Response(JSON.stringify({ status: "error", message: cMessages[4] }), {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+  }
+};
+
+/**
+ * Handle PUT requests for updating a product
+ */
+export const PUT: APIRoute = async ({ request, params }: APIContext) => {
+  try {
+    const body: any = await request.json();
+
+    const id = params.id; // 型を Record<string, string | undefined> に対応
+    if (!id) {
+      return new Response(JSON.stringify({ status: "error", message: "Product ID is required" }), {
         status: 400,
         headers: { "Content-Type": "application/json" },
       });
     }
 
-    await upsertProduct(product);
+    if (typeof body !== "object" || body === null) {
+      return new Response(JSON.stringify({ status: "error", message: "Invalid request body: expected an object" }), {
+        status: 400,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
 
-    return new Response(JSON.stringify({ status: "success", message: cMessages.success }), {
+    // Construct a complete Product object
+    const product: Product = {
+      id,
+      name: body.name ?? "Unknown Product",
+      shop_name: body.shop_name ?? "Unknown Shop",
+      platform: body.platform ?? "Unknown Platform",
+      base_price: body.base_price ?? 0,
+      ec_data: typeof body.ec_data === "string" ? body.ec_data : JSON.stringify(body.ec_data ?? {}),
+    };
+
+    if (!validateProduct(product)) {
+      return new Response(JSON.stringify({ status: "error", message: cMessages[2] }), {
+        status: 400,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    await updateProduct(product);
+
+    return new Response(JSON.stringify({ status: "success", message: cMessages[1] }), {
       status: 200,
       headers: { "Content-Type": "application/json" },
     });
-    
   } catch (error) {
-    console.error("[POST /product] Error:", error);
-    return new Response(JSON.stringify({ status: "error", message: "Internal server error" }), {
+    console.error("[PUT /product/:id] Error:", error instanceof Error ? error.message : error);
+    return new Response(JSON.stringify({ status: "error", message: cMessages[4] }), {
       status: 500,
       headers: { "Content-Type": "application/json" },
     });
   }
 };
+
+/**
+ * Handle DELETE requests for deleting a product
+ */
+export const DELETE: APIRoute = async ({ params }: APIContext) => {
+  try {
+    const id = params.id; // 型を Record<string, string | undefined> に対応
+    if (!id) {
+      return new Response(JSON.stringify({ status: "error", message: "Product ID is required" }), {
+        status: 400,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    await deleteProduct(id);
+
+    return new Response(JSON.stringify({ status: "success", message: cMessages[1] }), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
+  } catch (error) {
+    console.error("[DELETE /product/:id] Error:", error instanceof Error ? error.message : error);
+    return new Response(JSON.stringify({ status: "error", message: cMessages[4] }), {
+      status: 500,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+};
+
+/**
+ * Handle GET requests for filtered products using Hono
+ */
+export async function handleGetFilteredProducts(c: Context): Promise<Response> {
+  try {
+    // クエリパラメータを取得
+    const shop = c.req.query("shop") ?? undefined;
+    const limit = Number(c.req.query("limit") ?? 100);
+    const ownOnly = c.req.query("ownOnly") === "true";
+
+    // モデルからデータを取得
+    const results = await getFilteredProducts({ shop, limit, ownOnly });
+
+    // 成功レスポンスを返す
+    return c.json(results, 200);
+  } catch (error) {
+    console.error("[GET /products] Error:", error instanceof Error ? error.message : error);
+
+    // エラーレスポンスを返す
+    return c.json({ status: "error", message: cMessages[4] }, 500); // Internal server error
+  }
+}

@@ -6,7 +6,7 @@ export interface Address {
   zip: string;
   address: string;
   is_default: number;
-  created_at?: string;
+  created_at: string;
 }
 
 export interface CreateAddressInput {

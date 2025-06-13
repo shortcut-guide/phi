@@ -1,0 +1,10 @@
+export declare const PORT: string | number;
+export declare const NODE_ENV: string;
+export declare const SEARCHLOGS_DB: string;
+export declare const PRODUCTS_DB: string;
+export declare const PROFILE_DB: string;
+export declare const PUP_DB: string;
+export declare const PAYPAL_CLIENT_ID: string;
+export declare const PAYPAL_SECRET: string;
+export declare const PAYPAL_API_BASE: string;
+export declare const IMGUR_CLIENT_ID: string;

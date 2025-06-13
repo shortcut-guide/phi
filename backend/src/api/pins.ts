@@ -1,5 +1,6 @@
 // backend/api/pins.ts
 import type { APIRoute } from "astro";
+import { Context } from "hono";
 import { getPins } from "@/b/models/pinModel";
 import { setCORSHeaders } from "@/b/utils/cors";
 
@@ -9,7 +10,7 @@ export async function handleGetPins(c: Context){
   const items = await getPins(offset, limit);
 
   return setCORSHeaders(
-    new Response(c.json(items), {
+    new Response(JSON.stringify(items), {
       status: 200,
       headers: { "Content-Type": "application/json" },
     })

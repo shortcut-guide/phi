@@ -1,5 +1,6 @@
 // frontend/src/api/searchClient.ts
 import type { SearchResult } from '@/b/types/search';
+
 import { messages } from "@/b/config/messageConfig";
 import { getLang } from "@/b/utils/lang";
 

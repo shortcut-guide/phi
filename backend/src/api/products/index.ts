@@ -1,16 +1,10 @@
-import { getProducts, createProduct } from "@/b/models/ProductModel";
-import { getDB } from "@/b/utils/d1";
+import { POST } from "@/b/controllers/productController";
+import { getProducts } from "@/b/models/ProductModel";
 
-export const onRequestGet = async ({ env }: any) => {
-  const db = getDB(env);
-  const products = await getProducts(db);
+
+export const onRequestGet = async () => {
+  const products = await getProducts();
   return new Response(JSON.stringify(products), { headers: { "Content-Type": "application/json" } });
 };
 
-export const onRequestPost = async ({ request, env }: any) => {
-  const db = getDB(env);
-  const body = await request.json();
-  const id = crypto.randomUUID();
-  await createProduct(db, { ...body, id });
-  return new Response("Created", { status: 201 });
-};
+export const onRequestPost = POST; // productController の POST をそのまま使用

@@ -1,11 +1,11 @@
 import esbuild from 'esbuild';
-import alias from 'esbuild-plugin-alias';
-import pkg from './package.json' assert { type: "json" };
+import { createRequire } from 'module';
 
+const require = createRequire(import.meta.url);
+const pkg = require('./package.json'); // CommonJS スタイルで JSON を読み込む
+
+// 依存関係を外部化
 const dependencies = Object.keys(pkg.dependencies || {});
-
-// ✅ 依存を外部化（bundle対象から除外）する
-const externals = Object.keys(dependencies || {});
 
 esbuild.build({
   entryPoints: ['src/d1Server.ts'],
@@ -13,12 +13,10 @@ esbuild.build({
   platform: 'node',
   target: 'node20',
   format: 'esm',
-  outdir: 'public/src',
+  outdir: 'public',
   sourcemap: true,
-  external: ['@hono/node-server'],
-  plugins: [
-    alias({
-      '@': './src'
-    })
-  ]
+  external: dependencies,
+  loader: {
+    '.ts': 'ts',
+  },
 }).catch(() => process.exit(1));
