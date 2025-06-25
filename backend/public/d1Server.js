@@ -262,8 +262,10 @@ async function handleGetProducts(c) {
 
 // src/routes/products.ts
 var productRoutes = new Hono2();
-productRoutes.get("/", handleGetProducts);
-console.log(productRoutes.router.match("GET", "/"));
+productRoutes.get("/", (c) => {
+  console.log("matched GET /api/products \u2192", c.req.path);
+  return handleGetProducts(c);
+});
 
 // src/routes/sites.ts
 import { Hono as Hono3 } from "hono";
