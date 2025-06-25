@@ -1,5 +1,6 @@
 export declare const PORT: string | number;
 export declare const NODE_ENV: string;
+export declare const SITE_DB: string;
 export declare const SEARCHLOGS_DB: string;
 export declare const PRODUCTS_DB: string;
 export declare const PROFILE_DB: string;

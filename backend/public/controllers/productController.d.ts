@@ -1,4 +1,4 @@
-import { Context } from "hono";
+import type { Context } from "hono";
 import type { APIRoute } from "astro";
 /**
  * Handle POST requests for creating a product

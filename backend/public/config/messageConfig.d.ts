@@ -6,6 +6,20 @@ export declare const messages: {
     ErrorMail2: string;
     ErrorMail3: string;
     ErrorPasswordReset1: string;
+    utilsD1: {
+        ja: {
+            ErrorSITE_DB: string;
+            ErrorSEARCHLOGS_DB: string;
+            ErrorPROFILE_DB: string;
+            ErrorPRODUCTS_DB: string;
+        };
+        en: {
+            ErrorSITE_DB: string;
+            ErrorSEARCHLOGS_DB: string;
+            ErrorPROFILE_DB: string;
+            ErrorPRODUCTS_DB: string;
+        };
+    };
     searchClient: {
         ja: {
             ErrorSearch: string;
