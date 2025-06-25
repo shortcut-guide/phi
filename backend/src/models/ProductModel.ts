@@ -50,11 +50,9 @@ export async function getFilteredProducts(
   {
     shop,
     limit,
-    ownOnly,
   }: {
     shop?: string;
     limit: number;
-    ownOnly: boolean;
   }
 ) {
 
@@ -62,11 +60,6 @@ export async function getFilteredProducts(
   let query = "SELECT * FROM products";
   const conditions: string[] = [];
   const bindings: any[] = [];
-
-  if (ownOnly) {
-    conditions.push("shop_name = ?");
-    bindings.push("自社");
-  }
 
   if (shop) {
     conditions.push("site_name = ?");

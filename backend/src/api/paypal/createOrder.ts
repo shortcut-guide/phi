@@ -8,7 +8,7 @@ import fetch from "node-fetch";
 import { PAYPAL_API_BASE, PAYPAL_CLIENT_ID, PAYPAL_SECRET } from "@/b/config/env";
 
 async function getProductPrice(productId: string): Promise<{ price: number; currency: string }> {
-  const productsResult = await getFilteredProducts({ ownOnly: true, limit: 100 });
+  const productsResult = await getFilteredProducts({ limit: 100 });
   const products = Array.isArray(productsResult) ? productsResult : [];
   const product = products.find((p) => p.id === productId);
 

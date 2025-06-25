@@ -15,4 +15,7 @@ export declare const DELETE: APIRoute;
 /**
  * Handle GET requests for filtered products using Hono
  */
-export declare function handleGetFilteredProducts(c: Context): Promise<Response>;
+/**
+ * Handle GET requests for filtered products using Hono
+ */
+export declare function GetFilteredProducts(c: Context): Promise<Response>;

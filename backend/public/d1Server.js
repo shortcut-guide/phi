@@ -218,17 +218,12 @@ async function executeQuery(db, query, bindings = [], isSelect = false) {
 // src/models/ProductModel.ts
 async function getFilteredProducts({
   shop,
-  limit,
-  ownOnly
+  limit
 }) {
   const db = getD1Product();
   let query = "SELECT * FROM products";
   const conditions = [];
   const bindings = [];
-  if (ownOnly) {
-    conditions.push("shop_name = ?");
-    bindings.push("\u81EA\u793E");
-  }
   if (shop) {
     conditions.push("site_name = ?");
     bindings.push(shop);
@@ -242,12 +237,11 @@ async function getFilteredProducts({
 }
 
 // src/controllers/productController.ts
-async function handleGetFilteredProducts(c) {
+async function GetFilteredProducts(c) {
   try {
     const shop = c.req.query("shop") ?? void 0;
     const limit = Number(c.req.query("limit") ?? 100);
-    const ownOnly = c.req.query("ownOnly") === "true";
-    const results = await getFilteredProducts({ shop, limit, ownOnly });
+    const results = await getFilteredProducts({ shop, limit }) ?? [];
     return c.json(results, 200);
   } catch (error) {
     console.error("[GET /products] Error:", error instanceof Error ? error.message : error);
@@ -256,15 +250,17 @@ async function handleGetFilteredProducts(c) {
 }
 
 // src/api/products.ts
-async function handleGetProducts(c) {
-  return await handleGetFilteredProducts(c);
+async function GetProducts(c) {
+  return await GetFilteredProducts(c);
 }
 
 // src/routes/products.ts
 var productRoutes = new Hono2();
-productRoutes.get("/", (c) => {
-  console.log("matched GET /api/products \u2192", c.req.path);
-  return handleGetProducts(c);
+productRoutes.get("/", async (c) => {
+  console.log("[productRoutes] GET /api/products invoked, path =", c.req.path);
+  const resp = await GetProducts(c);
+  const data = await resp.json();
+  return c.json(data, 200);
 });
 
 // src/routes/sites.ts

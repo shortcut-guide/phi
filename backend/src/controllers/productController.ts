@@ -66,31 +66,6 @@ export const POST: APIRoute = async ({ request }: { request: Request }) => {
 };
 
 /**
- * Handle GET requests for retrieving products with optional filters
- */
-export const GET: APIRoute = async ({ request }: { request: Request }) => {
-  try {
-    const url = new URL(request.url);
-    const shop = url.searchParams.get('shop') ?? undefined;
-    const limit = Number(url.searchParams.get('limit') ?? '100');
-    const ownOnly = url.searchParams.get('ownOnly') === 'true';
-
-    const results = await getFilteredProducts({ shop, limit, ownOnly });
-
-    return new Response(JSON.stringify(results), {
-      status: 200,
-      headers: { "Content-Type": "application/json" },
-    });
-  } catch (error) {
-    console.error("[GET /product] Error:", error instanceof Error ? error.message : error);
-    return new Response(JSON.stringify({ status: "error", message: cMessages[4] }), {
-      status: 500,
-      headers: { "Content-Type": "application/json" },
-    });
-  }
-};
-
-/**
  * Handle PUT requests for updating a product
  */
 export const PUT: APIRoute = async ({ request, params }: APIContext) => {
@@ -175,22 +150,20 @@ export const DELETE: APIRoute = async ({ params }: APIContext) => {
 /**
  * Handle GET requests for filtered products using Hono
  */
-export async function handleGetFilteredProducts(c: Context): Promise<Response> {
+/**
+ * Handle GET requests for filtered products using Hono
+ */
+export async function GetFilteredProducts(c: Context): Promise<Response> {
   try {
-    // クエリパラメータを取得
     const shop = c.req.query("shop") ?? undefined;
     const limit = Number(c.req.query("limit") ?? 100);
-    const ownOnly = c.req.query("ownOnly") === "true";
 
-    // モデルからデータを取得
-    const results = await getFilteredProducts({ shop, limit, ownOnly });
+    // モデルからデータを取得。null/undefined なら空配列を返す
+    const results = (await getFilteredProducts({ shop, limit })) ?? [];
 
-    // 成功レスポンスを返す
     return c.json(results, 200);
   } catch (error) {
     console.error("[GET /products] Error:", error instanceof Error ? error.message : error);
-
-    // エラーレスポンスを返す
-    return c.json({ status: "error", message: cMessages[4] }, 500); // Internal server error
+    return c.json({ status: "error", message: cMessages[4] }, 500);
   }
 }
