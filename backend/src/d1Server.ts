@@ -8,12 +8,17 @@ import { productRoutes } from '@/b/routes/products';
 import { siteRoutes } from '@/b/routes/sites';
 import { renderIndex } from "@/b/views/index";
 
-// ✅ ルートの設定
-const publicApp = new Hono<{ Bindings: { DB: D1Database } }>();
-const app = new Hono<{ Bindings: { DB: D1Database } }>().basePath('/admin');
+// メインアプリ
+const rootApp = new Hono<{ Bindings: { DB: D1Database } }>();
+
+// 管理用サブアプリ
+const adminApp = new Hono<{ Bindings: { DB: D1Database } }>();
+
+// API用サブアプリ
+const apiApp = new Hono<{ Bindings: { DB: D1Database } }>();
 
 // ✅ CORS を有効化
-app.use(
+rootApp.use(
     "*",
     cors({
         origin: "*", // ✅ すべてのオリジンからのアクセスを許可
@@ -23,7 +28,7 @@ app.use(
 );
 
 // Content Security Policy: allow fonts from self and data URIs
-app.use("*", async (c, next) => {
+rootApp.use("*", async (c, next) => {
     c.header(
         "Content-Security-Policy",
         "default-src 'self'; font-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self';"
@@ -31,30 +36,23 @@ app.use("*", async (c, next) => {
     await next();
 });
 
-app.notFound((c) => {
+rootApp.get("/admin", (c) => c.html(renderIndex()));
+rootApp.route("/admin", adminApp);
+rootApp.route("/api", apiApp);
+
+apiApp.route("/token", tokenRoutes);
+apiApp.route("/products", productRoutes);
+apiApp.route("/sites", siteRoutes);
+
+rootApp.get("/admin/", (c) => c.redirect("/admin", 301));
+rootApp.get("/api/token/", (c) => c.redirect("/api/token", 301));
+rootApp.get('/api/products/', (c) => c.redirect('/api/products', 301));
+rootApp.get('/api/sites/', (c) => c.redirect('/api/sites', 301));
+
+rootApp.notFound((c) => {
     return c.json({ error: "Not Found" }, 404);
 });
 
-app.notFound((c) => {
-    return c.json({ error: "Not Found" }, 403);
-});
-
-app.notFound((c) => {
-    return c.json({ error: "Not Found" }, 503);
-});
-
-app.get("/", async (c) => {
-    console.log("Root route accessed");
-    const html = renderIndex();
-    return c.html(html);
-});
-
-// ✅ トークン関連のルートを追加
-app.route('/', app);
-app.route("/api/token", tokenRoutes);
-publicApp.route('/api', productRoutes);
-publicApp.route('/api/sites', siteRoutes);
-
 const PORT = Number(process.env.PORT) || 3000;
 console.log(`🚀 Server listening on http://localhost:${PORT}`);
-serve({ fetch: app.fetch, port: PORT });
+serve({ fetch: rootApp.fetch, port: PORT });

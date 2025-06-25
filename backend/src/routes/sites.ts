@@ -3,8 +3,8 @@ import { handleGetSites, handleGetSiteById, handleCreateSite, handleUpdateSite, 
 
 export const siteRoutes = new Hono();
 
-siteRoutes.get('/sites', handleGetSites); // GET /sites
-siteRoutes.get('/sites/:id', handleGetSiteById); // GET /sites/:id
-siteRoutes.post('/sites', handleCreateSite); // POST /sites
-siteRoutes.put('/sites/:id', handleUpdateSite); // PUT /sites/:id
-siteRoutes.delete('/sites/:id', handleDeleteSite); // DELETE /sites/:id
+siteRoutes.get('/', handleGetSites); // GET /sites
+siteRoutes.get('/:id', handleGetSiteById); // GET /sites/:id
+siteRoutes.post('/', handleCreateSite); // POST /sites
+siteRoutes.put('/:id', handleUpdateSite); // PUT /sites/:id
+siteRoutes.delete('/:id', handleDeleteSite); // DELETE /sites/:id

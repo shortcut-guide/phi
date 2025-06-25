@@ -3,5 +3,5 @@ import { handleGetProducts } from '@/b/api/products';
 
 export const productRoutes = new Hono();
 
-productRoutes.get('/products', handleGetProducts);
-console.log(productRoutes.router.match('GET','/products'));
+productRoutes.get('/', handleGetProducts);
+console.log(productRoutes.router.match('GET','/'));
