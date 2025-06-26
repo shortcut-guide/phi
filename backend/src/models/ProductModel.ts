@@ -1,5 +1,5 @@
 import { getD1Product } from "@/b/utils/d1";
-import { executeQuery } from "@/b/utils/executeQuery";
+import { selectQuery,executeQuery } from "@/b/utils/executeQuery";
 import { Product } from "@/b/types/product";
 
 export async function getProducts() {
@@ -54,8 +54,7 @@ export async function getFilteredProducts(
     shop?: string;
     limit: number;
   }
-) {
-
+): Promise<Product[]> {
   const db = getD1Product();
   let query = "SELECT * FROM products";
   const conditions: string[] = [];
@@ -69,10 +68,11 @@ export async function getFilteredProducts(
   if (conditions.length > 0) {
     query += " WHERE " + conditions.join(" AND ");
   }
+
   query += " ORDER BY updated_at DESC LIMIT ?";
   bindings.push(limit);
 
-  return await executeQuery<Product>(db, query, bindings, true);
+  return await selectQuery<Product>(db, query, bindings);
 }
 
 export async function upsertProduct(product: Product) {

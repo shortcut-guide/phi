@@ -12,3 +12,14 @@ export async function executeQuery<T = Record<string, unknown>>(
     return await stmt.run();
   }
 }
+
+// 選択系（SELECT）専用：返り値は T[]
+export async function selectQuery<T = Record<string, unknown>>(
+  db: D1Database,
+  query: string,
+  bindings: any[] = []
+): Promise<T[]> {
+  const stmt = db.prepare(query).bind(...bindings);
+  const result = await stmt.all();
+  return result.results as T[];
+}
