@@ -6,5 +6,5 @@ export declare function deleteProduct(id: string): Promise<D1Result<unknown> | R
 export declare function getFilteredProducts({ shop, limit, }: {
     shop?: string;
     limit: number;
-}): Promise<D1Result<unknown> | Product[]>;
+}): Promise<Product[]>;
 export declare function upsertProduct(product: Product): Promise<D1Result<unknown> | Record<string, unknown>[]>;

@@ -205,14 +205,10 @@ var getD1Product = () => {
 };
 
 // src/utils/executeQuery.ts
-async function executeQuery(db, query, bindings = [], isSelect = false) {
+async function selectQuery(db, query, bindings = []) {
   const stmt = db.prepare(query).bind(...bindings);
-  if (isSelect) {
-    const result = await stmt.all();
-    return result.results;
-  } else {
-    return await stmt.run();
-  }
+  const result = await stmt.all();
+  return result.results;
 }
 
 // src/models/ProductModel.ts
@@ -233,18 +229,23 @@ async function getFilteredProducts({
   }
   query += " ORDER BY updated_at DESC LIMIT ?";
   bindings.push(limit);
-  return await executeQuery(db, query, bindings, true);
+  return await selectQuery(db, query, bindings);
+}
+
+// src/services/products.ts
+async function handleGetFilteredProducts(shop, limit = 100) {
+  return await getFilteredProducts({ shop, limit }) ?? [];
 }
 
 // src/controllers/productController.ts
 async function GetFilteredProducts(c) {
   try {
-    const shop = c.req.query("shop") ?? void 0;
+    const shop = c.req.query("shop");
     const limit = Number(c.req.query("limit") ?? 100);
-    const results = await getFilteredProducts({ shop, limit }) ?? [];
+    const results = await handleGetFilteredProducts(shop, limit);
     return c.json(results, 200);
   } catch (error) {
-    console.error("[GET /products] Error:", error instanceof Error ? error.message : error);
+    console.error("[GET /products] Error:", error);
     return c.json({ status: "error", message: cMessages[4] }, 500);
   }
 }

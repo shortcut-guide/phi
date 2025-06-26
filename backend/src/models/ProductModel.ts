@@ -48,10 +48,12 @@ export async function deleteProduct(id: string) {
 
 export async function getFilteredProducts(
   {
-    shop,
+    name,
+    shop_name,
     limit,
   }: {
-    shop?: string;
+    name?: string;
+    shop_name?: string;
     limit: number;
   }
 ): Promise<Product[]> {
@@ -60,9 +62,14 @@ export async function getFilteredProducts(
   const conditions: string[] = [];
   const bindings: any[] = [];
 
-  if (shop) {
-    conditions.push("site_name = ?");
-    bindings.push(shop);
+  if (name) {
+    conditions.push("name = ?");
+    bindings.push(name);
+  }
+
+  if (shop_name) {
+    conditions.push("shop_name = ?");
+    bindings.push(shop_name);
   }
 
   if (conditions.length > 0) {

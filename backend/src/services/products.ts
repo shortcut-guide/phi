@@ -68,6 +68,6 @@ export async function handleDeleteProduct(id?: string): Promise<Response> {
   });
 }
 
-export async function handleGetFilteredProducts(shop?: string, limit: number = 100): Promise<Product[]> {
-  return (await getFilteredProducts({ shop, limit })) ?? [];
+export async function handleGetFilteredProducts(name?: string, shop_name?: string, limit: number = 100): Promise<Product[]> {
+  return (await getFilteredProducts({ name, shop_name, limit })) ?? [];
 }
