@@ -170,62 +170,85 @@ function getLang() {
   return "ja";
 }
 
-// src/config/env.ts
-import { config } from "dotenv";
-import { resolve } from "path";
-var ENV = process.env.NODE_ENV || "develop";
-var envFile = resolve(process.cwd(), `.env.${ENV}`);
-config({ path: envFile });
-var required = (key) => {
-  const value = process.env[key];
-  if (!value)
-    throw new Error(`Missing environment variable: ${key}`);
-  return value;
+// src/utils/contextHolder.ts
+var currentContext = null;
+var setContext = (c) => {
+  currentContext = c;
 };
-var PORT = process.env.PORT || 3e3;
-var SITE_DB = required("CLOUDFLARE_D1_DATABASE_SITES");
-var SEARCHLOGS_DB = required("CLOUDFLARE_D1_DATABASE_SEARCH_LOGS");
-var PRODUCTS_DB = required("CLOUDFLARE_D1_DATABASE_PRODUCTS");
-var PROFILE_DB = required("CLOUDFLARE_D1_DATABASE_PROFILE");
-var PUP_DB = required("CLOUDFLARE_D1_DATABASE_PUP");
-var PAYPAL_CLIENT_ID = required("PAYPAL_CLIENT_ID");
-var PAYPAL_SECRET = required("PAYPAL_SECRET");
-var PAYPAL_API_BASE = required("PAYPAL_API_BASE");
-var IMGUR_CLIENT_ID = required("IMGUR_CLIENT_ID");
+var getContext = () => {
+  if (!currentContext)
+    throw new Error("Context not set");
+  return currentContext;
+};
+var getD1Client = (key) => {
+  const ctx = getContext();
+  const db = ctx.env?.[key];
+  if (!db)
+    throw new Error(`D1Database "${key}" is not bound.`);
+  return db;
+};
 
 // src/utils/d1.ts
 var lang = getLang();
 var t = messages.utilsD1?.[lang];
-var DB;
 var getD1Product = () => {
-  DB = PRODUCTS_DB;
-  if (!DB)
+  try {
+    return getD1Client("PRODUCTS_DB");
+  } catch {
     throw new Error(t.ErrorPRODUCTS_DB);
-  return DB;
+  }
 };
 
 // src/utils/executeQuery.ts
 async function selectQuery(db, query, bindings = []) {
   const stmt = db.prepare(query).bind(...bindings);
   const result = await stmt.all();
-  return result.results;
+  return [...result.results];
 }
 
 // src/models/ProductModel.ts
 async function getFilteredProducts({
-  shop,
+  id,
+  name,
+  shop_name,
+  platform,
+  base_price,
+  ec_data,
   limit
 }) {
   const db = getD1Product();
   let query = "SELECT * FROM products";
   const conditions = [];
   const bindings = [];
-  if (shop) {
-    conditions.push("site_name = ?");
-    bindings.push(shop);
+  if (id) {
+    conditions.push("id = ?");
+    bindings.push(id);
+  }
+  if (name) {
+    conditions.push("name = ?");
+    bindings.push(name);
+  }
+  if (shop_name) {
+    conditions.push("shop_name = ?");
+    bindings.push(shop_name);
+  }
+  if (platform) {
+    conditions.push("platform = ?");
+    bindings.push(platform);
+  }
+  if (base_price) {
+    conditions.push("base_price = ?");
+    bindings.push(base_price);
+  }
+  if (ec_data) {
+    conditions.push("ec_data = ?");
+    bindings.push(ec_data);
   }
   if (conditions.length > 0) {
     query += " WHERE " + conditions.join(" AND ");
+  }
+  if (!limit) {
+    limit = 10;
   }
   query += " ORDER BY updated_at DESC LIMIT ?";
   bindings.push(limit);
@@ -233,16 +256,19 @@ async function getFilteredProducts({
 }
 
 // src/services/products.ts
-async function handleGetFilteredProducts(shop, limit = 100) {
-  return await getFilteredProducts({ shop, limit }) ?? [];
+async function handleGetFilteredProducts(id, name, shop_name, platform, base_price, ec_data, limit) {
+  return await getFilteredProducts({ id, name, shop_name, platform, base_price, ec_data, limit }) ?? [];
 }
 
 // src/controllers/productController.ts
 async function GetFilteredProducts(c) {
   try {
-    const shop = c.req.query("shop");
-    const limit = Number(c.req.query("limit") ?? 100);
-    const results = await handleGetFilteredProducts(shop, limit);
+    const id = c.req.query("id");
+    const name = c.req.query("name");
+    const shop_name = c.req.query("shop_name");
+    const platform = c.req.query("platform");
+    const limit = Number(c.req.query("limit"));
+    const results = await handleGetFilteredProducts(id, name, shop_name, platform, limit);
     return c.json(results, 200);
   } catch (error) {
     console.error("[GET /products] Error:", error);
@@ -359,31 +385,9 @@ siteRoutes.post("/", handleCreateSite);
 siteRoutes.put("/:id", handleUpdateSite);
 siteRoutes.delete("/:id", handleDeleteSite);
 
-// src/views/index.ts
-function renderIndex() {
-  return `<!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="UTF-8" />
-  <title>Phis</title>
-  <meta http-equiv="Content-Security-Policy"
-        content="default-src 'self'; font-src 'self' data:; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self';">
-  <style>
-    body { font-family: sans-serif; margin: 2rem; }
-  </style>
-</head>
-<body>
-  <h1>\u2705 Phis is running</h1>
-  <p>You can now access your API endpoints.</p>
-</body>
-</html>`;
-}
-
 // src/d1Server.ts
-var rootApp = new Hono4();
-var adminApp = new Hono4();
-var apiApp = new Hono4();
-rootApp.use(
+var app = new Hono4();
+app.use(
   "*",
   cors({
     origin: "*",
@@ -392,27 +396,24 @@ rootApp.use(
     allowHeaders: ["Content-Type", "Authorization"]
   })
 );
-rootApp.use("*", async (c, next) => {
+app.use("*", async (c, next) => {
   c.header(
     "Content-Security-Policy",
     "default-src 'self'; font-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self';"
   );
+  setContext(c);
   await next();
 });
-rootApp.get("/admin", (c) => c.html(renderIndex()));
-rootApp.route("/admin", adminApp);
-rootApp.route("/api", apiApp);
-apiApp.route("/token", tokenRoutes);
-apiApp.route("/products", productRoutes);
-apiApp.route("/sites", siteRoutes);
-rootApp.get("/admin/", (c) => c.redirect("/admin", 301));
-rootApp.get("/api/token/", (c) => c.redirect("/api/token", 301));
-rootApp.get("/api/products/", (c) => c.redirect("/api/products", 301));
-rootApp.get("/api/sites/", (c) => c.redirect("/api/sites", 301));
-rootApp.notFound((c) => {
+app.route("/api/token", tokenRoutes);
+app.route("/api/products", productRoutes);
+app.route("/api/sites", siteRoutes);
+app.get("/api/token/", (c) => c.redirect("/api/token", 301));
+app.get("/api/products/", (c) => c.redirect("/api/products", 301));
+app.get("/api/sites/", (c) => c.redirect("/api/sites", 301));
+app.notFound((c) => {
   return c.json({ error: "Not Found" }, 404);
 });
-var PORT2 = Number(process.env.PORT) || 3e3;
-console.log(`\u{1F680} Server listening on http://localhost:${PORT2}`);
-serve({ fetch: rootApp.fetch, port: PORT2 });
+var PORT = Number(process.env.PORT) || 3e3;
+console.log(`\u{1F680} Server listening on http://localhost:${PORT}`);
+serve({ fetch: app.fetch, port: PORT });
 //# sourceMappingURL=d1Server.js.map

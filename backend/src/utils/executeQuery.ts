@@ -5,12 +5,10 @@ export async function executeQuery<T = Record<string, unknown>>(
   isSelect = false
 ): Promise<T[] | D1Result> {
   const stmt = db.prepare(query).bind(...bindings);
-  if (isSelect) {
-    const result = await stmt.all();
-    return result.results as T[];
-  } else {
-    return await stmt.run();
-  }
+  if (!isSelect) return await stmt.run();
+
+  const result = await stmt.all();
+  return [...result.results] as T[];
 }
 
 // 選択系（SELECT）専用：返り値は T[]
@@ -21,5 +19,5 @@ export async function selectQuery<T = Record<string, unknown>>(
 ): Promise<T[]> {
   const stmt = db.prepare(query).bind(...bindings);
   const result = await stmt.all();
-  return result.results as T[];
+  return [...result.results] as T[];
 }

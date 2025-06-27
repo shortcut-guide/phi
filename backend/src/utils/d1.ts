@@ -1,39 +1,39 @@
 import { D1Database } from '@cloudflare/workers-types';
 import { messages } from "@/b/config/messageConfig";
 import { getLang } from "@/b/utils/lang";
-
-import { SITE_DB, SEARCHLOGS_DB, PROFILE_DB, PRODUCTS_DB } from "@/b/config/env";
+import { getD1Client } from '@/b/utils/contextHolder';
 
 const lang = getLang();
 const t = messages.utilsD1?.[lang];
 
-let DB: D1Database;
-
-// Cloudflare D1 に接続するクライアントを取得する
 export const getD1Site = (): D1Database => {
-  // @ts-ignore - D1 は Cloudflare Worker 上で自動でバインドされる
-  DB = SITE_DB;
-  if (!DB) throw new Error(t.ErrorSITE_DB);
-  return DB;
+  try {
+    return getD1Client("SITE_DB");
+  } catch {
+    throw new Error(t.ErrorSITE_DB);
+  }
 };
 
 export const getD1SearchLogs = (): D1Database => {
-  // @ts-ignore - D1 は Cloudflare Worker 上で自動でバインドされる
-  DB = SEARCHLOGS_DB;
-  if (!DB) throw new Error(t.ErrorSEARCHLOGS_DB);
-  return DB;
+  try {
+    return getD1Client("SEARCHLOGS_DB");
+  } catch {
+    throw new Error(t.ErrorSEARCHLOGS_DB);
+  }
 };
 
 export const getD1UserProfile = (): D1Database => {
-  // @ts-ignore - D1 は Cloudflare Worker 上で自動でバインドされる
-  DB = PROFILE_DB;
-  if (!DB) throw new Error(t.ErrorPROFILE_DB);
-  return DB;
+  try {
+    return getD1Client("PROFILE_DB");
+  } catch {
+    throw new Error(t.ErrorPROFILE_DB);
+  }
 };
 
 export const getD1Product = (): D1Database => {
-  // @ts-ignore - D1 は Cloudflare Worker 上で自動でバインドされる
-  DB = PRODUCTS_DB;
-  if (!DB) throw new Error(t.ErrorPRODUCTS_DB);
-  return DB;
+  try {
+    return getD1Client("PRODUCTS_DB");
+  } catch {
+    throw new Error(t.ErrorPRODUCTS_DB);
+  }
 };

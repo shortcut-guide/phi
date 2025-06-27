@@ -1,0 +1,14 @@
+name = "d1-server-all"
+compatibility_date = "2025-06-27"
+
+[vars]
+
+[[d1_databases]]
+binding = "PRODUCTS_DB"
+database_name = "products"
+database_id = "a34d8aaf-ce52-4b85-b76b-9807bd58476a"
+
+[[d1_databases]]
+binding = "PROFILE_DB"
+database_name = "profile-db"
+database_id = "<your-profile-db-id>"

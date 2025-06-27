@@ -68,6 +68,6 @@ export async function handleDeleteProduct(id?: string): Promise<Response> {
   });
 }
 
-export async function handleGetFilteredProducts(name?: string, shop_name?: string, limit: number = 100): Promise<Product[]> {
-  return (await getFilteredProducts({ name, shop_name, limit })) ?? [];
+export async function handleGetFilteredProducts(id?: string, name?: string, shop_name?: string, platform?: string, base_price?: number, ec_data?: any, limit?: number) {
+  return (await getFilteredProducts({ id, name, shop_name, platform, base_price, ec_data, limit })) ?? [];
 }

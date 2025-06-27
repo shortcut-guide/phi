@@ -44,8 +44,8 @@ export async function GetFilteredProducts(c: Context): Promise<Response> {
     const name = c.req.query("name");
     const shop_name = c.req.query("shop_name");
     const platform = c.req.query("platform");
-    const limit = Number(c.req.query("limit") ?? 100);
-    const results = await handleGetFilteredProducts(name, shop_name, limit);
+    const limit = Number(c.req.query("limit"));
+    const results = await handleGetFilteredProducts(id,name, shop_name, platform, limit);
     return c.json(results, 200);
   } catch (error) {
     console.error("[GET /products] Error:", error);

@@ -4,7 +4,7 @@ import { Product } from "@/b/types/product";
 
 export async function getProducts() {
   const db = getD1Product();
-  return await executeQuery<Product>(db, "SELECT * FROM products", [], true);
+  return await executeQuery(db, "SELECT * FROM products", [], true);
 }
 
 export async function createProduct(product: Product) {
@@ -48,19 +48,32 @@ export async function deleteProduct(id: string) {
 
 export async function getFilteredProducts(
   {
+    id,
     name,
     shop_name,
+    platform,
+    base_price,
+    ec_data,
     limit,
   }: {
+    id?: string;
     name?: string;
     shop_name?: string;
-    limit: number;
+    platform?: string;
+    base_price?: number;
+    ec_data?: any
+    limit?: number;
   }
-): Promise<Product[]> {
+){
   const db = getD1Product();
   let query = "SELECT * FROM products";
   const conditions: string[] = [];
   const bindings: any[] = [];
+
+  if (id) {
+    conditions.push("id = ?");
+    bindings.push(id);
+  }
 
   if (name) {
     conditions.push("name = ?");
@@ -72,14 +85,33 @@ export async function getFilteredProducts(
     bindings.push(shop_name);
   }
 
+  if (platform) {
+    conditions.push("platform = ?");
+    bindings.push(platform);
+  }
+
+  if (base_price) {
+    conditions.push("base_price = ?");
+    bindings.push(base_price);
+  }
+
+  if (ec_data) {
+    conditions.push("ec_data = ?");
+    bindings.push(ec_data);
+  }
+
   if (conditions.length > 0) {
     query += " WHERE " + conditions.join(" AND ");
+  }
+
+  if (!limit) {
+    limit = 10;
   }
 
   query += " ORDER BY updated_at DESC LIMIT ?";
   bindings.push(limit);
 
-  return await selectQuery<Product>(db, query, bindings);
+  return await selectQuery(db, query, bindings);
 }
 
 export async function upsertProduct(product: Product) {
