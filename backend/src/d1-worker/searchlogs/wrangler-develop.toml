@@ -4,6 +4,7 @@ compatibility_date = "2025-05-7"
 # Search logs environment
 [env.searchlogs]
 account_id = "b2e83006acc77b6785c52a4d1c52e8de"
+compatibility_flags = ["nodejs_compat"]
 [[env.searchlogs.d1_databases]]
 binding = "SEARCHLOGS_DB"
 database_name = "searchlogs"

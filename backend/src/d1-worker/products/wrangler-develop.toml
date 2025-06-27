@@ -3,10 +3,11 @@ type = "javascript"
 
 compatibility_date = "2025-05-7"
 compatibility_flags = ["nodejs_compat"]
-workers_dev = true
 
 [env.develop]
 account_id = "668ea9059163f3fd8df3b6f512d3ab3f"
+main = "../../../public/d1Server.js"
+compatibility_flags = ["nodejs_compat"]
 [[env.develop.d1_databases]]
 binding = "PRODUCTS_DB"
 database_name = "products"

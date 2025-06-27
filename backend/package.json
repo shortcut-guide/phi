@@ -7,7 +7,7 @@
         "clean": "rimraf public",
         "build": "npm run clean && node --experimental-json-modules esbuild.config.mjs",
         "start": "node public/d1Server.js",
-        "dev": "NODE_ENV=development concurrently \"tsc --watch\" \"ts-node --loader ts-node/esm scripts/dev-multi.ts\" \"wrangler dev public/d1Server.js\"",
+        "dev": "npx tsx scripts/dev.mjs",
         "test": "node --max-old-space-size=4096 --experimental-vm-modules node_modules/.bin/jest --config ./jest.config.mjs"
     },
     "dependencies": {
@@ -64,6 +64,7 @@
         "ts-jest": "^29.3.2",
         "ts-node": "^10.9.2",
         "tsconfig-paths": "^4.2.0",
+        "tsx": "^4.20.3",
         "ttypescript": "^1.5.15",
         "typescript": "^5.8.3",
         "typescript-transform-paths": "^3.5.5"

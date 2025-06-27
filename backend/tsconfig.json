@@ -3,7 +3,7 @@
   "exclude": ["node_modules","public"],
   "compilerOptions": {
     "target": "ES2020",
-    "module": "ESNext",
+    "module": "esnext",
     "moduleResolution": "node",
     "strict": true,
     "esModuleInterop": true,
@@ -11,7 +11,7 @@
     "declaration": true,
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
-    "types": ["node","@cloudflare/workers-types"],
+    "types": ["node"],
     "skipLibCheck": true,
     "typeRoots": ["./node_modules/@types", "./types"],
     "outDir":"./public",
@@ -26,4 +26,7 @@
       { "transform": "typescript-transform-paths" }
     ],
   },
+  "ts-node": {
+    "esm": true
+  }
 }
