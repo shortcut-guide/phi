@@ -6,14 +6,6 @@ import { getD1Client } from '@/b/utils/contextHolder';
 const lang = getLang();
 const t = messages.utilsD1?.[lang];
 
-export const getD1Site = (): D1Database => {
-  try {
-    return getD1Client("SITE_DB");
-  } catch {
-    throw new Error(t.ErrorSITE_DB);
-  }
-};
-
 export const getD1SearchLogs = (): D1Database => {
   try {
     return getD1Client("SEARCHLOGS_DB");

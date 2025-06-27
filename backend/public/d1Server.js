@@ -1,5 +1,5 @@
 // src/d1Server.ts
-import { Hono as Hono4 } from "hono";
+import { Hono as Hono3 } from "hono";
 import { cors } from "hono/cors";
 import { serve } from "@hono/node-server";
 
@@ -172,9 +172,6 @@ function getLang() {
 
 // src/utils/contextHolder.ts
 var currentContext = null;
-var setContext = (c) => {
-  currentContext = c;
-};
 var getContext = () => {
   if (!currentContext)
     throw new Error("Context not set");
@@ -290,103 +287,8 @@ productRoutes.get("/", async (c) => {
   return c.json(data, 200);
 });
 
-// src/routes/sites.ts
-import { Hono as Hono3 } from "hono";
-
-// src/controllers/sitesController.ts
-async function handleGetFilteredSites(c) {
-  try {
-    const limit = Number(c.req.query("limit") ?? 100);
-    const orderBy = c.req.query("orderBy") ?? "createdAt";
-    const { results } = await c.env.DB.prepare(
-      `SELECT * FROM sites ORDER BY ${orderBy} DESC LIMIT ?`
-    ).bind(limit).all();
-    return c.json(results, 200);
-  } catch (error) {
-    console.error("[GET /sites] Error:", error instanceof Error ? error.message : error);
-    return c.json({ status: "error", message: cMessages[4] }, 500);
-  }
-}
-async function handleGetSiteByIdFromController(c) {
-  try {
-    const id = c.req.param("id");
-    const { results } = await c.env.DB.prepare(`SELECT * FROM sites WHERE id = ?`).bind(id).all();
-    if (!results || results.length === 0) {
-      return c.json({ status: "error", message: "Site not found" }, 404);
-    }
-    return c.json(results[0], 200);
-  } catch (error) {
-    console.error("[GET /sites/:id] Error:", error instanceof Error ? error.message : error);
-    return c.json({ status: "error", message: cMessages[4] }, 500);
-  }
-}
-async function handleCreateSiteInController(c) {
-  try {
-    const body = await c.req.json();
-    const { name, url } = body;
-    if (!name || !url) {
-      return c.json({ status: "error", message: "Missing required fields" }, 400);
-    }
-    await c.env.DB.prepare(`INSERT INTO sites (name, url) VALUES (?, ?)`).bind(name, url).run();
-    return c.json({ status: "success", message: "Site created successfully" }, 201);
-  } catch (error) {
-    console.error("[POST /sites] Error:", error instanceof Error ? error.message : error);
-    return c.json({ status: "error", message: cMessages[4] }, 500);
-  }
-}
-async function handleUpdateSiteInController(c) {
-  try {
-    const id = c.req.param("id");
-    const body = await c.req.json();
-    const { name, url } = body;
-    if (!name || !url) {
-      return c.json({ status: "error", message: "Missing required fields" }, 400);
-    }
-    await c.env.DB.prepare(`UPDATE sites SET name = ?, url = ? WHERE id = ?`).bind(name, url, id).run();
-    return c.json({ status: "success", message: "Site updated successfully" }, 200);
-  } catch (error) {
-    console.error("[PUT /sites/:id] Error:", error instanceof Error ? error.message : error);
-    return c.json({ status: "error", message: cMessages[4] }, 500);
-  }
-}
-async function handleDeleteSiteInController(c) {
-  try {
-    const id = c.req.param("id");
-    await c.env.DB.prepare(`DELETE FROM sites WHERE id = ?`).bind(id).run();
-    return c.json({ status: "success", message: "Site deleted successfully" }, 200);
-  } catch (error) {
-    console.error("[DELETE /sites/:id] Error:", error instanceof Error ? error.message : error);
-    return c.json({ status: "error", message: cMessages[4] }, 500);
-  }
-}
-
-// src/api/sites.ts
-async function handleGetSites(c) {
-  return await handleGetFilteredSites(c);
-}
-async function handleGetSiteById(c) {
-  return await handleGetSiteByIdFromController(c);
-}
-async function handleCreateSite(c) {
-  return await handleCreateSiteInController(c);
-}
-async function handleUpdateSite(c) {
-  return await handleUpdateSiteInController(c);
-}
-async function handleDeleteSite(c) {
-  return await handleDeleteSiteInController(c);
-}
-
-// src/routes/sites.ts
-var siteRoutes = new Hono3();
-siteRoutes.get("/", handleGetSites);
-siteRoutes.get("/:id", handleGetSiteById);
-siteRoutes.post("/", handleCreateSite);
-siteRoutes.put("/:id", handleUpdateSite);
-siteRoutes.delete("/:id", handleDeleteSite);
-
 // src/d1Server.ts
-var app = new Hono4();
+var app = new Hono3();
 app.use(
   "*",
   cors({
@@ -401,15 +303,12 @@ app.use("*", async (c, next) => {
     "Content-Security-Policy",
     "default-src 'self'; font-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self';"
   );
-  setContext(c);
   await next();
 });
 app.route("/api/token", tokenRoutes);
 app.route("/api/products", productRoutes);
-app.route("/api/sites", siteRoutes);
 app.get("/api/token/", (c) => c.redirect("/api/token", 301));
 app.get("/api/products/", (c) => c.redirect("/api/products", 301));
-app.get("/api/sites/", (c) => c.redirect("/api/sites", 301));
 app.notFound((c) => {
   return c.json({ error: "Not Found" }, 404);
 });

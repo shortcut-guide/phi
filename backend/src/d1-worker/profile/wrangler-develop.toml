@@ -1,7 +1,7 @@
 name = "profile"
 compatibility_date = "2025-05-7"
 
-# Search logs environment
+# Profile environment
 [env.develop]
 account_id = "1fea45390402b8410d4e794d724e1e2c"
 [[env.develop.d1_databases]]

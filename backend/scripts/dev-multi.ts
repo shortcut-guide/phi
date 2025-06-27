@@ -1,36 +1,36 @@
-import { spawn } from "child_process";
-const path = require("path");
 
-const processes = [
+import { spawn } from "child_process";
+import path = require("path");  // CommonJS方式に修正
+
+const services = [
   {
     name: "products",
-    config: path.resolve("d1-worker/products/wrangler-develop.toml"),
+    config: "wrangler-develop.toml",
+    dir: "../src/d1-worker/products",
   },
   {
     name: "profile",
-    config: path.resolve("d1-worker/profile/wrangler-develop.toml"),
+    config: "wrangler-develop.toml",
+    dir: "../src/d1-worker/profile",
   },
   {
-    name: "pup",
-    config: path.resolve("d1-worker/pup/wrangler-develop.toml"),
-  },
-  {
-    name: "search_logs",
-    config: path.resolve("d1-worker/search_logs/wrangler-develop.toml"),
-  },
-  {
-    name: "sites",
-    config: path.resolve("d1-worker/sites/wrangler-develop.toml"),
+    name: "searchlogs",
+    config: "wrangler-develop.toml",
+    dir: "../src/d1-worker/searchlogs",
   },
 ];
 
-for (const proc of processes) {
-  const p = spawn("wrangler", ["dev", "--config", proc.config], {
+services.forEach(({ name, config, dir }) => {
+  spawn("npx", [
+    "wrangler", "dev",
+    "--local",
+    "--env", "develop",
+    "-c", config,
+  ], {
+    cwd: path.resolve(__dirname, dir),
     stdio: "inherit",
-    env: { ...process.env },
+    shell: true
+  }).on('close', (code) => {
+    console.log(`[${name}] exited with ${code}`);
   });
-
-  p.on("exit", (code) => {
-    console.log(`Process ${proc.name} exited with code ${code}`);
-  });
-}
+});

@@ -4,7 +4,6 @@ import type { Context } from 'hono';
 import type { D1Database } from '@cloudflare/workers-types';
 
 type Env = {
-  SITE_DB?: D1Database;
   SEARCHLOGS_DB?: D1Database;
   PROFILE_DB?: D1Database;
   PRODUCTS_DB?: D1Database;
@@ -25,5 +24,5 @@ export const getD1Client = (key: keyof Env): D1Database => {
   const ctx = getContext();
   const db = ctx.env?.[key];
   if (!db) throw new Error(`D1Database "${key}" is not bound.`);
-  return db;
+  return db as D1Database;
 };
