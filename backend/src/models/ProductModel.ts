@@ -1,10 +1,10 @@
 import { getD1Product } from "@/b/utils/d1";
-import { executeQuery } from "@/b/utils/executeQuery";
+import { selectQuery,executeQuery } from "@/b/utils/executeQuery";
 import { Product } from "@/b/types/product";
 
 export async function getProducts() {
   const db = getD1Product();
-  return await executeQuery<Product>(db, "SELECT * FROM products", [], true);
+  return await executeQuery(db, "SELECT * FROM products", [], true);
 }
 
 export async function createProduct(product: Product) {
@@ -48,38 +48,70 @@ export async function deleteProduct(id: string) {
 
 export async function getFilteredProducts(
   {
-    shop,
+    id,
+    name,
+    shop_name,
+    platform,
+    base_price,
+    ec_data,
     limit,
-    ownOnly,
   }: {
-    shop?: string;
-    limit: number;
-    ownOnly: boolean;
+    id?: string;
+    name?: string;
+    shop_name?: string;
+    platform?: string;
+    base_price?: number;
+    ec_data?: any
+    limit?: number;
   }
-) {
-
+){
   const db = getD1Product();
   let query = "SELECT * FROM products";
   const conditions: string[] = [];
   const bindings: any[] = [];
 
-  if (ownOnly) {
-    conditions.push("shop_name = ?");
-    bindings.push("自社");
+  if (id) {
+    conditions.push("id = ?");
+    bindings.push(id);
   }
 
-  if (shop) {
-    conditions.push("site_name = ?");
-    bindings.push(shop);
+  if (name) {
+    conditions.push("name = ?");
+    bindings.push(name);
+  }
+
+  if (shop_name) {
+    conditions.push("shop_name = ?");
+    bindings.push(shop_name);
+  }
+
+  if (platform) {
+    conditions.push("platform = ?");
+    bindings.push(platform);
+  }
+
+  if (base_price) {
+    conditions.push("base_price = ?");
+    bindings.push(base_price);
+  }
+
+  if (ec_data) {
+    conditions.push("ec_data = ?");
+    bindings.push(ec_data);
   }
 
   if (conditions.length > 0) {
     query += " WHERE " + conditions.join(" AND ");
   }
+
+  if (!limit) {
+    limit = 10;
+  }
+
   query += " ORDER BY updated_at DESC LIMIT ?";
   bindings.push(limit);
 
-  return await executeQuery<Product>(db, query, bindings, true);
+  return await selectQuery(db, query, bindings);
 }
 
 export async function upsertProduct(product: Product) {

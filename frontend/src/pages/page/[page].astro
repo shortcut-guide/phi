@@ -3,18 +3,55 @@ import { PinGrid } from "@/f/components/PinGrid";
 import { trackGAEvent } from "@/f/utils/track";
 import { messages } from "@/f/config/messageConfig";
 import { getLang } from "@/f/utils/lang";
+
 const lang = getLang();
 const t = messages.pageListPage[lang];
 
-const page = Number(Astro.params.page || "1");
-trackGAEvent("scroll_page", { page: {page} });
+export async function getStaticPaths() {
+  const limit = 30;
+  // 全アイテムを1回のAPI接続で取得（絶対URLを指定してください）
+  const res = await fetch("https://phis.jp/api/pins");
+  
+  let allItems = [];
+  if (res.status === 404) {
+    console.warn("API returned 404, using fallback empty items.");
+    // 空の配列でフォールバック（または定型データで代用）
+  } else if (!res.ok) {
+    throw new Error(`Failed to fetch pins: ${res.status} ${res.statusText}`);
+  } else {
+    try {
+      allItems = await res.json();
+    } catch (err) {
+      throw new Error(`Failed to parse JSON: ${err}`);
+    }
+  }
+  
+  // API からデータが取得できなかった場合は、1 ページ分（空リスト）を作成
+  if (!allItems.length) {
+    return [{
+      params: { page: "1" },
+      props: { items: [] }
+    }];
+  }
+  
+  const totalPages = Math.ceil(allItems.length / limit);
+  return Array.from({ length: totalPages }, (_, i) => {
+    const page = i + 1;
+    const offset = (page - 1) * limit;
+    return {
+      params: { page: String(page) },
+      props: { items: allItems.slice(offset, offset + limit) }
+    };
+  });
+}
 
-const limit = 30;
-const offset = (page - 1) * limit;
-const pins = await fetch(`/api/pins?offset=${offset}`);
-const items = await pins.json();
+const page = Number(Astro.params.page || "1");
+trackGAEvent("scroll_page", { page: { page } });
+
+// getStaticPaths で取得した items を利用するため再度の fetch は不要
+const items = Astro.props.items;
 const first = items?.[0];
-const ogImage = first?.imageUrl || '/default-og.jpg';
+const ogImage = first?.imageUrl || "/default-og.jpg";
 const ogTitle = t.ogTitle(page);
 const ogDescription = t.ogDescription;
 ---
@@ -27,7 +64,7 @@ const ogDescription = t.ogDescription;
     <meta property="og:description" content={ogDescription} />
     <meta property="og:image" content={ogImage} />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content={`https://yourdomain.com/page/${page}`} />
+    <meta property="og:url" content={`https://phis.jp/page/${page}`} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={ogTitle} />
     <meta name="twitter:image" content={ogImage} />
@@ -41,7 +78,7 @@ const ogDescription = t.ogDescription;
           "@type": "Product",
           "name": p.title,
           "image": p.imageUrl,
-          "url": `https://yourdomain.com/products/${p.id}`,
+          "url": `https://phis.jp/products/${p.id}`,
         })),
       })}
     </script>

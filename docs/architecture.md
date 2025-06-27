@@ -579,6 +579,7 @@ npx wrangler d1 migrations create PROFILE_DB create_profile_table \
 ## PRODUCT_DB
 develop DB 確認
 ```
+cd backend
 npx wrangler d1 execute PRODUCTS_DB --env=develop --local --config=src/d1-worker/products/wrangler-develop.toml --command="SELECT name FROM sqlite_master WHERE type='table';"
 ```
 
@@ -607,6 +608,17 @@ npx wrangler d1 execute PRODUCTS_DB \
   --env=develop \
   --config=src/d1-worker/products/wrangler-develop.toml \
   --command "ALTER TABLE products ADD COLUMN own BOOLEAN DEFAULT 0;"
+```
+
+カラム削除
+直接カラムを削除する ALTER TABLE ... DROP COLUMN はサポートされていません。
+代替手順として 新しいテーブルを作成してデータを移行する
+```
+npx wrangler d1 execute PRODUCTS_DB \
+  --local \
+  --env=develop \
+  --config=src/d1-worker/products/wrangler-develop.toml \
+  --file ./sql/remove_own_column.sql
 ```
 
 ## CURL POST 追加

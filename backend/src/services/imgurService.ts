@@ -1,5 +1,4 @@
 // backend/services/imgurService.ts
-import { IMGUR_CLIENT_ID } from "@/b/config/env";
 import { cMessages } from "@/b/config/consoleMessage";
 import type { ImgurResponse } from "@/b/types/imgurService"; // 型定義をインポート
 
@@ -7,7 +6,7 @@ export async function uploadImageToImgur(imageBase64: string): Promise<string> {
   const res = await fetch("https://api.imgur.com/3/image", {
     method: "POST",
     headers: {
-      Authorization: `Client-ID ${IMGUR_CLIENT_ID}`,
+      Authorization: `Client-ID ${process.env.IMGUR_CLIENT_ID}`,
       "Content-Type": "application/json"
     },
     body: JSON.stringify({ image: imageBase64, type: "base64" })

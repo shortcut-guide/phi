@@ -1,16 +1,12 @@
-import type { D1Database } from "@cloudflare/workers-types";
-
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { serve } from '@hono/node-server';
+import type { Env } from "@/b/types/env";
 import { tokenRoutes } from '@/b/routes/token';
 import { productRoutes } from '@/b/routes/products';
-import { siteRoutes } from '@/b/routes/sites';
 import { renderIndex } from "@/b/views/index";
 
-// ✅ ルートの設定
-const publicApp = new Hono<{ Bindings: { DB: D1Database } }>();
-const app = new Hono<{ Bindings: { DB: D1Database } }>().basePath('/admin');
+const app = new Hono<{ Bindings: Env }>();
 
 // ✅ CORS を有効化
 app.use(
@@ -31,30 +27,16 @@ app.use("*", async (c, next) => {
     await next();
 });
 
+app.route("/api/token", tokenRoutes);
+app.route("/api/products", productRoutes);
+app.get("/api/token/", (c) => c.redirect("/api/token", 301));
+app.get('/api/products/', (c) => c.redirect('/api/products', 301));
+
 app.notFound((c) => {
     return c.json({ error: "Not Found" }, 404);
 });
 
-app.notFound((c) => {
-    return c.json({ error: "Not Found" }, 403);
-});
-
-app.notFound((c) => {
-    return c.json({ error: "Not Found" }, 503);
-});
-
-app.get("/", async (c) => {
-    console.log("Root route accessed");
-    const html = renderIndex();
-    return c.html(html);
-});
-
-// ✅ トークン関連のルートを追加
-app.route('/', app);
-app.route("/api/token", tokenRoutes);
-publicApp.route('/api', productRoutes);
-publicApp.route('/api/sites', siteRoutes);
-
 const PORT = Number(process.env.PORT) || 3000;
+
 console.log(`🚀 Server listening on http://localhost:${PORT}`);
 serve({ fetch: app.fetch, port: PORT });

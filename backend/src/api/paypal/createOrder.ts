@@ -5,12 +5,12 @@ import { parse } from "json5";
 
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import fetch from "node-fetch";
-import { PAYPAL_API_BASE, PAYPAL_CLIENT_ID, PAYPAL_SECRET } from "@/b/config/env";
 
 async function getProductPrice(productId: string): Promise<{ price: number; currency: string }> {
-  const productsResult = await getFilteredProducts({ ownOnly: true, limit: 100 });
+  const productsResult = await getFilteredProducts({ limit: 100 });
   const products = Array.isArray(productsResult) ? productsResult : [];
   const product = products.find((p) => p.id === productId);
+  const price = typeof product?.base_price === "number" ? product.base_price : 0;
 
   if (!product) {
     throw new Error("Invalid product or not own product");
@@ -24,7 +24,7 @@ async function getProductPrice(productId: string): Promise<{ price: number; curr
     throw new Error("PayPal is not available for this product");
   }
 
-  return { price: product.base_price / 100, currency: ecData.currency || "USD" };
+  return { price: price, currency: ecData.currency ?? "USD" };
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -64,7 +64,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   const auth = await getAccessToken();
 
-  const order = await fetch(`${PAYPAL_API_BASE}/v2/checkout/orders`, {
+  const order = await fetch(`${process.env.PAYPAL_API_BASE}/v2/checkout/orders`, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${auth}`,
@@ -93,8 +93,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 }
 
 async function getAccessToken() {
-  const auth = Buffer.from(`${PAYPAL_CLIENT_ID}:${PAYPAL_SECRET}`).toString("base64");
-  const res = await fetch(`${PAYPAL_API_BASE}/v1/oauth2/token`, {
+  const auth = Buffer.from(`${process.env.PAYPAL_CLIENT_ID}:${process.env.PAYPAL_SECRET}`).toString("base64");
+  const res = await fetch(`${process.env.PAYPAL_API_BASE}/v1/oauth2/token`, {
     method: "POST",
     headers: {
       Authorization: `Basic ${auth}`,

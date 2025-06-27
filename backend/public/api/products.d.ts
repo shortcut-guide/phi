@@ -1,2 +1,2 @@
 import type { Context } from "hono";
-export declare function handleGetProducts(c: Context): Promise<Response>;
+export declare function GetProducts(c: Context): Promise<Response>;

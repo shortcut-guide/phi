@@ -1,5 +1,12 @@
+import type { D1Database as CloudflareD1Database } from "@cloudflare/workers-types";
+
 import { executeQuery } from "@/b/utils/executeQuery";
 import type { Address, AddressCount } from "@/b/types/address";
+
+interface ExtendedD1Database extends CloudflareD1Database {
+  query(query: string, bindings: any[]): Promise<any>;
+  // other methods and properties...
+}
 
 export async function fetchAddresses(db: D1Database, user_id: string): Promise<Address[]> {
   const query = `
@@ -8,7 +15,7 @@ export async function fetchAddresses(db: D1Database, user_id: string): Promise<A
     WHERE user_id = ? 
     ORDER BY created_at DESC
   `;
-  const result = await executeQuery<Address>(db, query, [user_id], true);
+  const result = await executeQuery<Address>(db as ExtendedD1Database, query, [user_id], true);
   if (!Array.isArray(result)) {
     throw new Error("Failed to fetch addresses");
   }
@@ -21,7 +28,7 @@ export async function countAddresses(db: D1Database, user_id: string): Promise<A
     FROM user_addresses 
     WHERE user_id = ?
   `;
-  const rows = await executeQuery<{ count: number }>(db, query, [user_id], true);
+  const rows = await executeQuery<{ count: number }>(db as ExtendedD1Database, query, [user_id], true);
   if (!Array.isArray(rows) || rows.length === 0) {
     throw new Error("Failed to count user addresses");
   }
@@ -40,7 +47,7 @@ export async function setDefaultAddress(db: D1Database, user_id: string, address
     },
   ];
   for (const { query, bindings } of queries) {
-    await executeQuery(db, query, bindings);
+    await executeQuery(db as ExtendedD1Database, query, bindings);
   }
 }
 
@@ -58,5 +65,5 @@ export async function insertAddress(db: D1Database, address: Address): Promise<v
     address.address,
     address.is_default,
   ];
-  await executeQuery(db, query, bindings);
+  await executeQuery(db as ExtendedD1Database, query, bindings);
 }
