@@ -1,5 +1,5 @@
 // backend/src/controllers/searchController.ts
-import type { Request, Response } from 'express';
+import { Context } from 'hono';
 import { findSuggestedKeywords } from '@/b/models/SearchLog';
 import {
   insertSearchLog,
@@ -7,43 +7,36 @@ import {
   getPopularKeywords
 } from '@/b/services/searchService';
 
-export async function Search(req: Request, res: Response) {
-  const q = typeof req.query.q === 'string' ? req.query.q.trim() : null;
-  const uid = typeof req.query.uid === 'string' ? req.query.uid.trim() : null;
+export async function Search(c: Context): Promise<Response> {
+  const q = c.req.query('q')?.trim();
+  const uid = c.req.query('uid')?.trim();
 
   if (!q) {
-    res.status(400).send('Missing query');
+    return c.text('Missing query', 400);
     return;
   }
 
-  await insertSearchLog(q, uid);
+  await insertSearchLog(q, uid ?? null);
   res.json([]);
 }
 
-export async function ClickLog(req: Request, res: Response) {
-  const { keyword, user_id, product_id } = req.body;
+export async function ClickLog(c: Context): Promise<Response> {
+  const body = await c.req.json();
+  const { keyword, user_id, product_id } = body;
 
-  if (!keyword || !product_id) {
-    res.status(400).send('Missing keyword or product_id');
-    return;
-  }
-
+  if (!keyword || !product_id) return c.text('Missing keyword or product_id', 400);
   await insertClickLog(keyword, user_id ?? 'anonymous', product_id);
-  res.status(200).send('OK');
+  return c.text('OK', 200);
 }
 
-export async function Analytics(req: Request, res: Response) {
+export async function Analytics(c: Context): Promise<Response> {
   const result = await getPopularKeywords();
-  res.status(200).json(result);
+  return c.json(result, 200);
 }
 
-export async function Suggest(req: Request, res: Response) {
-  const prefix = typeof req.query.prefix === 'string' ? req.query.prefix.trim() : null;
-  if (!prefix) {
-    res.status(400).send('Missing prefix');
-    return;
-  }
-
+export async function Suggest(c: Context): Promise<Response> {
+  const prefix = c.req.query('prefix')?.trim();
+  if (!prefix) return c.text('Missing prefix', 400);
   const suggestions = await findSuggestedKeywords(prefix);
-  res.status(200).json(suggestions);
+  return c.json(suggestions, 200);
 }

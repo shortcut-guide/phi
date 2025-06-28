@@ -1,12 +1,12 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { serve } from '@hono/node-server';
-import type { Env } from "@/b/types/env";
 import { tokenRoutes } from '@/b/routes/token';
 import { productRoutes } from '@/b/routes/products';
 import { renderIndex } from "@/b/views/index";
+import { getServiceConfig } from "@/b/config/routeConfig";
 
-const app = new Hono<{ Bindings: Env }>();
+const app = new Hono();
 
 // ✅ CORS を有効化
 app.use(
@@ -27,16 +27,16 @@ app.use("*", async (c, next) => {
     await next();
 });
 
-app.route("/api/token", tokenRoutes);
-app.route("/api/products", productRoutes);
-app.get("/api/token/", (c) => c.redirect("/api/token", 301));
-app.get('/api/products/', (c) => c.redirect('/api/products', 301));
+const service = process.argv[2];
+const config = getServiceConfig(service);
 
-app.notFound((c) => {
-    return c.json({ error: "Not Found" }, 404);
-});
+if (!config) {
+  throw new Error(`Unknown service: ${service}`);
+}
+
+app.route(`/api/${service}`, config.routes);
+app.notFound((c) => c.json({ error: "Not Found" }, 404));
 
 const PORT = Number(process.env.PORT) || 3000;
-
 console.log(`🚀 Server listening on http://localhost:${PORT}`);
 serve({ fetch: app.fetch, port: PORT });
