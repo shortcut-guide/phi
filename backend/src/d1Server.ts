@@ -2,7 +2,6 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { serve } from '@hono/node-server';
 import { tokenRoutes } from '@/b/routes/token';
-import { productRoutes } from '@/b/routes/products';
 import { renderIndex } from "@/b/views/index";
 import { getServiceConfig } from "@/b/config/routeConfig";
 

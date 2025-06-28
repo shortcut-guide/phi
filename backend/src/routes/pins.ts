@@ -1,6 +1,15 @@
 import { Hono } from 'hono';
-import { handleGetPins } from '@/b/api/pins';
+import { GetPins } from "@/b/controllers/pinController";
 
-const pinsRoutes = new Hono();
-pinsRoutes.get('/pins', handleGetPins);
-export default pinsRoutes;
+export function pinsRoutes() {
+  const app = new Hono();
+
+  app.get('/', async (c: Context) => {
+    console.log("[pinsRoutes] GET /api/pins invoked, path =", c.req.path);
+    const resp = await GetPins(c);
+    const data = (await resp.json()) as any;
+    return c.json(data, 200);
+  });
+
+  return app;
+}

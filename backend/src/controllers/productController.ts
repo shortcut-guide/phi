@@ -48,8 +48,7 @@ export async function GetFilteredProducts(c: Context): Promise<Response> {
     const results = await handleGetFilteredProducts(id,name, shop_name, platform, limit);
     return c.json(results, 200);
   } catch (error) {
-    console.error("[GET /products] Error:", error);
-    return c.json({ status: "error", message: cMessages[4] }, 500);
+    return errorResponse("[GET /products] Error:", error);
   }
 }
 

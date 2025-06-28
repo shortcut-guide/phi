@@ -1,7 +1,7 @@
 // backend/models/pinModel.ts
 import { getD1Product } from "@/b/utils/d1";
 
-export async function getPins(offset = 0, limit = 30) {
+export async function handleGetPins(offset = 0, limit = 30) {
   const db = getD1Product();
 
   const stmt = await db.prepare(`
