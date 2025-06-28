@@ -1,8 +1,9 @@
 import { productRoutes } from "@/b/routes/products";
 import { searchRoutes } from "@/b/routes/searchlogs";
+import { profileRoutes } from "@/b/routes/profile";
 import type { Hono } from 'hono';
 
-export type ServiceName = "products" | "searchlogs";
+export type ServiceName = "products" | "searchlogs" | "profile";
 
 type ServiceRouteConfig = {
   [K in ServiceName]: () => Hono<any>;
@@ -11,6 +12,7 @@ type ServiceRouteConfig = {
 const serviceRouteMap: ServiceRouteConfig = {
   products: productRoutes,
   searchlogs: searchRoutes,
+  profile: profileRoutes,
 };
 
 export function getServiceConfig(service: string) {
