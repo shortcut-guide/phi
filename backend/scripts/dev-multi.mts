@@ -31,7 +31,7 @@ async function main(): Promise<void> {
   try {
     run("products", "PORT=3001 tsx src/d1Server.ts");
     run("searchlogs", "PORT=3002 tsx src/d1Server.ts");
-    run("profile", "PORT=3003 tsx src/d1Server.ts");
+    run("gateway", "tsx scripts/gateway.ts");
   } catch (err: unknown) {
     console.error("Error occurred in dev-multi.mts:", err);
   }

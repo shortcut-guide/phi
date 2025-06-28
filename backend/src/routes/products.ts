@@ -1,15 +1,15 @@
-import { Hono } from 'hono';
-import type { Context } from 'hono';
-import { GetProducts } from '@/b/api/products';
+import { Hono, Context } from 'hono';
+import { GetFilteredProducts } from "@/b/controllers/productController";
 
-export const productRoutes = new Hono();
+export function productRoutes() {
+  const app = new Hono();
 
-productRoutes.get('/', async (c: Context) => {
-  console.log("[productRoutes] GET /api/products invoked, path =", c.req.path);
-  // コントローラを呼び出し
-  const resp = await GetProducts(c);
-  // JSON をパース
-  const data = (await resp.json()) as any;
-  // Hono の c.json で返却
-  return c.json(data, 200);
-});
+  app.get('/', async (c: Context) => {
+    console.log("[productRoutes] GET /api/products invoked, path =", c.req.path);
+    const resp = await GetFilteredProducts(c);
+    const data = (await resp.json()) as any;
+    return c.json(data, 200);
+  });
+
+  return app;
+}
