@@ -1,6 +1,5 @@
 ---
 import DefaultLayout from '@/f/layouts/DefaultLayout.astro'
-import { fetchAllProducts } from '@/b/services/products';
 import { ProductCard } from '@/f/components/ProductCard';
 import type { Product } from '@/f/types/product';
 import { messages } from "@/f/config/messageConfig";
@@ -8,7 +7,9 @@ import { getLang } from "@/f/utils/lang";
 const lang = getLang();
 const t = messages.products[lang];
 
-const products: Product[] = await fetchAllProducts();
+const apiUrl = import.meta.env.PUBLIC_API_BASE_URL;
+const res = await fetch(`${apiUrl}/api/products`);
+const products = await res.json();
 ---
 
 <DefaultLayout title={t.title}>
