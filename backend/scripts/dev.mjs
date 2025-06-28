@@ -2,6 +2,7 @@
 import { register } from 'node:module';
 import { pathToFileURL } from 'node:url';
 
+// @ts-ignore
 await register('ts-node/esm', pathToFileURL('./'));
 try {
   await import('./dev-multi.mts');

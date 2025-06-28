@@ -1,11 +1,11 @@
 name = "profile"
-compatibility_date = "2025-05-7"
-
-# Profile environment
-[env.develop]
-account_id = "1fea45390402b8410d4e794d724e1e2c"
+compatibility_date = "2025-06-17"
 compatibility_flags = ["nodejs_compat"]
-[[env.develop.d1_databases]]
+main = "../worker.ts"
+
+account_id = "1fea45390402b8410d4e794d724e1e2c"
+
+[[d1_databases]]
 binding = "PROFILE_DB"
 database_name = "profile"
 database_id = "bfe56e92-3cef-4d98-82ab-8135b2190d79"

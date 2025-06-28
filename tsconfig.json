@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "module": "esnext",
+    "noImplicitAny": true,
     "baseUrl": ".",
     "paths": {
       "@/f/*": ["frontend/src/*"],
