@@ -663,6 +663,15 @@ rm -rf .wrangler/state/v3/d1
 curl -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxZmVhNDUzOTA0MDJiODQxMGQ0ZTc5NGQ3MjRlMWUyYyIsImlhdCI6MTc1MTE0NTU1NiwiZXhwIjoxNzUxMTg4NzU2fQ.odQKu2HsaI6jiydSpPtH_fw5NgC6IH-Ho-UbYjYFtrs" https://searchlogs.phis.workers.dev/searchlogs/popular
 ```
 
+# トークン作成
+```
+# シークレット作成
+openssl rand -hex 32
+
+# アカウントIDを指定して実行
+npx tsx generate-jwt.ts account1
+~~~
+
 ---
 
 # Maintenance (メンテナンス)
