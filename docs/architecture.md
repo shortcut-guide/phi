@@ -658,6 +658,11 @@ wrangler d1 execute pup --command="DELETE FROM contents; VACUUM;"
 rm -rf .wrangler/state/v3/d1
 ```
 
+# 本番 curl
+```
+curl -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxZmVhNDUzOTA0MDJiODQxMGQ0ZTc5NGQ3MjRlMWUyYyIsImlhdCI6MTc1MTE0NTU1NiwiZXhwIjoxNzUxMTg4NzU2fQ.odQKu2HsaI6jiydSpPtH_fw5NgC6IH-Ho-UbYjYFtrs" https://searchlogs.phis.workers.dev/searchlogs/popular
+```
+
 ---
 
 # Maintenance (メンテナンス)

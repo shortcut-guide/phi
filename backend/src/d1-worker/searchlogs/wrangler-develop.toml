@@ -6,6 +6,6 @@ account_id = "b2e83006acc77b6785c52a4d1c52e8de"
 
 [[d1_databases]]
 binding = "SEARCHLOGS_DB"
-database_name = "searchlogs"
+database_name = "search-logs"
 database_id = "92407f62-c484-4bdb-aa24-29248abbb946"
 

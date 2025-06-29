@@ -61,15 +61,16 @@ function runGateway(): void {
   });
 }
 
+
 async function main(): Promise<void> {
   try {
     runWrangler("products", "src/d1-worker/products/wrangler-develop.toml", 3001);
-    setTimeout(() => {
-      runWrangler("searchlogs", "src/d1-worker/searchlogs/wrangler-develop.toml", 3002);
-    }, 1000);
-    setTimeout(() => {
-      runWrangler("profile", "src/d1-worker/profile/wrangler-develop.toml", 3003);
-    }, 1000);
+      setTimeout(() => {
+        runWrangler("searchlogs", "src/d1-worker/searchlogs/wrangler-develop.toml", 3002);
+      }, 1000);
+      setTimeout(() => {
+        runWrangler("profile", "src/d1-worker/profile/wrangler-develop.toml", 3003);
+      }, 1000);
     runGateway();
   } catch (err: unknown) {
     console.error("Error occurred in dev-multi.mts:", err);

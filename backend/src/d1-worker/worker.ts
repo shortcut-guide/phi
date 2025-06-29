@@ -1,3 +1,6 @@
+import type { ExecutionContext } from '@cloudflare/workers-types';
+import type { D1Database } from '@cloudflare/workers-types';
+
 export default {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const url = new URL(request.url);
@@ -18,13 +21,13 @@ export default {
     }
 
     // --- Products API ---
-    if (request.method === "GET" && url.pathname === "/api/products") {
+    if (request.method === "GET" && url.pathname === "/products") {
       const { results } = await env.PRODUCTS_DB.prepare(
         "SELECT * FROM products"
       ).all();
       return json(results);
     }
-    if (request.method === "POST" && url.pathname === "/api/products") {
+    if (request.method === "POST" && url.pathname === "/products") {
       const body = await request.json() as {
         id: string;
         name: string;
@@ -42,14 +45,14 @@ export default {
     // ...（PUT/DELETEも同様にaccount_idで制限）
 
     // --- UserProfile API ---
-    if (request.method === "GET" && url.pathname.startsWith("/api/profile/")) {
+    if (request.method === "GET" && url.pathname.startsWith("/profile/")) {
       const user_id = url.pathname.split("/").pop();
       const { results } = await env.PROFILE_DB.prepare(
         `SELECT * FROM user_profiles WHERE user_id = ? AND account_id = ?`
       ).bind(user_id, account_id).all();
       return json(results);
     }
-    if (request.method === "PUT" && url.pathname === "/api/profile") {
+    if (request.method === "PUT" && url.pathname === "/profile") {
       const { user_id, nickname, bio, avatar_url } = await request.json() as {
         user_id: string;
         nickname: string;
@@ -69,7 +72,7 @@ export default {
     }
 
     // --- SearchLog API ---
-    if (request.method === "POST" && url.pathname === "/api/searchlogs") {
+    if (request.method === "POST" && url.pathname === "/searchlogs") {
       const { keyword, user_id } = await request.json() as {
         keyword: string;
         user_id: string;
@@ -81,13 +84,13 @@ export default {
       ).bind(id, keyword, user_id, account_id).run();
       return json({ status: "ok" });
     }
-    if (request.method === "GET" && url.pathname === "/api/searchlogs/popular") {
+    if (request.method === "GET" && url.pathname === "/searchlogs/popular") {
       const { results } = await env.SEARCHLOGS_DB.prepare(
         `SELECT keyword, COUNT(*) as count
-         FROM search_logs WHERE account_id = ?
+         FROM search_logs
          GROUP BY keyword
          ORDER BY count DESC LIMIT 10`
-      ).bind(account_id).all();
+      ).all();
       return json(results);
     }
 
