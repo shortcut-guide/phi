@@ -1296,3 +1296,19 @@ vps-app/
 
 ---
 
+# 画像圧縮
+SVG→PNG→WebPに変換して画像を最適化
+webp : png -> Webp
+inkspace: svg -> png
+
+```mermaid
+graph TD
+  A[画像ファイルパス引数受取] --> B[拡張子判定]
+  B -->|SVG| C[sharpでPNG/WebP変換 + コピー]
+  B -->|PNG/JPG| D[sharpでWebP変換 + コピー]
+  C & D --> E[./output に保存]
+```
+
+```
+node --loader ts-node/esm scripts/imageConvert.mts '/Users/higemaru/phis-admin/frontend/static/assets/img/sale.png'
+```

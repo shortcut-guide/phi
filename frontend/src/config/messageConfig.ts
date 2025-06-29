@@ -592,4 +592,12 @@ export const messages = {
       ErrorProductSuggest: 'Failed to fetch product suggestions'
     }
   },
+  profilePage: {
+    ja: {
+      title: 'プロフィール',
+    },
+    en: {
+      title: 'Profile',
+    }
+  }
 };

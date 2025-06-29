@@ -1,63 +1,37 @@
 ---
+import PictureImage from "@/f/components/PictureImage.astro";
 import ResponsiveToggle from '@/f/components/ResponsiveToggle.astro'
 import Logo from '@/f/components/Logo.astro'
-import { Icon } from 'astro-icon/components'
 ---
 
-<div id="main-navigation" class="is-desktop">
-  <div class="desktop-menu">
-    <nav>
-      <ul>
-        <li class="brand-logo">
-          <a href="/">
-            <Logo />
-          </a>
-        </li>
-        <li class="menu-item">
-          <button class="toggle-expanded-view" aria-expanded="false">
-            <Icon name="majesticons:chevron-double-right-line" /> 
-            <span class="sr-only">Expand menu</span>
-          </button>
-        </li>
-        <slot />
-        <li class="menu-item bottom-position">
-          <a href="/login/">
-            <Icon name="majesticons:logout-line" /> 
-            <span class="sr-only">Logout</span>
-          </a>
-        </li>
-        <li class="menu-item bottom-position user-avatar">
-          <a href="/settings/" class="logout-link">
-            <img src="/user-avatar.png" alt="">
-            <span class="sr-only">Settings</span>
-          </a>
-        </li>
-      </ul>
-    </nav>
-  </div>
-  <div class="container mobile-menu padding-16">
-    <div class="w-10">
-      <Logo />
+<div id="main-navigation">
+  <nav id="vertical-nav" class="position-fixed flex flex-col w-[72px] h-screen overflow-y-auto overflow-x-hidden border-r border-gray-200 bg-white z-5">
+    <div class="gap-24 h-full flex items-center justify-space-between flex-col box-border">
+      <div class="gap-24 flex items-center flex-col box-border">
+        <a href="/" aria-label="ホーム" class="flex items-center justify-center h-12 w-full hover:bg-gray-100 focus:outline-none focus:bg-gray-200">
+          <Logo />
+        </a>
+        <button type="button" aria-label="探索する" class="flex items-center justify-center h-12 w-full border-none hover:bg-gray-100 focus:outline-none focus:bg-gray-200">
+          <i class="fi fi-rr-category h-6 w-6"></i>
+        </button>
+        <a href="/pin-creation-tool/" aria-label="特価を探す" class="flex items-center justify-center h-12 w-full border-none hover:bg-gray-100 focus:outline-none focus:bg-gray-200">
+          <PictureImage src="/assets/img/sale.png" alt="sale" width={56} height={56} />  
+        </a>
+        <button type="button" aria-label="最新情報" class="flex items-center justify-center h-12 w-full border-none hover:bg-gray-100 focus:outline-none focus:bg-gray-200">
+          <PictureImage src="/assets/img/new.png" alt="new" width={56} height={56} />  
+        </button>
+        <button type="button" aria-label="メッセージ" class="flex items-center justify-center h-12 w-full border-none hover:bg-gray-100 focus:outline-none focus:bg-gray-200">
+          <PictureImage src="/assets/img/message.png" alt="message" width={56} height={56} />
+        </button>
+      </div>
+      
+      <div class="box-border">
+        <button type="button" aria-label="その他のオプション" class="flex items-center justify-center h-12 w-full border-none hover:bg-gray-100 focus:outline-none focus:bg-gray-200">
+          <PictureImage src="/assets/img/option.png" alt="option" width={56} height={56} />
+        </button>
+      </div>
     </div>
-    <ResponsiveToggle />
-    <nav>
-      <ul>
-        <slot />
-        <li class="menu-item">
-          <a href="/login">
-            <Icon name="majesticons:logout-line" /> 
-            <span class="sr-only">Logout</span>
-          </a>
-        </li>
-        <li class="menu-item user-avatar">
-          <a href="/settings">
-            <Icon name="majesticons:user-box-line" />
-            <span class="sr-only">Settings</span>
-          </a>
-        </li>
-      </ul>
-    </nav>
-  </div>
+  </nav>
 </div>
 
 <script>
@@ -188,218 +162,4 @@ import { Icon } from 'astro-icon/components'
   @use '@/f/assets/scss/base/breakpoint' as *;
   @use '@/f/assets/scss/base/elevation' as *;
   @use '@/f/assets/scss/base/size' as *;
-
-  #main-navigation {
-    background-color: var(--neutral-900);
-
-    > .container {
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-    }
-
-    &.is-desktop {
-      width: 60px;
-      min-height: 100vh;
-      position: fixed;
-      z-index: 1;
-      box-shadow: 0 0 40px rgba(0, 0, 0, 0.15);
-
-      .mobile-menu { 
-        display: none; 
-      }
-    }
-
-    &.is-mobile {
-      flex-direction: column;
-
-      .mobile-menu { 
-        nav {
-          display: none; 
-        }
-
-        &.show nav {
-          display: block;
-        }
-      }
-
-      .responsive-toggle {
-        display: block;
-      }
-
-      .desktop-menu {
-        display: none;
-      }
-    }
-
-    nav {
-      width: 100%;
-
-      > ul {
-        display: flex;
-        width: 100%;
-
-        .is-active {
-          font-weight: bold;
-        }
-      }
-
-      li,
-      a,
-      button {
-        width: 100%;
-      }
-
-      a,
-      button {
-        display: flex;
-        justify-content: center;
-        padding: 1rem 0;
-        color: var(--neutral-400);
-        transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out;
-      }
-
-      .user-avatar a {
-        padding: 0;
-        
-        img {
-          padding: 0.5rem;
-          max-width: 60px;
-          border-radius: 100%;
-        }
-      }
-
-      button {
-        border: none;
-      }
-
-      svg {
-        width: 30px;
-      
-        path {
-          fill: var(--neutral-600);
-          transition: fill 0.2s ease-in-out;
-        }
-      }
-
-      a:hover,
-      a:focus,
-      a.is-active,
-      button:hover, 
-      button:not(.toggle-expanded-view):focus {
-        color: var(--neutral-800);
-        background-color: var(--secondary-200);
-
-        svg path {
-          fill: var(--neutral-800);
-        }
-      }
-    }
-
-    .desktop-menu {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      min-height: 100vh;
-
-      ul {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        min-height: 100vh;
-        position: relative;
-
-        .bottom-position {
-          position: absolute;
-        }
-
-        .bottom-position:nth-last-of-type(1) { bottom: 0; }
-        .bottom-position:nth-last-of-type(2) { bottom: 3.75rem; }
-        .bottom-position:nth-last-of-type(3) { bottom: 8rem; }
-
-        .brand-logo {
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
-          padding: 1rem;
-          color: var(--neutral-100);
-          background-color: var(--neutral-700);
-
-          img {
-            max-height: 18px;
-          }
-        }
-      }
-
-      .toggle-expanded-view {
-        svg {
-          padding-top: 3px;
-        }
-
-        span {
-        text-decoration: underline;
-        }
-
-        &:hover,
-        &:focus {
-          span {
-            text-decoration: none;
-          }
-        }
-      }
-    }
-
-    &.is-expanded {
-      width: 200px;
-
-      .desktop-menu {
-        a,
-        button {
-          justify-content: left;
-          align-items: center;
-          gap: 0.5rem;
-          padding: 1rem 0.75rem;
-        }
-
-        .user-avatar a {
-          padding: 0.5rem 0.3rem 0;
-        }
-      } 
-
-      ~ main {
-        margin-left: 200px;
-      }
-    }
-
-    .mobile-menu nav {
-      > ul {
-        flex-direction: column;
-        margin-top: 1rem;
-
-        a {
-          justify-content: start;
-          align-items: center;
-          gap: 0.5rem;
-
-          &:hover,
-          &:focus {
-            color: var(--secondary-200);
-            background-color: transparent;
-
-            svg path {
-              fill: var(--secondary-200);
-            }
-          }
-        }
-      }
-
-      svg {
-        width: 35px;
-      
-        path {
-          transition: fill 0.2s ease-in-out;
-        }
-      }
-    }
-  }
 </style>

@@ -1,4 +1,4 @@
-CREATE TABLE user_addresses (
+CREATE TABLE user_profile (
   id TEXT PRIMARY KEY,
   user_id TEXT,
   name TEXT,

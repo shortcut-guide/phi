@@ -21,5 +21,8 @@
     },
     "types": ["astro/client", "astro/test"],
     "typeRoots": ["./src/types", "./node_modules/@types"]
+  },
+  "ts-node": {
+    "esm": true
   }
 }
