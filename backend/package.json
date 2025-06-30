@@ -5,9 +5,9 @@
     "type": "module",
     "scripts": {
         "clean": "rimraf public",
-        "node:build": "npm run clean && tsc",
-        "node:dev": "ts-node src/server.ts",
-        "node:start": "node public/server.js",
+        "node:build": "node esbuild.config.mjs",
+        "node:dev": "nodemon --ext ts --ignore public/ --exec \"tsc && node public/server.js\"",
+        "node:start": "node public/src/server.js",
         "d1:build": "npm run clean && node --experimental-json-modules esbuild.config.mjs",
         "d1:start": "node public/d1Server.js",
         "d1:dev": "npx tsx scripts/dev.mjs",

@@ -6,7 +6,7 @@ const app = express();
 const PORT = 8787;
 
 app.use(express.json());
-app.use("/api/auth/paypal/callback", PaypalRoutes);
+app.use("/api/auth/paypal", PaypalRoutes);
 
 app.listen(PORT, () => {
   console.log(`🚀 Server is running at http://localhost:${PORT}`);
