@@ -1,3 +1,6 @@
-<a href={`https://www.sandbox.paypal.com/signin/authorize?response_type=code&client_id=${import.meta.env.PAYPAL_CLIENT_ID}&redirect_uri=${process.env.PAYPAL_REDIRECT_URI}&scope=openid email profile`}>
-  <button>PayPalでログイン</button>
-</a>
+---
+import LoginBtnReact from '@/f/components/LoginBtnReact.tsx';
+const clientId = import.meta.env.PUBLIC_PAYPAL_CLIENT_ID;
+---
+
+<LoginBtnReact client:only="react" clientId={clientId} />

@@ -1,7 +1,7 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import tailwind from '@astrojs/tailwind';
-import preact from '@astrojs/preact';
+import react from '@astrojs/react';
 import icon from "astro-icon";
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -15,7 +15,7 @@ const __dirname = dirname(__filename);
 
 // https://astro.build/config
 export default defineConfig({
-  integrations: [tailwind(), preact(),icon(),relativeLinks()],
+  integrations: [tailwind(),icon(),relativeLinks(),react()],
   output: "static",
   outDir: "./public",
   publicDir: "./static",
