@@ -4,13 +4,14 @@ interface Props {
   alt?: string
   width?: number
   height?: number
+  class?: string
 }
-const { src, alt = '', width = 128, height = 128 } = Astro.props;
-const baseName = src.replace(/\.(webp|png|svg)$/i, '');
+const { src, ...props } = Astro.props;
+const baseName = src?.replace(/\.(webp|png|svg)$/i, '');
 ---
 
 <picture>
   <source srcset={`${baseName}.webp`} type="image/webp" />
   <source srcset={`${baseName}.png`} type="image/png" />
-  <img src={`${baseName}.png`} alt={alt} width={width} height={height} loading="lazy" />
+  <img src={`${baseName}.png`} {...props} loading="lazy" />
 </picture>

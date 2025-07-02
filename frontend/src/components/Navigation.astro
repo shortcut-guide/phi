@@ -5,30 +5,40 @@ import Logo from '@/f/components/Logo.astro'
 ---
 
 <div id="main-navigation">
-  <nav id="vertical-nav" class="position-fixed flex flex-col w-[72px] h-screen overflow-y-auto overflow-x-hidden border-r border-gray-200 bg-white z-5">
-    <div class="gap-24 h-full flex items-center justify-space-between flex-col box-border">
-      <div class="gap-24 flex items-center flex-col box-border">
-        <a href="/" aria-label="ホーム" class="flex items-center justify-center h-12 w-full hover:bg-gray-100 focus:outline-none focus:bg-gray-200">
-          <Logo />
-        </a>
-        <button type="button" aria-label="探索する" class="flex items-center justify-center h-12 w-full border-none hover:bg-gray-100 focus:outline-none focus:bg-gray-200">
-          <i class="fi fi-rr-category h-6 w-6"></i>
-        </button>
-        <a href="/pin-creation-tool/" aria-label="特価を探す" class="flex items-center justify-center h-12 w-full border-none hover:bg-gray-100 focus:outline-none focus:bg-gray-200">
-          <PictureImage src="/assets/img/sale.png" alt="sale" width={56} height={56} />  
-        </a>
-        <button type="button" aria-label="最新情報" class="flex items-center justify-center h-12 w-full border-none hover:bg-gray-100 focus:outline-none focus:bg-gray-200">
-          <PictureImage src="/assets/img/new.png" alt="new" width={56} height={56} />  
-        </button>
-        <button type="button" aria-label="メッセージ" class="flex items-center justify-center h-12 w-full border-none hover:bg-gray-100 focus:outline-none focus:bg-gray-200">
-          <PictureImage src="/assets/img/message.png" alt="message" width={56} height={56} />
-        </button>
+  <nav id="vertical-nav" class="fixed flex flex-col w-[15%] h-screen overflow-y-auto overflow-x-hidden border-r border-gray-200 bg-white z-5">
+    <div class="h-full py-5 flex items-center justify-between flex-col box-border">
+      <div class="flex items-center flex-col box-border">
+        <ul class="flex flex-col gap-y-10">
+          <li class="flex items-center justify-center">
+            <Logo alt="phis admin" class="w-[72%] text-gray-600 group-focus:text-gray-800" />
+          </li>
+          <li class="flex items-center justify-center">
+            <a aria-label="探索する" class="w-[72%] border-none hover:bg-gray-100 focus:outline-none focus:bg-gray-200">
+              <PictureImage src="/assets/img/searching-bar.png" alt="search" class="w-full" />
+            </a>
+          </li>
+          <li class="flex items-center justify-center">
+            <a href="/pin-creation-tool/" aria-label="特価を探す" class="w-[70%] border-none hover:bg-gray-100 focus:outline-none focus:bg-gray-200">
+              <PictureImage src="/assets/img/sale.png" alt="sale" class="w-full" /> 
+            </a>
+          </li>
+          <li class="flex items-center justify-center">
+            <a href="/releases/" aria-label="最新情報" class="w-[70%] border-none hover:bg-gray-100 focus:outline-none focus:bg-gray-200">
+              <PictureImage src="/assets/img/new.png" alt="new" class="w-full" />  
+            </a>
+          </li>
+          <li class="flex items-center justify-center">
+            <a href="/messages/" aria-label="メッセージ" class="w-[72%] border-none hover:bg-gray-100 focus:outline-none focus:bg-gray-200">
+              <PictureImage src="/assets/img/message.png" alt="message" class="w-full" />
+            </a>
+          </li>
+        </ul>
       </div>
       
-      <div class="box-border">
-        <button type="button" aria-label="その他のオプション" class="flex items-center justify-center h-12 w-full border-none hover:bg-gray-100 focus:outline-none focus:bg-gray-200">
-          <PictureImage src="/assets/img/option.png" alt="option" width={56} height={56} />
-        </button>
+      <div class="flex items-center justify-center box-border">
+        <a aria-label="その他のオプション" class="w-[70%] border-none hover:bg-gray-100 focus:outline-none focus:bg-gray-200">
+          <PictureImage src="/assets/img/option.png" alt="option" class="w-full" />
+        </a>
       </div>
     </div>
   </nav>
