@@ -5,21 +5,15 @@ import { getLang } from "@/f/utils/lang";
 const lang = getLang();
 const t = messages.privacyPolicy[lang];
 ---
-
-<html lang={lang}>
-  <head>
-    <title>{t.title}</title>
-    <meta name="description" content={t.description} />
-  </head>
-  <body class="p-8 max-w-4xl mx-auto space-y-8">
+<DefaultLayout title="Phis">
+  <div>
     <h1 class="text-4xl font-bold">{t.heading}</h1>
     <p>{t.description}</p>
-
     {Object.entries(t.sections).map(([key, section]) => (
-      <section>
+      <section key={key}>
         <h2 class="text-2xl font-semibold">{section.title}</h2>
         <p>{section.description}</p>
       </section>
     ))}
-  </body>
-</html>
+  </div>
+</DefaultLayout> 

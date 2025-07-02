@@ -6,24 +6,18 @@ import { getLang } from "@/f/utils/lang";
 
 const lang = getLang();
 const t = messages.pageListPage[lang];
+const apiUrl = import.meta.env.PUBLIC_API_BASE_URL;
 
 export async function getStaticPaths() {
   const limit = 30;
-  // 全アイテムを1回のAPI接続で取得（絶対URLを指定してください）
-  const res = await fetch("https://phis.jp/api/pins");
-  
   let allItems = [];
-  if (res.status === 404) {
-    console.warn("API returned 404, using fallback empty items.");
-    // 空の配列でフォールバック（または定型データで代用）
-  } else if (!res.ok) {
-    throw new Error(`Failed to fetch pins: ${res.status} ${res.statusText}`);
-  } else {
-    try {
-      allItems = await res.json();
-    } catch (err) {
-      throw new Error(`Failed to parse JSON: ${err}`);
-    }
+  try {
+    const res = await fetch(`${apiUrl}/api/pins`);
+    if (res.status === 404) throw new Error("API returned 404");
+    if (!res.ok) throw new Error(`Failed to fetch pins: ${res.status} ${res.statusText}`);
+    allItems = await res.json();
+  } catch (err) {
+    console.error("🔥 API fetch 失敗:", err);
   }
   
   // API からデータが取得できなかった場合は、1 ページ分（空リスト）を作成

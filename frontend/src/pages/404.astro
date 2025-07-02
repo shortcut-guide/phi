@@ -1,8 +1,7 @@
 ---
-import DefaultLayout from '../layouts/DefaultLayout.astro'
+import DefaultLayout from '@/f/layouts/DefaultLayout.astro'
 import { messages } from "@/f/config/messageConfig";
-import { getLang } from "@/f/utils/lang";
-const lang = getLang();
+const lang = "ja";
 const t = messages.notFoundPage[lang];
 ---
 

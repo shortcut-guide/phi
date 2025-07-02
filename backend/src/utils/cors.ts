@@ -1,5 +1,5 @@
 export function setCORSHeaders(response: Response): Response {
-  const allowedOrigin = "https://your-frontend-domain.com";
+  const allowedOrigin = `${process.env.FRONTEND_URL}`;
 
   response.headers.set("Access-Control-Allow-Origin", allowedOrigin);
   response.headers.set("Access-Control-Allow-Methods", "POST, GET, OPTIONS");

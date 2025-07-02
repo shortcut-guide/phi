@@ -1,6 +1,6 @@
 ---
 const { addresses } = Astro.props;
-import type { Address } from '@/f/types/address';
+import type { Profile } from '@/f/types/profile';
 import { messages } from "@/f/config/messageConfig";
 import { getLang } from "@/f/utils/lang";
 
@@ -14,7 +14,7 @@ const t = messages.addressList[lang];
 </div>
 
 <ul class="space-y-4">
-  {addresses.map((addr: Address) => (
+  {addresses.map((addr: Profile) => (
     <li class="p-4 border rounded">
       <p class="font-bold">{addr.name}（{addr.kana}）</p>
       <p>{addr.zip}</p>

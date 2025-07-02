@@ -5,15 +5,21 @@
     "type": "module",
     "scripts": {
         "clean": "rimraf public",
-        "build": "npm run clean && node --experimental-json-modules esbuild.config.mjs",
-        "start": "node public/d1Server.js",
-        "dev": "npx tsx scripts/dev.mjs",
+        "node:build": "node esbuild.config.mjs",
+        "node:dev": "nodemon --ext ts --ignore public/ --exec \"tsc && node public/server.js\"",
+        "node:start": "node public/src/server.js",
+        "d1:build": "npm run clean && node --experimental-json-modules esbuild.config.mjs",
+        "d1:start": "node public/d1Server.js",
+        "d1:dev": "npx tsx scripts/dev.mjs",
+        "d1:deploy:products": "cd src/d1-worker/products && wrangler deploy --config wrangler-production.toml",
+        "d1:deploy:searchlogs": "cd src/d1-worker/searchlogs && wrangler deploy --config wrangler-production.toml",
+        "d1:deploy:profile": "cd src/d1-worker/profile && wrangler deploy --config wrangler-production.toml",
         "test": "node --max-old-space-size=4096 --experimental-vm-modules node_modules/.bin/jest --config ./jest.config.mjs"
     },
     "dependencies": {
         "@hono/node-server": "^1.14.1",
         "@prisma/client": "^6.5.0",
-        "@vercel/node": "^5.1.16",
+        "@vercel/node": "^2.3.0",
         "axios": "^1.8.1",
         "body-parser": "^1.20.0",
         "cors": "^2.8.5",
@@ -24,6 +30,9 @@
         "glob": "^9.3.5",
         "googleapis": "^148.0.0",
         "hono": "^4.7.4",
+        "http-proxy-middleware": "^3.0.5",
+        "itty-router": "^5.0.18",
+        "jsonwebtoken": "^9.0.2",
         "kysely": "^0.27.6",
         "kysely-d1": "^0.3.0",
         "mongoose": "^6.8.1",
@@ -48,7 +57,7 @@
         "astro": "^5.9.1",
         "babel-jest": "^29.7.0",
         "concurrently": "^9.2.0",
-        "esbuild": "^0.17.19",
+        "esbuild": "^0.25.5",
         "esbuild-plugin-alias": "^0.2.1",
         "esbuild-register": "^3.6.0",
         "eslint": "^8.0.0",
@@ -67,6 +76,7 @@
         "tsx": "^4.20.3",
         "ttypescript": "^1.5.15",
         "typescript": "^5.8.3",
-        "typescript-transform-paths": "^3.5.5"
+        "typescript-transform-paths": "^3.5.5",
+        "wrangler": "^4.22.0"
     }
 }

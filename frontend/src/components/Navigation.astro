@@ -1,405 +1,51 @@
 ---
-import ResponsiveToggle from '@/f/components/ResponsiveToggle.astro'
+import PictureImage from "@/f/components/PictureImage.astro";
 import Logo from '@/f/components/Logo.astro'
-import { Icon } from 'astro-icon/components'
 ---
 
-<div id="main-navigation" class="is-desktop">
-  <div class="desktop-menu">
-    <nav>
-      <ul>
-        <li class="brand-logo">
-          <a href="/">
-            <Logo />
-          </a>
-        </li>
-        <li class="menu-item">
-          <button class="toggle-expanded-view" aria-expanded="false">
-            <Icon name="majesticons:chevron-double-right-line" /> 
-            <span class="sr-only">Expand menu</span>
-          </button>
-        </li>
-        <slot />
-        <li class="menu-item bottom-position">
-          <a href="/login/">
-            <Icon name="majesticons:logout-line" /> 
-            <span class="sr-only">Logout</span>
-          </a>
-        </li>
-        <li class="menu-item bottom-position user-avatar">
-          <a href="/settings/" class="logout-link">
-            <img src="/user-avatar.png" alt="">
-            <span class="sr-only">Settings</span>
-          </a>
-        </li>
-      </ul>
-    </nav>
-  </div>
-  <div class="container mobile-menu padding-16">
-    <div class="w-10">
-      <Logo />
+<div id="main-navigation">
+  <nav id="vertical-nav" class="fixed flex flex-col w-[15%] h-screen overflow-y-auto overflow-x-hidden border-r border-gray-200 bg-white z-5">
+    <div class="h-full py-5 flex items-center justify-between flex-col box-border">
+      <div class="flex items-center flex-col box-border">
+        <ul class="flex flex-col gap-y-10">
+          <li class="flex items-center justify-center">
+            <Logo alt="phis admin" class="w-[72%] text-gray-600 group-focus:text-gray-800 invert" />
+          </li>
+          <li class="flex items-center justify-center">
+            <a aria-label="探索する" class="w-[72%] border-none hover:bg-gray-100 focus:outline-none focus:bg-gray-200">
+              <PictureImage src="/assets/img/searching-bar.png" alt="search" class="w-full" />
+            </a>
+          </li>
+          <li class="flex items-center justify-center">
+            <a href="/pin-creation-tool/" aria-label="特価を探す" class="w-[70%] border-none hover:bg-gray-100 focus:outline-none focus:bg-gray-200">
+              <PictureImage src="/assets/img/sale.png" alt="sale" class="w-full" /> 
+            </a>
+          </li>
+          <li class="flex items-center justify-center">
+            <a href="/releases/" aria-label="最新情報" class="w-[70%] border-none hover:bg-gray-100 focus:outline-none focus:bg-gray-200">
+              <PictureImage src="/assets/img/new.png" alt="new" class="w-full" />  
+            </a>
+          </li>
+          <li class="flex items-center justify-center">
+            <a href="/messages/" aria-label="メッセージ" class="w-[72%] border-none hover:bg-gray-100 focus:outline-none focus:bg-gray-200">
+              <PictureImage src="/assets/img/message.png" alt="message" class="w-full" />
+            </a>
+          </li>
+        </ul>
+      </div>
+      
+      <div class="flex items-center justify-center box-border">
+        <a aria-label="その他のオプション" class="w-[70%] border-none hover:bg-gray-100 focus:outline-none focus:bg-gray-200">
+          <PictureImage src="/assets/img/option.png" alt="option" class="w-full" />
+        </a>
+      </div>
     </div>
-    <ResponsiveToggle />
-    <nav>
-      <ul>
-        <slot />
-        <li class="menu-item">
-          <a href="/login">
-            <Icon name="majesticons:logout-line" /> 
-            <span class="sr-only">Logout</span>
-          </a>
-        </li>
-        <li class="menu-item user-avatar">
-          <a href="/settings">
-            <Icon name="majesticons:user-box-line" />
-            <span class="sr-only">Settings</span>
-          </a>
-        </li>
-      </ul>
-    </nav>
-  </div>
+  </nav>
 </div>
-
-<script>
-  // variables
-  const mainNav = document.querySelector('#main-navigation')
-  const mainMenu = mainNav ? mainNav.querySelector('ul') : null
-  const toggleExpandedView = document.querySelector('.toggle-expanded-view')
-  const menuIconLabels = mainNav ? [...mainNav.querySelectorAll('.sr-only')] : []
-  const mediaQuery = window.matchMedia('(min-width: 48em)')
-  let isMenuExpanded = localStorage.getItem('isMenuExpanded')
-
-  // functions
-  const setActiveMenuItem = () => {
-    if (!mainMenu) return;
-    const menuItems = [...mainMenu.querySelectorAll('a:not([rel*="external"])')]
-
-    menuItems.forEach(menuItem => {
-      const anchor = menuItem as HTMLAnchorElement;
-      if (anchor.pathname === window.location.pathname) {
-        anchor.classList.add('is-active')
-        anchor.setAttribute('aria-current', 'page')
-      }
-    })
-  }
-
-  const expandMenu = () => {
-    if (!mainNav) return;
-    mainNav.classList.add('is-expanded')
-    localStorage.setItem('isMenuExpanded', 'true')
-    if (toggleExpandedView) {
-      toggleExpandedView.setAttribute('aria-expanded', 'true')
-      const span = toggleExpandedView.querySelector('span')
-      if (span) span.textContent = 'Collapse menu'
-    }
-    
-    menuIconLabels.forEach(menuIconLabel => {
-      menuIconLabel.classList.remove('sr-only')
-    })
-  }
-  const collapseMenu = () => {
-    if (!mainNav) return;
-    mainNav.classList.remove('is-expanded')
-    localStorage.setItem('isMenuExpanded', '')
-    if (toggleExpandedView) {
-      toggleExpandedView.setAttribute('aria-expanded', 'false')
-      const span = toggleExpandedView.querySelector('span')
-      if (span) span.textContent = 'Expand menu'
-    }
-    
-    menuIconLabels.forEach(menuIconLabel => {
-      menuIconLabel.classList.add('sr-only')
-    })
-  }
-  const checkViewportWidth = () => {
-    if (!mainNav) return;
-    if (mediaQuery.matches) {
-      mainNav.classList.add('is-desktop')
-      mainNav.classList.remove('is-mobile')
-
-      collapseMenu()
-    } else {
-      mainNav.classList.remove('is-desktop')
-      mainNav.classList.add('is-mobile')
-
-      collapseMenu()
-    }
-  }
-
-  // execution
-  mainMenu && mainMenu.addEventListener('keydown', event => {
-    const currentMenuItem = event.target && (event.target as Element).closest ? (event.target as Element).closest('li') : null
-    const menuItems = [...mainMenu.querySelectorAll('.menu-item')]
-    const currentIndex = currentMenuItem ? menuItems.findIndex(item => item === currentMenuItem) : -1
-
-    const key = event.key
-    let targetItem
-
-    if (key === 'ArrowDown' && currentMenuItem) {
-      event.preventDefault()
-      if (menuItems.indexOf(currentMenuItem) === menuItems.length - 1) {
-        targetItem = menuItems[0]
-      } else {
-        targetItem = menuItems[currentIndex + 1]
-      }
-    }
-
-    if (key === 'ArrowUp' && currentMenuItem) {
-      event.preventDefault()
-      if (menuItems.indexOf(currentMenuItem) === 0) {
-        targetItem = menuItems[menuItems.length - 1]
-      } else {
-        targetItem = menuItems[currentIndex - 1]
-      }
-    }
-
-    if (key === 'Escape') {
-      targetItem = menuItems[0]
-    }
-
-    if (targetItem) {
-      const focusable = targetItem.querySelector('a, button, input');
-      if (focusable && 'focus' in focusable) (focusable as HTMLElement).focus();
-    }
-  })
-
-  if (toggleExpandedView) {
-    toggleExpandedView.addEventListener('click', () => {
-      if (mainNav && mainNav.classList.contains('is-expanded')) {
-        collapseMenu()
-      } else {
-        expandMenu()
-      }
-    })
-  }
-
-  window.addEventListener('resize', checkViewportWidth)
-
-  setActiveMenuItem()
-  checkViewportWidth()
-
-  if (isMenuExpanded === 'true') {
-    expandMenu()
-  }
-</script>
 
 <style lang="scss" is:global>
   @use '@/f/assets/scss/base/border' as *;
   @use '@/f/assets/scss/base/breakpoint' as *;
   @use '@/f/assets/scss/base/elevation' as *;
   @use '@/f/assets/scss/base/size' as *;
-
-  #main-navigation {
-    background-color: var(--neutral-900);
-
-    > .container {
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-    }
-
-    &.is-desktop {
-      width: 60px;
-      min-height: 100vh;
-      position: fixed;
-      z-index: 1;
-      box-shadow: 0 0 40px rgba(0, 0, 0, 0.15);
-
-      .mobile-menu { 
-        display: none; 
-      }
-    }
-
-    &.is-mobile {
-      flex-direction: column;
-
-      .mobile-menu { 
-        nav {
-          display: none; 
-        }
-
-        &.show nav {
-          display: block;
-        }
-      }
-
-      .responsive-toggle {
-        display: block;
-      }
-
-      .desktop-menu {
-        display: none;
-      }
-    }
-
-    nav {
-      width: 100%;
-
-      > ul {
-        display: flex;
-        width: 100%;
-
-        .is-active {
-          font-weight: bold;
-        }
-      }
-
-      li,
-      a,
-      button {
-        width: 100%;
-      }
-
-      a,
-      button {
-        display: flex;
-        justify-content: center;
-        padding: 1rem 0;
-        color: var(--neutral-400);
-        transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out;
-      }
-
-      .user-avatar a {
-        padding: 0;
-        
-        img {
-          padding: 0.5rem;
-          max-width: 60px;
-          border-radius: 100%;
-        }
-      }
-
-      button {
-        border: none;
-      }
-
-      svg {
-        width: 30px;
-      
-        path {
-          fill: var(--neutral-600);
-          transition: fill 0.2s ease-in-out;
-        }
-      }
-
-      a:hover,
-      a:focus,
-      a.is-active,
-      button:hover, 
-      button:not(.toggle-expanded-view):focus {
-        color: var(--neutral-800);
-        background-color: var(--secondary-200);
-
-        svg path {
-          fill: var(--neutral-800);
-        }
-      }
-    }
-
-    .desktop-menu {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      min-height: 100vh;
-
-      ul {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        min-height: 100vh;
-        position: relative;
-
-        .bottom-position {
-          position: absolute;
-        }
-
-        .bottom-position:nth-last-of-type(1) { bottom: 0; }
-        .bottom-position:nth-last-of-type(2) { bottom: 3.75rem; }
-        .bottom-position:nth-last-of-type(3) { bottom: 8rem; }
-
-        .brand-logo {
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
-          padding: 1rem;
-          color: var(--neutral-100);
-          background-color: var(--neutral-700);
-
-          img {
-            max-height: 18px;
-          }
-        }
-      }
-
-      .toggle-expanded-view {
-        svg {
-          padding-top: 3px;
-        }
-
-        span {
-        text-decoration: underline;
-        }
-
-        &:hover,
-        &:focus {
-          span {
-            text-decoration: none;
-          }
-        }
-      }
-    }
-
-    &.is-expanded {
-      width: 200px;
-
-      .desktop-menu {
-        a,
-        button {
-          justify-content: left;
-          align-items: center;
-          gap: 0.5rem;
-          padding: 1rem 0.75rem;
-        }
-
-        .user-avatar a {
-          padding: 0.5rem 0.3rem 0;
-        }
-      } 
-
-      ~ main {
-        margin-left: 200px;
-      }
-    }
-
-    .mobile-menu nav {
-      > ul {
-        flex-direction: column;
-        margin-top: 1rem;
-
-        a {
-          justify-content: start;
-          align-items: center;
-          gap: 0.5rem;
-
-          &:hover,
-          &:focus {
-            color: var(--secondary-200);
-            background-color: transparent;
-
-            svg path {
-              fill: var(--secondary-200);
-            }
-          }
-        }
-      }
-
-      svg {
-        width: 35px;
-      
-        path {
-          transition: fill 0.2s ease-in-out;
-        }
-      }
-    }
-  }
 </style>

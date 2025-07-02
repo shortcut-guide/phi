@@ -1,29 +1,46 @@
-import { useState, useEffect } from "preact/hooks";
+import { useState, useEffect } from "react";
 import { messages } from "@/f/config/messageConfig";
 import { getLang } from "@/f/utils/lang";
 const lang = getLang();
 const t = messages.profileForm[lang];
-
+const apiUrl = import.meta.env.PUBLIC_API_BASE_URL;
 export default function ProfileForm() {
   const [nickname, setNickname] = useState("");
   const [bio, setBio] = useState("");
-
+  
   useEffect(() => {
     (async () => {
-      const res = await fetch("/api/profile");
-      const data = await res.json();
+      let data = [];
+
+      try {
+        const res = await fetch(`${apiUrl}/api/profile`);
+        if (!res.ok) {
+          throw new Error(`APIエラー: ${res.status}\n`);
+        }
+        data = await res.json();
+      } catch (err) {
+        console.error("🔥 API fetch 失敗:", err);
+      }
+
       setNickname(data.nickname ?? "");
       setBio(data.bio ?? "");
     })();
   }, []);
 
   async function updateProfile() {
-    await fetch("/api/profile", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ nickname, bio })
-    });
-    alert(t.updated);
+    try {
+      const res = await fetch(`${apiUrl}/api/profile`,{
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nickname, bio })
+      });
+      if (!res.ok) {
+        throw new Error(`APIエラー: ${res.status}\n`);
+      }
+      alert(t.updated); 
+    } catch (err) {
+      console.error("🔥 API fetch 失敗:", err);
+    }
   }
 
   return (

@@ -1,0 +1,33 @@
+{
+  "include": ["src", "scripts"],
+  "exclude": ["node_modules","public"],
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "strict": true,
+    "esModuleInterop": true,
+    "emitDeclarationOnly": true,
+    "declaration": true,
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "noImplicitAny": false,
+    "types": ["node","@cloudflare/workers-types"],
+    "skipLibCheck": true,
+    "typeRoots": ["./node_modules/@types", "./types"],
+    "outDir":"./public",
+    "rootDir":"./src",
+    "lib": ["ES2020", "DOM"],
+    "baseUrl": "./src",
+    "paths":{
+      "@/f/*": ["../frontend/src/*"],
+      "@/b/*": ["./*"],
+    },
+    "plugins": [
+      { "transform": "typescript-transform-paths" }
+    ],
+  },
+  "ts-node": {
+    "esm": true
+  }
+}

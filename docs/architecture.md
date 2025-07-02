@@ -658,6 +658,20 @@ wrangler d1 execute pup --command="DELETE FROM contents; VACUUM;"
 rm -rf .wrangler/state/v3/d1
 ```
 
+# 本番 curl
+```
+curl -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxZmVhNDUzOTA0MDJiODQxMGQ0ZTc5NGQ3MjRlMWUyYyIsImlhdCI6MTc1MTE0NTU1NiwiZXhwIjoxNzUxMTg4NzU2fQ.odQKu2HsaI6jiydSpPtH_fw5NgC6IH-Ho-UbYjYFtrs" https://searchlogs.phis.workers.dev/searchlogs/popular
+```
+
+# トークン作成
+```
+# シークレット作成
+openssl rand -hex 32
+
+# アカウントIDを指定して実行
+npx tsx generate-jwt.ts account1
+~~~
+
 ---
 
 # Maintenance (メンテナンス)
@@ -1222,6 +1236,43 @@ curl -v https://api-m.sandbox.paypal.com/v1/oauth2/token \
 }
 ```
 
+# Paypal ログイン
+```mermaid
+sequenceDiagram
+    participant PayPal
+    participant Frontend (/callback.ts)
+    participant Backend (/api/auth/paypal/callback)
+    participant D1 (user_profiles など)
+
+    PayPal ->> Frontend: ?code=xxx
+    Frontend ->> Backend: POST /api/auth/paypal/callback (codeを送信)
+    Backend ->> PayPal: codeからaccess_token取得
+    Backend ->> PayPal: ユーザー情報取得（email, name）
+    Backend ->> D1: user_profiles に保存 or ログイン
+    Backend -->> Frontend: セッション or JWT 発行
+    Frontend ->> Frontend: /mypage にリダイレクト
+```
+
+## callback
+```mermaid
+sequenceDiagram
+    participant PayPal
+    participant Frontend(callback.ts)
+    participant API(/api/auth/paypal/callback)
+    participant Controller(paypalController.ts)
+    participant D1(user_profiles)
+
+    PayPal ->> Frontend: /callback?code=XXX
+    Frontend ->> API: POST /api/auth/paypal/callback { code }
+    API ->> Controller: handlePaypalCallback(code)
+    Controller ->> PayPal: token exchange
+    Controller ->> PayPal: get userinfo
+    Controller ->> D1: upsert user_profiles
+    Controller -->> API: login OK + JWT
+    API -->> Frontend: 200 OK
+    Frontend ->> Frontend: リダイレクト /mypage
+```
+
 ---
 # PayPal Checkout を使った決済フロー
   - フロントエンド: Astro（カートUIとPayPalボタン表示）
@@ -1291,3 +1342,30 @@ vps-app/
 
 ---
 
+# 画像圧縮
+SVG→PNG→WebPに変換して画像を最適化
+webp : png -> Webp
+inkspace: svg -> png
+
+```mermaid
+graph TD
+  A[画像ファイルパス引数受取] --> B[拡張子判定]
+  B -->|SVG| C[sharpでPNG/WebP変換 + コピー]
+  B -->|PNG/JPG| D[sharpでWebP変換 + コピー]
+  C & D --> E[./output に保存]
+```
+
+```
+node --loader ts-node/esm scripts/imageConvert.mts '/Users/higemaru/phis-admin/frontend/static/assets/img/sale.png'
+```
+
+# ミドルウェアによるlang切り替え
+frontend -> build
+./lang/ npm run lang:start
+http://localhost:3000
+
+langをブラウザから自動取得して以下を変換
+/frontend/src/layouts/DefaultLayout.astro
+<html lang="__PLACEHOLDER__" dir="ltr">
+↓
+<html lang="en" dir="ltr" data-astro-cid-qup72gqn="">

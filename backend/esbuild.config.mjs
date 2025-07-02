@@ -8,7 +8,7 @@ const pkg = require('./package.json'); // CommonJS スタイルで JSON を読�
 const dependencies = Object.keys(pkg.dependencies || {});
 
 esbuild.build({
-  entryPoints: ['src/d1Server.ts'],
+  entryPoints: ['src/server.ts'],
   bundle: true,
   platform: 'node',
   target: 'node20',

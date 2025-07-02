@@ -1,40 +1,80 @@
 import { fileURLToPath } from "url";
-import { spawn } from "child_process";
+import { spawn, ChildProcess } from "child_process";
 import * as path from "path";
-import * as os from "os";
-import * as fs from "fs";
 
 const __filename: string = fileURLToPath(import.meta.url as string);
 const __dirname: string = path.dirname(__filename);
 
-function run(name: string, command: string): void {
-  const [cmd, ...args]: string[] = command.split(" ");
-  const child = spawn(cmd, args, {
-    cwd: path.resolve(__dirname, "../"),
-    stdio: "inherit",
-    env: {
-      ...process.env,
-    },
-    shell: true,
-  });
+function runWrangler(name: string, config: string, port: number): void {
+  const child: ChildProcess = spawn(
+    "npx",
+    [
+      "wrangler",
+      "dev",
+      "--config",
+      config,
+      "--port",
+      String(port),
+    ],
+    {
+      cwd: path.resolve(__dirname, "../"),
+      stdio: "inherit",
+      env: {
+        ...process.env,
+        NODE_ENV: "development",
+        NODE_OPTIONS: "--inspect=0",
+      },
+      shell: true,
+    }
+  );
 
   child.on("close", (code: number | null): void => {
-    console.log(`[${name}] exited with ${code}`);
+    console.log(`[${name}] wrangler exited with ${code}`);
   });
 
   child.on("error", (err: Error): void => {
-    console.error(`[${name}] failed to start:`, err);
+    console.error(`[${name}] wrangler failed to start:`, err);
   });
 }
 
+function runGateway(): void {
+  const child: ChildProcess = spawn(
+    "npx",
+    ["tsx", "scripts/gateway.ts"],
+    {
+      cwd: path.resolve(__dirname, "../"),
+      stdio: "inherit",
+      env: {
+        ...process.env,
+        NODE_ENV: "development",
+      },
+      shell: true,
+    }
+  );
+
+  child.on("close", (code: number | null): void => {
+    console.log(`[gateway] exited with ${code}`);
+  });
+
+  child.on("error", (err: Error): void => {
+    console.error(`[gateway] failed to start:`, err);
+  });
+}
+
+
 async function main(): Promise<void> {
   try {
-    run("products", "PORT=3001 tsx src/d1Server.ts");
-    run("searchlogs", "PORT=3002 tsx src/d1Server.ts");
-    run("profile", "PORT=3003 tsx src/d1Server.ts");
-    run("gateway", "tsx scripts/gateway.ts");
+    runWrangler("products", "src/d1-worker/products/wrangler-develop.toml", 3001);
+      setTimeout(() => {
+        runWrangler("searchlogs", "src/d1-worker/searchlogs/wrangler-develop.toml", 3002);
+      }, 1000);
+      setTimeout(() => {
+        runWrangler("profile", "src/d1-worker/profile/wrangler-develop.toml", 3003);
+      }, 1000);
+    runGateway();
   } catch (err: unknown) {
     console.error("Error occurred in dev-multi.mts:", err);
   }
 }
+
 main();

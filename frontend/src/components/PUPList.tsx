@@ -1,4 +1,4 @@
-import { useState, useEffect } from "preact/hooks";
+import { useState, useEffect } from "react";
 import type { PuppeteerItem } from "@/f/types/puppeteer";
 import clsx from "clsx";
 import { messages } from "@/f/config/messageConfig";

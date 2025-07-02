@@ -1,23 +1,21 @@
+import { useEffect, useState } from "react";
 export function getLang(): "ja" | "en" {
+  // サーバーサイドならデフォルト返す
+  if (typeof window === "undefined" || typeof navigator === "undefined" || typeof localStorage === "undefined") {
+    return "ja";
+  }
   // クエリパラメータ
-  const urlLang = typeof window !== "undefined"
-    ? new URLSearchParams(window.location.search).get("lang")
-    : null;
-
+  const urlLang = new URLSearchParams(window.location.search).get("lang");
   if (urlLang === "ja" || urlLang === "en") return urlLang;
 
-  // localStorage
-  if (typeof localStorage !== "undefined") {
-    const storedLang = localStorage.getItem("lang");
-    if (storedLang === "ja" || storedLang === "en") return storedLang;
-  }
-
   // ブラウザの言語設定
-  if (typeof navigator !== "undefined") {
-    const browserLang = navigator.language.slice(0, 2);
-    if (browserLang === "ja" || browserLang === "en") return browserLang;
-  }
+  const browserLang = navigator.language.slice(0, 2);
+  if (browserLang === "ja" || browserLang === "en") return browserLang;
 
-  //デフォルト
+  // localStorage
+  const storedLang = localStorage.getItem("lang");
+  if (storedLang === "ja" || storedLang === "en") return storedLang;
+
+  // デフォルト
   return "ja";
 }

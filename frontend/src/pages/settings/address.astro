@@ -4,7 +4,23 @@ import { messages } from "@/f/config/messageConfig";
 import { getLang } from "@/f/utils/lang";
 const lang = getLang();
 const t = messages.addressSettingsPage[lang];
-const addresses = await fetch("/api/address").then(res => res.json());
+const apiUrl = import.meta.env.PUBLIC_API_BASE_URL;
+
+let profile = [];
+
+try {
+  const res = await fetch(`${apiUrl}/api/profile`);
+  if (!res.ok) {
+    throw new Error(`APIエラー: ${res.status}\n`);
+  }
+  profile = await res.json();
+} catch (err) {
+  console.error("🔥 API fetch 失敗:", err);
+}
 ---
 
-<AddressList addresses={addresses} lang={lang} />
+{Array.isArray(profile) && profile.length > 0 ? (
+  <AddressList profile={profile} lang={lang} />
+) : (
+  <p>登録されていません。</p>
+)}

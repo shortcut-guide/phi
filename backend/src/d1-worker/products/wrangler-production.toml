@@ -1,10 +1,11 @@
 name = "products"
-compatibility_date = "2025-05-7"
+compatibility_date = "2025-06-17"
+compatibility_flags = ["nodejs_compat"]
+main = "../worker.ts"
 
-# Products environment
-[env.products]
-account_id = "668ea9059163f3fd8df3b6f512d3a b3f"
-[[env.products.d1_databases]]
+account_id = "668ea9059163f3fd8df3b6f512d3ab3f"
+
+[[d1_databases]]
 binding = "PRODUCTS_DB"
 database_name = "products"
 database_id = "a34d8aaf-ce52-4b85-b76b-9807bd58476a"
