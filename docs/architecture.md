@@ -1358,3 +1358,14 @@ graph TD
 ```
 node --loader ts-node/esm scripts/imageConvert.mts '/Users/higemaru/phis-admin/frontend/static/assets/img/sale.png'
 ```
+
+# ミドルウェアによるlang切り替え
+frontend -> build
+./lang/ npm run lang:start
+http://localhost:3000
+
+langをブラウザから自動取得して以下を変換
+/frontend/src/layouts/DefaultLayout.astro
+<html lang="__PLACEHOLDER__" dir="ltr">
+↓
+<html lang="en" dir="ltr" data-astro-cid-qup72gqn="">
