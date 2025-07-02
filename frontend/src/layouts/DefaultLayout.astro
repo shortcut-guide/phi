@@ -4,7 +4,6 @@ import Navigation from '@/f/components/Navigation.astro'
 import { DarkMode, SkipLink } from 'accessible-astro-components'
 import { Icon } from 'astro-icon/components'
 import GoogleTag from '@/f/components/googletag';
-import RedirectIfNotLoggedIn from '@/f/components/LoggedIn';
 import { messages } from "@/f/config/messageConfig";
 
 import type { on } from 'events';
@@ -89,7 +88,6 @@ const { title, description } = Astro.props;
     </div>
 
     <GoogleTag client:only="react" />
-    <RedirectIfNotLoggedIn client:only="react" />
   </body>
 </html>
 

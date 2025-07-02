@@ -15,12 +15,18 @@ app.use(
   })
 );
 
-// 静的ファイル配信
-app.use(express.static(publicDir));
-
 // HTMLファイルの lang 属性を Accept-Language で書き換える
 app.get("*", async (req, res, next) => {
   let urlPath = req.path === "/" ? "/index.html" : req.path;
+
+  // ↓ 静的ファイルへのリクエストはスルー
+  if (
+    urlPath.match(/\.(js|mjs|css|png|jpe?g|webp|gif|svg|ico|json|txt|map)$/i) ||
+    urlPath.startsWith('/assets/') ||
+    urlPath.startsWith('/_astro/')
+  ) {
+    return next();
+  }
 
   // URLが .html で終わっていない場合はSPA的に index.html を返す
   if (!urlPath.endsWith(".html")) {
@@ -33,14 +39,23 @@ app.get("*", async (req, res, next) => {
 
     const acceptLang = req.headers["accept-language"] || "";
     const lang = acceptLang.startsWith("ja") ? "ja" : "en";
-    html = html.replace(/<html lang="__PLACEHOLDER__"/, `<html lang="${lang}"`);
-
+    
+    html = html.replace(
+      /<html\b[^>]*lang=['"]__PLACEHOLDER__['"][^>]*>/i,
+      (htmlTag) => {
+        const replaced = htmlTag.replace(/lang=['"]__PLACEHOLDER__['"]/, `lang="${lang}"`);
+        return replaced;
+      }
+    );
     res.setHeader("Content-Type", "text/html");
     res.send(html);
   } catch (err) {
     res.status(404).send("Not found");
   }
 });
+
+// 静的ファイル配信
+app.use(express.static(publicDir));
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
