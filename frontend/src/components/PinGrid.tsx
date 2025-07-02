@@ -1,5 +1,5 @@
 // PinGrid.tsx
-import { useEffect, useRef } from 'preact/hooks';
+import { useEffect, useRef } from 'react';
 import { trackGAEvent } from '@/f/utils/track';
 
 interface Item {

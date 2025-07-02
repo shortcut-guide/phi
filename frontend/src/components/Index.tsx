@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'preact/hooks';
+import { useState, useEffect } from 'react';
 import { PinGrid } from '@/f/components/PinGrid';
 import { ProductDetail } from '@/f/components/ProductDetail';
 

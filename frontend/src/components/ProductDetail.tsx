@@ -1,5 +1,5 @@
 // ProductDetail.tsx
-import { useState } from 'preact/hooks';
+import { useState } from 'react';
 import { trackGAEvent } from "@/f/utils/track";
 import { messages } from "@/f/config/messageConfig";
 import { getLang } from "@/f/utils/lang";

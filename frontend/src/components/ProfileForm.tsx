@@ -1,4 +1,4 @@
-import { useState, useEffect } from "preact/hooks";
+import { useState, useEffect } from "react";
 import { messages } from "@/f/config/messageConfig";
 import { getLang } from "@/f/utils/lang";
 const lang = getLang();
