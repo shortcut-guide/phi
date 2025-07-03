@@ -1,0 +1,17 @@
+---
+// frontend/src/pages/help/index.astro
+import FaqSection from "@/f/components/FaqSection";
+import { pageTitle } from "@/f/config/messageConfig";
+---
+
+<html lang="ja">
+  <head>
+    <title>{pageTitle.faq}</title>
+  </head>
+  <body>
+    <main class="max-w-2xl mx-auto p-6">
+      <h1 class="text-2xl font-bold mb-6">{pageTitle.faq}</h1>
+      <FaqSection client:load />
+    </main>
+  </body>
+</html>
