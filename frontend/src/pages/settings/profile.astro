@@ -2,8 +2,8 @@
 // frontend/src/pages/settings/profile.astro
 import ProfileForm from "@/f/components/ProfileForm.astro";
 import { messages } from "@/f/config/messageConfig";
-import { getLang } from "@/f/utils/lang";
-const lang = getLang();
+import { useLang } from "@/f/utils/LangProvider";
+const lang = useLang();
 const t = messages.profilePage[lang];
 ---
 

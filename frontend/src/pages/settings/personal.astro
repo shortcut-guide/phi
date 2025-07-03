@@ -2,8 +2,8 @@
 // frontend/src/pages/settings/personal.astro
 import SlideMenu from "@/f/components/SlideMenu.astro";
 import { messages } from "@/f/config/messageConfig";
-import { getLang } from "@/f/utils/lang";
-const lang = getLang();
+import { useLang } from "@/f/utils/LangProvider";
+const lang = useLang();
 const t = messages.personalSettingsPage[lang];
 ---
 

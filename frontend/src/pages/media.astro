@@ -2,8 +2,8 @@
 import { Media, Modal, Pagination } from 'accessible-astro-components'
 import DefaultLayout from '../layouts/DefaultLayout.astro'
 import { messages } from "@/f/config/messageConfig";
-import { getLang } from "@/f/utils/lang";
-const lang = getLang();
+import { useLang } from "@/f/utils/LangProvider";
+const lang = useLang();
 const t = messages.mediaPage[lang];
 ---
 

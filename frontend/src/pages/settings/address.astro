@@ -1,8 +1,8 @@
 ---
 import AddressList from "@/f/components/AddressList.astro";
 import { messages } from "@/f/config/messageConfig";
-import { getLang } from "@/f/utils/lang";
-const lang = getLang();
+import { useLang } from "@/f/utils/LangProvider";
+const lang = useLang();
 const t = messages.addressSettingsPage[lang];
 const apiUrl = import.meta.env.PUBLIC_API_BASE_URL;
 
