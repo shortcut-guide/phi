@@ -1369,3 +1369,43 @@ langをブラウザから自動取得して以下を変換
 <html lang="__PLACEHOLDER__" dir="ltr">
 ↓
 <html lang="en" dir="ltr" data-astro-cid-qup72gqn="">
+
+---
+
+# スライドナビゲーション
+```mermaid
+sequenceDiagram
+  participant User
+  participant DOM
+  participant App as SlideNavigator
+  participant Hook as usePathStateWithDirection
+  participant History
+
+  User->>DOM: PushLink click → /page2
+  DOM->>History: pushState("/page2")
+  History->>Hook: popstate
+  Hook->>App: direction = in → transform = translateX(0)
+
+  User->>DOM: スワイプ右→左
+  DOM->>History: history.back()
+  History->>Hook: popstate
+  Hook->>App: direction = out → transform = translateX(100%)
+```
+
+## ヘルプ表示
+```mermaid
+graph TD
+  Load[ページロード]
+  Check[window.innerWidth >= 768]
+  Yes[PC] --> Show[← 戻るボタンを表示]
+  No[スマホ] --> Hide[ヘルプ非表示]
+  Click[← クリック] --> Back[history.back()]
+```
+### 表示フロー（初回のみ）
+```mermaid
+graph TD
+  A[ページロード]
+  B[PC判定] --> C{localStorage.slideHelpShown}
+  C -- 未設定 --> D[showHelp = true, localStorageに記録]
+  C -- 記録済み --> E[showHelp = false]
+```
