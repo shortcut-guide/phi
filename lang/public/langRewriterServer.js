@@ -14,6 +14,9 @@ app.use("/api", (0, http_proxy_middleware_1.createProxyMiddleware)({
     target: "http://localhost:8787",
     changeOrigin: true,
 }));
+app.get(/^(.+)\/index\.html$/, (req, res) => {
+    res.redirect(301, req.params[0] + "/");
+});
 // HTMLファイルの lang 属性を Accept-Language で書き換える
 app.get("*", async (req, res, next) => {
     let urlPath = req.path === "/" ? "/index.html" : req.path;
@@ -23,9 +26,18 @@ app.get("*", async (req, res, next) => {
         urlPath.startsWith('/_astro/')) {
         return next();
     }
-    // URLが .html で終わっていない場合はSPA的に index.html を返す
-    if (!urlPath.endsWith(".html")) {
-        urlPath = "/index.html";
+    const hasExtension = path_1.default.extname(urlPath);
+    if (!hasExtension) {
+        // Try to map to a directory's index.html if available
+        const tryIndex = path_1.default.join(publicDir, urlPath, "index.html");
+        try {
+            await promises_1.default.access(tryIndex);
+            urlPath = path_1.default.join(urlPath, "index.html");
+        }
+        catch {
+            // fallback to root index.html if not found
+            urlPath = "/index.html";
+        }
     }
     try {
         const filePath = path_1.default.join(publicDir, urlPath);

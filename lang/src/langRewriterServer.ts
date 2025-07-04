@@ -15,6 +15,10 @@ app.use(
   })
 );
 
+app.get(/^(.+)\/index\.html$/, (req, res) => {
+  res.redirect(301, req.params[0] + "/");
+});
+
 // HTMLファイルの lang 属性を Accept-Language で書き換える
 app.get("*", async (req, res, next) => {
   let urlPath = req.path === "/" ? "/index.html" : req.path;
@@ -28,9 +32,17 @@ app.get("*", async (req, res, next) => {
     return next();
   }
 
-  // URLが .html で終わっていない場合はSPA的に index.html を返す
-  if (!urlPath.endsWith(".html")) {
-    urlPath = "/index.html";
+  const hasExtension = path.extname(urlPath);
+  if (!hasExtension) {
+    // Try to map to a directory's index.html if available
+    const tryIndex = path.join(publicDir, urlPath, "index.html");
+    try {
+      await fs.access(tryIndex);
+      urlPath = path.join(urlPath, "index.html");
+    } catch {
+      // fallback to root index.html if not found
+      urlPath = "/index.html";
+    }
   }
 
   try {
