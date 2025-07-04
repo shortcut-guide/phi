@@ -1409,3 +1409,30 @@ graph TD
   C -- 未設定 --> D[showHelp = true, localStorageに記録]
   C -- 記録済み --> E[showHelp = false]
 ```
+
+
+# 言語別HTMLキャッシュ × Cloudflare KV
+```mermaid
+flowchart TD
+    subgraph Client
+        BROWSER[ユーザー（ja/en...）]
+    end
+    subgraph Edge
+        WORKER[Cloudflare Worker/Functions]
+        KV[(Cloudflare KV<br>言語別HTML格納)]
+    end
+    subgraph Origin
+        BUILD[SSG/ISRビルドサーバー]
+    end
+
+    BROWSER-->|リクエスト: /ja/xxx|WORKER
+    WORKER-->|GET /ja/xxx|KV
+    KV-->|ヒット: HTML返却|WORKER
+    WORKER-->|HTML返却|BROWSER
+
+    KV-->|ミス: fallback|WORKER
+    WORKER-->|Origin fetch|BUILD
+    BUILD-->|HTML生成→KV書込|KV
+    BUILD-->|HTML返却|WORKER
+    WORKER-->|HTML返却|BROWSER
+```

@@ -1,6 +1,7 @@
 ---
 import { PinGrid } from "@/f/components/PinGrid";
 import { trackGAEvent } from "@/f/utils/track";
+import { generateLangStaticPaths } from '@/f/utils/langs';
 import { messages } from "@/f/config/messageConfig";
 
 const lang = "__MSG_LANG__";
@@ -11,36 +12,39 @@ const t = ((messages.pageListPage as any)[lang]) ?? {
   ogDescription: ""
 };
 
-const apiUrl = import.meta.env.PUBLIC_API_BASE_URL;
-
 export async function getStaticPaths() {
   const limit = 30;
-  let allItems = [];
-  try {
-    const res = await fetch(`${apiUrl}/api/pins`);
-    if (res.status === 404) throw new Error("API returned 404");
-    if (!res.ok) throw new Error(`Failed to fetch pins: ${res.status} ${res.statusText}`);
-    allItems = await res.json();
-  } catch (err) {
-    console.error("🔥 API fetch 失敗:", err);
-  }
-  
-  // API からデータが取得できなかった場合は、1 ページ分（空リスト）を作成
-  if (!allItems.length) {
-    return [{
-      params: { page: "1" },
-      props: { items: [] }
-    }];
-  }
-  
-  const totalPages = Math.ceil(allItems.length / limit);
-  return Array.from({ length: totalPages }, (_, i) => {
-    const page = i + 1;
-    const offset = (page - 1) * limit;
-    return {
-      params: { page: String(page) },
-      props: { items: allItems.slice(offset, offset + limit) }
-    };
+  const apiUrl = import.meta.env.PUBLIC_API_BASE_URL;
+
+  return generateLangStaticPaths(async (lang)=>{
+    let allItems = [];
+    try {
+      const res = await fetch(`${apiUrl}/api/pins`);
+      if (res.status === 404) throw new Error("API returned 404");
+      if (!res.ok) throw new Error(`Failed to fetch pins: ${res.status} ${res.statusText}`);
+      allItems = await res.json();
+    } catch (err) {
+      console.error("🔥 API fetch 失敗:", err);
+    }
+
+    // API からデータが取得できなかった場合は、1 ページ分（空リスト）を作成
+    if (!allItems.length) {
+      return [{
+        params: { page: "1" },
+        props: { items: [] }
+      }];
+    }
+
+    const totalPages = Math.ceil(allItems.length / limit);
+    return Array.from({ length: totalPages }, (_, i) => {
+      const page = i + 1;
+      const offset = (page - 1) * limit;
+      return {
+        params: { lang, page: String(page) },
+        props: { items: allItems.slice(offset, offset + limit) }
+      };
+    });
+
   });
 }
 
