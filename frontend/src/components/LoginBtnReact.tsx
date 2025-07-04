@@ -13,7 +13,6 @@ const paypalAuthUrl = [
   `&redirect_uri=${encodeURIComponent(returnUrl)}`,
   `&locale=${locale}`
 ].join("");
-console.log("PayPal Auth URL", paypalAuthUrl);
 const PaypalLogin: React.FC = () => (
   <div>
     <button

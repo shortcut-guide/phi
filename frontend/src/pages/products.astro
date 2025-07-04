@@ -3,9 +3,9 @@ import DefaultLayout from '@/f/layouts/DefaultLayout.astro'
 import { ProductCard } from '@/f/components/ProductCard';
 import type { Product } from '@/f/types/product';
 import { messages } from "@/f/config/messageConfig";
-import { useLang } from "@/f/utils/LangProvider";
-const lang = useLang();
-const t = messages.products[lang];
+const lang = "__MSG_LANG__";
+const t = ((messages.products as any)[lang]) ?? {};
+
 const apiUrl = import.meta.env.PUBLIC_API_BASE_URL;
 
 let products = [];

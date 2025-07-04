@@ -2,10 +2,9 @@ import React from 'react';
 import { trackGAEvent } from "@/f/utils/track";
 import { Icon } from 'astro-icon/components'
 import { messages } from "@/f/config/messageConfig";
-import { getLang } from "@/f/utils/lang";
 
-const lang = getLang();
-const t = messages.productDetail[lang];
+const lang = "__MSG_LANG__";
+const t = ((messages.productDetail as any)[lang]) ?? {};
 
 type Props = {
   id: string;
@@ -17,7 +16,7 @@ type Props = {
 };
 
 export const ProductCard = ({ id, name, price, imageUrl, description, lang }: Props) => {
-  const t = messages.productCard[lang];
+  const t = ((messages.productCard as any)[lang]) ?? {};
 
   return (
     <div className="rounded-2xl shadow-md p-4 bg-white hover:shadow-lg transition">

@@ -1,10 +1,11 @@
 ---
 import '@/f/assets/scss/globals.scss'
 import { messages } from "@/f/config/messageConfig";
-import { useLang } from "@/f/utils/LangProvider";
-const lang = useLang();
-const t = messages.loginLayout[lang];
-const { title } = Astro.props;
+
+const lang = "__MSG_LANG__";
+const t = ((messages.loginLayout as any)[lang]) ?? {};
+
+const { title = "", description = "" } = Astro.props;
 ---
 
 <html lang="ja" dir="ltr">

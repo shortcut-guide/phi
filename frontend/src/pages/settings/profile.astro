@@ -2,9 +2,9 @@
 // frontend/src/pages/settings/profile.astro
 import ProfileForm from "@/f/components/ProfileForm.astro";
 import { messages } from "@/f/config/messageConfig";
-import { useLang } from "@/f/utils/LangProvider";
-const lang = useLang();
-const t = messages.profilePage[lang];
+
+const lang = "__MSG_LANG__";
+const t = ((messages.profilePage as any)[lang]) ?? {};
 ---
 
 <h1 class="text-xl font-bold">{t.title}</h1>

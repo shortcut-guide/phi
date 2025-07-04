@@ -1,14 +1,13 @@
 ---
 import { Notification } from 'accessible-astro-components'
 import { Icon } from 'astro-icon/components'
-import LoginLayout from '@/f/layouts/LoginLayout.astro'
+import DefaultLayout from '@/f/layouts/DefaultLayout.astro'
 import LoginBtn from '@/f/components/LoginBtn.astro'
 import { messages } from "@/f/config/messageConfig";
-import { useLang } from "@/f/utils/LangProvider";
-const lang = useLang();
-const t = messages.login[lang];
+const lang = "__MSG_LANG__";
+const t = ((messages.login as any)[lang]) ?? {};
 ---
 
-<LoginLayout title={t.title}>
+<DefaultLayout title={t.title}>
   <LoginBtn />
-</LoginLayout>
+</DefaultLayout>

@@ -1,9 +1,8 @@
 ---
 import { paypalClientId } from "@/f/config/paypalConfig";
 import { messages } from "@/f/config/messageConfig";
-import { useLang } from "@/f/utils/LangProvider";
-const lang = useLang();
-const t = messages.cartPage[lang];
+const lang = "__MSG_LANG__";
+const t = ((messages.cartPage as any)[lang]) ?? {};
 --- 
 <html>
   <head>

@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { messages } from "@/f/config/messageConfig";
-import { getLang } from "@/f/utils/lang";
-const lang = getLang();
-const t = messages.profileForm[lang];
+
+const lang = "__MSG_LANG__";
+const t = ((messages.profileForm as any)[lang]) ?? {};
+
 const apiUrl = import.meta.env.PUBLIC_API_BASE_URL;
 export default function ProfileForm() {
   const [nickname, setNickname] = useState("");

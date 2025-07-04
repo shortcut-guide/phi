@@ -1,15 +1,14 @@
 ---
 import DefaultLayout from '@/f/layouts/DefaultLayout.astro'
 import { messages } from "@/f/config/messageConfig";
-import { useLang } from "@/f/utils/LangProvider";
-const lang = useLang();
-const t = messages.notFoundPage[lang];
+const lang = "__MSG_LANG__";
+const t = ((messages.notFoundPage as any)[lang]) ?? {};
 ---
 
 <DefaultLayout title={t.title}>
   <section>
-    <h1>{t.heading}</h1><br>
-    <p class="size-20">{t.description}</p><br>
+    <h1>{t.heading}</h1>
+    <p class="size-20">{t.description}</p>
     <a class="button color-secondary" href="/">{t.back}</a>
   </section>
 </DefaultLayout>

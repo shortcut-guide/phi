@@ -5,13 +5,13 @@ import { DarkMode, SkipLink } from 'accessible-astro-components'
 import { Icon } from 'astro-icon/components'
 import GoogleTag from '@/f/components/googletag';
 import { messages } from "@/f/config/messageConfig";
-import { useLang } from "@/f/utils/LangProvider";
 
 import type { on } from 'events';
 
-const lang = useLang();
-const t = messages.loginLayout[lang];
-const { title, description } = Astro.props;
+const lang = "__MSG_LANG__";
+const t = ((messages.DefaultLayout as any)[lang]) ?? {};
+
+const { title = "", description = "" } = Astro.props;
 ---
 
 <html lang="__PLACEHOLDER__" dir="ltr">

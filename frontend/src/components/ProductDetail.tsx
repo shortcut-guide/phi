@@ -2,10 +2,9 @@
 import { useState } from 'react';
 import { trackGAEvent } from "@/f/utils/track";
 import { messages } from "@/f/config/messageConfig";
-import { getLang } from "@/f/utils/lang";
 
-const lang = getLang();
-const t = messages.productDetail[lang];
+const lang = "__MSG_LANG__";
+const t = ((messages.productDetail as any)[lang]) ?? {};
 
 interface Product {
   id: string;

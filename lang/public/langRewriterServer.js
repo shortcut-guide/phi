@@ -48,6 +48,8 @@ app.get("*", async (req, res, next) => {
             const replaced = htmlTag.replace(/lang=['"]__PLACEHOLDER__['"]/, `lang="${lang}"`);
             return replaced;
         });
+        // Astro内の __MSG_LANG__ を書き換え
+        html = html.replace(/__MSG_LANG__/g, lang);
         res.setHeader("Content-Type", "text/html");
         res.send(html);
     }

@@ -3,9 +3,8 @@ import { Modal } from 'accessible-astro-components'
 import DefaultLayout from '@/f/layouts/DefaultLayout.astro'
 import EmptyState from '@/f/components/EmptyState.astro'
 import { messages } from "@/f/config/messageConfig";
-import { useLang } from "@/f/utils/LangProvider";
-const lang = useLang();
-const t = messages.messagesPage[lang];
+const lang = "__MSG_LANG__";
+const t = ((messages.messagesPage as any)[lang]) ?? {};
 ---
 
 <DefaultLayout title={t.title}>

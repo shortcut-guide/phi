@@ -599,5 +599,19 @@ export const messages = {
     en: {
       title: 'Profile',
     }
+  },
+  help:{
+    ja:{
+      title: 'よくある質問',
+      ErrorFaqNotFound: 'よくある質問が見つかりません',
+      ErrorFaqSearch: 'よくある質問検索に失敗しました',
+      ErrorFaqSuggest: 'よくある質問サジェスト取得に失敗しました'
+    },
+    en: {
+      title: 'FAQ',
+      ErrorFaqNotFound: 'FAQ not found',
+      ErrorFaqSearch: 'Failed to search FAQs',
+      ErrorFaqSuggest: 'Failed to fetch FAQ suggestions'
+    }
   }
 };

@@ -1,9 +1,10 @@
 ---
 import AddressList from "@/f/components/AddressList.astro";
 import { messages } from "@/f/config/messageConfig";
-import { useLang } from "@/f/utils/LangProvider";
-const lang = useLang();
-const t = messages.addressSettingsPage[lang];
+
+const lang = "__MSG_LANG__";
+const t = ((messages.addressSettingsPage as any)[lang]) ?? {};
+
 const apiUrl = import.meta.env.PUBLIC_API_BASE_URL;
 
 let profile = [];

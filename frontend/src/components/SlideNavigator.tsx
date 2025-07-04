@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from 'react';
-import { usePathStateWithDirection } from '../hooks/usePathStateWithDirection';
-import { PushLink } from './PushLink';
+import { usePathStateWithDirection } from '@/f/utils/usePathStateWithDirection';
+import { PushLink } from '@/f/components/PushLink';
 
 export const SlideNavigator = () => {
   const { transformStyle, transitionClass } = usePathStateWithDirection();

@@ -2,10 +2,9 @@ import { useState, useEffect } from "react";
 import type { PuppeteerItem } from "@/f/types/puppeteer";
 import clsx from "clsx";
 import { messages } from "@/f/config/messageConfig";
-import { getLang } from "@/f/utils/lang";
 
-const lang = getLang();
-const t = messages.puppeteerPage[lang];
+const lang = "__MSG_LANG__";
+const t = ((messages.puppeteerPage as any)[lang]) ?? {};
 
 const PUPList = () => {
     const [data, setData] = useState<PuppeteerItem[]>([]);

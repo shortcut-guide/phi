@@ -1,9 +1,9 @@
 ---
 import DefaultLayout from '@/f/layouts/DefaultLayout.astro'
 import { messages } from "@/f/config/messageConfig";
-import { useLang } from "@/f/utils/LangProvider";
-const lang = useLang();
-const t = messages.settings[lang];
+
+const lang = "__MSG_LANG__";
+const t = ((messages.settings as any)[lang]) ?? {};
 ---
 
 <DefaultLayout title={t.title}>

@@ -1,5 +1,5 @@
 // frontend/src/components/PushLink.tsx
-import { FC } from 'react';
+import type { FC } from 'react';
 import { pushState } from '../utils/navigation';
 
 type PushLinkProps = {
