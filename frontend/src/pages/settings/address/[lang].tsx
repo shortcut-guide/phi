@@ -1,27 +1,48 @@
----
-import AddressList from "@/f/components/AddressList.astro";
+import { GetServerSideProps } from "next";
+import AddressList from "@/f/components/AddressList";
 import { messages } from "@/f/config/messageConfig";
 
-const lang = "__MSG_LANG__";
-const t = ((messages.addressSettingsPage as any)[lang]) ?? {};
+type Props = {
+  lang: string;
+  profile: any[];
+};
 
-const apiUrl = import.meta.env.PUBLIC_API_BASE_URL;
+const AddressSettingsPage = ({ lang, profile }: Props) => {
+  const t = (messages.addressSettingsPage as any)[lang] ?? {};
 
-let profile = [];
+  return (
+    <div>
+      <h1 className="text-xl font-bold mb-4">{t.title}</h1>
+      {Array.isArray(profile) && profile.length > 0 ? (
+        <AddressList profile={profile} lang={lang} />
+      ) : (
+        <p>登録されていません。</p>
+      )}
+    </div>
+  );
+};
 
-try {
-  const res = await fetch(`${apiUrl}/api/profile`);
-  if (!res.ok) {
-    throw new Error(`APIエラー: ${res.status}\n`);
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const lang = typeof context.params?.lang === "string" ? context.params.lang : "ja";
+  const apiUrl = process.env.PUBLIC_API_BASE_URL || "";
+  let profile: any[] = [];
+
+  try {
+    const res = await fetch(`${apiUrl}/api/profile`);
+    if (!res.ok) {
+      throw new Error(`APIエラー: ${res.status}`);
+    }
+    profile = await res.json();
+  } catch (err) {
+    console.error("🔥 API fetch 失敗:", err);
   }
-  profile = await res.json();
-} catch (err) {
-  console.error("🔥 API fetch 失敗:", err);
-}
----
 
-{Array.isArray(profile) && profile.length > 0 ? (
-  <AddressList profile={profile} lang={lang} />
-) : (
-  <p>登録されていません。</p>
-)}
+  return {
+    props: {
+      lang,
+      profile,
+    },
+  };
+};
+
+export default AddressSettingsPage;

@@ -1,5 +1,4 @@
----
-import DefaultLayout from '@/f/layouts/DefaultLayout.astro'
+import DefaultLayout from '@/f/layouts/DefaultLayout';
 import { messages } from "@/f/config/messageConfig";
 
 type TermsSection = {
@@ -7,20 +6,29 @@ type TermsSection = {
   content: string;
 };
 
-const lang = "__MSG_LANG__";
-const t = ((messages.terms as any)[lang]) ?? {};
----
-<DefaultLayout title={t.title}>
-  <main class="max-w-3xl mx-auto px-4 py-12 text-neutral-800">
-    <h1 class="text-3xl font-bold mb-8">{t.title}</h1>
+type Props = {
+  lang: string;
+};
 
-    {((t.sections ?? []) as TermsSection[]).map((section) => (
-      <section class="mt-10 space-y-4">
-        <h2 class="text-2xl font-semibold">{section.heading}</h2>
-        <p>{section.content}</p>
-      </section>
-    ))}
+const TermsPage = ({ lang }: Props) => {
+  const t = (messages.terms as any)[lang] ?? {};
 
-    <p class="text-sm text-neutral-500 mt-12">{t.lastUpdated}</p>
-  </main>
-</DefaultLayout>
+  return (
+    <DefaultLayout title={t.title}>
+      <main className="max-w-3xl mx-auto px-4 py-12 text-neutral-800">
+        <h1 className="text-3xl font-bold mb-8">{t.title}</h1>
+
+        {((t.sections ?? []) as TermsSection[]).map((section, idx) => (
+          <section className="mt-10 space-y-4" key={idx}>
+            <h2 className="text-2xl font-semibold">{section.heading}</h2>
+            <p>{section.content}</p>
+          </section>
+        ))}
+
+        <p className="text-sm text-neutral-500 mt-12">{t.lastUpdated}</p>
+      </main>
+    </DefaultLayout>
+  );
+};
+
+export default TermsPage;

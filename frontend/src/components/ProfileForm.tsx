@@ -1,6 +1,7 @@
----
-// filepath: /frontend/src/components/ProfileForm.astro
-import ProfileFormComponent from '@/f/components/ProfileForm.tsx';
----
+import ProfileFormComponent from '@/f/components/ProfileForm';
 
-<ProfileFormComponent client:load />
+const ProfileForm = () => {
+  return <ProfileFormComponent />;
+};
+
+export default ProfileForm;

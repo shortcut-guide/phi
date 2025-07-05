@@ -1,32 +1,46 @@
----
-const { selectedMethod } = Astro.props;
+import React from "react";
 import { messages } from "@/f/config/messageConfig";
 
-const lang = "__MSG_LANG__";
-const t = ((messages.paymentMethodList as any)[lang]) ?? {};
+type Props = {
+  lang: string;
+  selectedMethod: string;
+};
 
-const paymentOptions = [
-  {
-    id: "paypal",
-    label: t.paypal,
-    description: t.paypalDescription
-  }
-];
----
+const PaymentMethodList: React.FC<Props> = ({ lang, selectedMethod }) => {
+  const t = (messages.paymentMethodList as any)[lang] ?? {};
 
-<section class="mb-6">
-  <h2 class="font-bold">{msg.postpayCredit}</h2>
-  <ul class="mt-2 space-y-4">
-    {paymentOptions.map(opt => (
-      <li>
-        <label class="flex items-start gap-2">
-          <input type="radio" name="payment" value={opt.id} checked={selectedMethod === opt.id} />
-          <div>
-            <p class="font-semibold">{opt.label}</p>
-            <p class="text-sm whitespace-pre-line">{opt.description}</p>
-          </div>
-        </label>
-      </li>
-    ))}
-  </ul>
-</section>
+  const paymentOptions = [
+    {
+      id: "paypal",
+      label: t.paypal,
+      description: t.paypalDescription
+    }
+  ];
+
+  return (
+    <section className="mb-6">
+      <h2 className="font-bold">{t.postpayCredit}</h2>
+      <ul className="mt-2 space-y-4">
+        {paymentOptions.map(opt => (
+          <li key={opt.id}>
+            <label className="flex items-start gap-2">
+              <input
+                type="radio"
+                name="payment"
+                value={opt.id}
+                checked={selectedMethod === opt.id}
+                readOnly
+              />
+              <div>
+                <p className="font-semibold">{opt.label}</p>
+                <p className="text-sm whitespace-pre-line">{opt.description}</p>
+              </div>
+            </label>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+};
+
+export default PaymentMethodList;

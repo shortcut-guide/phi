@@ -1,13 +1,19 @@
----
-import { Notification } from 'accessible-astro-components'
-import { Icon } from 'astro-icon/components'
-import DefaultLayout from '@/f/layouts/DefaultLayout.astro'
-import LoginBtn from '@/f/components/LoginBtn.astro'
+import DefaultLayout from '@/f/layouts/DefaultLayout';
+import LoginBtn from '@/f/components/LoginBtn';
 import { messages } from "@/f/config/messageConfig";
-const lang = "__MSG_LANG__";
-const t = ((messages.login as any)[lang]) ?? {};
----
 
-<DefaultLayout title={t.title}>
-  <LoginBtn />
-</DefaultLayout>
+type Props = {
+  lang: string;
+};
+
+const LoginPage = ({ lang }: Props) => {
+  const t = (messages.login as any)[lang] ?? {};
+
+  return (
+    <DefaultLayout title={t.title}>
+      <LoginBtn />
+    </DefaultLayout>
+  );
+};
+
+export default LoginPage;

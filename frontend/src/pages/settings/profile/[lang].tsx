@@ -1,11 +1,19 @@
----
-// frontend/src/pages/settings/profile.astro
-import ProfileForm from "@/f/components/ProfileForm.astro";
+import ProfileForm from "@/f/components/ProfileForm";
 import { messages } from "@/f/config/messageConfig";
 
-const lang = "__MSG_LANG__";
-const t = ((messages.profilePage as any)[lang]) ?? {};
----
+type Props = {
+  lang: string;
+};
 
-<h1 class="text-xl font-bold">{t.title}</h1>
-<ProfileForm />
+const ProfilePage = ({ lang }: Props) => {
+  const t = (messages.profilePage as any)[lang] ?? {};
+
+  return (
+    <div>
+      <h1 className="text-xl font-bold">{t.title}</h1>
+      <ProfileForm />
+    </div>
+  );
+};
+
+export default ProfilePage;

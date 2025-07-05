@@ -1,6 +1,9 @@
----
-import PaypalLogin from '@/f/components/LoginBtnReact.tsx';
-const clientId = import.meta.env.PUBLIC_PAYPAL_CLIENT_ID;
----
+import PaypalLogin from '@/f/components/LoginBtnReact';
 
-<PaypalLogin client:only="react" />
+const clientId = process.env.PUBLIC_PAYPAL_CLIENT_ID;
+
+const PaypalLoginWrapper = () => {
+  return <PaypalLogin clientId={clientId} />;
+};
+
+export default PaypalLoginWrapper;
