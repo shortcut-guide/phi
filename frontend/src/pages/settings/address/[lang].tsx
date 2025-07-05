@@ -1,4 +1,4 @@
-import { GetServerSideProps } from "next";
+import type { GetServerSideProps } from "next";
 import AddressList from "@/f/components/AddressList";
 import { messages } from "@/f/config/messageConfig";
 
@@ -14,7 +14,7 @@ const AddressSettingsPage = ({ lang, profile }: Props) => {
     <div>
       <h1 className="text-xl font-bold mb-4">{t.title}</h1>
       {Array.isArray(profile) && profile.length > 0 ? (
-        <AddressList profile={profile} lang={lang} />
+        <AddressList addresses={profile} lang={lang} t={t} />
       ) : (
         <p>登録されていません。</p>
       )}

@@ -1,4 +1,4 @@
-import { GetStaticPaths, GetStaticProps } from "next";
+import type { GetStaticPaths, GetStaticProps } from "next";
 import DefaultLayout from '@/f/layouts/DefaultLayout';
 import { messages } from "@/f/config/messageConfig";
 
@@ -12,17 +12,19 @@ type Props = {
   lang: string;
 };
 
-const PrivacyPolicyPage = ({ t }: Props) => {
+const PrivacyPolicyPage = ({ lang }: Props) => {
+  const t = (messages.messagesPage as any)[lang] ?? {};
+
   return (
-    <DefaultLayout title="Privacy-policy |Phis">
+    <DefaultLayout lang={lang} title={t.title}>
       <div>
         <h1 className="text-4xl font-bold">{t.heading}</h1>
         <p>{t.description}</p>
         {t.sections &&
-          Object.entries(t.sections).map(([key, section]: [string, Section]) => (
+          Object.entries(t.sections).map(([key, section]) => (
             <section key={key}>
-              <h2 className="text-2xl font-semibold">{section.title}</h2>
-              <p>{section.description}</p>
+              <h2 className="text-2xl font-semibold">{(section as Section).title}</h2>
+              <p>{(section as Section).description}</p>
             </section>
           ))}
       </div>

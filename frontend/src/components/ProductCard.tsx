@@ -12,7 +12,7 @@ type Props = {
   price: number;
   imageUrl: string;
   description: string;
-  lang: 'en' | 'ja';
+  lang: string;
 };
 
 export const ProductCard = ({ id, name, price, imageUrl, description, lang }: Props) => {

@@ -1,4 +1,4 @@
-import { GetServerSideProps } from "next";
+import type { GetServerSideProps } from "next";
 import DefaultLayout from '@/f/layouts/DefaultLayout';
 import { ProductCard } from '@/f/components/ProductCard';
 import type { Product } from '@/f/types/product';
@@ -13,7 +13,7 @@ const ProductsPage = ({ lang, products }: Props) => {
   const t = (messages.products as any)[lang] ?? {};
 
   return (
-    <DefaultLayout title={t.title}>
+    <DefaultLayout lang={lang} title={t.title}>
       <main className="max-w-3xl mx-auto px-4 py-12 text-neutral-800">
         <h1 className="text-2xl font-bold mb-6">{t.title}</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">

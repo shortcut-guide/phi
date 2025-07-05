@@ -10,7 +10,7 @@ const LoginPage = ({ lang }: Props) => {
   const t = (messages.login as any)[lang] ?? {};
 
   return (
-    <DefaultLayout title={t.title}>
+    <DefaultLayout lang={lang} title={t.title}>
       <LoginBtn />
     </DefaultLayout>
   );

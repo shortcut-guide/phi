@@ -1,50 +1,21 @@
+import type { GetServerSideProps } from "next";
 import Head from "next/head";
-import { GetStaticPaths, GetStaticProps } from "next";
+import { useEffect } from "react";
 import { PinGrid } from "@/f/components/PinGrid";
 import { trackGAEvent } from "@/f/utils/track";
+import { messages } from "@/f/config/messageConfig";
 
-
-// SSGで生成するページ（多言語＆ページネーション）
-export const getStaticPaths: GetStaticPaths = async () => {
-  const limit = 30;
-  const apiUrl = process.env.PUBLIC_API_BASE_URL;
-  const langs = Object.keys(messages.pageListPage);
-
-  let allItems: any[] = [];
-  try {
-    const res = await fetch(`${apiUrl}/api/pins`);
-    if (res.status === 404) throw new Error("API returned 404");
-    if (!res.ok) throw new Error(`Failed to fetch pins: ${res.status} ${res.statusText}`);
-    allItems = await res.json();
-  } catch (err) {
-    console.error("🔥 API fetch 失敗:", err);
-  }
-
-  // 取得失敗時は各言語1ページ分空リスト
-  if (!allItems.length) {
-    return {
-      paths: langs.map(lang => ({
-        params: { lang, page: "1" }
-      })),
-      fallback: false,
-    };
-  }
-
-  // 多言語×ページネーションでpaths作成
-  const paths: { params: { lang: string; page: string } }[] = [];
-  for (const lang of langs) {
-    const totalPages = Math.ceil(allItems.length / limit);
-    for (let i = 0; i < totalPages; i++) {
-      paths.push({ params: { lang, page: String(i + 1) } });
-    }
-  }
-  return { paths, fallback: false };
+type Props = {
+  lang: string;
+  page: number;
+  items: any[];
+  t: any;
 };
 
+const limit = 30;
 
-
-export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const limit = 30;
+export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
+  const { params, req } = ctx;
   const apiUrl = process.env.PUBLIC_API_BASE_URL;
   const lang = typeof params?.lang === "string" ? params.lang : "ja";
   const page = Number(params?.page || 1);
@@ -62,34 +33,30 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const offset = (page - 1) * limit;
   const items = allItems.slice(offset, offset + limit);
 
-  return {
-    props: {
-      lang,
-      page,
-      items,
-    },
-  };
-};
-
-type Props = {
-  lang: string;
-  page: number;
-  items: any[];
-};
-
-const PageList = ({ lang, page, items }: Props) => {
+  // 多言語テキスト
   const t = (messages.pageListPage as any)[lang] ?? {
     title: (page: number) => "",
     ogTitle: (page: number) => "",
     description: (page: number) => "",
     ogDescription: "",
   };
+
+  return {
+    props: {
+      lang,
+      page,
+      items,
+      t,
+    },
+  };
+};
+
+const PageList = ({ lang, page, items, t }: Props) => {
   const first = items?.[0];
   const ogImage = first?.imageUrl || "/default-og.jpg";
   const ogTitle = t.ogTitle(page);
   const ogDescription = t.ogDescription;
 
-  // ページビュートラッキング（初回のみ）
   useEffect(() => {
     trackGAEvent("scroll_page", { page: { page } });
   }, [page]);
@@ -133,14 +100,3 @@ const PageList = ({ lang, page, items }: Props) => {
 };
 
 export default PageList;
-
-
-import React from "react";
-import Head from "next/head";
-import PinGrid from "@/f/components/PinGrid";
-import { withLangMessagesSSR } from "@/f/utils/withLangSSR";
-export const getServerSideProps = withLangMessagesSSR("pageListPage");
-
-const PageListPage = ({ lang, t, page, items }: { lang: string; t: any; page: number; items: any[] }) => (
-
-);

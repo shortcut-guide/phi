@@ -1,4 +1,5 @@
-import React, { ReactNode } from "react";
+import React from "react";
+import type { ReactNode } from "react";
 import DefaultLayout from '@/f/layouts/DefaultLayout';
 import Index from '@/f/components/Index';
 import { withLangMessagesSSR } from "@/f/utils/withLangSSR";

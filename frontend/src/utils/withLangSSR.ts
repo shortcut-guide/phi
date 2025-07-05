@@ -1,5 +1,5 @@
 // src/utils/withLangSSR.ts
-import { GetServerSideProps, GetServerSidePropsContext } from "next";
+import type { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { detectLang } from "@/f/utils/langs";
 import { messages } from "@/f/config/messageConfig";
 

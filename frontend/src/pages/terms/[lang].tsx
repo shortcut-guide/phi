@@ -14,7 +14,7 @@ const TermsPage = ({ lang }: Props) => {
   const t = (messages.terms as any)[lang] ?? {};
 
   return (
-    <DefaultLayout title={t.title}>
+    <DefaultLayout lang={lang} title={t.title}>
       <main className="max-w-3xl mx-auto px-4 py-12 text-neutral-800">
         <h1 className="text-3xl font-bold mb-8">{t.title}</h1>
 

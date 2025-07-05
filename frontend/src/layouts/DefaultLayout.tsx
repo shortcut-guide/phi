@@ -1,5 +1,6 @@
 import Head from "next/head";
-import React, { ReactNode } from "react";
+import React from "react";
+import type { ReactNode } from "react";
 import '@/assets/scss/globals.scss';
 import Navigation from '@/f/components/Navigation';
 import GoogleTag from '@/f/components/googletag';
