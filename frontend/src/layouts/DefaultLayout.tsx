@@ -1,24 +1,21 @@
+import Head from "next/head";
+import React, { ReactNode } from "react";
 import '@/assets/scss/globals.scss';
 import Navigation from '@/f/components/Navigation';
-import { DarkMode, SkipLink } from 'accessible-astro-components';
-import { Icon } from 'astro-icon/components';
 import GoogleTag from '@/f/components/googletag';
-import { messages } from "@/f/config/messageConfig";
-import Head from "next/head";
-import { ReactNode } from "react";
+import { withLangMessagesSSR } from "@/f/utils/withLangSSR";
+export const getServerSideProps = withLangMessagesSSR("DefaultLayout");
 
 type Props = {
   lang: string;
+  t?: any;
   title?: string;
   description?: string;
   children: ReactNode;
 };
 
-const DefaultLayout = ({ lang, title = "", description = "", children }: Props) => {
-  const t = (messages.DefaultLayout as any)[lang] ?? {};
-
-  return (
-    <html lang={lang} dir="ltr">
+const DefaultLayout = ({ lang, t, title = "", description = "", children }: Props) => (
+  <html lang={lang} dir="ltr">
       <Head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -112,7 +109,6 @@ const DefaultLayout = ({ lang, title = "", description = "", children }: Props) 
         {/* 必要なSCSS内容はSCSSファイル側に移動推奨 */}
       </body>
     </html>
-  );
-};
+);
 
 export default DefaultLayout;

@@ -2,7 +2,7 @@ import Head from "next/head";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { PinGrid } from "@/f/components/PinGrid";
 import { trackGAEvent } from "@/f/utils/track";
-import { messages } from "@/f/config/messageConfig";
+
 
 // SSGで生成するページ（多言語＆ページネーション）
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -40,6 +40,8 @@ export const getStaticPaths: GetStaticPaths = async () => {
   }
   return { paths, fallback: false };
 };
+
+
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const limit = 30;
@@ -131,3 +133,14 @@ const PageList = ({ lang, page, items }: Props) => {
 };
 
 export default PageList;
+
+
+import React from "react";
+import Head from "next/head";
+import PinGrid from "@/f/components/PinGrid";
+import { withLangMessagesSSR } from "@/f/utils/withLangSSR";
+export const getServerSideProps = withLangMessagesSSR("pageListPage");
+
+const PageListPage = ({ lang, t, page, items }: { lang: string; t: any; page: number; items: any[] }) => (
+
+);

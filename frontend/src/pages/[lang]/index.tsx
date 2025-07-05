@@ -1,9 +1,17 @@
+import React, { ReactNode } from "react";
 import DefaultLayout from '@/f/layouts/DefaultLayout';
-import IndexPage from '@/f/components/IndexPage'; // 拡張子.tsxはimportに不要
+import Index from '@/f/components/Index';
+import { withLangMessagesSSR } from "@/f/utils/withLangSSR";
+export const getServerSideProps = withLangMessagesSSR("index");
 
-const Home = () => (
-  <DefaultLayout title="Phis">
-    <IndexPage />
+type Props = {
+  lang: string;
+  t?: any;
+}
+
+const Home = ({ lang, t }: Props) => (
+  <DefaultLayout lang={lang} title={t.title}>
+    <Index />
   </DefaultLayout>
 );
 

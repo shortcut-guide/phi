@@ -1,4 +1,12 @@
 export const messages = {
+  index:{
+    ja:{
+      title: "phis"
+    },
+    en:{
+      title: "phis"
+    }
+  },
   loginForm: {
     ja: {
       title: "ログイン",

@@ -1,5 +1,7 @@
 // frontend/src/components/search/SearchBar.tsx
 import { useState, useEffect } from 'react';
+import { withLangMessagesSSR } from "@/f/utils/withLangSSR";
+export const getServerSideProps = withLangMessagesSSR("index");
 import { fetchSearchResults, fetchSuggestions } from '@/b/api/searchClient';
 import { useSearchModel } from '@/b/models/useSearchModel';
 
