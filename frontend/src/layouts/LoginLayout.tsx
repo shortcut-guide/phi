@@ -21,7 +21,7 @@ const LoginLayout = ({ lang, title = "", description = "", children }: Props) =>
         <meta httpEquiv="X-UA-Compatible" content="ie=edge" />
 
         {/* favicon */}
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="icon" type="image/svg+xml" href="/assets/img/favicon.svg" />
 
         {/* google fonts */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />

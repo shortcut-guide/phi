@@ -93,6 +93,16 @@ export default {
       ).all();
       return json(results);
     }
+    if (request.method === "GET" && url.pathname === "/searchlogs") {
+      const { results } = await env.SEARCHLOGS_DB.prepare(
+        `SELECT id, keyword, user_id, clicked_product_id, created_at
+         FROM search_logs
+         WHERE account_id = ?
+         ORDER BY created_at DESC
+         LIMIT 100`
+      ).bind(account_id).all();
+      return json(results);
+    }
 
     return new Response("Not found", { status: 404 });
   }

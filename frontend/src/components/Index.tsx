@@ -1,8 +1,15 @@
 import { useState, useEffect } from 'react';
 import { PinGrid } from '@/f/components/PinGrid';
 import { ProductDetail } from '@/f/components/ProductDetail';
+import { messages } from "@/f/config/messageConfig";
 
-export default function Index() {
+type Props = {
+  lang: string;
+};
+
+const Index =({ lang }: Props) => {
+  const t = (messages.index as any)[lang] ?? {};
+
   const [items, setItems] = useState<any[]>([]);
   const [page, setPage] = useState(1);
   const [selected, setSelected] = useState(null);
@@ -77,3 +84,5 @@ export default function Index() {
     </div>
   );
 }
+
+export default Index;

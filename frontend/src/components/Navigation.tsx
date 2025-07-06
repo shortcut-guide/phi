@@ -3,10 +3,7 @@ import Logo from '@/f/components/Logo';
 
 const MainNavigation = () => (
   <div id="main-navigation">
-    <nav
-      id="vertical-nav"
-      className="fixed flex flex-col w-[15%] h-screen overflow-y-auto overflow-x-hidden border-r border-gray-200 bg-white z-5"
-    >
+    <nav id="vertical-nav" className="fixed flex flex-col w-[15%] h-screen overflow-y-auto overflow-x-hidden border-r border-gray-200 bg-white z-5">
       <div className="h-full py-5 flex items-center justify-between flex-col box-border">
         <div className="flex items-center flex-col box-border">
           <ul className="flex flex-col gap-y-10">

@@ -8,7 +8,7 @@ interface Props {
   className?: string;
 }
 
-const Picture: React.FC<Props> = ({ src, alt, width, height, className }) => {
+const Picture = ({ src, alt, width, height, className }: Props) => {
   const baseName = src?.replace(/\.(webp|png|svg)$/i, '');
 
   return (

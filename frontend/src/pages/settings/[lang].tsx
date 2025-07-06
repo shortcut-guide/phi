@@ -9,7 +9,7 @@ const SettingsPage = ({ lang }: Props) => {
   const t = (messages.settings as any)[lang] ?? {};
 
   return (
-    <DefaultLayout title={t.title}>
+    <DefaultLayout lang={lang} title={t.title}>
       <section>
         <h1>{t.heading}</h1>
         <br />

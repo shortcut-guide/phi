@@ -1,5 +1,4 @@
----
-// frontend/src/components/search/SearchBar
 import { SearchBar as SearchBarComponent } from '@/f/components/search/SearchBar';
----
-<SearchBarComponent />
+export default function SearchBar() {
+  return <SearchBarComponent />;
+}

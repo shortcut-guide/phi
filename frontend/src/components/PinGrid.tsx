@@ -65,21 +65,9 @@ export function PinGrid({ items, loadMore, onSelect }: Readonly<Props>) {
     <>
       <div className="columns-3 sm:columns-4 md:columns-5 lg:columns-6 xl:columns-7 gap-4 p-4">
         {items.map((item) => (
-          <button
-            key={item.id}
-            data-pin
-            type="button"
-            className="mb-4 break-inside-avoid cursor-pointer w-full text-left bg-transparent border-none p-0"
-            onClick={() => handleClick(item)}
-            aria-label={`Select ${item.title}`}
-          >
+          <button key={item.id} data-pin type="button" className="mb-4 break-inside-avoid cursor-pointer w-full text-left bg-transparent border-none p-0" onClick={() => handleClick(item)} aria-label={`Select ${item.title}`}>
             <div className="block">
-              <img
-                src={item.imageUrl}
-                alt={item.title}
-                loading="lazy"
-                className="w-full rounded-lg shadow-md"
-              />
+              <img src={item.imageUrl} alt={item.title} loading="lazy" className="w-full rounded-lg shadow-md" />
               <div className="mt-1 text-sm text-center text-gray-700">{item.title}</div>
             </div>
           </button>

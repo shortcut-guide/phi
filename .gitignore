@@ -36,3 +36,5 @@ frontend/public/*
 
 # sqlite cache
 .wrangler/
+
+frontend/.next/*

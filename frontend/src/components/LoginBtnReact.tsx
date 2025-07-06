@@ -1,9 +1,13 @@
 import React from "react";
 
-const clientId = import.meta.env.PUBLIC_PAYPAL_CLIENT_ID;
-const returnUrl = import.meta.env.PUBLIC_REDIRECT_URI;
+const clientId = process.env.PUBLIC_PAYPAL_CLIENT_ID;
+const returnUrl = process.env.PUBLIC_REDIRECT_URI;
 const scope = "openid profile email";
 const locale = "ja_JP";
+
+type PaypalLoginProps = {
+  clientId: string;
+};
 
 const paypalAuthUrl = [
   "https://www.sandbox.paypal.com/signin/authorize",
@@ -13,19 +17,11 @@ const paypalAuthUrl = [
   `&redirect_uri=${encodeURIComponent(returnUrl)}`,
   `&locale=${locale}`
 ].join("");
-const PaypalLogin: React.FC = () => (
+
+const PaypalLogin: React.FC<PaypalLoginProps> = ({ clientId }) => (
   <div>
     <button
-      style={{
-        background: "#ffc439",
-        border: "none",
-        borderRadius: "4px",
-        padding: "12px 24px",
-        fontSize: "16px",
-        fontWeight: "bold",
-        color: "#222",
-        cursor: "pointer"
-      }}
+      style={{ background: "#ffc439", border: "none", borderRadius: "4px", padding: "12px 24px", fontSize: "16px", fontWeight: "bold", color: "#222", cursor: "pointer"}}
       onClick={() => window.location.href = paypalAuthUrl}
     >
       PayPalでログイン

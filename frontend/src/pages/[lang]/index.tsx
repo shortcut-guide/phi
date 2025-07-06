@@ -12,7 +12,7 @@ type Props = {
 
 const Home = ({ lang, t }: Props) => (
   <DefaultLayout lang={lang} title={t.title}>
-    <Index />
+    <Index lang={lang} />
   </DefaultLayout>
 );
 

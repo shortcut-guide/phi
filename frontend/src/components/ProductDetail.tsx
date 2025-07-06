@@ -1,10 +1,8 @@
 // ProductDetail.tsx
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { trackGAEvent } from "@/f/utils/track";
 import { messages } from "@/f/config/messageConfig";
-
-const lang = "__MSG_LANG__";
-const t = ((messages.productDetail as any)[lang]) ?? {};
 
 interface Product {
   id: string;
@@ -14,7 +12,7 @@ interface Product {
   diff: number;
 }
 
-interface Props {
+type Props = {
   product: Product | null;
   onExpand: () => void;
   onClose: () => void;
@@ -22,6 +20,11 @@ interface Props {
 
 export function ProductDetail({ product, onExpand, onClose }: Props) {
   if (!product) return null;
+
+  const router = useRouter();
+  const { lang } = router.query;
+  const langValue = Array.isArray(lang) ? lang[0] : (lang ?? "ja");
+  const t = ((messages.productDetail as any)[langValue]) ?? {};
   
   trackGAEvent("product_expand", {
     product_id: product.id,
@@ -45,7 +48,7 @@ export function ProductDetail({ product, onExpand, onClose }: Props) {
       </div>
 
       <div className="flex justify-between mt-4 gap-2">
-        <button className="text-sm text-blue-700 underline" onClick={() => location.href = `/products/${product.id}`}>詳細ページ</button>
+        <button className="text-sm text-blue-700 underline" onClick={() => location.href = `/products/${product.id}`}>${t.detail}</button>
         <button className="text-sm text-green-600 underline" onClick={onExpand}>{t.expand}</button>
       </div>
     </div>

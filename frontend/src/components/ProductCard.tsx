@@ -1,10 +1,6 @@
 import React from 'react';
 import { trackGAEvent } from "@/f/utils/track";
-import { Icon } from 'astro-icon/components'
 import { messages } from "@/f/config/messageConfig";
-
-const lang = "__MSG_LANG__";
-const t = ((messages.productDetail as any)[lang]) ?? {};
 
 type Props = {
   id: string;
@@ -24,10 +20,7 @@ export const ProductCard = ({ id, name, price, imageUrl, description, lang }: Pr
       <h3 className="text-lg font-semibold">{name}</h3>
       <p className="text-gray-600">{description}</p>
       <p className="text-indigo-600 font-bold mt-2">{t.currency}{price.toLocaleString()}</p>
-      <a href={`/product/${id}`} className="text-sm text-blue-500 hover:underline" onClick={() => trackGAEvent("product_click", {
-        product_id: id,
-        productname: name
-      })}>
+      <a href={`/product/${id}`} className="text-sm text-blue-500 hover:underline" onClick={() => trackGAEvent("product_click", { product_id: id, productname: name })}>
         {t.detail}
       </a>
     </div>

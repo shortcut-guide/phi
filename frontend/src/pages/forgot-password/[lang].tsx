@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Icon } from 'astro-icon/components'; // React用で存在すればこのまま
 import DefaultLayout from '@/f/layouts/DefaultLayout';
 import { messages } from "@/f/config/messageConfig";
 
@@ -31,11 +30,10 @@ const ForgotPasswordPage = ({ lang }: Props) => {
   };
 
   return (
-    <DefaultLayout title={t.title}>
+    <DefaultLayout lang={lang} title={t.title}>
       <section className="bg-neutral-100 min-h-screen flex items-center justify-center">
         <div className="w-full max-w-md bg-white rounded-lg shadow-lg p-8 flex flex-col gap-6">
           <div className="flex flex-col items-center gap-2">
-            <Icon name="majesticons:lock-line" className="text-4xl text-secondary-500" />
             <h1 className="text-2xl font-bold">{t.heading}</h1>
             <p className="text-neutral-600 text-center">
               {t.description.split('\n').map((line: string, i: number) => (
