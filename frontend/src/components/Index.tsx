@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router'
 import { PinGrid } from '@/f/components/PinGrid';
 import { ProductDetail } from '@/f/components/ProductDetail';
 import { messages } from "@/f/config/messageConfig";
@@ -8,8 +9,12 @@ type Props = {
 };
 
 const Index =({ lang }: Props) => {
-  const t = (messages.index as any)[lang] ?? {};
+  const router = useRouter();
+  if (router.isFallback) {
+    return <div>Loading...</div>
+  }
 
+  const t = (messages.index as any)[lang] ?? {};
   const [items, setItems] = useState<any[]>([]);
   const [page, setPage] = useState(1);
   const [selected, setSelected] = useState(null);

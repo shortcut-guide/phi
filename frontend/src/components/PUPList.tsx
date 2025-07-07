@@ -45,30 +45,30 @@ const PUPList = () => {
         <div className="bg-gray-100 dark:bg-gray-900 p-6">
             <h3 className="text-2xl font-bold mb-4 text-gray-800 dark:text-white">{t.title}</h3>
             <div className="flex space-x-4 mb-4">
-                <input className={inputStyle} type="text" placeholder={t.placeholder} onInput={(e) => setSearch(e.target.value)} />
-                <button className={buttonStyle} onClick={() => setOrder(order === "desc" ? "asc" : "desc")}>{t.sortLabel}: {order}</button>
+                <input className="*:inputStyle" type="text" placeholder={t.placeholder} onChange={(e) => setSearch(e.target.value)} />
+                <button className="buttonStyle" onClick={() => setOrder(order === "desc" ? "asc" : "desc")}>{t.sortLabel}: {order}</button>
             </div>
 
-            <div className={gridContainer}>
-                <div className={gridHeader}>{t.ecSite}</div>
-                <div className={gridHeader}>{t.uploadedAt}</div>
-                <div className={gridHeader}>{t.actions}</div>
+            <div className="gridContainer">
+                <div className="gridHeader">{t.ecSite}</div>
+                <div className="gridHeader">{t.uploadedAt}</div>
+                <div className="gridHeader">{t.actions}</div>
             </div>
 
             {data.map(item => (
                 <div key={item.id} className={gridContainer}>
-                    <div className={gridItem}>{item.ec_site}</div>
-                    <div className={gridItem}>{new Date(item.uploaded_at).toLocaleString()}</div>
-                    <div className={gridItem} class={actions}>
-                        <a href={`/edit?id=${item.id}`} class="text-blue-500 hover:underline">{t.edit}</a>
-                        <button onClick={() => handleDelete(item.id)} class="text-red-500 hover:underline">{t.delete}</button>
+                    <div className="gridItem">{item.ec_site}</div>
+                    <div className="gridItem">{new Date(item.uploaded_at).toLocaleString()}</div>
+                    <div className="gridItem actions">
+                        <a className="text-blue-500 hover:underline" href={`/edit?id=${item.id}`}>{t.edit}</a>
+                        <button className="text-red-500 hover:underline" onClick={() => handleDelete(item.id)}>{t.delete}</button>
                     </div>
                 </div>
             ))}
 
-            <div class="flex justify-between mt-4">
-                <button className={buttonStyle} onClick={() => setPage(page - 1)} disabled={page <= 1}>{t.prev}</button>
-                <button className={buttonStyle} onClick={() => setPage(page + 1)}>{t.next}</button>
+            <div className="flex justify-between mt-4">
+                <button className="buttonStyle" onClick={() => setPage(page - 1)} disabled={page <= 1}>{t.prev}</button>
+                <button className="buttonStyle" onClick={() => setPage(page + 1)}>{t.next}</button>
             </div>
         </div>
     );

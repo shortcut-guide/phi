@@ -6,13 +6,15 @@
     "dev": "next dev -p 8787",
     "build": "next build",
     "start": "next start -p 8787",
-    "test": "node --max-old-space-size=4096 --experimental-vm-modules node_modules/.bin/jest"
+    "test": "node --max-old-space-size=4096 --experimental-vm-modules node_modules/.bin/jest",
+    "tsc": "tsc"
   },
   "dependencies": {
     "@formkit/themes": "^1.6.9",
     "@iconify-json/majesticons": "^1.2.2",
     "@midudev/tailwind-animations": "^0.2.0",
     "@paypal/react-paypal-js": "^8.8.3",
+    "@preact/preset-vite": "^2.10.2",
     "@tailwindcss/container-queries": "^0.1.1",
     "clsx": "^2.1.1",
     "emmet": "^2.4.11",
@@ -51,6 +53,7 @@
     "@types/testing-library__react": "^10.2.0",
     "@types/testing-library__user-event": "^4.2.0",
     "@vitejs/plugin-react": "^4.4.1",
+    "@zxing/browser": "^0.1.5",
     "babel-jest": "^29.7.0",
     "eslint-plugin-tailwindcss": "^3.18.0",
     "identity-obj-proxy": "^3.0.0",

@@ -22,10 +22,6 @@
         "../backend/src/*"
       ]
     },
-    "types": [
-      "astro/client",
-      "astro/test"
-    ],
     "typeRoots": [
       "./src/types",
       "./node_modules/@types"

@@ -11,7 +11,7 @@ type Props = {
 }
 
 const Home = ({ lang, t }: Props) => (
-  <DefaultLayout lang={lang} title={t.title}>
+  <DefaultLayout lang={lang} title={typeof t?.title === "string" ? t.title : ""}>
     <Index lang={lang} />
   </DefaultLayout>
 );
