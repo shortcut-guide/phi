@@ -23,10 +23,7 @@ const DefaultLayout = ({ lang, t = {}, title = "", description = "", children }:
       <meta name="description" content={description} />
       <meta property="og:title" content={typeof t.title === "string" ? t.title : ""} />
       <meta property="og:description" content={typeof t.description === "string" ? t.description : ""} />
-      <title>
-        {title}
-        {typeof t.title === "string" ? ` | ${t.title}` : ""}
-      </title>
+      <title>{title && typeof t.title === "string" ? `${title} | ${t.title}` : title || (typeof t.title === "string" ? t.title : "")}</title>
     </Head>
     <div className="admin-interface">
       <ErrorBoundary>
