@@ -8,7 +8,7 @@ type Props = {
   lang: string;
 };
 
-const Index =({ lang }: Props) => {
+const Home =({ lang }: Props) => {
   const router = useRouter();
   if (router.isFallback) {
     return <div>Loading...</div>
@@ -90,4 +90,4 @@ const Index =({ lang }: Props) => {
   );
 }
 
-export default Index;
+export default Home;

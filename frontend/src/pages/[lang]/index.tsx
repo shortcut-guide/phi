@@ -1,7 +1,7 @@
 import React from "react";
 import type { ReactNode } from "react";
 import DefaultLayout from '@/f/layouts/DefaultLayout';
-import Index from '@/f/components/Index';
+import Home from '@/f/components/home';
 import { withLangMessagesSSR } from "@/f/utils/withLangSSR";
 export const getServerSideProps = withLangMessagesSSR("index");
 
@@ -10,10 +10,10 @@ type Props = {
   t?: any;
 }
 
-const Home = ({ lang, t }: Props) => (
+const Index = ({ lang, t }: Props) => (
   <DefaultLayout lang={lang} title={typeof t?.title === "string" ? t.title : ""}>
-    <Index lang={lang} />
+    <Home lang={lang} />
   </DefaultLayout>
 );
 
-export default Home;
+export default Index;
