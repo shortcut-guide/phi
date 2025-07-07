@@ -44,6 +44,5 @@ export default function Document(props: any) {
 Document.getInitialProps = async (ctx) => {
   const initialProps = await (await import('next/document')).default.getInitialProps(ctx);
   const lang = getLangFromCtx(ctx);
-  console.log("lang", lang);
   return { ...initialProps, lang };
 };
