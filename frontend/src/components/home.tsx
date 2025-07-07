@@ -5,6 +5,7 @@ import { ProductDetail } from '@/f/components/ProductDetail';
 import { messages } from "@/f/config/messageConfig";
 import { fetchWithTimeout } from "@/f/utils/fetchTimeout";
 import { getParsePageInt } from "@/f/utils/getParsePageInt";
+import DefaultLayout from "@/f/layouts/DefaultLayout";
 import type { Pins } from "@/f/types/pins";
 
 const Home = ({ lang, page: initialPage, items: initialItems, fetchError }: Pins) => {
@@ -99,24 +100,27 @@ const Home = ({ lang, page: initialPage, items: initialItems, fetchError }: Pins
     setExpanded(false);
   };
 
+  const t = (messages.index as any)[lang] ?? {};
   return (
-    <div className="w-full h-screen flex flex-col overflow-hidden">
-      <div className={`transition-all duration-300 ${expanded ? 'h-0' : 'h-2/3'} overflow-y-auto`}>
-        <PinGrid
-          items={items}
-          loadMore={loadMoreHandler}
-          onSelect={handleSelect}
-          enableInfiniteScroll={isPageRoute && !clientError}
-        />
+    <DefaultLayout lang={lang} title={t.title}>
+      <div className="w-full h-screen flex flex-col overflow-hidden">
+        <div className={`transition-all duration-300 ${expanded ? 'h-0' : 'h-2/3'} overflow-y-auto`}>
+          <PinGrid
+            items={items}
+            loadMore={loadMoreHandler}
+            onSelect={handleSelect}
+            enableInfiniteScroll={isPageRoute && !clientError}
+          />
+        </div>
+        <div className={`transition-all duration-300 bg-white shadow-md ${expanded ? 'h-full' : 'h-1/3'} overflow-y-auto`}>
+          <ProductDetail
+            product={selected}
+            onExpand={() => setExpanded(true)}
+            onClose={() => setSelected(null)}
+          />
+        </div>
       </div>
-      <div className={`transition-all duration-300 bg-white shadow-md ${expanded ? 'h-full' : 'h-1/3'} overflow-y-auto`}>
-        <ProductDetail
-          product={selected}
-          onExpand={() => setExpanded(true)}
-          onClose={() => setSelected(null)}
-        />
-      </div>
-    </div>
+    </DefaultLayout>
   );
 };
 

@@ -31,15 +31,15 @@ const DefaultLayout = ({ lang, t = {}, title = "", description = "", children }:
       <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;800&display=swap" rel="stylesheet" />
       {/* open graph */}
-      <meta property="og:title" content={typeof t.subtitle === "string" ? t.subtitle : ""} />
+      <meta property="og:title" content={typeof t.title === "string" ? t.title : ""} />
       <meta property="og:description" content={typeof t.description === "string" ? t.description : ""} />
       <meta property="og:type" content="website" />
       <meta property="og:url" content="https://dashboard.accessible-astro.dev" />
       <meta property="og:image" content="/assets/img/social-preview-image.png" />
       {/* page title */}
       <title>
-        {typeof title === "string" ? title : ""}
-        {typeof t.subtitle === "string" ? " - " + t.subtitle : ""}
+        {title}
+        {typeof t.title === "string" ? ` | ${t.title}` : ""}
       </title>
     </Head>
     <div className="admin-interface">
