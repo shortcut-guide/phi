@@ -8,10 +8,15 @@ import { getParsePageInt } from "@/f/utils/getParsePageInt";
 import DefaultLayout from "@/f/layouts/DefaultLayout";
 import type { Pins } from "@/f/types/pins";
 
-const Home = ({ lang, page: initialPage, items: initialItems, fetchError }: Pins) => {
+const Home = ({ lang }: { lang: string }) => {
+  const initialPage = 1;
+  const initialItems: any[] = [];
+  const fetchError: string | undefined = undefined;
+
   const router = useRouter();
   if (router.isFallback) return <div>Loading...</div>;
 
+  
   const isPageRoute = router.query.page !== undefined;
 
   const [items, setItems] = useState<any[]>(initialItems);
