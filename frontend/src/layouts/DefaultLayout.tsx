@@ -50,7 +50,6 @@ const DefaultLayout = ({ lang, t = {}, title = "", description = "", children }:
         padding: 2rem;
       }
     `}</style>
-    {/* グローバルなSCSSは_app.tsxでimport管理 */}
   </>
 );
 

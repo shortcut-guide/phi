@@ -13,9 +13,7 @@ type Props = {
 }
 
 const Index = ({ lang, t }: Props) => (
-  <DefaultLayout lang={lang} title={typeof t?.title === "string" ? t.title : ""}>
-    <Home lang={lang} />
-  </DefaultLayout>
+  <Home lang={lang} />
 );
 
 export default Index;
