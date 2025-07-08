@@ -1,4 +1,76 @@
+"use client";
+
+import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
+
+function ProductModal({ product, onClose }: { product: any; onClose: () => void }) {
+  useEffect(() => {
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", handleEsc);
+    return () => window.removeEventListener("keydown", handleEsc);
+  }, [onClose]);
+
+  return (
+    <div
+      style={{
+        position: "fixed",
+        inset: 0,
+        background: "rgba(0,0,0,0.35)",
+        zIndex: 1000,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+      onClick={onClose}
+    >
+      <div
+        style={{
+          background: "#fff",
+          borderRadius: "16px",
+          boxShadow: "0 8px 40px rgba(0,0,0,0.14)",
+          padding: 32,
+          minWidth: 340,
+          maxWidth: 500,
+          width: "90vw",
+          cursor: "default",
+        }}
+        onClick={e => e.stopPropagation()}
+      >
+        <img
+          src={product.image}
+          alt={product.title}
+          style={{
+            width: "100%",
+            aspectRatio: "1/1",
+            objectFit: "cover",
+            borderRadius: "12px",
+            marginBottom: 20,
+          }}
+        />
+        <div style={{ fontWeight: 700, fontSize: 24 }}>{product.title}</div>
+        <div style={{ color: "#c33", fontWeight: 600, margin: "12px 0 20px" }}>{product.price}</div>
+        <div style={{ fontSize: 16, color: "#444" }}>{product.description}</div>
+        <button
+          style={{
+            marginTop: 24,
+            padding: "10px 18px",
+            background: "#eee",
+            border: "none",
+            borderRadius: 8,
+            fontWeight: 600,
+            cursor: "pointer",
+            float: "right",
+          }}
+          onClick={onClose}
+        >
+          閉じる
+        </button>
+      </div>
+    </div>
+  );
+}
 
 type Item = {
   id: string;
@@ -17,9 +89,21 @@ export function PinGrid({
   items = [],
   loadMore,
   onSelect,
-  enableInfiniteScroll = false
+  enableInfiniteScroll = false,
 }: Readonly<Props>) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const [modalId, setModalId] = useState<string | null>(null);
   const loadRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const id = pathname.split("/").pop();
+    if (pathname.startsWith("/products/") && id && products.find(p => p.id === id)) {
+      setModalId(id);
+    } else {
+      setModalId(null);
+    }
+  }, [pathname]);
 
   useEffect(() => {
     if (!enableInfiniteScroll) return;
@@ -41,15 +125,62 @@ export function PinGrid({
     };
   }, [loadMore, enableInfiniteScroll]);
 
+  const openModal = (id: string) => {
+    router.push(`/products/${id}`, { scroll: false });
+  };
+
+  const closeModal = () => {
+    router.push("/products", { scroll: false });
+  };
+
+  const modalProduct = products.find((p) => p.id === modalId);
+
   return (
-    <div className="pin-grid">
-      {items.map((item) => (
-        <div key={item.id} data-pin onClick={() => onSelect(item)}>
-          <img src={item.imageUrl} alt={item.title} />
-          <p>{item.title}</p>
-        </div>
-      ))}
-      <div ref={loadRef} />
-    </div>
+    <>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+          gap: "24px",
+          padding: "32px",
+        }}
+      >
+        {products.map((p) => (
+          <div
+            key={p.id}
+            style={{
+              borderRadius: "12px",
+              boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+              overflow: "hidden",
+              background: "#fff",
+              cursor: "pointer",
+              transition: "transform .18s",
+            }}
+            onClick={() => openModal(p.id)}
+          >
+            <img
+              src={p.image}
+              alt={p.title}
+              style={{
+                width: "100%",
+                aspectRatio: "1/1",
+                objectFit: "cover",
+                display: "block",
+              }}
+            />
+            <div style={{ padding: "16px" }}>
+              <div style={{ fontWeight: 600, fontSize: "1.1em" }}>{p.title}</div>
+              <div style={{ color: "#c33", marginTop: 4 }}>{p.price}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+      {modalProduct && (
+        <ProductModal
+          product={modalProduct}
+          onClose={closeModal}
+        />
+      )}
+    </>
   );
 }
