@@ -24,21 +24,6 @@ export const getServerSideProps: GetServerSideProps<Pins> = async (ctx) => {
   const pageRaw = params?.page;
   const page = Number(pageRaw);
 
-  // リダイレクト条件
-  if (
-    !pageRaw ||                    // pageパラメータが未定義/空
-    isNaN(page) ||                 // 数値変換できない
-    !Number.isInteger(page) ||     // 整数じゃない（小数点とか）
-    page <= 1                      // 1以下は全部 /[lang] へ
-  ) {
-    return {
-      redirect: {
-        destination: `/${lang}`,
-        permanent: true,
-      },
-    };
-  }
-
   let allItems: any[] = [];
   let fetchError: string | undefined = undefined;
 
