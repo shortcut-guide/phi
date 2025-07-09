@@ -2,6 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
+.admin-interface {
+  display: block;
+}
+@media (min-width: 768px) {
+  .admin-interface {
+    display: grid;
+    grid-template-columns: 1fr auto;
+  }
+  .admin-interface main {
+    margin-left: 60px;
+    padding: 6rem;
+  }
+}
+.admin-interface main {
+  padding: 2rem;
+}
+
 .slide-in {
   transition-timing-function: ease-out;
 }
