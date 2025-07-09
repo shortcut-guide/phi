@@ -15,6 +15,7 @@
     "@midudev/tailwind-animations": "^0.2.0",
     "@paypal/react-paypal-js": "^8.8.3",
     "@preact/preset-vite": "^2.10.2",
+    "@tailwindcss/cli": "^4.1.11",
     "@tailwindcss/container-queries": "^0.1.1",
     "clsx": "^2.1.1",
     "emmet": "^2.4.11",
@@ -23,7 +24,6 @@
     "jest-fetch-mock": "^3.0.3",
     "next": "^15.3.5",
     "node-fetch": "^3.3.2",
-    "outdated": "^0.1.1",
     "prettier": "^3.5.3",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
@@ -33,8 +33,7 @@
     "tailwindcss-mixins": "^0.0.11",
     "tailwindcss-radix": "^4.0.2",
     "tw-astasy": "^1.0.0",
-    "tw-elements": "^2.0.0",
-    "update": "^0.7.4"
+    "tw-elements": "^2.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.26.10",

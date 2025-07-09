@@ -44,6 +44,14 @@ project-root/
 
 ---
 
+# npm 問題
+tailwind: npm yarn経由のインストールだとtailwindが動かない為手動インストールしている
+```
+curl -L -o tailwindcss-4.1.11.zip https://github.com/tailwindlabs/tailwindcss/archive/refs/tags/v4.1.11.zip
+unzip tailwindcss-4.1.11.zip
+cp -r tailwindcss-4.1.11/packages/tailwindcss/* /path/to/your/project/node_modules/tailwindcss/
+```
+
 ## 1. 概要
 
 本システムは、複数のECサイトを横断的に管理し、ユーザーの購買活動を一元化するプラットフォームです。ユーザーが優先するECサイトを設定し、商品検索、注文自動化、メール管理、ポイント管理、売上管理などを統合的に提供します。また、代理購入を横断的にシステム機能として提供します。
@@ -2497,6 +2505,11 @@ project-root/
 │       │   └── products.astro    # 商品一覧・登録・編集UI
 │       ├── styles/               # CSS／Tailwindなどのスタイル定義
 │       └── types/                # 型定義（フロント用）
+```
+
+## style build
+```
+npx tailwindcss -i ./src/styles/style.css -o ./public/style.css --minify
 ```
 
 ## 無限スクロール + pushState

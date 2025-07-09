@@ -1,9 +1,9 @@
 module.exports = {
   content: [
-    "./src/**/*.{astro,tsx,ts,js,jsx}",
-    "./components/**/*.{astro,tsx,ts,js,jsx}",
-    "./layouts/**/*.{astro,tsx,ts,js,jsx}",
-    "./pages/**/*.{astro,tsx,ts,js,jsx}",
+    "./src/**/*.{tsx,ts,js,jsx,scss}",
+    "./components/**/*.{tsx,ts,js,jsx}",
+    "./layouts/**/*.{tsx,ts,js,jsx}",
+    "./pages/**/*.{tsx,ts,js,jsx}",
     "./node_modules/tw-elements/js/**/*.js"
   ],
   theme: {
