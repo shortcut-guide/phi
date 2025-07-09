@@ -21,7 +21,7 @@ function getLangFromAcceptLanguage(acceptLanguage: string | null): string {
 
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
-
+  const lang = getLangFromAcceptLanguage(req.headers.get('accept-language'));
   // Exclude specific paths
   if (EXCLUDE_PATHS.some(p => pathname.startsWith(p))) {
     return NextResponse.next();
@@ -34,14 +34,12 @@ export function middleware(req: NextRequest) {
 
   // If root path, redirect to language path based on accept-language header
   if (pathname === '/') {
-    const lang = getLangFromAcceptLanguage(req.headers.get('accept-language'));
     const url = req.nextUrl.clone();
     url.pathname = `/${lang}`;
     return NextResponse.redirect(url);
   }
 
   // Otherwise, add language prefix to path and redirect
-  const lang = getLangFromAcceptLanguage(req.headers.get('accept-language'));
   const url = req.nextUrl.clone();
   url.pathname = `/${lang}${pathname}`;
 

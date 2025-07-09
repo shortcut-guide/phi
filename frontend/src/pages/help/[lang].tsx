@@ -8,7 +8,7 @@ type Props = {
 };
 
 const HelpPage = ({ lang }: Props) => {
-  const t = (messages.login as any)[lang] ?? {};
+  const t = (messages.help as any)[lang] ?? {};
 
   return (
     <DefaultLayout lang={lang} title={t.title}>
