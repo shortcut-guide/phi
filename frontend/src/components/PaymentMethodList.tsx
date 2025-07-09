@@ -1,5 +1,6 @@
 import React from "react";
 import { messages } from "@/f/config/messageConfig";
+import { getLangObj } from "@/f/utils/getLangObj";
 
 type Props = {
   lang: string;
@@ -7,7 +8,7 @@ type Props = {
 };
 
 const PaymentMethodList = ({ lang, selectedMethod }:Props) => {
-  const t = (messages.paymentMethodList as any)[lang] ?? {};
+  const t = getLangObj(messages.nav, lang);
   const paymentOptions = [{
     id: "paypal",
     label: t.paypal,

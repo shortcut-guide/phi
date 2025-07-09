@@ -1,4 +1,32 @@
 export const messages = {
+  alt:{
+    ja:{
+      search: "search",
+      sale: "sale",
+      new: "new",
+      message: "message",
+      profile: "profile",
+      logout: "logout",
+      login: "login",
+      signUp: "signUp",
+      settings: "settings",
+      dashboard: "dashboard",
+      option: "option"
+    },
+    en:{
+      search: "search",
+      sale: "sale",
+      new: "new",
+      message: "message",
+      profile: "profile",
+      logout: "logout",
+      login: "login",
+      signUp: "signUp",
+      settings: "settings",
+      dashboard: "dashboard",
+      option: "option"
+    }
+  },
   index:{
     ja:{
       title: "phis"
@@ -6,6 +34,22 @@ export const messages = {
     en:{
       title: "phis"
     }
+  },
+  nav:{
+    ja:{
+      search: "探索する",
+      sale: "特価を探す",
+      new: "最新情報",
+      message: "メッセージ",
+      profile: "プロフィール",
+      logout: "ログアウト",
+      login: "ログイン",
+      signUp: "新規登録",
+      settings: "設定",
+      dashboard: "タップして開く",
+      option: "その他のオプション"
+    },
+    en:{}
   },
   loginForm: {
     ja: {
@@ -620,6 +664,18 @@ export const messages = {
       ErrorFaqNotFound: 'FAQ not found',
       ErrorFaqSearch: 'Failed to search FAQs',
       ErrorFaqSuggest: 'Failed to fetch FAQ suggestions'
+    }
+  },
+  slideComponent:{
+    ja:{
+      open:"開く",
+      return:"← 戻る",
+      next: "次へ",
+    },
+    en:{
+      open:"Open",
+      return:"← Return",
+      next: "Next",
     }
   }
 };

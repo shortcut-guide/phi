@@ -3,6 +3,8 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { trackGAEvent } from "@/f/utils/track";
 import { messages } from "@/f/config/messageConfig";
+import { links } from "@/f/config/links";
+import { getLangObj } from "@/f/utils/getLangObj";
 
 interface Product {
   id: string;
@@ -24,7 +26,8 @@ export function ProductDetail({ product, onExpand, onClose }: Props) {
   const router = useRouter();
   const { lang } = router.query;
   const langValue = Array.isArray(lang) ? lang[0] : (lang ?? "ja");
-  const t = ((messages.productDetail as any)[langValue]) ?? {};
+  const t = getLangObj(messages.nav, langValue);
+  const url = getLangObj<typeof links.url>(links.url);
   
   trackGAEvent("product_expand", {
     product_id: product.id,
@@ -48,7 +51,7 @@ export function ProductDetail({ product, onExpand, onClose }: Props) {
       </div>
 
       <div className="flex justify-between mt-4 gap-2">
-        <button className="text-sm text-blue-700 underline" onClick={() => location.href = `/products/${product.id}`}>${t.detail}</button>
+        <button className="text-sm text-blue-700 underline" onClick={() => location.href = `${url.api.products}${product.id}`}>${t.detail}</button>
         <button className="text-sm text-green-600 underline" onClick={onExpand}>{t.expand}</button>
       </div>
     </div>

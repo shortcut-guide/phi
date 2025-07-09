@@ -1,8 +1,15 @@
 import { useRef, useState, useEffect } from 'react';
 import { usePathStateWithDirection } from '@/f/utils/usePathStateWithDirection';
 import { PushLink } from '@/f/components/PushLink';
+import { messages } from "@/f/config/messageConfig";
+import { getLangObj } from "@/f/utils/getLangObj";
+import { return } from '../../next.js/packages/next/src/server/config-shared';
+type Props = {
+  lang: string;
+}
 
-export const SlideNavigator = () => {
+export const SlideNavigator = ({ lang }: Props) => {
+  const t = getLangObj(messages.slideComponent, lang);
   const { transformStyle, transitionClass } = usePathStateWithDirection();
   const [showHelp, setShowHelp] = useState(false);
 
@@ -46,7 +53,7 @@ export const SlideNavigator = () => {
   return (
     <div className="relative w-full h-screen overflow-hidden bg-gray-50">
       <nav className="p-4 bg-white z-10 flex gap-4">
-        <PushLink to="/page2">開く（スライドイン）</PushLink>
+        <PushLink to="/page/2">{t.open}</PushLink>
       </nav>
 
       <div
@@ -67,11 +74,9 @@ export const SlideNavigator = () => {
               onClick={handleBack}
               className="absolute left-0 top-1/2 -translate-y-1/2 p-2 pl-4 text-gray-600 hover:text-black bg-transparent z-10"
               style={{ pointerEvents: 'auto' }}
-            >
-              ← 戻る
-            </button>
+            >{t.return}</button>
           )}
-          <div className="p-8">Page2スライドコンテンツ</div>
+          <div className="p-8">{t.next}</div>
         </div>
       </div>
     </div>

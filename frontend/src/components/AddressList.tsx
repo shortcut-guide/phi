@@ -1,5 +1,7 @@
 import React from "react";
 import type { Profile } from '@/f/types/profile';
+import { links } from "@/f/config/links";
+import { getLangObj } from "@/f/utils/getLangObj";
 
 type AddressListProps = {
   addresses: Profile[];
@@ -8,11 +10,13 @@ type AddressListProps = {
 };
 
 const AddressList: React.FC<AddressListProps> = ({ addresses, lang, t }) => {
+  const url = getLangObj<typeof links.url>(links.url);
+
   return (
     <>
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-xl font-bold">{t.title}</h1>
-        <a href="/settings/address/edit" className="text-blue-500">{t.edit}</a>
+        <a href={url.address.edit} className="text-blue-500">{t.edit}</a>
       </div>
 
       <ul className="space-y-4">
@@ -28,7 +32,7 @@ const AddressList: React.FC<AddressListProps> = ({ addresses, lang, t }) => {
 
       {addresses.length < 3 && (
         <div className="mt-6">
-          <a href="/settings/address/new" className="text-blue-600 underline">
+          <a href={url.address.new} className="text-blue-600 underline">
             + {t.registerNew}
           </a>
         </div>

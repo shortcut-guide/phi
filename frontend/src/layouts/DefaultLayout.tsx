@@ -27,29 +27,11 @@ const DefaultLayout = ({ lang, t = {}, title = "", description = "", children }:
     </Head>
     <div className="admin-interface">
       <ErrorBoundary>
-        <MainNavigation />
+        <MainNavigation lang={lang} />
       </ErrorBoundary>
       <main id="main-content">{children}</main>
     </div>
     <GoogleTag />
-    <style jsx global>{`
-      .admin-interface {
-        display: block;
-      }
-      @media (min-width: 768px) {
-        .admin-interface {
-          display: grid;
-          grid-template-columns: 1fr auto;
-        }
-        .admin-interface main {
-          margin-left: 60px;
-          padding: 6rem;
-        }
-      }
-      .admin-interface main {
-        padding: 2rem;
-      }
-    `}</style>
   </>
 );
 

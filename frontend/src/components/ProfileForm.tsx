@@ -1,6 +1,8 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { messages } from "@/f/config/messageConfig";
+import { links } from "@/f/config/links";
+import { getLangObj } from "@/f/utils/getLangObj";
 
 type Props = {
   lang: string;
@@ -11,6 +13,7 @@ type Profile = {
 }
 
 const ProfileForm = ({ lang }: Props) => {
+  const url = getLangObj<typeof links.url>(links.url);
   const apiUrl = process.env.PUBLIC_API_BASE_URL;
   const t = ((messages.profileForm as any)[lang]) ?? {};
   const [nickname, setNickname] = useState("");
@@ -21,7 +24,7 @@ const ProfileForm = ({ lang }: Props) => {
       let data: Profile = {};
 
       try {
-        const res = await fetch(`${apiUrl}/api/profile`);
+        const res = await fetch(`${apiUrl}${url.api.profile}`);
         if (!res.ok) {
           throw new Error(`APIエラー: ${res.status}\n`);
         }
@@ -37,7 +40,7 @@ const ProfileForm = ({ lang }: Props) => {
 
   async function updateProfile() {
     try {
-      const res = await fetch(`${apiUrl}/api/profile`,{
+      const res = await fetch(`${apiUrl}${url.api.profile}`,{
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ nickname, bio })

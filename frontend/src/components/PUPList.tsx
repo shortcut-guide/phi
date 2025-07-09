@@ -2,11 +2,14 @@ import { useState, useEffect } from "react";
 import type { PuppeteerItem } from "@/f/types/puppeteer";
 import clsx from "clsx";
 import { messages } from "@/f/config/messageConfig";
+import { links } from "@/f/config/links";
+import { getLangObj } from "@/f/utils/getLangObj";
 
-const lang = "__MSG_LANG__";
-const t = ((messages.puppeteerPage as any)[lang]) ?? {};
-
-const PUPList = () => {
+const PUPList = ({ lang }: { lang: string }) => {
+    const t = getLangObj(messages.nav, lang);
+    const asset = getLangObj<typeof links.assets>(links.assets);
+    const url = getLangObj<typeof links.url>(links.url);
+    
     const [data, setData] = useState<PuppeteerItem[]>([]);
     const [search, setSearch] = useState("");
     const [page, setPage] = useState(1);
@@ -15,7 +18,7 @@ const PUPList = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const res = await fetch(`/api/puppeteer/data?search=${search}&page=${page}&sort=${sort}&order=${order}`);
+            const res = await fetch(`${url.api.puppeteer.data}?search=${search}&page=${page}&sort=${sort}&order=${order}`);
             const result = await res.json();
             setData(result.contents);
         };
@@ -25,7 +28,7 @@ const PUPList = () => {
     const handleDelete = async (id: string) => {
         if (!confirm(t.confirmDelete)) return;
         try {
-            const res = await fetch(`/api/puppeteer/delete?id=${id}`, { method: 'DELETE' });
+            const res = await fetch(`${url.api.puppeteer.delete}?id=${id}`, { method: 'DELETE' });
             if (!res.ok) throw new Error('Delete failed');
             setData(prev => prev.filter(item => item.id !== id));
         } catch (error) {
@@ -60,7 +63,7 @@ const PUPList = () => {
                     <div className="gridItem">{item.ec_site}</div>
                     <div className="gridItem">{new Date(item.uploaded_at).toLocaleString()}</div>
                     <div className="gridItem actions">
-                        <a className="text-blue-500 hover:underline" href={`/edit?id=${item.id}`}>{t.edit}</a>
+                        <a className="text-blue-500 hover:underline" href={`${url.edit}?id=${item.id}`}>{t.edit}</a>
                         <button className="text-red-500 hover:underline" onClick={() => handleDelete(item.id)}>{t.delete}</button>
                     </div>
                 </div>

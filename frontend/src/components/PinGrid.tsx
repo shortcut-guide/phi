@@ -1,9 +1,12 @@
 "use client";
 
+import { links } from "@/f/config/links";
+import { getLangObj } from "@/f/utils/getLangObj";
 import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 function ProductModal({ product, onClose }: { product: any; onClose: () => void }) {
+  
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -64,9 +67,7 @@ function ProductModal({ product, onClose }: { product: any; onClose: () => void 
             float: "right",
           }}
           onClick={onClose}
-        >
-          閉じる
-        </button>
+        >×</button>
       </div>
     </div>
   );
@@ -93,6 +94,7 @@ export function PinGrid({
   onSelect,
   enableInfiniteScroll = false,
 }: Readonly<Props>) {
+  const url = getLangObj<typeof links.url>(links.url);
   const router = useRouter();
   const pathname = usePathname();
   const [modalId, setModalId] = useState<string | null>(null);
@@ -100,7 +102,7 @@ export function PinGrid({
 
   useEffect(() => {
     const id = pathname.split("/").pop();
-    if (pathname.startsWith("/products/") && id && items.find(p => p.id === id)) {
+    if (pathname.startsWith(url.api.products) && id && items.find(p => p.id === id)) {
       setModalId(id);
     } else {
       setModalId(null);
@@ -128,11 +130,11 @@ export function PinGrid({
   }, [loadMore, enableInfiniteScroll]);
 
   const openModal = (id: string) => {
-    router.push(`/products/${id}`, { scroll: false });
+    router.push(`${url.api.products}${id}`, { scroll: false });
   };
 
   const closeModal = () => {
-    router.push("/products", { scroll: false });
+    router.push(url.api.products, { scroll: false });
   };
 
   const modalProduct = items.find((p) => p.id === modalId);
