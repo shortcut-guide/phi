@@ -10,6 +10,7 @@ export const links = {
   },
   url:{
     home: "/",
+    page: "/page/",
     dashboard: "/dashboard",
     pinCreationTool: "/pin-creation-tool",
     releases: "/releases",
@@ -24,7 +25,7 @@ export const links = {
       sandbox: "https://www.sandbox.paypal.com/signin/authorize"
     },
     edit: "/edit",
-    api:{
+    api: {
       products: "/products/",
       profile: "/api/profile",
       puppeteer:{
