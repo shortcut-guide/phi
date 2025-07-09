@@ -20,6 +20,9 @@
       ],
       "@/b/*": [
         "../backend/src/*"
+      ],
+      "assets/*": [
+        "public/assets/*"
       ]
     },
     "typeRoots": [

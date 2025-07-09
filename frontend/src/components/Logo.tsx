@@ -10,7 +10,7 @@ interface Props extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
 const LogoLink: React.FC<Props> = (props) => {
   return (
     <a href="/" {...props}>
-      <PictureImage src="/assets/img/phis_logo.svg" className="w-full" />
+      <PictureImage src="/assets/phis_logo" className="w-full" />
     </a>
   );
 };

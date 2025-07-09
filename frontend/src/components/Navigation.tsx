@@ -1,4 +1,4 @@
-import PictureImage from "@/f/components/PictureImage";
+import Picture from "@/f/components/PictureImage";
 import Logo from '@/f/components/Logo';
 
 const MainNavigation = () => (
@@ -12,22 +12,22 @@ const MainNavigation = () => (
             </li>
             <li className="flex items-center justify-center">
               <a aria-label="探索する" className="w-[72%] border-none hover:bg-gray-100 focus:outline-none focus:bg-gray-200">
-                <PictureImage src="/assets/img/searching-bar.png" alt="search" className="w-full" />
+                <Picture src="/assets/searching-bar" alt="search" className="w-full" />
               </a>
             </li>
             <li className="flex items-center justify-center">
               <a href="/pin-creation-tool/" aria-label="特価を探す" className="w-[70%] border-none hover:bg-gray-100 focus:outline-none focus:bg-gray-200">
-                <PictureImage src="/assets/img/sale.png" alt="sale" className="w-full" />
+                <Picture src="/assets/sale" alt="sale" className="w-full" />
               </a>
             </li>
             <li className="flex items-center justify-center">
               <a href="/releases/" aria-label="最新情報" className="w-[70%] border-none hover:bg-gray-100 focus:outline-none focus:bg-gray-200">
-                <PictureImage src="/assets/img/new.png" alt="new" className="w-full" />
+                <Picture src="/assets/new" alt="new" className="w-full" />
               </a>
             </li>
             <li className="flex items-center justify-center">
               <a href="/messages/" aria-label="メッセージ" className="w-[72%] border-none hover:bg-gray-100 focus:outline-none focus:bg-gray-200">
-                <PictureImage src="/assets/img/message.png" alt="message" className="w-full" />
+                <Picture src="/assets/message" alt="message" className="w-full" />
               </a>
             </li>
           </ul>
@@ -35,7 +35,7 @@ const MainNavigation = () => (
 
         <div className="flex items-center justify-center box-border">
           <a aria-label="その他のオプション" className="w-[70%] border-none hover:bg-gray-100 focus:outline-none focus:bg-gray-200">
-            <PictureImage src="/assets/img/option.png" alt="option" className="w-full" />
+            <Picture src="/assets/option" alt="option" className="w-full" />
           </a>
         </div>
       </div>

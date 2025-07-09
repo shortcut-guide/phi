@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, usePathname } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 function ProductModal({ product, onClose }: { product: any; onClose: () => void }) {
   useEffect(() => {
@@ -76,6 +76,8 @@ type Item = {
   id: string;
   title: string;
   imageUrl: string;
+  price: string;
+  description: string;
 };
 
 interface Props {
@@ -98,7 +100,7 @@ export function PinGrid({
 
   useEffect(() => {
     const id = pathname.split("/").pop();
-    if (pathname.startsWith("/products/") && id && products.find(p => p.id === id)) {
+    if (pathname.startsWith("/products/") && id && items.find(p => p.id === id)) {
       setModalId(id);
     } else {
       setModalId(null);
@@ -133,7 +135,7 @@ export function PinGrid({
     router.push("/products", { scroll: false });
   };
 
-  const modalProduct = products.find((p) => p.id === modalId);
+  const modalProduct = items.find((p) => p.id === modalId);
 
   return (
     <>
@@ -145,7 +147,7 @@ export function PinGrid({
           padding: "32px",
         }}
       >
-        {products.map((p) => (
+        {items.map((p) => (
           <div
             key={p.id}
             style={{
@@ -159,7 +161,7 @@ export function PinGrid({
             onClick={() => openModal(p.id)}
           >
             <img
-              src={p.image}
+              src={p.imageUrl}
               alt={p.title}
               style={{
                 width: "100%",

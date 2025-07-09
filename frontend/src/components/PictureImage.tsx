@@ -9,14 +9,13 @@ interface Props {
 }
 
 const Picture = ({ src, alt, width, height, className }: Props) => {
-  const baseName = src?.replace(/\.(webp|png|svg)$/i, '');
 
   return (
     <picture>
-      <source srcSet={`${baseName}.webp`} type="image/webp" />
-      <source srcSet={`${baseName}.png`} type="image/png" />
+      <source srcSet={`${src}.webp`} type="image/webp" />
+      <source srcSet={`${src}.png`} type="image/png" />
       <img
-        src={`${baseName}.png`}
+        src={`${src}.png`}
         alt={alt}
         width={width}
         height={height}
