@@ -44,6 +44,19 @@ export function middleware(req: NextRequest) {
   const lang = getLangFromAcceptLanguage(req.headers.get('accept-language'));
   const url = req.nextUrl.clone();
   url.pathname = `/${lang}${pathname}`;
+
+  // 下層（/page, /about, など）で言語が含まれていない場合のみリダイレクト
+  // 例: /page/1 → /ja/page/1
+  const pathParts = pathname.split('/').filter(Boolean);
+
+  // 1つ目が言語でなければリダイレクト
+  if (pathParts.length && !lang.includes(pathParts[0])) {
+    const lang = getLangFromAcceptLanguage(req.headers.get('accept-language'));
+    const url = req.nextUrl.clone();
+    url.pathname = `/${lang}${pathname}`;
+    return NextResponse.redirect(url);
+  }
+
   return NextResponse.redirect(url);
 }
 
