@@ -1,0 +1,7 @@
+.slide-in {
+  transition-timing-function: ease-out;
+}
+
+.slide-out {
+  transition-timing-function: ease-in;
+}
