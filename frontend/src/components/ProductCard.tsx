@@ -5,16 +5,11 @@ import { links } from "@/f/config/links";
 import { getLangObj } from "@/f/utils/getLangObj";
 
 type Props = {
-  id: string;
-  name: string;
-  price: number;
-  imageUrl: string;
-  description: string;
-  lang: string;
+  key: string;
+  post: string;
 };
 
-export const ProductCard = ({ id, name, price, imageUrl, description, lang }: Props) => {
-  const t = getLangObj(messages.nav, lang);
+export const ProductCard = ({ key,post }: Props) => {
   const url = getLangObj<typeof links.url>(links.url);
 
   return (
