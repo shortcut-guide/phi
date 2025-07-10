@@ -1,26 +1,46 @@
 import React from 'react';
 import { trackGAEvent } from "@/f/utils/track";
 import { messages } from "@/f/config/messageConfig";
-import { links } from "@/f/config/links";
-import { getLangObj } from "@/f/utils/getLangObj";
 
-type Props = {
-  key: string;
-  post: string;
+type Product = {
+  id: string | number;
+  name: string;
+  image: string;
+  price: number;
+  description?: string;
+  [key: string]: any;
 };
 
-export const ProductCard = ({ key,post }: Props) => {
-  const url = getLangObj<typeof links.url>(links.url);
+type ProductCardProps = {
+  product: Product;
+  onClick?: (product: Product) => void;
+  className?: string;
+  children?: React.ReactNode;
+} & React.HTMLAttributes<HTMLDivElement>;
+
+const ProductCard: React.FC<ProductCardProps> = ({
+  product,
+  onClick,
+  className = "",
+  children,
+  ...rest
+}) => {
 
   return (
-    <div className="rounded-2xl shadow-md p-4 bg-white hover:shadow-lg transition">
-      <img src={imageUrl} alt={name} className="w-full h-48 object-cover rounded-xl mb-4" />
-      <h3 className="text-lg font-semibold">{name}</h3>
-      <p className="text-gray-600">{description}</p>
-      <p className="text-indigo-600 font-bold mt-2">{t.currency}{price.toLocaleString()}</p>
-      <a href={`${url.product}${id}`} className="text-sm text-blue-500 hover:underline" onClick={() => trackGAEvent("product_click", { product_id: id, productname: name })}>
-        {t.detail}
-      </a>
+    <div 
+      className="rounded-2xl shadow-md p-4 bg-white hover:shadow-lg transition"
+      onClick={() => onClick && onClick(product)}
+      {...rest}
+    >
+      <img src={product.image} alt={product.name} className="product-card-img" />
+      <div className="product-card-body">
+        <h2 className="product-card-title">{product.name}</h2>
+        {product.description && (
+          <p className="product-card-description">{product.description}</p>
+        )}
+        <div className="product-card-price">{product.price.toLocaleString()}</div>
+        {children}
+      </div>
     </div>
   );
 };
