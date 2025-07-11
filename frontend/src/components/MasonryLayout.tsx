@@ -1,10 +1,10 @@
 import { useRef } from "react";
-import { ProductCard } from "@/f/components/ProductCard";
+import ProductCard from "@/f/components/ProductCard";
 
-export const MasonryLayout = ({ posts }) => {
-  const firstColumn = posts.filter((_, index) => index % 3 === 0);
-  const secondColumn = posts.filter((_, index) => index % 3 === 1);
-  const thirdColumn = posts.filter((_, index) => index % 3 === 2);
+export const MasonryLayout = ({ products }) => {
+  const featured = products.filter((_, index) => index % 3 === 0);
+  const popular = products.filter((_, index) => index % 3 === 1);
+  const recent = products.filter((_, index) => index % 3 === 2);
 
   // 親・中央コラムのref
   const containerRef = useRef(null);
@@ -25,8 +25,8 @@ export const MasonryLayout = ({ posts }) => {
     >
       {/* 左カラム: 独立スクロール */}
       <div className="overflow-y-auto h-full">
-        {firstColumn.map((post) => (
-          <ProductCard key={post.id} post={post} />
+        {featured.map((product) => (
+          <ProductCard key={product.id} product={product} />
         ))}
       </div>
       {/* 中央カラム: スクロールで親を動かす */}
@@ -37,14 +37,14 @@ export const MasonryLayout = ({ posts }) => {
         // pointer-events-autoでイベント拾える
         style={{ pointerEvents: "auto" }}
       >
-        {secondColumn.map((post) => (
-          <ProductCard key={post.id} post={post} />
+        {popular.map((product) => (
+          <ProductCard key={product.id} product={product} />
         ))}
       </div>
       {/* 右カラム: 独立スクロール */}
       <div className="overflow-y-auto h-full">
-        {thirdColumn.map((post) => (
-          <ProductCard key={post.id} post={post} />
+        {recent.map((product) => (
+          <ProductCard key={product.id} product={product} />
         ))}
       </div>
     </div>

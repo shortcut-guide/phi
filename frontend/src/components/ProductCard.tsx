@@ -1,15 +1,7 @@
 import React from 'react';
 import { trackGAEvent } from "@/f/utils/track";
 import { messages } from "@/f/config/messageConfig";
-
-type Product = {
-  id: string | number;
-  name: string;
-  image: string;
-  price: number;
-  description?: string;
-  [key: string]: any;
-};
+import type { Product } from "@/f/types/product";
 
 type ProductCardProps = {
   product: Product;
@@ -44,3 +36,5 @@ const ProductCard: React.FC<ProductCardProps> = ({
     </div>
   );
 };
+
+export default ProductCard;

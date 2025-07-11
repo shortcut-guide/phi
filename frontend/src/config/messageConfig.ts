@@ -633,12 +633,14 @@ export const messages = {
   products:{
     ja: {
       title: 'おすすめ',
+      ErrorLoad: '商品の読込失敗',
       ErrorProductNotFound: '商品が見つかりません',
       ErrorProductSearch: '商品検索に失敗しました',
       ErrorProductSuggest: '商品サジェスト取得に失敗しました'
     },
     en: {
       title: 'Recommended',
+      ErrorLoad: 'Failed to load products',
       ErrorProductNotFound: 'Product not found',
       ErrorProductSearch: 'Failed to search products',
       ErrorProductSuggest: 'Failed to fetch product suggestions'

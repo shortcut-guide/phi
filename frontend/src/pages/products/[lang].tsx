@@ -1,6 +1,6 @@
 import type { GetServerSideProps } from "next";
 import DefaultLayout from '@/f/layouts/DefaultLayout';
-import { ProductCard } from '@/f/components/ProductCard';
+import ProductCard from '@/f/components/ProductCard';
 import type { Product } from '@/f/types/product';
 import { messages } from "@/f/config/messageConfig";
 
@@ -19,10 +19,10 @@ const ProductsPage = ({ lang, products }: Props) => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {Array.isArray(products) && products.length > 0 ? (
             products.map((product: Product) => (
-              <ProductCard key={product.id} {...product} lang={lang} />
+              <ProductCard key={product.id} product={product} lang={lang} />
             ))
           ) : (
-            <p>商品の読込失敗</p>
+            <p>{t.ErrorLoad}</p>
           )}
         </div>
       </main>
