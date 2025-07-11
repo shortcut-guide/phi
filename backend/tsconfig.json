@@ -10,6 +10,7 @@
     "emitDeclarationOnly": true,
     "declaration": true,
     "allowImportingTsExtensions": true,
+    "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
     "noImplicitAny": false,
     "types": ["node"],
@@ -22,6 +23,7 @@
     "paths":{
       "@/f/*": ["../frontend/src/*"],
       "@/b/*": ["./*"],
+      "http-proxy-middleware": ["node_modules/http-proxy-middleware"]
     },
     "plugins": [
       { "transform": "typescript-transform-paths" }
