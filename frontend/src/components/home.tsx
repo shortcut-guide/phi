@@ -1,12 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { PinGrid } from '@/f/components/PinGrid';
-import { ProductDetail } from '@/f/components/ProductDetail';
 import { messages } from "@/f/config/messageConfig";
 import { fetchWithTimeout } from "@/f/utils/fetchTimeout";
 import { getParsePageInt } from "@/f/utils/getParsePageInt";
 import DefaultLayout from "@/f/layouts/DefaultLayout";
-import type { Pins } from "@/f/types/pins";
+import { MasonryLayout } from "@/f/components/MasonryLayout";
 
 const Home = ({ lang }: { lang: string }) => {
   const initialPage = 1;
@@ -28,7 +26,7 @@ const Home = ({ lang }: { lang: string }) => {
   const loadPage = async (p: number, overwrite = false) => {
     try {
       const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000';
-      const res = await fetchWithTimeout(`${apiUrl}/api/pins?offset=${(p - 1) * 30}`, 5000);
+      const res = await fetchWithTimeout(`${apiUrl}/api/products`, 5000);
       if (!res.ok) {
         console.error("API fetch failed status:", res.status);
         setClientError(`Status: ${res.status}`);
@@ -109,21 +107,11 @@ const Home = ({ lang }: { lang: string }) => {
   return (
     <DefaultLayout lang={lang} title={t.title}>
       <div className="w-full h-screen flex flex-col overflow-hidden">
-        <div className={`transition-all duration-300 ${expanded ? 'h-0' : 'h-2/3'} overflow-y-auto`}>
-          <PinGrid
-            items={items}
-            loadMore={loadMoreHandler}
-            onSelect={handleSelect}
-            enableInfiniteScroll={isPageRoute && !clientError}
-          />
-        </div>
-        <div className={`transition-all duration-300 bg-white shadow-md ${expanded ? 'h-full' : 'h-1/3'} overflow-y-auto`}>
-          <ProductDetail
-            product={selected}
-            onExpand={() => setExpanded(true)}
-            onClose={() => setSelected(null)}
-          />
-        </div>
+        <MasonryLayout
+          products={items}
+          onLoadMore={loadMoreHandler}
+          enableInfiniteScroll={true}
+        />
       </div>
     </DefaultLayout>
   );

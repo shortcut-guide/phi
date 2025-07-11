@@ -1,7 +1,7 @@
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import ProductCard from "@/f/components/ProductCard";
 
-export const MasonryLayout = ({ products }) => {
+export const MasonryLayout = ({ products, onLoadMore, enableInfiniteScroll = false }) => {
   const featured = products.filter((_, index) => index % 3 === 0);
   const popular = products.filter((_, index) => index % 3 === 1);
   const recent = products.filter((_, index) => index % 3 === 2);
@@ -9,6 +9,29 @@ export const MasonryLayout = ({ products }) => {
   // 親・中央コラムのref
   const containerRef = useRef(null);
   const centerColumnRef = useRef(null);
+
+  // observer用
+  const loadRef = useRef<HTMLDivElement | null>(null);
+  const [observerAttached, setObserverAttached] = useState(false);
+
+  useEffect(() => {
+    if (!enableInfiniteScroll || observerAttached) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && onLoadMore) {
+          onLoadMore();
+        }
+      },
+      { rootMargin: "200px" }
+    );
+    if (loadRef.current) {
+      observer.observe(loadRef.current);
+      setObserverAttached(true);
+    }
+    return () => {
+      if (loadRef.current) observer.unobserve(loadRef.current);
+    };
+  }, [enableInfiniteScroll, onLoadMore, observerAttached]);
 
   // 中央でスクロールしたら、全体をスクロールさせる
   const handleCenterScroll = (e) => {
@@ -34,7 +57,6 @@ export const MasonryLayout = ({ products }) => {
         ref={centerColumnRef}
         className="overflow-y-auto h-full"
         onWheel={handleCenterScroll}
-        // pointer-events-autoでイベント拾える
         style={{ pointerEvents: "auto" }}
       >
         {popular.map((product) => (
@@ -47,6 +69,8 @@ export const MasonryLayout = ({ products }) => {
           <ProductCard key={product.id} product={product} />
         ))}
       </div>
+      {/* PinGridと同様のIntersectionObserver */}
+      {enableInfiniteScroll && <div ref={loadRef} style={{ height: 1 }} />}
     </div>
   );
 };
