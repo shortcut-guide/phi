@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@formkit/themes": "^1.6.9",
+    "@headlessui/react": "^2.2.4",
     "@iconify-json/majesticons": "^1.2.2",
     "@midudev/tailwind-animations": "^0.2.0",
     "@paypal/react-paypal-js": "^8.8.3",
