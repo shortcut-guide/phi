@@ -43,7 +43,7 @@ const CartPage = ({ lang }: Props) => {
             const { orderID } = await res.json();
             return orderID;
           },
-          onApprove: async (data: any) => {
+          onApprove: async (data: any, actions: any): Promise<any> => {
             const res = await fetch("/api/paypal/capture-order", {
               method: "POST",
               headers: {
@@ -53,7 +53,7 @@ const CartPage = ({ lang }: Props) => {
               body: JSON.stringify({ orderID: data.orderID }),
             });
             const result = await res.json();
-            alert(`${t.success}: ${result.status}`);
+            return result
           },
         }).render("#paypal-button-container");
       } catch (err) {
