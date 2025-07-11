@@ -21,6 +21,9 @@
       ],
       "@/b/*": [
         "../backend/src/*"
+      ],
+      "@/d/*":[
+        "./src/data/*"
       ]
     },
     "typeRoots": [

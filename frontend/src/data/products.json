@@ -1,0 +1,16 @@
+[
+  {
+    "id": "p-1",
+    "name": "テスト商品",
+    "description": "説明サンプル",
+    "image": "/images/product1.png",
+    "price": 1000
+  },
+  {
+    "id": "p-2",
+    "name": "テスト商品2",
+    "description": "説明サンプル2",
+    "image": "/images/product2.png",
+    "price": 1500
+  }
+]
