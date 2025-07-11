@@ -11,7 +11,7 @@ const ProfilePage = ({ lang }: Props) => {
   return (
     <div>
       <h1 className="text-xl font-bold">{t.title}</h1>
-      <ProfileForm />
+      <ProfileForm lang={lang} />
     </div>
   );
 };
