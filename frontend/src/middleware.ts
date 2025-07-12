@@ -20,6 +20,7 @@ function getLangFromAcceptLanguage(acceptLanguage: string | null): string {
 }
 
 export function middleware(req: NextRequest) {
+  console.log("middleware fire", req.nextUrl.pathname);
   const { pathname } = req.nextUrl;
   const lang = getLangFromAcceptLanguage(req.headers.get('accept-language'));
   // Exclude specific paths
@@ -48,5 +49,5 @@ export function middleware(req: NextRequest) {
 
 // すでに言語パス始まりの場合はmiddlewareが発動しない
 export const config = {
-  matcher: ['/((?!_next|api|static|favicon\\.ico|.well-known)(?![a-zA-Z-]{2,8}($|/)).*)',],
+  matcher: ['/((?!_next/|api/|static/|favicon.ico|.well-known/).*)'],
 };
