@@ -24,6 +24,12 @@ export const getServerSideProps: GetServerSideProps<Pins> = async (ctx) => {
   const pageRaw = params?.page;
   const page = Number(pageRaw);
 
+  // ★「pageが数値でない場合」は404を返す
+  if (!pageRaw || isNaN(page) || page < 1) {
+    return { notFound: true };
+  }
+
+  // 以下は今まで通り
   let allItems: any[] = [];
   let fetchError: string | undefined = undefined;
 
