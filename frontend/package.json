@@ -7,7 +7,9 @@
     "start": "next start -p 8787",
     "test": "node --max-old-space-size=4096 --experimental-vm-modules node_modules/.bin/jest",
     "tsc": "tsc",
-    "langpages": "node scripts/genLangPages.js"
+    "gen-page-files": "node scripts/genPageFiles.js",
+    "gen-lang-pages": "node scripts/genLangPages.js",
+    "langpages": "npm run gen-page-files && npm run gen-lang-pages"
   },
   "dependencies": {
     "@formkit/themes": "^1.6.9",

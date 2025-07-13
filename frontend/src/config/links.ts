@@ -12,7 +12,7 @@ export const links = {
     home: "/",
     page: "/page/",
     dashboard: "/dashboard",
-    pinCreationTool: "/pin-creation-tool",
+    sale: "/sale",
     releases: "/releases",
     messages: "/messages",
     settings: "/settings",

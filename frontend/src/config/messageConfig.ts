@@ -97,6 +97,14 @@ export const messages = {
       forgotPassword: "Forgot your password?"
     }
   },
+  sale:{
+    ja: {
+      title: "特価情報",
+    },
+    en: {
+      title: "Special Offers"
+    }
+  },
   profileForm: {
     ja: {
       nickname: "ニックネーム",

@@ -25,7 +25,7 @@ const MainNavigation = ({ lang }: { lang: string }) =>{
                 </a>
               </li>
               <li className="flex items-center justify-center">
-                <a href={url.pinCreationTool} aria-label={t.sale} className="w-[70%] border-none hover:bg-gray-100 focus:outline-none focus:bg-gray-200">
+                <a href={url.sale} aria-label={t.sale} className="w-[70%] border-none hover:bg-gray-100 focus:outline-none focus:bg-gray-200">
                   <Picture src={asset.sale} alt={alt.sale} className="w-full" />
                 </a>
               </li>

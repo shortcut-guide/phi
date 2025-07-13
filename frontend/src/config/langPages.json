@@ -1,6 +1,4 @@
 [
-  "404",
-  "[page]",
   "cart",
   "commerce",
   "forgot-password",
@@ -10,6 +8,7 @@
   "messages",
   "privacy-policy",
   "releases",
+  "sale",
   "terms",
   "users"
 ]

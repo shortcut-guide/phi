@@ -13,7 +13,7 @@ type Props = {
 };
 
 const PrivacyPolicyPage = ({ lang }: Props) => {
-  const t = (messages.privacyPolicy as any)[lang] ?? {};
+  const t = (messages.sale as any)[lang] ?? {};
 
   return (
     <DefaultLayout lang={lang} title={t.title}>
