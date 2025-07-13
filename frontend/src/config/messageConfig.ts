@@ -679,5 +679,13 @@ export const messages = {
       return:"← Return",
       next: "Next",
     }
+  },
+  releases:{
+    ja: {
+      title: 'リリース',
+    },
+    en: {
+      title: 'Releases',
+    }
   }
 };

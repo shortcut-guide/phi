@@ -1,53 +1,50 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import langPages from '@/f/config/langPages.json'; // tsconfigでpath調整
 
-const EXCLUDE_PATHS = ['/.well-known', '/_next', '/api', '/favicon.ico', '/static'];
+import { messages } from "@/f/config/messageConfig";
 
-function isLangPath(pathname: string) {
-  // Check if pathname starts with / followed by 2 to 8 letters or hyphens (case insensitive)
-  // e.g. /ja, /en, /fr, /zh-CN, /pt-br
-  const match = pathname.match(/^\/([a-zA-Z-]{2,8})(\/|$)/);
-  return !!match;
+function getSupportedLangs(): string[] {
+  return Object.keys(messages.index || {});
 }
 
-function getLangFromAcceptLanguage(acceptLanguage: string | null): string {
-  if (!acceptLanguage) return 'en';
-  const langs = acceptLanguage.split(',');
-  if (langs.length === 0) return 'en';
-  const firstLang = langs[0].split(';')[0].trim();
-  const primaryLang = firstLang.split('-')[0];
-  return primaryLang || 'en';
+function detectLang(header: string | null, fallback: string = 'ja'): string {
+  if (!header) return fallback;
+  const langs = header.split(',').map(l => l.split(';')[0].trim().toLowerCase());
+  const supported = getSupportedLangs();
+  const found = langs.find(l => supported.includes(l));
+  if (found) return found;
+  if (supported.includes('en')) return 'en';
+  return fallback;
 }
 
 export function middleware(req: NextRequest) {
-  console.log("middleware fire", req.nextUrl.pathname);
   const { pathname } = req.nextUrl;
-  const lang = getLangFromAcceptLanguage(req.headers.get('accept-language'));
-  // Exclude specific paths
-  if (EXCLUDE_PATHS.some(p => pathname.startsWith(p))) {
-    return NextResponse.next();
-  }
 
-  // If path starts with a language code, do not redirect
-  if (isLangPath(pathname)) {
-    return NextResponse.next();
-  }
-
-  // If root path, redirect to language path based on accept-language header
+  // /なら言語トップにリダイレクト
   if (pathname === '/') {
+    const lang = detectLang(req.headers.get('accept-language'), 'ja');
     const url = req.nextUrl.clone();
     url.pathname = `/${lang}`;
     return NextResponse.redirect(url);
   }
 
-  // Otherwise, add language prefix to path and redirect
-  const url = req.nextUrl.clone();
-  url.pathname = `/${lang}${pathname}`;
+  // /{page} 形式ならリスト参照して自動判定
+  if (/^\/[\w-]+$/.test(pathname)) {
+    const page = pathname.slice(1);
+    if (langPages.includes(page)) {
+      const lang = detectLang(req.headers.get('accept-language'), 'ja');
+      const url = req.nextUrl.clone();
+      url.pathname = `/${lang}${pathname}`;
+      return NextResponse.redirect(url);
+    }
+  }
 
-  return NextResponse.redirect(url);
+  // /{lang} または /{lang}/{page} の場合はそのまま
+  const lang = pathname.split('/')[1];
+  if (getSupportedLangs().includes(lang)) {
+    return NextResponse.next();
+  }
+
+  return NextResponse.next();
 }
-
-// すでに言語パス始まりの場合はmiddlewareが発動しない
-export const config = {
-  matcher: ['/((?!_next/|api/|static/|favicon.ico|.well-known/).*)'],
-};

@@ -3,10 +3,11 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "next dev -p 8787",
-    "build": "next build",
+    "build": "npm run langpages && next build",
     "start": "next start -p 8787",
     "test": "node --max-old-space-size=4096 --experimental-vm-modules node_modules/.bin/jest",
-    "tsc": "tsc"
+    "tsc": "tsc",
+    "langpages": "node scripts/genLangPages.js"
   },
   "dependencies": {
     "@formkit/themes": "^1.6.9",
