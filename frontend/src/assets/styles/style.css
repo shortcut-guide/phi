@@ -2,26 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
-.admin-interface {
-  display: block;
-}
-@media (min-width: 768px) {
-  .admin-interface {
-    display: grid;
-    grid-template-columns: 1fr auto;
-  }
-  .admin-interface main {
-    margin-left: 60px;
-    padding: 6rem;
-  }
-}
-.admin-interface main {
-  padding: 2rem;
-}
-
 .slide-in {
   transition-timing-function: ease-out;
 }
 .slide-out {
   transition-timing-function: ease-in;
+}
+
+.scrollbar-hide {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
 }

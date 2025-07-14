@@ -2,13 +2,11 @@ import { useEffect, useRef, useState } from "react";
 import ProductCard from "@/f/components/ProductCard";
 
 export const MasonryLayout = ({ products, onLoadMore, enableInfiniteScroll = false }) => {
-  const featured = products.filter((_, index) => index % 3 === 0);
-  const popular = products.filter((_, index) => index % 3 === 1);
-  const recent = products.filter((_, index) => index % 3 === 2);
+  const col1 = products.filter((_, index) => index % 2 === 0);
+  const col2 = products.filter((_, index) => index % 2 === 1);
 
-  // 親・中央コラムのref
+  // 親コラムのref
   const containerRef = useRef(null);
-  const centerColumnRef = useRef(null);
 
   // observer用
   const loadRef = useRef<HTMLDivElement | null>(null);
@@ -33,43 +31,31 @@ export const MasonryLayout = ({ products, onLoadMore, enableInfiniteScroll = fal
     };
   }, [enableInfiniteScroll, onLoadMore, observerAttached]);
 
-  // 中央でスクロールしたら、全体をスクロールさせる
+  // スクロールイベント
   const handleCenterScroll = (e) => {
     if (containerRef.current) {
       containerRef.current.scrollTop += e.deltaY;
-      e.preventDefault();
     }
   };
 
   return (
     <div
-      className="grid grid-cols-3 gap-4 h-[80vh] overflow-hidden"
+      className="grid grid-cols-2 gap-1 h-[100vh] overflow-hidden"
       ref={containerRef}
     >
-      {/* 左カラム: 独立スクロール */}
-      <div className="overflow-y-auto h-full">
-        {featured.map((product) => (
+      {/* 左カラム */}
+      <div className="h-full" onWheel={handleCenterScroll} style={{ pointerEvents: "auto" }}>
+        {col1.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}
       </div>
-      {/* 中央カラム: スクロールで親を動かす */}
-      <div
-        ref={centerColumnRef}
-        className="overflow-y-auto h-full"
-        onWheel={handleCenterScroll}
-        style={{ pointerEvents: "auto" }}
-      >
-        {popular.map((product) => (
+      {/* 右カラム */}
+      <div className="h-full" onWheel={handleCenterScroll} style={{ pointerEvents: "auto" }}>
+        {col2.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}
       </div>
-      {/* 右カラム: 独立スクロール */}
-      <div className="overflow-y-auto h-full">
-        {recent.map((product) => (
-          <ProductCard key={product.id} product={product} />
-        ))}
-      </div>
-      {/* PinGridと同様のIntersectionObserver */}
+      {/* IntersectionObserver */}
       {enableInfiniteScroll && <div ref={loadRef} style={{ height: 1 }} />}
     </div>
   );

@@ -22,7 +22,6 @@ module.exports = {
   darkMode: "class",
   corePlugins:{
     aspectRatio: false,
-    fontSize: false,
   },
   plugins: [
     require('@tailwindcss/forms'),
