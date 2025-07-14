@@ -52,10 +52,8 @@ const Home = ({ lang }: { lang: string }) => {
 
   useEffect(() => {
     const { page: queryPage } = router.query;
-    if (queryPage) {
-      const initialPageFromURL = getParsePageInt();
-      loadPage(initialPageFromURL, true);
-    }
+    const initialPageFromURL = getParsePageInt();
+    loadPage(initialPageFromURL, true);
   }, [router.query.page]);
 
   const t = (messages.index as any)[lang] ?? {};
