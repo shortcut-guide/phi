@@ -14,7 +14,7 @@ const LogoLink: React.FC<Props> = (props) => {
   const url = getLangObj<typeof links.url>(links.url);
   return (
     <a href={url.home} {...props}>
-      <PictureImage src={asset.logo} className="w-full" />
+      <PictureImage src={asset.logo} className="h-full" />
     </a>
   );
 };
