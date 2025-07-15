@@ -59,7 +59,7 @@ const Home = ({ lang }: { lang: string }) => {
   const t = (messages.index as any)[lang] ?? {};
   return (
     <DefaultLayout lang={lang} title={t.title}>
-      <div className="w-full h-screen flex flex-col overflow-hidden">
+      <div className="w-full h-screen flex flex-col overflow-hidden p-4">
         <MasonryLayout
           products={items}
           onLoadMore={() => {}}
