@@ -3,8 +3,7 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "next dev -p 8787",
-    "build": "npm run langpages && next build",
-    "start": "next start -p 8787",
+    "start": "rm -rf .next && npm run langpages && next build && next start -p 8787",
     "test": "node --max-old-space-size=4096 --experimental-vm-modules node_modules/.bin/jest",
     "tsc": "tsc",
     "gen-page-files": "node scripts/genPageFiles.js",
