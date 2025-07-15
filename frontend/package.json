@@ -23,6 +23,7 @@
     "emmet": "^2.4.11",
     "eslint": "^9.25.0",
     "express": "^5.1.0",
+    "iso-country-currency": "^0.7.2",
     "jest-fetch-mock": "^3.0.3",
     "next": "^15.3.5",
     "node-fetch": "^3.3.2",

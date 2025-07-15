@@ -44,13 +44,13 @@ export const MasonryLayout = ({ products, onLoadMore, enableInfiniteScroll = fal
       ref={containerRef}
     >
       {/* 左カラム */}
-      <div className="h-full" onWheel={handleCenterScroll} style={{ pointerEvents: "auto" }}>
+      <div className="px-1 h-full" onWheel={handleCenterScroll} style={{ pointerEvents: "auto" }}>
         {col1.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}
       </div>
       {/* 右カラム */}
-      <div className="h-full" onWheel={handleCenterScroll} style={{ pointerEvents: "auto" }}>
+      <div className="px-1 h-full" onWheel={handleCenterScroll} style={{ pointerEvents: "auto" }}>
         {col2.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}

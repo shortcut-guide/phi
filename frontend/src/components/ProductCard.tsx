@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import type { Product } from "@/f/types/product";
+import { getAllInfoByISO } from 'iso-country-currency';
 
 // シンプルなスライドコンポーネント
 const ImageSlider = ({ images }: { images: string[] }) => {
@@ -159,6 +160,24 @@ const ProductCard: React.FC<ProductCardProps> = ({
         .map(([key]) => key);
     };
 
+    const getCurrencyInfo = () => {
+      const rawCountry = product.ec_data?.country;
+      const country = typeof rawCountry === 'string' && rawCountry.length === 2
+        ? rawCountry.toUpperCase()
+        : null;
+
+      try {
+        const info = country ? getAllInfoByISO(country) : null;
+        const code = info?.currency ?? 'USD';
+        const symbol = info?.symbol ?? '$';
+        return { symbol, label: code };
+      } catch (err) {
+        console.error('Currency lookup failed:', err);
+        return { symbol: '$', label: 'USD' };
+      }
+    };
+    const currency = getCurrencyInfo();
+
     const priceGroups = getPriceGroupKeys();
     const [activeTab, setActiveTab] = React.useState<string | null>(
       priceGroups.length > 0 ? Object.keys(product.ec_data[priceGroups[0]])[0] : null
@@ -172,10 +191,10 @@ const ProductCard: React.FC<ProductCardProps> = ({
       return (
         <div className="flex mt-3 text-xs font-bold">
           {basePrice && (
-            <div id="base_price">{basePrice.toLocaleString()}</div>
+            <div id="base_price">{currency.symbol + basePrice.toLocaleString()}</div>
           )}
           {price && price !== basePrice && (
-            <div id="price" className="ml-2">{price.toLocaleString()}</div>
+            <div id="price" className="ml-2">{currency.symbol + price.toLocaleString()}</div>
           )}
         </div>
       );
@@ -207,10 +226,10 @@ const ProductCard: React.FC<ProductCardProps> = ({
           {activeTab && group[activeTab] && (
             <div className="flex text-xs">
               {group[activeTab].base_price && (
-                <div id="base_price" className="font-bold">{group[activeTab].base_price.toLocaleString()}</div>
+                <div id="base_price" className="font-bold">{currency.symbol + group[activeTab].base_price.toLocaleString()}</div>
               )}
               {group[activeTab].price && (
-                <div id="price" className="ml-2 text-gray-500 line-through">{group[activeTab].price.toLocaleString()}</div>
+                <div id="price" className="ml-2 text-gray-500 line-through">{currency.symbol + group[activeTab].price.toLocaleString()}</div>
               )}
             </div>
           )}
@@ -223,7 +242,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
     <>
       <div
         className={
-          "bg-white rounded-2xl shadow-md overflow-hidden max-w-xs my-3 transform transition-transform hover:scale-[1.02] cursor-pointer " +
+          "bg-white rounded-2xl shadow-md overflow-hidden max-w-xs my-1 transform transition-transform hover:scale-[1.02] cursor-pointer " +
           className
         }
         onClick={() => {
