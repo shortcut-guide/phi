@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
 import fallbackProducts from "@/d/products.json";
+import { MasonryLayout } from "@/f/components/MasonryLayout";
 
 const SearchPage = () => {
   const router = useRouter();
@@ -44,12 +45,45 @@ const SearchPage = () => {
     if (local) setHistory(JSON.parse(local));
   }, []);
 
+  const [searchResults, setSearchResults] = useState<any[]>([]);
   const handleSearch = () => {
     if (!keyword.trim()) return;
+
     const updatedHistory = [keyword, ...history.filter(h => h !== keyword)].slice(0, 5);
     setHistory(updatedHistory);
     localStorage.setItem("search_history", JSON.stringify(updatedHistory));
-    router.push(`/${lang}/search/result?keyword=${encodeURIComponent(keyword)}`);
+
+    const lower = keyword.toLowerCase();
+
+    const results = fallbackProducts.filter((p) => {
+      const ec: Record<string, any> = p.ec_data || {};
+      const name = p.name?.toLowerCase() || "";
+      const id = p.id?.toLowerCase() || "";
+      const desc = ec.description?.toLowerCase() || "";
+      const platform = p.platform?.toLowerCase() || "";
+      const shipping = ec.shipping_from?.toLowerCase() || "";
+
+      const categoryHit = Array.isArray(ec.category) && ec.category.some((c: string) => c.toLowerCase().includes(lower));
+      const colorHit = ec.images?.color && Object.keys(ec.images.color).some(c => c.toLowerCase().includes(lower));
+      const sizeHit = ec.size && Object.keys(ec.size).some(s => s.toLowerCase().includes(lower));
+      const priceHit = ec.size && Object.values(ec.size).some((sz: any) =>
+        String(sz?.base_price || "").includes(lower) || String(sz?.price || "").includes(lower)
+      );
+
+      return (
+        name.includes(lower) ||
+        id.includes(lower) ||
+        desc.includes(lower) ||
+        platform.includes(lower) ||
+        shipping.includes(lower) ||
+        categoryHit ||
+        colorHit ||
+        sizeHit ||
+        priceHit
+      );
+    });
+
+    setSearchResults(results);
   };
 
   // カテゴリの木構造を構築する関数
@@ -139,6 +173,62 @@ const SearchPage = () => {
     );
   };
 
+  // 柔軟な画像構造対応: FlexibleImagesのロジックを踏襲
+  const getProductImage = (p: any): string | null => {
+    try {
+      const images = p.ec_data?.images;
+      if (!images) {
+        if (typeof p.image === "string" && p.image.trim()) {
+          return encodeURI(p.image.trim());
+        }
+        console.warn("画像取得失敗:", p.id, p.image, images);
+        return null;
+      }
+
+      // 配列なら先頭
+      if (Array.isArray(images) && images.length > 0) {
+        if (typeof images[0] === "string" && images[0].trim()) {
+          return encodeURI(images[0].trim());
+        }
+      }
+
+      // オブジェクト(多重構造)なら最初の画像を探索
+      if (typeof images === "object" && images !== null) {
+        const parentKeys = Object.keys(images);
+        for (const parentKey of parentKeys) {
+          const childObj = images[parentKey];
+          if (Array.isArray(childObj) && childObj.length > 0) {
+            if (typeof childObj[0] === "string" && childObj[0].trim()) {
+              return encodeURI(childObj[0].trim());
+            }
+          }
+          if (typeof childObj === "object" && childObj !== null) {
+            const childKeys = Object.keys(childObj);
+            for (const childKey of childKeys) {
+              const imgs = childObj[childKey];
+              if (Array.isArray(imgs) && imgs.length > 0) {
+                if (typeof imgs[0] === "string" && imgs[0].trim()) {
+                  return encodeURI(imgs[0].trim());
+                }
+              }
+            }
+          }
+        }
+      }
+
+      // フォールバック
+      if (typeof p.image === "string" && p.image.trim()) {
+        return encodeURI(p.image.trim());
+      }
+
+      console.warn("画像取得失敗:", p.id, p.image, images);
+      return null;
+    } catch (e) {
+      console.error("画像取得エラー:", p.id, e);
+      return null;
+    }
+  };
+
   return (
     <div className="p-4 space-y-6">
       {/* フリーワード検索 */}
@@ -189,12 +279,21 @@ const SearchPage = () => {
       <div>
         <h2 className="font-bold mb-2">注目商品</h2>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          {featuredProducts.map((p) => (
-            <div key={p.id} className="border p-2 rounded">
-              <img src={p.image} alt={p.name} className="w-full h-32 object-cover mb-2" />
-              <div className="text-sm">{p.name}</div>
-            </div>
-          ))}
+          {featuredProducts.map((p) => {
+            const imageSrc = getProductImage(p);
+            return (
+              <div key={p.id} className="border p-2 rounded">
+                {imageSrc && (
+                  <img
+                    src={imageSrc}
+                    alt={p.name}
+                    className="w-full h-32 object-cover mb-2"
+                  />
+                )}
+                <div className="text-sm">{p.name}</div>
+              </div>
+            );
+          })}
         </div>
       </div>
 
@@ -216,6 +315,18 @@ const SearchPage = () => {
           ))}
         </div>
       </div>
+
+      {/* 検索結果 */}
+      {searchResults.length > 0 && (
+        <div>
+          <h2 className="font-bold mb-2">検索結果</h2>
+          <MasonryLayout
+            products={searchResults}
+            onLoadMore={() => {}}
+            enableInfiniteScroll={true}
+          />
+        </div>
+      )}
     </div>
   );
 };
