@@ -1,18 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from "react";
 import type { Product } from "@/f/types/product";
-import { getAllInfoByISO } from 'iso-country-currency';
+import { getAllInfoByISO } from "iso-country-currency";
 
-const ImageSlider = ({ images }: { images: string[] }) => {
-  if (!Array.isArray(images) || images.length === 0) return null;
-  return (
-    <div
-      className="overflow-hidden w-full py-2"
-      style={{ position: "relative" }}
-    >
-      <div
-        className="flex flex-nowrap overflow-x-auto scrollbar-hide snap-x snap-mandatory scroll-smooth"
-        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-      >
+// 汎用：ec_dataラベル自動生成
+const labelize = (key: string) =>
+  key
+    .replace(/_/g, " ")
+    .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
+    .replace(/\b\w/g, (c) => c.toUpperCase())
+    .trim();
+
+// 画像スライダー
+const ImageSlider = ({ images }: { images: string[] }) =>
+  !images?.length ? null : (
+    <div className="overflow-hidden w-full py-2">
+      <div className="flex flex-nowrap overflow-x-auto scrollbar-hide snap-x snap-mandatory scroll-smooth" style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
         {images.map((img, i) => (
           <img
             key={i}
@@ -26,39 +28,31 @@ const ImageSlider = ({ images }: { images: string[] }) => {
       </div>
     </div>
   );
-};
 
+// 複雑な多重構造画像対応
 const FlexibleImages: React.FC<{ images: any }> = ({ images }) => {
-  if (Array.isArray(images)) {
-    return <ImageSlider images={images} />;
-  }
-  if (typeof images === 'object' && images !== null) {
+  if (Array.isArray(images)) return <ImageSlider images={images} />;
+  if (typeof images === "object" && images !== null) {
     const parentKeys = Object.keys(images);
     const [activeParent, setActiveParent] = useState(parentKeys[0]);
-    const [activeChild, setActiveChild] = useState(Object.keys(images[parentKeys[0]])[0]);
-
-    // 親が変わったときに、子もその親の先頭にリセット
+    const [activeChild, setActiveChild] = useState(Object.keys(images[activeParent])[0]);
     React.useEffect(() => {
       setActiveChild(Object.keys(images[activeParent])[0]);
     }, [activeParent]);
-
     const childKeys = Object.keys(images[activeParent]);
-    const activeImages = Array.isArray(images[activeParent][activeChild])
-      ? images[activeParent][activeChild]
-      : [];
-
+    const activeImages = Array.isArray(images[activeParent][activeChild]) ? images[activeParent][activeChild] : [];
     return (
       <div>
         <ImageSlider images={activeImages} />
-        <div
-          className="flex gap-2 mt-1 overflow-x-auto whitespace-nowrap scrollbar-hide"
-          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-        >
-          {childKeys.map(child => (
+        <div className="flex gap-2 mt-1 overflow-x-auto whitespace-nowrap scrollbar-hide" style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
+          {childKeys.map((child) => (
             <button
               key={child}
-              className={`inline-block min-w-fit px-2 text-black text-[0.6875em] ${child === activeChild ? 'bg-blue-400 text-white' : 'bg-gray-100'}`}
-              onClick={e => { e.stopPropagation(); setActiveChild(child); }}
+              className={`inline-block min-w-fit px-2 text-black text-[0.6875em] ${child === activeChild ? "bg-blue-400 text-white" : "bg-gray-100"}`}
+              onClick={(e) => {
+                e.stopPropagation();
+                setActiveChild(child);
+              }}
               type="button"
             >
               {child}
@@ -71,6 +65,143 @@ const FlexibleImages: React.FC<{ images: any }> = ({ images }) => {
   return null;
 };
 
+// description：改行＆余白あり
+const DescriptionBlock: React.FC<{ text?: string }> = ({ text }) =>
+  !text ? null : (
+    <div className="mb-4">
+      {text.split("\n").map((line, i) =>
+        line.trim() ? (
+          <div key={i} className="text-[0.6875em] font-bold text-black text-left mb-2 leading-tight">
+            {line}
+          </div>
+        ) : (
+          <div key={i} className="mb-2" />
+        )
+      )}
+    </div>
+  );
+
+// タブ付きスペック
+const TabbedSpec: React.FC<{
+  label: string;
+  data: Record<string, any>;
+  active: string;
+  setActive: (tab: string) => void;
+}> = ({ label, data, active, setActive }) => (
+  <div className="col-span-2 bg-blue-50 rounded px-2 py-2 text-xs text-blue-700 font-semibold flex flex-col min-w-0 max-w-full">
+    <div className="text-blue-500 mb-1 break-keep">{label}</div>
+    <div className="flex gap-1 mb-2">
+      {Object.keys(data).map((tab) => (
+        <button
+          key={tab}
+          className={`px-2 py-1 rounded ${active === tab ? "bg-blue-500 text-white" : "bg-gray-100 text-blue-700"}`}
+          onClick={(e) => {
+            e.stopPropagation();
+            setActive(tab);
+          }}
+          type="button"
+        >
+          {tab}
+        </button>
+      ))}
+    </div>
+    <div className="bg-white rounded px-2 py-1 text-blue-900">
+      {Object.entries(data[active]).map(([k, v]) => (
+        <div key={k} className="flex justify-between">
+          <span className="text-gray-500">{labelize(k)}:</span>
+          <span>{String(v)}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+);
+
+// 汎用スペック
+const GenericSpec: React.FC<{ label: string; value: any }> = ({ label, value }) => (
+  <div className="bg-blue-50 rounded px-2 py-1 text-xs text-blue-700 font-semibold flex flex-col min-w-0 max-w-full">
+    <div className="text-blue-500 mb-1 break-keep">{label}</div>
+    <div className="break-all whitespace-pre-wrap bg-white rounded px-1 py-0.5 text-blue-900">
+      {typeof value === "object" ? JSON.stringify(value, null, 2) : String(value)}
+    </div>
+  </div>
+);
+
+// 価格パネル（タブ付き含む）
+const PricePanel: React.FC<{ product: Product }> = ({ product }) => {
+  const getCurrencyInfo = () => {
+    const rawCountry = product.ec_data?.country;
+    const country = typeof rawCountry === "string" && rawCountry.length === 2 ? rawCountry.toUpperCase() : null;
+    try {
+      const info = country ? getAllInfoByISO(country) : null;
+      const code = info?.currency ?? "USD";
+      const symbol = info?.symbol ?? "$";
+      return { symbol, label: code };
+    } catch (err) {
+      return { symbol: "$", label: "USD" };
+    }
+  };
+  const currency = getCurrencyInfo();
+
+  // バリエーションキー検出
+  const ecData = product.ec_data || {};
+  const priceGroupKeys = Object.entries(ecData)
+    .filter(
+      ([, value]) =>
+        value &&
+        typeof value === "object" &&
+        Object.values(value).every((v) => v && typeof v === "object" && ("base_price" in v || "price" in v))
+    )
+    .map(([key]) => key);
+
+  // タブ管理
+  const [activeTabs, setActiveTabs] = useState(
+    Object.fromEntries(priceGroupKeys.map((key) => [key, Object.keys(ecData[key])[0]]))
+  );
+
+  if (priceGroupKeys.length === 0) {
+    const basePrice = product.base_price ?? ecData.base_price;
+    const price = product.price ?? ecData.price;
+    if (!basePrice && !price) return null;
+    return (
+      <div className="flex mt-3 text-xs font-bold">
+        {basePrice && <div id="base_price">{currency.symbol + basePrice.toLocaleString()}</div>}
+        {price && price !== basePrice && <div id="price" className="ml-2">{currency.symbol + price.toLocaleString()}</div>}
+      </div>
+    );
+  }
+
+  return priceGroupKeys.map((parentKey) => {
+    const group = ecData[parentKey];
+    const tabKeys = Object.keys(group);
+    const activeTab = activeTabs[parentKey] || tabKeys[0];
+    return (
+      <div key={parentKey} className="mt-2">
+        <div className="flex gap-1 mb-2 overflow-x-auto whitespace-nowrap scrollbar-hide">
+          {tabKeys.map((tab) => (
+            <button
+              key={tab}
+              className={`px-1 py-1 text-[0.6875em] rounded ${activeTab === tab ? "bg-blue-500 text-white" : "bg-gray-100"}`}
+              onClick={(e) => {
+                e.stopPropagation();
+                setActiveTabs((prev) => ({ ...prev, [parentKey]: tab }));
+              }}
+              type="button"
+            >
+              {tab}
+            </button>
+          ))}
+        </div>
+        {group[activeTab] && (
+          <div className="flex text-xs">
+            {group[activeTab].base_price && <div id="base_price" className="font-bold">{currency.symbol + group[activeTab].base_price.toLocaleString()}</div>}
+            {group[activeTab].price && <div id="price" className="ml-2 text-gray-500 line-through">{currency.symbol + group[activeTab].price.toLocaleString()}</div>}
+          </div>
+        )}
+      </div>
+    );
+  });
+};
+
 type ProductCardProps = {
   product: Product;
   onClick?: (product: Product) => void;
@@ -78,125 +209,28 @@ type ProductCardProps = {
   children?: React.ReactNode;
 } & React.HTMLAttributes<HTMLDivElement>;
 
-const ProductCard: React.FC<ProductCardProps> = ({
-  product,
-  onClick,
-  className = "",
-  children,
-  ...rest
-}) => {
+const ProductCard: React.FC<ProductCardProps> = ({ product, onClick, className = "", children, ...rest }) => {
   const [modalOpen, setModalOpen] = useState(false);
 
-  // images以外のパラメータ自動リスト
-  const renderEcData = () => {
-    if (!product.ec_data) return null;
-    return (
-      <div className="mt-2 text-[0.6875em] text-gray-600">
-        {Object.entries(product.ec_data)
-          .filter(([key, value]) => key !== "images" && value)
-          .map(([key, value]) => (
-            <div key={key} className="mb-1">
-              <span className="font-semibold">{key}:</span>{" "}
-              {typeof value === "object" ? JSON.stringify(value) : String(value)}
-            </div>
-          ))}
-      </div>
-    );
-  };
-
-  // 価格表示ロジック（関数で再利用可）
-  const PricePanel: React.FC = () => {
-    // 親の候補を自動検出
-    const getPriceGroupKeys = () => {
-      if (!product.ec_data) return [];
-      return Object.entries(product.ec_data)
+  // ec_dataからスペックを分離
+  const ecData = product.ec_data || {};
+  const tabbedKeys = useMemo(
+    () =>
+      Object.entries(ecData)
         .filter(
           ([, value]) =>
-            value && typeof value === 'object' && 
+            value &&
+            typeof value === "object" &&
             Object.values(value).every(
-              v => v && typeof v === 'object' && ('base_price' in v || 'price' in v)
+              (v) => v && typeof v === "object" && ("base_price" in v || "price" in v)
             )
         )
-        .map(([key]) => key);
-    };
-
-    const getCurrencyInfo = () => {
-      const rawCountry = product.ec_data?.country;
-      const country = typeof rawCountry === 'string' && rawCountry.length === 2
-        ? rawCountry.toUpperCase()
-        : null;
-
-      try {
-        const info = country ? getAllInfoByISO(country) : null;
-        const code = info?.currency ?? 'USD';
-        const symbol = info?.symbol ?? '$';
-        return { symbol, label: code };
-      } catch (err) {
-        console.error('Currency lookup failed:', err);
-        return { symbol: '$', label: 'USD' };
-      }
-    };
-    const currency = getCurrencyInfo();
-
-    const priceGroups = getPriceGroupKeys();
-    const [activeTab, setActiveTab] = React.useState<string | null>(
-      priceGroups.length > 0 ? Object.keys(product.ec_data[priceGroups[0]])[0] : null
-    );
-
-    // 親なしでbase_price/priceだけの場合
-    if (priceGroups.length === 0) {
-      const basePrice = product.base_price ?? product.ec_data?.base_price;
-      const price = product.price ?? product.ec_data?.price;
-      if (!basePrice && !price) return null;
-      return (
-        <div className="flex mt-3 text-xs font-bold">
-          {basePrice && (
-            <div id="base_price">{currency.symbol + basePrice.toLocaleString()}</div>
-          )}
-          {price && price !== basePrice && (
-            <div id="price" className="ml-2">{currency.symbol + price.toLocaleString()}</div>
-          )}
-        </div>
-      );
-    }
-
-    // 親（sizeやtypeなど）がある場合
-    return priceGroups.map(parentKey => {
-      const group = product.ec_data[parentKey];
-      const tabKeys = Object.keys(group);
-      return (
-        <div key={parentKey} className="mt-2">
-          {/* タブ */}
-          <div className="flex gap-1 mb-2 overflow-x-auto whitespace-nowrap scrollbar-hide">
-            {tabKeys.map(tab => (
-              <button
-                key={tab}
-                className={`px-1 py-1 text-[0.6875em] rounded ${activeTab === tab ? 'bg-blue-500 text-white' : 'bg-gray-100'}`}
-                onClick={e => {
-                  e.stopPropagation();
-                  setActiveTab(tab);
-                }}
-                type="button"
-              >
-                {tab}
-              </button>
-            ))}
-          </div>
-          {/* 選択されたタブの価格を表示 */}
-          {activeTab && group[activeTab] && (
-            <div className="flex text-xs">
-              {group[activeTab].base_price && (
-                <div id="base_price" className="font-bold">{currency.symbol + group[activeTab].base_price.toLocaleString()}</div>
-              )}
-              {group[activeTab].price && (
-                <div id="price" className="ml-2 text-gray-500 line-through">{currency.symbol + group[activeTab].price.toLocaleString()}</div>
-              )}
-            </div>
-          )}
-        </div>
-      );
-    });
-  };
+        .map(([key]) => key),
+    [ecData]
+  );
+  const [activeTabs, setActiveTabs] = useState(
+    Object.fromEntries(tabbedKeys.map((key) => [key, Object.keys(ecData[key])[0]]))
+  );
 
   return (
     <>
@@ -211,33 +245,49 @@ const ProductCard: React.FC<ProductCardProps> = ({
         }}
         {...rest}
       >
-        {/* 画像表示箇所を変更 */}
-        {product.ec_data?.images && <FlexibleImages images={product.ec_data.images} />}
+        {ecData.images && <FlexibleImages images={ecData.images} />}
         <div className="py-1 px-4">
-          {product.name ? (
-            <h2 className="text-[0.6875em] font-semibold mb-2">{product.name}</h2>
-          ) : null}
-          <PricePanel />
+          {product.name && <h2 className="text-[0.6875em] font-semibold mb-2">{product.name}</h2>}
+          <PricePanel product={product} />
           {children}
         </div>
       </div>
-      {/* Modal */}
       {modalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
-          <div className="relative bg-white rounded-xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-6">
-            <button className="absolute top-3 right-3 text-gray-400 hover:text-gray-700 text-2xl font-bold" onClick={() => setModalOpen(false)} aria-label="閉じる">
-              ×
-            </button>
-            <h2 className="text-xs font-semibold mb-2">{product.name}</h2>
-            {product.description && (
-              <p className="text-base text-gray-700 mb-3">{product.description}</p>
+          <div className="relative bg-white rounded-xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-0">
+            <button className="absolute top-3 right-3 text-gray-400 hover:text-gray-700 text-2xl font-bold" onClick={() => setModalOpen(false)} aria-label="閉じる">×</button>
+            {ecData.images && (
+              <div className="flex justify-center items-center bg-gray-100 rounded-t-xl p-4">
+                <FlexibleImages images={ecData.images} />
+              </div>
             )}
-            <PricePanel />
-            {renderEcData()}
-            {/* 画像一覧を同様に表示 */}
-            {product.ec_data?.images && (
-              <div><FlexibleImages images={product.ec_data.images} /></div>
-            )}
+            <div className="p-6">
+              {product.name && <h2 className="text-[0.6875em] font-bold text-center mb-1">{product.name}</h2>}
+              <div className="mb-2 text-center">
+                <PricePanel product={product} />
+              </div>
+              {/* description（本体・ec_data両方） */}
+              <DescriptionBlock text={product.description} />
+              <DescriptionBlock text={ecData.description} />
+              {/* スペックタグ：タブ付き・通常両対応 */}
+              <div className="mb-2 grid grid-cols-2 gap-2">
+                {Object.entries(ecData)
+                  .filter(([key, value]) => key !== "images" && key !== "description" && value !== undefined && value !== null)
+                  .map(([key, value]) =>
+                    tabbedKeys.includes(key) ? (
+                      <TabbedSpec
+                        key={key}
+                        label={labelize(key)}
+                        data={value}
+                        active={activeTabs[key] || Object.keys(value)[0]}
+                        setActive={(tab) => setActiveTabs((prev) => ({ ...prev, [key]: tab }))}
+                      />
+                    ) : (
+                      <GenericSpec key={key} label={labelize(key)} value={value} />
+                    )
+                  )}
+              </div>
+            </div>
           </div>
         </div>
       )}
