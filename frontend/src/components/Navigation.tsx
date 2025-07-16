@@ -20,7 +20,7 @@ const MainNavigation = ({ lang }: { lang: string }) =>{
                 <Logo alt="phis admin" className="h-full text-gray-600 group-focus:text-gray-800 invert" />
               </li>
               <li className="h-full">
-                <a aria-label={t.search} className="h-full border-none hover:bg-gray-100 focus:outline-none focus:bg-gray-200">
+                <a href={url.search} aria-label={t.search} className="h-full border-none hover:bg-gray-100 focus:outline-none focus:bg-gray-200">
                   <Picture src={asset.searchingBar} alt={alt.search} className="w-full h-full object-contain" />
                 </a>
               </li>

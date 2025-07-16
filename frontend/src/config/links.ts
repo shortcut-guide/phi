@@ -12,6 +12,7 @@ export const links = {
     home: "/",
     page: "/page/",
     dashboard: "/dashboard",
+    search: "/search",
     sale: "/sale",
     releases: "/releases",
     messages: "/messages",
