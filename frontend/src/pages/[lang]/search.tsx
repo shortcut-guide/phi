@@ -1,3 +1,4 @@
+import DefaultLayout from "@/f/layouts/DefaultLayout";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
@@ -230,104 +231,106 @@ const SearchPage = () => {
   };
 
   return (
-    <div className="p-4 space-y-6">
-      {/* フリーワード検索 */}
-      <div className="flex gap-2">
-        <input
-          value={keyword}
-          onChange={(e) => setKeyword(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-          placeholder="検索ワードを入力"
-          className="border rounded px-3 py-2 w-full"
-        />
-        <button onClick={handleSearch} className="bg-blue-500 text-white text-[0.6875em] px-2 py-1 rounded">検索</button>
-      </div>
-
-      {/* カテゴリ検索 */}
-      <div>
-        <h2 className="font-bold mb-2">カテゴリから探す</h2>
-        {categories.length > 0 && (
-          <CategoryTree
-            nodes={buildCategoryTree(categories)}
-            onSelect={(selectedPath) =>
-              router.push(`/${lang}/search/result?category=${encodeURIComponent(selectedPath.join(">"))}`)
-            }
+    <DefaultLayout lang={lang as string} title="検索">
+      <div className="p-4 space-y-6">
+        {/* フリーワード検索 */}
+        <div className="flex gap-2">
+          <input
+            value={keyword}
+            onChange={(e) => setKeyword(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+            placeholder="検索ワードを入力"
+            className="border rounded px-3 py-2 w-full"
           />
+          <button onClick={handleSearch} className="bg-blue-500 text-white text-[0.6875em] px-2 py-1 rounded">検索</button>
+        </div>
+
+        {/* カテゴリ検索 */}
+        <div>
+          <h2 className="font-bold mb-2">カテゴリから探す</h2>
+          {categories.length > 0 && (
+            <CategoryTree
+              nodes={buildCategoryTree(categories)}
+              onSelect={(selectedPath) =>
+                router.push(`/${lang}/search/result?category=${encodeURIComponent(selectedPath.join(">"))}`)
+              }
+            />
+          )}
+        </div>
+
+        {/* 人気検索ワード */}
+        <div>
+          <h2 className="font-bold mb-2">人気検索ワード</h2>
+          <div className="flex flex-wrap gap-2">
+            {popularWords.map((word) => (
+              <button
+                key={word}
+                onClick={() => {
+                  setKeyword(word);
+                  handleSearch();
+                }}
+                className="bg-yellow-200 px-3 py-1 rounded"
+              >
+                {word}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* 注目商品 */}
+        <div>
+          <h2 className="font-bold mb-2">注目商品</h2>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            {featuredProducts.map((p) => {
+              const imageSrc = getProductImage(p);
+              return (
+                <div key={p.id} className="border p-2 rounded">
+                  {imageSrc && (
+                    <img
+                      src={imageSrc}
+                      alt={p.name}
+                      className="w-full h-32 object-cover mb-2"
+                    />
+                  )}
+                  <div className="text-sm">{p.name}</div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* 検索履歴 */}
+        <div>
+          <h2 className="font-bold mb-2">最近の検索履歴</h2>
+          <div className="flex flex-wrap gap-2">
+            {history.map((h) => (
+              <button
+                key={h}
+                onClick={() => {
+                  setKeyword(h);
+                  handleSearch();
+                }}
+                className="bg-gray-300 px-3 py-1 rounded"
+              >
+                {h}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* 検索結果 */}
+        {searchResults.length > 0 && (
+          <div>
+            <h2 className="font-bold mb-2">検索結果</h2>
+            <MasonryLayout
+              products={searchResults}
+              onLoadMore={() => {}}
+              enableInfiniteScroll={true}
+            />
+          </div>
         )}
       </div>
-
-      {/* 人気検索ワード */}
-      <div>
-        <h2 className="font-bold mb-2">人気検索ワード</h2>
-        <div className="flex flex-wrap gap-2">
-          {popularWords.map((word) => (
-            <button
-              key={word}
-              onClick={() => {
-                setKeyword(word);
-                handleSearch();
-              }}
-              className="bg-yellow-200 px-3 py-1 rounded"
-            >
-              {word}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* 注目商品 */}
-      <div>
-        <h2 className="font-bold mb-2">注目商品</h2>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          {featuredProducts.map((p) => {
-            const imageSrc = getProductImage(p);
-            return (
-              <div key={p.id} className="border p-2 rounded">
-                {imageSrc && (
-                  <img
-                    src={imageSrc}
-                    alt={p.name}
-                    className="w-full h-32 object-cover mb-2"
-                  />
-                )}
-                <div className="text-sm">{p.name}</div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* 検索履歴 */}
-      <div>
-        <h2 className="font-bold mb-2">最近の検索履歴</h2>
-        <div className="flex flex-wrap gap-2">
-          {history.map((h) => (
-            <button
-              key={h}
-              onClick={() => {
-                setKeyword(h);
-                handleSearch();
-              }}
-              className="bg-gray-300 px-3 py-1 rounded"
-            >
-              {h}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* 検索結果 */}
-      {searchResults.length > 0 && (
-        <div>
-          <h2 className="font-bold mb-2">検索結果</h2>
-          <MasonryLayout
-            products={searchResults}
-            onLoadMore={() => {}}
-            enableInfiniteScroll={true}
-          />
-        </div>
-      )}
-    </div>
+    </DefaultLayout>
   );
 };
 
