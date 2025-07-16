@@ -106,12 +106,14 @@ const TabbedSpec: React.FC<{
       ))}
     </div>
     <div className="bg-white rounded px-2 py-1 text-blue-900">
-      {Object.entries(data[active]).map(([k, v]) => (
-        <div key={k} className="flex justify-between">
-          <span className="text-gray-500">{labelize(k)}:</span>
-          <span>{String(v)}</span>
-        </div>
-      ))}
+      {Object.entries(data[active])
+        .filter(([k]) => k !== "base_price" && k !== "price")
+        .map(([k, v]) => (
+          <div key={k} className="flex justify-between">
+            <span className="text-gray-500">{labelize(k)}:</span>
+            <span>{String(v)}</span>
+          </div>
+        ))}
     </div>
   </div>
 );
@@ -164,8 +166,16 @@ const PricePanel: React.FC<{ product: Product }> = ({ product }) => {
     if (!basePrice && !price) return null;
     return (
       <div className="flex mt-3 text-xs font-bold">
-        {basePrice && <div id="base_price">{currency.symbol + basePrice.toLocaleString()}</div>}
-        {price && price !== basePrice && <div id="price" className="ml-2">{currency.symbol + price.toLocaleString()}</div>}
+        {basePrice && (
+          <div id="base_price">
+            {currency.symbol}{basePrice.toLocaleString()}
+          </div>
+        )}
+        {price && price !== basePrice && (
+          <div id="price" className="ml-2 text-gray-500 line-through">
+            {currency.symbol}{price.toLocaleString()}
+          </div>
+        )}
       </div>
     );
   }
@@ -192,9 +202,17 @@ const PricePanel: React.FC<{ product: Product }> = ({ product }) => {
           ))}
         </div>
         {group[activeTab] && (
-          <div className="flex text-xs">
-            {group[activeTab].base_price && <div id="base_price" className="font-bold">{currency.symbol + group[activeTab].base_price.toLocaleString()}</div>}
-            {group[activeTab].price && <div id="price" className="ml-2 text-gray-500 line-through">{currency.symbol + group[activeTab].price.toLocaleString()}</div>}
+          <div className="flex text-xs font-bold">
+            {group[activeTab].base_price && (
+              <div id="base_price">
+                {currency.symbol}{group[activeTab].base_price.toLocaleString()}
+              </div>
+            )}
+            {group[activeTab].price && (
+              <div id="price" className="ml-2 text-gray-500 line-through">
+                {currency.symbol}{group[activeTab].price.toLocaleString()}
+              </div>
+            )}
           </div>
         )}
       </div>
@@ -266,13 +284,22 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onClick, className =
               <div className="mb-2 text-center">
                 <PricePanel product={product} />
               </div>
-              {/* description（本体・ec_data両方） */}
+              {/* description */}
               <DescriptionBlock text={product.description} />
               <DescriptionBlock text={ecData.description} />
-              {/* スペックタグ：タブ付き・通常両対応 */}
+              {/* スペックタグ：タブ付き */}
               <div className="mb-2 grid grid-cols-2 gap-2">
                 {Object.entries(ecData)
-                  .filter(([key, value]) => key !== "images" && key !== "description" && value !== undefined && value !== null)
+                  .filter(
+                    ([key, value]) =>
+                      key !== "images" &&
+                      key !== "description" &&
+                      key !== "base_price" &&
+                      key !== "price" &&
+                      key !== "size" &&
+                      value !== undefined &&
+                      value !== null
+                  )
                   .map(([key, value]) =>
                     tabbedKeys.includes(key) ? (
                       <TabbedSpec
