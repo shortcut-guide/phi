@@ -1,0 +1,12 @@
+name = "update-popular-search"
+type = "javascript"
+
+compatibility_date = "2025-07-17"
+
+# cron 実行（1日1回 AM 4:00 JST）
+triggers = { crons = ["0 19 * * *"] } # UTC 19時 = JST 4時
+
+# KV 保存先
+kv_namespaces = [
+  { binding = "POPULAR_KV", id = "your_kv_namespace_id" }
+]
