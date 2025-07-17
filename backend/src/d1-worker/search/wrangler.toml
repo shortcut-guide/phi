@@ -1,0 +1,24 @@
+// backend/src/d1-worker/search/popular.ts
+import { getClient } from '../../lib/d1-client';
+
+export async function getPopularSearches(env: Env): Promise<string[]> {
+  const db = getClient(env.DB);
+  const result = await db.prepare(`
+    SELECT keyword
+    FROM search_log
+    WHERE keyword IS NOT NULL AND keyword != ''
+    ORDER BY count DESC
+    LIMIT 20
+  `).all();
+
+  return result.results.map((row: any) => row.keyword);
+}
+
+export async function saveToKV(env: Env, keywords: string[]): Promise<void> {
+  await env.POPULAR_KV.put('popularSearch.json', JSON.stringify(keywords));
+}
+
+interface Env {
+  DB: D1Database;
+  POPULAR_KV: KVNamespace;
+}

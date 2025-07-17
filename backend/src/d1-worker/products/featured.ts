@@ -1,8 +1,12 @@
 // /products/featured.ts
 import type { D1Database } from '@cloudflare/workers-types';
 
-export async function getProducts(db: D1Database) {
-  const { results } = await db
+interface Env {
+  DB: D1Database;
+}
+
+export async function getProducts(env: Env) {
+  const { results } = await env.DB
     .prepare(`
       SELECT *
       FROM products
