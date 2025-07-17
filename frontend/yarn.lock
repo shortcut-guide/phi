@@ -2325,6 +2325,11 @@
   resolved "https://registry.npmjs.org/@tsconfig/node16/-/node16-1.0.4.tgz"
   integrity sha512-vxhUy4J8lyeyinH7Azl1pdd43GJhZH/tP2weN8TntQblOY+A0XbT8DJk1/oCPuOOyg/Ja757rG0CgHcWC8OfMA==
 
+"@tsndr/cloudflare-worker-jwt@^3.2.0":
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/@tsndr/cloudflare-worker-jwt/-/cloudflare-worker-jwt-3.2.0.tgz#bc3f149f36409dedfac96c325d33867f23ac4295"
+  integrity sha512-y45452JzKxFDfCUHNGrdgIcrJTkYa6xtrKtCQTjKj+hjzw8dOHF9R0uGuU8WxvCCMi4sMzZ1KREnZTsTy7DsiQ==
+
 "@types/aria-query@^5.0.1":
   version "5.0.4"
   resolved "https://registry.npmjs.org/@types/aria-query/-/aria-query-5.0.4.tgz"
@@ -4194,6 +4199,11 @@ hi-base32@^0.5.0:
   version "0.5.1"
   resolved "https://registry.npmjs.org/hi-base32/-/hi-base32-0.5.1.tgz"
   integrity sha512-EmBBpvdYh/4XxsnUybsPag6VikPYnN30td+vQk+GI3qpahVEG9+gTkG0aXVxTjBqQ5T6ijbWIu77O+C5WFWsnA==
+
+hono@^4.8.5:
+  version "4.8.5"
+  resolved "https://registry.yarnpkg.com/hono/-/hono-4.8.5.tgz#a3b7703649a86f608c148e9aa1ca9ea41266cf8e"
+  integrity sha512-Up2cQbtNz1s111qpnnECdTGqSIUIhZJMLikdKkshebQSEBcoUKq6XJayLGqSZWidiH0zfHRCJqFu062Mz5UuRA==
 
 html-encoding-sniffer@^3.0.0:
   version "3.0.0"
