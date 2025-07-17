@@ -326,6 +326,8 @@ const SearchPage = () => {
               products={searchResults}
               onLoadMore={() => {}}
               enableInfiniteScroll={true}
+              lang={lang}
+              t={{ title: "検索結果" }} // 必要に応じて適切な翻訳関数またはオブジェクトを渡す
             />
           </div>
         )}

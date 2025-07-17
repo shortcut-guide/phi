@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from "react";
 import type { Product } from "@/f/types/product";
 import { getAllInfoByISO } from "iso-country-currency";
+import { messages } from "@/f/config/messageConfig";
 
 // 汎用：ec_dataラベル自動生成
 const labelize = (key: string) =>
@@ -87,9 +88,10 @@ const TabbedSpec: React.FC<{
   data: Record<string, any>;
   active: string;
   setActive: (tab: string) => void;
-}> = ({ label, data, active, setActive }) => (
+  dict: any;
+}> = ({ label, data, active, setActive, dict }) => (
   <div className="col-span-2 bg-blue-50 rounded px-2 py-2 text-xs text-blue-700 font-semibold flex flex-col min-w-0 max-w-full">
-    <div className="text-blue-500 mb-1 break-keep">{label}</div>
+    <div className="text-blue-500 mb-1 break-keep">{dict[label] ?? labelize(label)}</div>
     <div className="flex gap-1 mb-2">
       {Object.keys(data).map((tab) => (
         <button
@@ -101,7 +103,7 @@ const TabbedSpec: React.FC<{
           }}
           type="button"
         >
-          {tab}
+          {dict[tab] ?? tab}
         </button>
       ))}
     </div>
@@ -110,8 +112,8 @@ const TabbedSpec: React.FC<{
         .filter(([k]) => k !== "base_price" && k !== "price")
         .map(([k, v]) => (
           <div key={k} className="flex justify-between">
-            <span className="text-gray-500">{labelize(k)}:</span>
-            <span>{String(v)}</span>
+            <span className="text-gray-500">{dict[k] ?? labelize(k)}:</span>
+            <span>{dict[String(v)] ?? String(v)}</span>
           </div>
         ))}
     </div>
@@ -119,11 +121,11 @@ const TabbedSpec: React.FC<{
 );
 
 // 汎用スペック
-const GenericSpec: React.FC<{ label: string; value: any }> = ({ label, value }) => (
+const GenericSpec: React.FC<{ label: string; value: any; dict: any }> = ({ label, value, dict }) => (
   <div className="bg-blue-50 rounded px-2 py-1 text-xs text-blue-700 font-semibold flex flex-col min-w-0 max-w-full">
-    <div className="text-blue-500 mb-1 break-keep">{label}</div>
+    <div className="text-blue-500 mb-1 break-keep">{dict[label] ?? labelize(label)}</div>
     <div className="break-all whitespace-pre-wrap bg-white rounded px-1 py-0.5 text-blue-900">
-      {typeof value === "object" ? JSON.stringify(value, null, 2) : String(value)}
+      {typeof value === "object" ? JSON.stringify(value, null, 2) : (dict[value] ?? String(value))}
     </div>
   </div>
 );
@@ -208,7 +210,7 @@ const PricePanel: React.FC<{ product: Product }> = ({ product }) => {
                 {currency.symbol}{group[activeTab].base_price.toLocaleString()}
               </div>
             )}
-            {group[activeTab].price && (
+            {group[activeTab].price && group[activeTab].price !== group[activeTab].base_price && (
               <div id="price" className="ml-2 text-gray-500 line-through">
                 {currency.symbol}{group[activeTab].price.toLocaleString()}
               </div>
@@ -225,10 +227,15 @@ type ProductCardProps = {
   onClick?: (product: Product) => void;
   className?: string;
   children?: React.ReactNode;
+  lang: string;
+  t?: any;
 } & React.HTMLAttributes<HTMLDivElement>;
 
-const ProductCard: React.FC<ProductCardProps> = ({ product, onClick, className = "", children, ...rest }) => {
+const ProductCard: React.FC<ProductCardProps> = ({ product, onClick, className = "", children, lang, ...rest }) => {
   const [modalOpen, setModalOpen] = useState(false);
+
+  // 翻訳辞書
+  const dict = messages.productSpec?.[lang] ?? {};
 
   // ec_dataからスペックを分離
   const ecData = product.ec_data || {};
@@ -280,7 +287,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onClick, className =
               </div>
             )}
             <div className="p-6">
-              {product.name && <h2 className="text-[0.6875em] font-bold text-center mb-1">{product.name}</h2>}
+              {product.name && <h2 className="text-[0.6875em] font-bold text-left mb-1">{product.name}</h2>}
               <div className="mb-2 text-center">
                 <PricePanel product={product} />
               </div>
@@ -300,19 +307,35 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onClick, className =
                       value !== undefined &&
                       value !== null
                   )
-                  .map(([key, value]) =>
-                    tabbedKeys.includes(key) ? (
-                      <TabbedSpec
-                        key={key}
-                        label={labelize(key)}
-                        data={value}
-                        active={activeTabs[key] || Object.keys(value)[0]}
-                        setActive={(tab) => setActiveTabs((prev) => ({ ...prev, [key]: tab }))}
-                      />
-                    ) : (
-                      <GenericSpec key={key} label={labelize(key)} value={value} />
-                    )
-                  )}
+                  .map(([key, value]) => {
+                    if (tabbedKeys.includes(key)) {
+                      return (
+                        <TabbedSpec
+                          key={key}
+                          label={key}
+                          data={value}
+                          active={activeTabs[key] || Object.keys(value)[0]}
+                          setActive={(tab) => setActiveTabs((prev) => ({ ...prev, [key]: tab }))}
+                          dict={dict}
+                        />
+                      );
+                    } else if (key === "category" && Array.isArray(value)) {
+                      return (
+                        <div key={key} className="bg-blue-50 rounded px-2 py-1 text-xs text-blue-700 font-semibold flex flex-col min-w-0 max-w-full">
+                          <div className="text-blue-500 mb-1 break-keep">{dict[key] ?? labelize(key)}</div>
+                          <div className="flex flex-wrap gap-1">
+                            {value.map((cat: string, idx: number) => (
+                              <span key={idx} className="bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full text-[0.65rem]">
+                                {dict[cat] ?? cat}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      );
+                    } else {
+                      return <GenericSpec key={key} label={key} value={value} dict={dict} />;
+                    }
+                  })}
               </div>
             </div>
           </div>

@@ -8,7 +8,7 @@ const getColumnArray = (products, columnCount) => {
   );
 };
 
-export const MasonryLayout = ({ products, onLoadMore, enableInfiniteScroll = false }) => {
+export const MasonryLayout = ({ products, onLoadMore, enableInfiniteScroll = false, lang, t }) => {
   const containerRef = useRef(null);
   const loadRef = useRef<HTMLDivElement | null>(null);
   const [observerAttached, setObserverAttached] = useState(false);
@@ -67,7 +67,7 @@ export const MasonryLayout = ({ products, onLoadMore, enableInfiniteScroll = fal
       {columns.map((col, idx) => (
         <div key={idx} className="flex flex-col gap-1">
           {col.map((product) => (
-            <ProductCard key={product.id} product={product} />
+            <ProductCard key={product.id} product={product} lang={lang} t={t} />
           ))}
         </div>
       ))}

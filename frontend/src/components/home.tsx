@@ -64,6 +64,8 @@ const Home = ({ lang }: { lang: string }) => {
           products={items}
           onLoadMore={() => {}}
           enableInfiniteScroll={true}
+          lang={lang}
+          t={t}
         />
       </div>
     </DefaultLayout>

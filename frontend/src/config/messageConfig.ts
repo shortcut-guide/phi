@@ -695,5 +695,42 @@ export const messages = {
     en: {
       title: 'Releases',
     }
-  }
+  },
+  productSpec: {
+    ja: {
+      color: "カラー",
+      size: "サイズ",
+      brand: "ブランド",
+      category: "カテゴリ",
+      point: "ポイント",
+      shipping_from: "発送元",
+      country: "販売国",
+      review_count: "レビュー",
+      material: "素材",
+      model: "モデル",
+      type: "タイプ",
+      capacity: "容量",
+      weight: "重さ",
+      length: "長さ",
+      width: "幅",
+      height: "高さ",
+    },
+    en: {
+      color: "Color",
+      size: "Size",
+      brand: "Brand",
+      category: "Category",
+      shipping_from: "Shipping",
+      country: "Sold in",
+      review_count: "Review",
+      material: "Material",
+      model: "Model",
+      type: "Type",
+      capacity: "Capacity",
+      weight: "Weight",
+      length: "Length",
+      width: "Width",
+      height: "Height",
+    }
+  },
 };
