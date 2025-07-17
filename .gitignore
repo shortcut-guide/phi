@@ -31,8 +31,10 @@ backend/src/.wrangler/*
 
 backend/public
 backend/public/*
-frontend/public
+# ignore everything in public except assets
 frontend/public/*
+!frontend/public/assets/
+!frontend/public/assets/**
 
 # sqlite cache
 .wrangler/
