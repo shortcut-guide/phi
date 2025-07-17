@@ -242,7 +242,6 @@ const SearchPage = () => {
             placeholder="検索ワードを入力"
             className="border rounded px-3 py-2 w-full"
           />
-          <button onClick={handleSearch} className="bg-blue-500 text-white text-[0.6875em] px-2 py-1 rounded">検索</button>
         </div>
 
         {/* カテゴリ検索 */}
