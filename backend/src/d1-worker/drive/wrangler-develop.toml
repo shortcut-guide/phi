@@ -1,0 +1,11 @@
+name = "drive_cache"
+compatibility_date = "2025-07-18"
+compatibility_flags = ["nodejs_compat"]
+main = "../worker.ts"
+
+account_id = "8273d3708f85a7dddbec9131a3e2b4b4"
+
+[[kv_namespaces]]
+binding = "drive_cache"
+id="2f7564284f4d49538db8b6cc3e1f9cd9"
+preview_id="2f7564284f4d49538db8b6cc3e1f9cd9"

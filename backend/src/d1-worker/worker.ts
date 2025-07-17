@@ -1,5 +1,6 @@
 import type { ExecutionContext } from '@cloudflare/workers-types';
 import type { D1Database } from '@cloudflare/workers-types';
+import { getDriveFile } from "@/b//drive";
 
 export default {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
@@ -104,6 +105,23 @@ export default {
       return json(results);
     }
 
+    // --- Drive API ---
+    if (request.method === "GET" && url.pathname === "/drive/") {
+      const fileId = url.searchParams.get("id");
+      if (!fileId) return json({ error: "Missing file id" }, 400);
+      try {
+        const buffer = await getDriveFile(fileId, env.DRIVE_KV);
+        return new Response(buffer, {
+          headers: {
+            "Content-Type": "application/octet-stream",
+            "Content-Disposition": `attachment; filename=\"${fileId}\"`,
+          },
+        });
+      } catch (e) {
+        return json({ error: "Failed to fetch from Drive" }, 500);
+      }
+    }
+
     return new Response("Not found", { status: 404 });
   }
 };
@@ -127,4 +145,5 @@ interface Env {
   PRODUCTS_DB: D1Database;
   PROFILE_DB: D1Database;
   SEARCHLOGS_DB: D1Database;
+  DRIVE_KV: KVNamespace;
 }
