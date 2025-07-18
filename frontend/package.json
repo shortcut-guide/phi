@@ -2,8 +2,8 @@
   "name": "phis-admin",
   "version": "0.0.1",
   "scripts": {
-    "dev": "next dev -p 8787",
-    "start": "rm -rf .next && npm run langpages && next build && next start -p 8787",
+    "dev": "next dev -p 3001",
+    "start": "rm -rf .next && npm run langpages && next build && next start -p 3001",
     "test": "node --max-old-space-size=4096 --experimental-vm-modules node_modules/.bin/jest",
     "tsc": "tsc",
     "gen-page-files": "node scripts/genPageFiles.js",
@@ -11,8 +11,10 @@
     "langpages": "npm run gen-page-files && npm run gen-lang-pages"
   },
   "dependencies": {
+    "@egoist/tailwindcss-icons": "^1.9.0",
     "@formkit/themes": "^1.6.9",
     "@headlessui/react": "^2.2.4",
+    "@iconify-json/lucide": "^1.2.57",
     "@iconify-json/majesticons": "^1.2.2",
     "@midudev/tailwind-animations": "^0.2.0",
     "@paypal/react-paypal-js": "^8.8.3",

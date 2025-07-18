@@ -1,6 +1,6 @@
 import type { ExecutionContext } from '@cloudflare/workers-types';
 import type { D1Database } from '@cloudflare/workers-types';
-import { getDriveFile } from "@/b//drive";
+import { getDriveFile } from "@/b/services/drive";
 
 export default {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {

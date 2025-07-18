@@ -16,7 +16,8 @@
       "point": 21,
       "shipping_from": "Amazon",
       "country": "JP",
-      "review_count": 3.9,
+      "review_rate": 3.9,
+      "review_count": 3000,
       "size":{
         "S":{
           "base_price":1618,
@@ -81,7 +82,8 @@
       "point": 0,
       "shipping_from": "Amazon",
       "country": "JP",
-      "review_count": 4.3,
+      "review_rate": 4.3,
+      "review_count": 240,
       "size":{
         "100ml":{
           "base_price": 1000,
@@ -140,7 +142,8 @@
       "point": 21,
       "shipping_from": "Amazon",
       "country": "JP",
-      "review_count": 3.9,
+      "review_rate": 3.9,
+      "review_count": 38,
       "size":{
         "S":{
           "base_price":1618,
@@ -205,7 +208,8 @@
       "point": 0,
       "shipping_from": "Amazon",
       "country": "JP",
-      "review_count": 4.3,
+      "review_rate": 4.3,
+      "review_count": 3,
       "size":{
         "100ml":{
           "base_price": 1000,
@@ -264,7 +268,8 @@
       "point": 21,
       "shipping_from": "Amazon",
       "country": "JP",
-      "review_count": 3.9,
+      "review_rate": 3.9,
+      "review_count": 10000,
       "size":{
         "S":{
           "base_price":1618,
@@ -329,7 +334,8 @@
       "point": 0,
       "shipping_from": "Amazon",
       "country": "JP",
-      "review_count": 4.3,
+      "review_rate": 0,
+      "review_count": 0,
       "size":{
         "100ml":{
           "base_price": 1000,
@@ -388,7 +394,8 @@
       "point": 21,
       "shipping_from": "Amazon",
       "country": "JP",
-      "review_count": 3.9,
+      "review_rate": 3.9,
+      "review_count": 3,
       "size":{
         "S":{
           "base_price":1618,
@@ -453,7 +460,8 @@
       "point": 0,
       "shipping_from": "Amazon",
       "country": "JP",
-      "review_count": 4.3,
+      "review_rate": 4.3,
+      "review_count": 3,
       "size":{
         "100ml":{
           "base_price": 1000,

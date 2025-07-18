@@ -1,3 +1,5 @@
+const { iconsPlugin,getIconCollections } = require('@egoist/tailwindcss-icons');
+
 module.exports = {
   content: [
     "./src/**/*.{tsx,ts,js,jsx,scss,css}",
@@ -35,5 +37,8 @@ module.exports = {
     require('tailwindcss-themer'),
     require('tailwindcss-3d'),
     require('tailwindcss-mixins'),
+    iconsPlugin({
+      collections: getIconCollections(["lucide"]),
+    })
   ],
 }

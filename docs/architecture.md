@@ -678,7 +678,7 @@ npx wrangler d1 execute PRODUCTS_DB \
 ## CURL POST 追加
 
 ```bash
-curl -X POST http://localhost:8787/api/contents \
+curl -X POST http://localhost:3002/api/contents \
      -H "Content-Type: application/json" \
      -d '{"title":"新規データ","body":"これはテストデータです","visible":true}'
 ```

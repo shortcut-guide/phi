@@ -192,7 +192,7 @@ const PricePanel: React.FC<{ product: Product }> = ({ product }) => {
           {tabKeys.map((tab) => (
             <button
               key={tab}
-              className={`px-1 py-1 text-[0.6875em] rounded ${activeTab === tab ? "bg-blue-500 text-white" : "bg-gray-100"}`}
+              className={`px-1 py-1 text-[0.6875em] leading-[0.6875em] rounded ${activeTab === tab ? "bg-blue-500 text-white" : "bg-gray-100"}`}
               onClick={(e) => {
                 e.stopPropagation();
                 setActiveTabs((prev) => ({ ...prev, [parentKey]: tab }));
@@ -272,7 +272,40 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onClick, className =
       >
         {ecData.images && <FlexibleImages images={ecData.images} />}
         <div className="py-1 px-4">
-          {product.name && <h2 className="text-[0.6875em] font-semibold mb-2">{product.name}</h2>}
+          {product.name && (
+            <h2 className="text-[0.6875em] font-semibold mb-1 line-clamp-2 leading-tight">
+              {product.name}
+            </h2>
+          )}
+
+          {typeof ecData.review_rate === 'number' && typeof ecData.review_count === 'number' && (
+            <div className="flex items-center gap-1 text-[0.625em] text-gray-500 mb-1">
+              <div className="flex gap-0.5">
+                {Array.from({ length: 5 }).map((_, i) => {
+                  const isFilled = i < Math.floor(ecData.review_rate);
+                  return (
+                    <svg
+                      key={i}
+                      className={`lucide ${isFilled ? 'lucide-star fill-orange-400' : 'lucide-star text-gray-300'} w-3 h-3`}
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                    >
+                      <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                    </svg>
+                  );
+                })}
+              </div>
+              <span>({ecData.review_count.toLocaleString()})</span>
+            </div>
+          )}
+
+          {typeof product.point === 'number' && (
+            <div className="text-[0.625em] text-blue-500 font-medium mb-1">
+              {product.point.toLocaleString()} pt
+            </div>
+          )}
+
           <PricePanel product={product} />
           {children}
         </div>

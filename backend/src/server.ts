@@ -4,7 +4,7 @@ import { PaypalRoutes } from "@/b/routes/auth";
 import faqRouter from "@/b/routes/faq";
 
 const app = express();
-const PORT = 8787;
+const PORT = 3002;
 
 app.use(express.json());
 app.use("/api/auth/paypal", PaypalRoutes);
