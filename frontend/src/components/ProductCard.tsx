@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from "react";
+import { StarIcon, ReviewLinkIcon, ChevronRightIcon } from "./icons";
 import type { Product } from "@/f/types/product";
 import { getAllInfoByISO } from "iso-country-currency";
 import { messages } from "@/f/config/messageConfig";
@@ -15,7 +16,10 @@ const labelize = (key: string) =>
 const ImageSlider = ({ images }: { images: string[] }) =>
   !images?.length ? null : (
     <div className="overflow-hidden w-full py-2">
-      <div className="flex flex-nowrap overflow-x-auto scrollbar-hide snap-x snap-mandatory scroll-smooth" style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
+      <div
+        className="relative flex flex-nowrap overflow-x-auto scrollbar-hide snap-x snap-mandatory scroll-smooth"
+        style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+      >
         {images.map((img, i) => (
           <img
             key={i}
@@ -26,6 +30,9 @@ const ImageSlider = ({ images }: { images: string[] }) =>
             draggable={false}
           />
         ))}
+        <div className="absolute bottom-1 right-1 bg-white bg-opacity-80 rounded-full p-0.5 pointer-events-none">
+          <ChevronRightIcon />
+        </div>
       </div>
     </div>
   );
@@ -279,24 +286,28 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onClick, className =
           )}
 
           {typeof ecData.review_rate === 'number' && typeof ecData.review_count === 'number' && (
-            <div className="flex items-center gap-1 text-[0.625em] text-gray-500 mb-1">
+            <div className="flex items-center justify-left text-[0.625em] text-gray-500 mb-1">
               <div className="flex gap-0.5">
                 {Array.from({ length: 5 }).map((_, i) => {
                   const isFilled = i < Math.floor(ecData.review_rate);
                   return (
-                    <svg
-                      key={i}
-                      className={`lucide ${isFilled ? 'lucide-star fill-orange-400' : 'lucide-star text-gray-300'} w-3 h-3`}
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                    >
-                      <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-                    </svg>
+                    <StarIcon key={i} filled={isFilled} />
                   );
                 })}
+                <span className="ml-1">({ecData.review_count.toLocaleString()})</span>
               </div>
-              <span>({ecData.review_count.toLocaleString()})</span>
+              {ecData.review_link && (
+                <a
+                  href={ecData.review_link.startsWith('http') ? ecData.review_link : `${ecData.url}${ecData.review_link}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-500 ml-2"
+                  aria-label="レビューを見る"
+                  onClick={e => e.stopPropagation()}
+                >
+                  <ReviewLinkIcon />
+                </a>
+              )}
             </div>
           )}
 
@@ -313,14 +324,47 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onClick, className =
       {modalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
           <div className="relative bg-white rounded-xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-0">
-            <button className="absolute top-3 right-3 text-gray-400 hover:text-gray-700 text-2xl font-bold" onClick={() => setModalOpen(false)} aria-label="閉じる">×</button>
-            {ecData.images && (
-              <div className="flex justify-center items-center bg-gray-100 rounded-t-xl p-4">
-                <FlexibleImages images={ecData.images} />
-              </div>
-            )}
+            <div className="relative">
+              <button
+                className="absolute top-3 right-3 text-gray-400 hover:text-gray-700 text-2xl font-bold z-10"
+                onClick={() => setModalOpen(false)}
+                aria-label="閉じる"
+              >
+                ×
+              </button>
+              {ecData.images && (
+                <div className="flex justify-center items-center bg-gray-100 rounded-t-xl p-4">
+                  <FlexibleImages images={ecData.images} />
+                </div>
+              )}
+            </div>
             <div className="p-6">
               {product.name && <h2 className="text-[0.6875em] font-bold text-left mb-1">{product.name}</h2>}
+              {typeof ecData.review_rate === 'number' && typeof ecData.review_count === 'number' && (
+                <div className="flex items-center justify-left text-[0.6875em] text-gray-500 mb-2">
+                  <div className="flex gap-0.5">
+                    {Array.from({ length: 5 }).map((_, i) => {
+                      const isFilled = i < Math.floor(ecData.review_rate);
+                      return (
+                        <StarIcon key={i} filled={isFilled} />
+                      );
+                    })}
+                    <span className="ml-1">({ecData.review_count.toLocaleString()})</span>
+                  </div>
+                  {ecData.review_link && (
+                    <a
+                      href={ecData.review_link.startsWith('http') ? ecData.review_link : `${ecData.url}${ecData.review_link}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-500 ml-2"
+                      aria-label="レビューを見る"
+                      onClick={e => e.stopPropagation()}
+                    >
+                      <ReviewLinkIcon />
+                    </a>
+                  )}
+                </div>
+              )}
               <div className="mb-2 text-center">
                 <PricePanel product={product} />
               </div>
@@ -365,11 +409,15 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onClick, className =
                           </div>
                         </div>
                       );
+                    } else if (key === "url" || key === "review_link" && typeof value === "string") {
+                      // Remove the review_link block from modal specs
+                      return null;
                     } else {
                       return <GenericSpec key={key} label={key} value={value} dict={dict} />;
                     }
                   })}
               </div>
+              {/* Removed modal's duplicate review star+count block here */}
             </div>
           </div>
         </div>
