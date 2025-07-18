@@ -16,7 +16,7 @@ export async function getPopularSearches(env: Env): Promise<string[]> {
         LIMIT 20
     `).all();
 
-  return result.results.map((row: any) => row.keyword);
+  return results.map((row: any) => row.keyword);
 }
 
 export async function saveToKV(env: Env, keywords: string[]): Promise<void> {

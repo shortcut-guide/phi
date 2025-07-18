@@ -8,7 +8,7 @@ const getColumnArray = (products, columnCount) => {
   );
 };
 
-export const MasonryLayout = ({ products, onLoadMore, enableInfiniteScroll = false, lang, t }) => {
+export const MasonryLayout = ({ products, onLoadMore, enableInfiniteScroll = false, lang, t,keyword  }) => {
   const containerRef = useRef(null);
   const loadRef = useRef<HTMLDivElement | null>(null);
   const [observerAttached, setObserverAttached] = useState(false);
@@ -46,8 +46,25 @@ export const MasonryLayout = ({ products, onLoadMore, enableInfiniteScroll = fal
     };
   }, [enableInfiniteScroll, onLoadMore, observerAttached]);
 
-  const columns = getColumnArray(products, columnCount);
+  const handleProductClick = (product) => {
+    // 商品クリックロギング
+    fetch('/api/log/click', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ clicked_product_id: product.id })
+    });
 
+    // 検索語＋商品クリックロギング（検索語ありのみ）
+    if (keyword && keyword.trim()) {
+      fetch('/api/log/search-result-click', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ keyword, clicked_product_id: product.id })
+      });
+    }
+  };
+
+  const columns = getColumnArray(products, columnCount);
   return (
     <div
       className={
@@ -67,7 +84,7 @@ export const MasonryLayout = ({ products, onLoadMore, enableInfiniteScroll = fal
       {columns.map((col, idx) => (
         <div key={idx} className="flex flex-col gap-1">
           {col.map((product) => (
-            <ProductCard key={product.id} product={product} lang={lang} t={t} />
+            <ProductCard key={product.id} product={product} lang={lang} t={t} onClick={() => handleProductClick(product)} />
           ))}
         </div>
       ))}

@@ -3004,3 +3004,24 @@ flowchart TD
     WORKER-->|HTML返却|BROWSER
 ```
 
+---
+
+# Redisによる一時キャッシュでリクエスト削減
+```mermaid
+graph TD
+  FE[Frontend: 商品表示/クリック] --> API
+  API -->|表示/クリックごと| Redis
+  Timer[定期バッチ] --> Redis
+  Timer -->|バルク保存| D1["Cloudflare D1: searchlogs"]
+```
+
+## Redis本体のインストール（macOS）
+```
+brew install redis
+brew services start redis
+```
+
+## 起動確認:
+```
+redis-cli ping
+```

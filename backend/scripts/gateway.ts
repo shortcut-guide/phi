@@ -3,6 +3,7 @@ import * as express from 'express';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import { addAuthHeader } from '@/b/utils/authHeader';
 import productsModules from '@/b/d1-worker/products/index';
+import { LogRoutes } from '@/b/routes/log';
 
 const app = express();
 const PRODUCTS_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NjhlYTkwNTkxNjNmM2ZkOGRmM2I2ZjUxMmQzYWIzZiIsImlhdCI6MTc1MTE0NTQ4OCwiZXhwIjoxNzUxMTg4Njg4fQ.WJFn1BRzqCYRqPAGGAaABv244g6NqVJXMX3P8C1nsbk";
@@ -42,6 +43,7 @@ app.use(
   addAuthHeader(PROFILE_TOKEN),
   createProxyMiddleware({ target: 'http://localhost:3003', changeOrigin: true }
 ));
+app.use('/api/log',LogRoutes);
 app.listen(3000, () => {
   console.log('🌀 Gateway running at http://localhost:3000');
 });

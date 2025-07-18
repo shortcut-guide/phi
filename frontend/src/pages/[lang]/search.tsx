@@ -6,6 +6,28 @@ import fallbackProducts from "@/d/products.json";
 import { MasonryLayout } from "@/f/components/MasonryLayout";
 import { messages } from "@/f/config/messageConfig";
 
+const logProductClick = async (productId: string) => {
+  try {
+    await axios.post('/api/log/click', { clicked_product_id: productId });
+  } catch (err) {
+    // エラー時は無視
+  }
+};
+const logSearchInput = async (keyword: string) => {
+  try {
+    await axios.post('/api/log/search-input', { keyword });
+  } catch (err) {
+    // エラー時は無視
+  }
+};
+
+const logSearchResultClick = async (keyword: string, productId: string) => {
+  try {
+    await axios.post('/api/log/search-result-click', { keyword, clicked_product_id: productId });
+  } catch (err) {
+    // エラー時は無視
+  }
+};
 
 const SearchPage = () => {
   const router = useRouter();
@@ -52,6 +74,7 @@ const SearchPage = () => {
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const handleSearch = () => {
     if (!keyword.trim()) return;
+    logSearchInput(keyword);
 
     const updatedHistory = [keyword, ...history.filter(h => h !== keyword)].slice(0, 5);
     setHistory(updatedHistory);
@@ -291,7 +314,11 @@ const SearchPage = () => {
                     <img
                       src={imageSrc}
                       alt={p.name}
-                      className="w-full h-32 object-cover mb-2"
+                      className="w-full h-32 object-cover mb-2 cursor-pointer"
+                      onClick={() => {
+                        logProductClick(p.id); // 商品クリック
+                        if (keyword.trim()) logSearchResultClick(keyword, p.id); // 検索語とセット
+                      }}
                     />
                   )}
                   <div className="text-sm">{p.name}</div>
@@ -329,7 +356,8 @@ const SearchPage = () => {
               onLoadMore={() => {}}
               enableInfiniteScroll={true}
               lang={lang}
-              t={{ title: t.SearchResult }} // 必要に応じて適切な翻訳関数またはオブジェクトを渡す
+              t={{ title: t.SearchResult }}
+              keyword={keyword}
             />
           </div>
         )}
