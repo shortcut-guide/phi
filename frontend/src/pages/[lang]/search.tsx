@@ -4,10 +4,13 @@ import { useRouter } from "next/router";
 import axios from "axios";
 import fallbackProducts from "@/d/products.json";
 import { MasonryLayout } from "@/f/components/MasonryLayout";
+import { messages } from "@/f/config/messageConfig";
+
 
 const SearchPage = () => {
   const router = useRouter();
   const { lang } = router.query;
+  const t = (messages.search as any)[lang as string] ?? {};
 
   const [keyword, setKeyword] = useState("");
   // カテゴリは階層配列（例: [["ペット用品", "犬", "服・アクセサリ", "レインコート・ライフジャケット"], ...]）
@@ -156,7 +159,7 @@ const SearchPage = () => {
                   <button
                     onClick={() => toggleOpen(key)}
                     className="ml-2 text-gray-600 border border-gray-300 rounded w-6 h-6 flex items-center justify-center hover:bg-gray-100 transition"
-                    aria-label="トグル"
+                    aria-label={t.toggle}
                   >
                     {isOpen ? "↓" : "→"}
                   </button>
@@ -182,7 +185,7 @@ const SearchPage = () => {
         if (typeof p.image === "string" && p.image.trim()) {
           return encodeURI(p.image.trim());
         }
-        console.warn("画像取得失敗:", p.id, p.image, images);
+        console.warn(t.FailedLoadImage, p.id, p.image, images);
         return null;
       }
 
@@ -222,10 +225,10 @@ const SearchPage = () => {
         return encodeURI(p.image.trim());
       }
 
-      console.warn("画像取得失敗:", p.id, p.image, images);
+      console.warn(t.FailedLoadImage, p.id, p.image, images);
       return null;
     } catch (e) {
-      console.error("画像取得エラー:", p.id, e);
+      console.error(t.ErrorLoadImage, p.id, e);
       return null;
     }
   };
@@ -239,14 +242,14 @@ const SearchPage = () => {
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-            placeholder="検索ワードを入力"
+            placeholder={t.InputFreeWord}
             className="border rounded px-3 py-2 w-full"
           />
         </div>
 
         {/* カテゴリ検索 */}
         <div>
-          <h2 className="font-bold mb-2">カテゴリから探す</h2>
+          <h2 className="font-bold mb-2">{t.SearchCategory}</h2>
           {categories.length > 0 && (
             <CategoryTree
               nodes={buildCategoryTree(categories)}
@@ -259,7 +262,7 @@ const SearchPage = () => {
 
         {/* 人気検索ワード */}
         <div>
-          <h2 className="font-bold mb-2">人気検索ワード</h2>
+          <h2 className="font-bold mb-2">{t.SearchPopular}</h2>
           <div className="flex flex-wrap gap-2">
             {popularWords.map((word) => (
               <button
@@ -278,7 +281,7 @@ const SearchPage = () => {
 
         {/* 注目商品 */}
         <div>
-          <h2 className="font-bold mb-2">注目商品</h2>
+          <h2 className="font-bold mb-2">{t.SearchAttention}</h2>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
             {featuredProducts.map((p) => {
               const imageSrc = getProductImage(p);
@@ -300,7 +303,7 @@ const SearchPage = () => {
 
         {/* 検索履歴 */}
         <div>
-          <h2 className="font-bold mb-2">最近の検索履歴</h2>
+          <h2 className="font-bold mb-2">{t.LogRecent}</h2>
           <div className="flex flex-wrap gap-2">
             {history.map((h) => (
               <button
@@ -320,13 +323,13 @@ const SearchPage = () => {
         {/* 検索結果 */}
         {searchResults.length > 0 && (
           <div>
-            <h2 className="font-bold mb-2">検索結果</h2>
+            <h2 className="font-bold mb-2">{t.SearchResult}</h2>
             <MasonryLayout
               products={searchResults}
               onLoadMore={() => {}}
               enableInfiniteScroll={true}
               lang={lang}
-              t={{ title: "検索結果" }} // 必要に応じて適切な翻訳関数またはオブジェクトを渡す
+              t={{ title: t.SearchResult }} // 必要に応じて適切な翻訳関数またはオブジェクトを渡す
             />
           </div>
         )}

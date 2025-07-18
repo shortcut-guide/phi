@@ -733,4 +733,32 @@ export const messages = {
       height: "Height",
     }
   },
+  search: {
+    ja: {
+      noResult: "検索結果がありません",
+      ErrorSearch: "検索に失敗しました",
+      toggle: "切り替え",
+      FailedLoadImage: "画像取得失敗:",
+      ErrorLoadImage: "画像取得エラー:",
+      InputFreeWord: "検索ワードを入力",
+      SearchCategory: "カテゴリから探す",
+      SearchPopular: "人気検索ワード",
+      SearchAttention: "注目商品",
+      LogRecent: "最近の検索履歴",
+      SearchResult: "検索結果",
+    },
+    en: {
+      noResult: "No search results",
+      ErrorSearch: "Failed to search",
+      toggle: "Toggle",
+      FailedLoadImage: "Failed to load image:",
+      ErrorLoadImage: "Failed to load image:",
+      InputFreeWord: "Enter search word",
+      SearchCategory: "Search by category",
+      SearchPopular: "Popular search words",
+      SearchAttention: "Attention products",
+      LogRecent: "Recent search history",
+      SearchResult: "Search results",
+    }
+  }
 };
