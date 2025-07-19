@@ -1,4 +1,3 @@
-// components/product/utils.ts
 export const labelize = (key: string) =>
   key
     .replace(/_/g, " ")

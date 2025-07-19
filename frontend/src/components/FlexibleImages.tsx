@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import ImageSlider from "./ImageSlider";
+import ImageSlider from "@/f/components/ImageSlider";
 
 const FlexibleImages: React.FC<{ images: any }> = ({ images }) => {
   if (Array.isArray(images)) return <ImageSlider images={images} />;

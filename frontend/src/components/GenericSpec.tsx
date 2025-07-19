@@ -1,5 +1,5 @@
 import React from "react";
-import { labelize } from "./utils";
+import { labelize } from "@/f/utils/labelize";
 
 const GenericSpec: React.FC<{ label: string; value: any; dict: any }> = ({ label, value, dict }) => (
   <div className="bg-blue-50 rounded px-2 py-1 text-xs text-blue-700 font-semibold flex flex-col min-w-0 max-w-full">

@@ -1,5 +1,5 @@
 import React from "react";
-import { labelize } from "./utils";
+import { labelize } from "@/f/utils/labelize";
 
 const TabbedSpec: React.FC<{
   label: string;
