@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import ProductCard from "@/f/components/ProductCard";
+import { ProductCard } from "@/f/components/product/ProductCard";
 
 const getColumnArray = (products, columnCount) => {
   // 各カラムごとに配列を作る

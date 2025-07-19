@@ -1,7 +1,11 @@
 import React from "react";
-import { ChevronRightIcon } from "@/f/assets/icons/ChevronRightIcon";
+import { ChevronRightIcon } from "@/f/components/icons/ChevronRightIcon";
 
-const ImageSlider: React.FC<{ images: string[] }> = ({ images }) =>
+type ImageSliderProps = {
+  images: string[];
+};
+
+const ImageSlider: React.FC<ImageSliderProps> = ({ images }) =>
   !images?.length ? null : (
     <div className="overflow-hidden w-full py-2">
       <div

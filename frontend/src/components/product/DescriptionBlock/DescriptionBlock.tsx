@@ -1,6 +1,10 @@
 import React from "react";
 
-const DescriptionBlock: React.FC<{ text?: string }> = ({ text }) =>
+type Props = {
+  text?: string;
+};
+
+const DescriptionBlock: React.FC<Props> = ({ text }) =>
   !text ? null : (
     <div className="mb-4">
       {text.split("\n").map((line, i) =>

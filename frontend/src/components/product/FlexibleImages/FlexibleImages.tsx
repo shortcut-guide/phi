@@ -1,8 +1,14 @@
 import React, { useState, useEffect } from "react";
-import ImageSlider from "@/f/components/ImageSlider";
+import ImageSlider from "./ImageSlider";
 
-const FlexibleImages: React.FC<{ images: any }> = ({ images }) => {
-  if (Array.isArray(images)) return <ImageSlider images={images} />;
+type FlexibleImagesProps = {
+  images: any;
+};
+
+const FlexibleImages: React.FC<FlexibleImagesProps> = ({ images }) => {
+  if (Array.isArray(images)) {
+    return <ImageSlider images={images} />;
+  }
   if (typeof images === "object" && images !== null) {
     const parentKeys = Object.keys(images);
     const [activeParent, setActiveParent] = useState(parentKeys[0]);
@@ -11,7 +17,9 @@ const FlexibleImages: React.FC<{ images: any }> = ({ images }) => {
       setActiveChild(Object.keys(images[activeParent])[0]);
     }, [activeParent]);
     const childKeys = Object.keys(images[activeParent]);
-    const activeImages = Array.isArray(images[activeParent][activeChild]) ? images[activeParent][activeChild] : [];
+    const activeImages = Array.isArray(images[activeParent][activeChild])
+      ? images[activeParent][activeChild]
+      : [];
     return (
       <div>
         <ImageSlider images={activeImages} />
