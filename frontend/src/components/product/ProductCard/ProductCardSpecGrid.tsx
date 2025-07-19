@@ -1,7 +1,7 @@
 import React from "react";
-import TabbedSpec from "@/f/components/product/TabbedSpec";
-import GenericSpec from "@/f/components/product/GenericSpec";
-import ProductCardCategory from "@/f/components/product/ProductCardCategory";
+import TabbedSpec from "@/f/components/product/TabbedSpec/TabbedSpec";
+import { GenericSpec } from "@/f/components/product/GenericSpec";
+import ProductCardCategory from "@/f/components/product/ProductCard/ProductCardCategory";
 import { labelize } from "@/f/utils/labelize";
 
 type Props = {

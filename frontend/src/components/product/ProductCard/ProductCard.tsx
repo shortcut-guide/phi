@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import FlexibleImages from "@/f/components/product/FlexibleImages";
-import DescriptionBlock from "@/f/components/product/DescriptionBlock";
-import PricePanel from "@/f/components/product/PricePanel";
+import { FlexibleImages } from "@/f/components/product/FlexibleImages";
+import { DescriptionBlock } from "@/f/components/product/DescriptionBlock";
+import { PricePanel } from "@/f/components/product/PricePanel";
 import ProductCardReview from "@/f/components/product/ProductCard/ProductCardReview";
 import ProductCardSpecGrid from "@/f/components/product/ProductCard/ProductCardSpecGrid";
 import { useTabbedKeys } from "@/f/components/product/TabbedSpec/useTabbedKeys";

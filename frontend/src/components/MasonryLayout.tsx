@@ -8,7 +8,7 @@ const getColumnArray = (products, columnCount) => {
   );
 };
 
-export const MasonryLayout = ({ products, onLoadMore, enableInfiniteScroll = false, lang, t,keyword  }) => {
+export const MasonryLayout = ({ products, onLoadMore, enableInfiniteScroll = false, lang, t,keyword = ""  }) => {
   const containerRef = useRef(null);
   const loadRef = useRef<HTMLDivElement | null>(null);
   const [observerAttached, setObserverAttached] = useState(false);

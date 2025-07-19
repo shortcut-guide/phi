@@ -1,5 +1,5 @@
 import React from "react";
-import { ChevronRightIcon } from "@/f/components/icons/ChevronRightIcon";
+import ChevronRightIcon from "@/f/components/icons/ChevronRightIcon";
 
 type ImageSliderProps = {
   images: string[];

@@ -1,1 +1,1 @@
-export { default } from "./GenericSpec";
+export { default as GenericSpec } from "./GenericSpec";

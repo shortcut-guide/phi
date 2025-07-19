@@ -1,3 +1,16 @@
+export type EcData = {
+  images?: string[] | Record<string, any>;
+  description?: string;
+  review_rate?: number;
+  review_count?: number;
+  review_link?: string;
+  url?: string;
+  country?: string;
+  category?: string[];
+  size?: string | number | Record<string, any>;
+  [key: string]: any;
+};
+
 export type Product = {
   id: string;
   name: string;
@@ -6,6 +19,5 @@ export type Product = {
   price?: number;
   point?: number;
   ec_data?: EcData;
-  // 必要に応じて拡張
   [key: string]: any;
 };

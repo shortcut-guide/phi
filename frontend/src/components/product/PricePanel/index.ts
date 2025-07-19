@@ -1,2 +1,2 @@
-export { default } from "./PricePanel";
+export { default as PricePanel } from "./PricePanel";
 export { useCurrencyInfo } from "./useCurrencyInfo";

@@ -1,6 +1,6 @@
 import React from "react";
-import { StarIcon } from "@/f/components/icons/StarIcon";
-import { ReviewLinkIcon } from "@/f/components/icons/ReviewLinkIcon";
+import StarIcon from "@/f/components/icons/StarIcon";
+import ReviewLinkIcon from "@/f/components/icons/ReviewLinkIcon";
 
 type Props = {
   rate?: number;
