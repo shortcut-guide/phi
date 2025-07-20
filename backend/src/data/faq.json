@@ -1,12 +1,102 @@
-[
-  {
-    "id": "faq1",
-    "question": "返品は可能ですか？",
-    "answer": "商品到着後7日以内であれば返品可能です。ただし未開封に限ります。"
+{
+  "ja": {
+    "return_policy": {
+      "title": "返品について",
+      "content": {
+        "default": {
+          "content": [
+            "各ショップへの直接お問い合わせが必要です。"
+          ]
+        },
+        "amazon_return": {
+          "title": "Amazonの商品の返品について",
+          "content": [
+            "Amazonの返品ポリシーは下記を参照してください。",
+            "https://www.amazon.co.jp/gp/help/customer/display.html?nodeId=G6E3B2E8QPHQ88KF"
+          ]
+        },
+        "overseas_return": {
+          "title": "海外輸入・中国製品の返品について",
+          "content": [
+            "基本的に返品はできません。",
+            "返品時に海外発送費や税関等が再度発生し、重複費用がかかります。"
+          ]
+        },
+        "payment_currency": {
+          "title": "支払い通貨と支払い方法を教えてください",
+          "content": [
+            "お支払い方法は、各ショップの支払い方法に基づきます。",
+            "各ショップの支払い方法をご確認ください。"
+          ]
+        }
+      }
+    },
+    "tax": {
+      "title": "関税について",
+      "content": {
+        "customs_duty": {
+          "title": "関税を支払う必要がありますか？",
+          "content": [
+            "商品・金額により、関税が発生致します。関税が発生した場合は、お客様にて、お支払い頂きます。",
+            "<a href=\"https://www.customs.go.jp/shiryo/kanzei_shikumi.htm\">参考サイト:関税のしくみ</a>"
+          ]
+        },
+        "tax_calculation": {
+          "title": "税額を計算してもらえますか？",
+          "content": [
+            "荷物は税関を通さないと金額を確定できません。税率は商品毎に異なり、規定の変更もあるため通関するまで判り兼ねます。",
+            "ご不安のある商品は、先に税関にご相談頂くことをおすすめします。",
+            "<a href=\"https://www.customs.go.jp/tariff/index.htm\">参考サイト：財務省関税局　輸入統計品目表（実行関税率表）</a>"
+          ]
+        }
+      }
+    }
   },
-  {
-    "id": "faq2",
-    "question": "配送料はいくらですか？",
-    "answer": "ご注文金額が5,000円以上の場合は送料無料です。"
+  "en": {
+    "return_policy": {
+      "title": "About Returns",
+      "content": {
+        "default": {
+          "content": [
+            "For returns, please contact each shop directly."
+          ]
+        },
+        "amazon_return": {
+          "title": "Returns for Amazon Products",
+          "content": [
+            "Please refer to Amazon's return policy below.",
+            "https://www.amazon.co.jp/gp/help/customer/display.html?nodeId=G6E3B2E8QPHQ88KF"
+          ]
+        },
+        "overseas_return": {
+          "title": "Returns for Overseas/Chinese Products",
+          "content": [
+            "Basically, returns are not accepted.",
+            "If you attempt a return, additional costs such as overseas shipping fees and customs duties will apply again, resulting in duplicate expenses."
+          ]
+        }
+      }
+    },
+    "tax": {
+      "title": "About Customs Duty",
+      "content": {
+        "customs_duty": {
+          "title": "Do you need to pay customs duty?",
+          "content": [
+            "Customs duty will be incurred based on the product and amount. If customs duty is incurred, you will be responsible for paying the duty.",
+            "<a href=\"https://www.customs.go.jp/shiryo/kanzei_shikumi.htm\">Reference: Customs Duty Mechanism</a>"
+          ]
+        },
+        "tax_calculation": {
+          "title": "Can you calculate the tax amount for me?",
+          "content": [
+            "The amount cannot be confirmed until the package clears customs. Tax rates vary by product and may change, so the exact amount is not known until customs clearance.",
+            "If you are concerned, we recommend consulting customs in advance.",
+            "Reference: Ministry of Finance, Customs Tariff Schedule",
+            "https://www.customs.go.jp/tariff/index.htm"
+          ]
+        }
+      }
+    }
   }
-]
+}

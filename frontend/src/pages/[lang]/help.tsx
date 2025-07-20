@@ -13,7 +13,7 @@ const HelpPage = ({ lang }: Props) => {
   return (
     <DefaultLayout lang={lang} title={t.title}>
         <h1 className="text-2xl font-bold mb-6">{t.title}</h1>
-        <FaqSection />
+        <FaqSection lang={lang} />
     </DefaultLayout>
   );
 };
