@@ -1,6 +1,5 @@
 import React from "react";
 import type { ReactNode } from "react";
-import DefaultLayout from '@/f/layouts/DefaultLayout';
 import Home from '@/f/components/home';
 import { withLangMessagesSSR } from "@/f/utils/withLangSSR";
 

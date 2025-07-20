@@ -10,6 +10,7 @@ const locale = "ja_JP";
 
 type PaypalLoginProps = {
   clientId: string;
+  lang: string;
 };
 
 const paypalAuthUrl = [
@@ -21,12 +22,12 @@ const paypalAuthUrl = [
   `&locale=${locale}`
 ].join("");
 
-const PaypalLogin: React.FC<PaypalLoginProps> = ({ clientId }) => (
+const PaypalLogin: React.FC<PaypalLoginProps> = ({ clientId,lang }) => (
   <div>
     <button
       style={{ background: "#ffc439", border: "none", borderRadius: "4px", padding: "12px 24px", fontSize: "16px", fontWeight: "bold", color: "#222", cursor: "pointer"}}
       onClick={() => window.location.href = paypalAuthUrl}
-    >PayPal Login</button>
+    >{messages.login?.[lang]?.loginWithPayPal }</button>
   </div>
 );
 

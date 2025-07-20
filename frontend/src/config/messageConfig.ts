@@ -1,4 +1,12 @@
 export const messages = {
+  login:{
+    ja:{
+      loginWithPayPal: "PayPalログイン",
+    },
+    en:{
+      loginWithPayPal: "PayPal Login",
+    },
+  },
   alt:{
     ja:{
       search: "search",
@@ -126,24 +134,6 @@ export const messages = {
     en: {
       title: "Profile Settings"
     },
-  },
-  login: {
-    ja: {
-      title: "ログイン",
-      pageName: "ダッシュボード",
-      hint: "以下のログイン情報をご利用ください：",
-      email: "admin@astro.demo",
-      password: "Astronaut570",
-      heading: "ログイン"
-    },
-    en: {
-      title: "Login",
-      pageName: "Dashboard",
-      hint: "Log in using:",
-      email: "admin@astro.demo",
-      password: "Astronaut570",
-      heading: "Login"
-    }
   },
   forgotPassword: {
     ja: {
@@ -461,16 +451,14 @@ export const messages = {
     ja: {
       title: "設定",
       heading: "設定",
-      overview: "Lorem ipsum dolor sit amet.",
-      sectionTitle: "設定概要",
-      sectionDescription: "タイムゾーン、カラーパレット、プロフィール画像などの設定を変更できます。"
+      description: "アカウント設定・ログイン",
+      about: "ログインにはPaypalアカウントが必要です。Paypalアカウントが未登録の場合は、PayPalログインから新規アカウント作成を行ってください。"
     },
     en: {
       title: "Settings",
       heading: "Settings",
-      overview: "Lorem ipsum dolor sit amet.",
-      sectionTitle: "Settings overview",
-      sectionDescription: "Change your preferences like timezone, color palette and profile picture."
+      description: "Account settings and login can be made here.",
+      about: "To log in, you will need a PayPal account. If you don't have one, please create a new account using the PayPal login."
     }
   },
   messagesPage: {
