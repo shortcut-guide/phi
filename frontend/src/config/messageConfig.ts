@@ -218,7 +218,7 @@ export const messages = {
         { heading: "Section 5 (Privacy Policy)", content: "Please refer to the Privacy Policy for information on how we collect, use, and disclose personal information." },
         { heading: "Section 6 (Termination)", content: "The Terms are effective until terminated. The Administrator may terminate the Terms at any time, with or without cause." },
         { heading: "Section 7 (Modification)", content: "The Administrator may modify the Terms at any time, with or without cause." },
-        { heading: "Section 8 (Governing Law)", content: "The Terms are governed by Japanese law." }
+        { heading: "Section 8 (Governing Law)", content: "The Terms are governed by Japanese law." },
         { heading: "Section 9 (Dispute Resolution)", content: "If you have any questions or concerns about the Terms, please contact the Administrator." }
       ],
       lastUpdated: "Last updated: April 28, 2025"

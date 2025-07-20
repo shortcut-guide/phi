@@ -40,7 +40,7 @@ const MainNavigation = ({ lang }: { lang: string }) =>{
                 </a>
               </li>
               <li className="h-full">
-                <a aria-label={t.option} className="h-full border-none hover:bg-gray-100 focus:outline-none focus:bg-gray-200">
+                <a href={url.settings} aria-label={t.option} className="h-full border-none hover:bg-gray-100 focus:outline-none focus:bg-gray-200">
                   <Picture src={asset.option} alt={alt.option} className="w-full h-full object-contain" />
                 </a>
               </li>
