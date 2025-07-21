@@ -44,7 +44,6 @@ jobs:
             cd /var/www/${{ steps.vars.outputs.dir }}
             git fetch origin
             git reset --hard origin/${{ steps.vars.outputs.branch }}
-            cp backend/.env.${{ steps.vars.outputs.env }} backend/.env
             cd backend
             npm install
             pm2 restart ${{ steps.vars.outputs.dir }} || pm2 start npm --name "${{ steps.vars.outputs.dir }}" -- start
