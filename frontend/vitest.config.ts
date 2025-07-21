@@ -1,10 +1,10 @@
 /// <reference types="vitest" />
-import preact from '@preact/preset-vite';
-import { getViteConfig } from 'astro/config';
+import react from '@vitejs/plugin-react';
+import { defineConfig } from 'vite';
 import * as path from "path";
 
-export default getViteConfig({
-  plugins: [preact()],
+export default defineConfig({
+  plugins: [react()],
   test: {
     globals: true,
     environment: 'jsdom',
@@ -13,13 +13,12 @@ export default getViteConfig({
     exclude: ['**/sys/**', '**/node_modules/**', '**/dist/**'],
   },
   esbuild: {
-    jsxImportSource: 'preact',
+    jsxImportSource: 'react',
     jsx: 'automatic',
   },
-  resolve:{
+  resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
-      'astro/container': 'astro/dist/container/index.js'
     },
   }
 });

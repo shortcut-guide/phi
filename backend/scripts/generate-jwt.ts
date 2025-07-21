@@ -1,4 +1,4 @@
-import jwt from "jsonwebtoken";
+import * as jwt from "jsonwebtoken";
 
 // シークレットキー（本番は環境変数などで管理）
 const SECRET = "83c7416d702fecf8596a6a4f906f0607048257e5d2ac398e70ad480cdfaf9d4a";

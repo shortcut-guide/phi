@@ -1,19 +1,30 @@
+import React from "react";
 import { useState, useEffect } from "react";
 import { messages } from "@/f/config/messageConfig";
-import { getLang } from "@/f/utils/lang";
-const lang = getLang();
-const t = messages.profileForm[lang];
-const apiUrl = import.meta.env.PUBLIC_API_BASE_URL;
-export default function ProfileForm() {
+import { links } from "@/f/config/links";
+import { getLangObj } from "@/f/utils/getLangObj";
+
+type Props = {
+  lang: string;
+}
+type Profile = {
+  nickname?: string;
+  bio?: string;
+}
+
+const ProfileForm = ({ lang }: Props) => {
+  const url = getLangObj<typeof links.url>(links.url);
+  const apiUrl = process.env.PUBLIC_API_BASE_URL;
+  const t = ((messages.profileForm as any)[lang]) ?? {};
   const [nickname, setNickname] = useState("");
   const [bio, setBio] = useState("");
   
   useEffect(() => {
     (async () => {
-      let data = [];
+      let data: Profile = {};
 
       try {
-        const res = await fetch(`${apiUrl}/api/profile`);
+        const res = await fetch(`${apiUrl}${url.api.profile}`);
         if (!res.ok) {
           throw new Error(`APIエラー: ${res.status}\n`);
         }
@@ -29,7 +40,7 @@ export default function ProfileForm() {
 
   async function updateProfile() {
     try {
-      const res = await fetch(`${apiUrl}/api/profile`,{
+      const res = await fetch(`${apiUrl}${url.api.profile}`,{
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ nickname, bio })
@@ -50,18 +61,20 @@ export default function ProfileForm() {
         id="nickname"
         value={nickname}
         onInput={e => setNickname((e.target as HTMLInputElement).value)}
-        class="input"
+        className="input"
       />
 
       <label htmlFor="bio">{t.bio}</label>
       <textarea
         id="bio"
         value={bio}
-        onInput={e => setBio((e.target as HTMLTextAreaElement).value)}
-        class="textarea"
+        onChange={(e) => setBio(e.target.value)}
+        className="textarea"
       />
 
-      <button onClick={updateProfile} class="btn-red">{t.updateButton}</button>
+      <button onClick={updateProfile} className="btn-red">{t.updateButton}</button>
     </div>
   );
-}
+};
+
+export default ProfileForm;

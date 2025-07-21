@@ -1,8 +1,0 @@
----
-export const prerender = false;
-const acceptLanguage = Astro.request.headers.get('accept-language') || "";
-const lang = acceptLanguage.startsWith("ja") ? "ja" : "en";
----
-<html lang={lang} dir="ltr">
-  <slot />
-</html>

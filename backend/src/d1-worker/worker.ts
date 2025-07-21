@@ -1,5 +1,6 @@
 import type { ExecutionContext } from '@cloudflare/workers-types';
 import type { D1Database } from '@cloudflare/workers-types';
+import { getDriveFile } from "@/b/services/drive";
 
 export default {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
@@ -38,11 +39,10 @@ export default {
       };
       const { id, name, shop_name, platform, base_price, ec_data } = body;
       await env.PRODUCTS_DB.prepare(
-        `INSERT INTO products (id, name, shop_name, platform, base_price, ec_data, account_id) VALUES (?, ?, ?, ?, ?, ?, ?)`
-      ).bind(id, name, shop_name, platform, base_price, ec_data, account_id).run();
+        `INSERT INTO products (id, name, shop_name, platform, base_price, ec_data) VALUES (?, ?, ?, ?, ?, ?, ?)`
+      ).bind(id, name, shop_name, platform, base_price, ec_data).run();
       return json({ status: "ok" });
     }
-    // ...（PUT/DELETEも同様にaccount_idで制限）
 
     // --- UserProfile API ---
     if (request.method === "GET" && url.pathname.startsWith("/profile/")) {
@@ -52,6 +52,7 @@ export default {
       ).bind(user_id, account_id).all();
       return json(results);
     }
+    
     if (request.method === "PUT" && url.pathname === "/profile") {
       const { user_id, nickname, bio, avatar_url } = await request.json() as {
         user_id: string;
@@ -93,6 +94,33 @@ export default {
       ).all();
       return json(results);
     }
+    if (request.method === "GET" && url.pathname === "/searchlogs") {
+      const { results } = await env.SEARCHLOGS_DB.prepare(
+        `SELECT id, keyword, user_id, clicked_product_id, created_at
+         FROM search_logs
+         WHERE account_id = ?
+         ORDER BY created_at DESC
+         LIMIT 100`
+      ).bind(account_id).all();
+      return json(results);
+    }
+
+    // --- Drive API ---
+    if (request.method === "GET" && url.pathname === "/drive/") {
+      const fileId = url.searchParams.get("id");
+      if (!fileId) return json({ error: "Missing file id" }, 400);
+      try {
+        const buffer = await getDriveFile(fileId, env.DRIVE_KV);
+        return new Response(buffer, {
+          headers: {
+            "Content-Type": "application/octet-stream",
+            "Content-Disposition": `attachment; filename=\"${fileId}\"`,
+          },
+        });
+      } catch (e) {
+        return json({ error: "Failed to fetch from Drive" }, 500);
+      }
+    }
 
     return new Response("Not found", { status: 404 });
   }
@@ -117,4 +145,5 @@ interface Env {
   PRODUCTS_DB: D1Database;
   PROFILE_DB: D1Database;
   SEARCHLOGS_DB: D1Database;
+  DRIVE_KV: KVNamespace;
 }

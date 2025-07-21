@@ -1,4 +1,64 @@
 export const messages = {
+  login:{
+    ja:{
+      loginWithPayPal: "PayPalログイン",
+    },
+    en:{
+      loginWithPayPal: "PayPal Login",
+    },
+  },
+  alt:{
+    ja:{
+      search: "search",
+      sale: "sale",
+      new: "new",
+      message: "message",
+      profile: "profile",
+      logout: "logout",
+      login: "login",
+      signUp: "signUp",
+      settings: "settings",
+      dashboard: "dashboard",
+      option: "option"
+    },
+    en:{
+      search: "search",
+      sale: "sale",
+      new: "new",
+      message: "message",
+      profile: "profile",
+      logout: "logout",
+      login: "login",
+      signUp: "signUp",
+      settings: "settings",
+      dashboard: "dashboard",
+      option: "option"
+    }
+  },
+  index:{
+    ja:{
+      title: "phis"
+    },
+    en:{
+      title: "phis"
+    }
+  },
+  nav:{
+    ja:{
+      search: "探索する",
+      sale: "特価を探す",
+      new: "最新情報",
+      message: "メッセージ",
+      profile: "プロフィール",
+      logout: "ログアウト",
+      login: "ログイン",
+      signUp: "新規登録",
+      settings: "設定",
+      dashboard: "タップして開く",
+      option: "その他のオプション"
+    },
+    en:{}
+  },
   loginForm: {
     ja: {
       title: "ログイン",
@@ -45,6 +105,14 @@ export const messages = {
       forgotPassword: "Forgot your password?"
     }
   },
+  sale:{
+    ja: {
+      title: "特価情報",
+    },
+    en: {
+      title: "Special Offers"
+    }
+  },
   profileForm: {
     ja: {
       nickname: "ニックネーム",
@@ -66,24 +134,6 @@ export const messages = {
     en: {
       title: "Profile Settings"
     },
-  },
-  login: {
-    ja: {
-      title: "ログイン",
-      pageName: "ダッシュボード",
-      hint: "以下のログイン情報をご利用ください：",
-      email: "admin@astro.demo",
-      password: "Astronaut570",
-      heading: "ログイン"
-    },
-    en: {
-      title: "Login",
-      pageName: "Dashboard",
-      hint: "Log in using:",
-      email: "admin@astro.demo",
-      password: "Astronaut570",
-      heading: "Login"
-    }
   },
   forgotPassword: {
     ja: {
@@ -151,32 +201,30 @@ export const messages = {
     en: {
       title: "Terms of Service",
       sections: [
-        { heading: "1. Application", content: "These Terms of Service (\"Terms\") govern your use of our service (\"Service\")." },
-        { heading: "2. Registration", content: "You must follow our procedures to register for the Service." },
-        { heading: "3. Account Management", content: "Users must properly manage their user ID and password." },
-        { heading: "4. Prohibited Actions", content: "You may not engage in illegal acts or interfere with the Service." },
-        { heading: "5. Suspension", content: "We may suspend or terminate Service without notice under certain circumstances." },
-        { heading: "6. Restrictions and Termination", content: "We may restrict use or delete registrations for violations." },
-        { heading: "7. Disclaimer", content: "We are not liable except in cases of intentional or gross negligence." },
-        { heading: "8. Changes", content: "Service content may change without prior notice." },
-        { heading: "9. Changes to Terms", content: "We may change these Terms without notice." },
-        { heading: "10. Governing Law", content: "Japanese law governs these Terms, with the Tokyo District Court as exclusive jurisdiction." }
+        { heading: "Section 1 (General Provisions)", content: "This Terms of Service (hereinafter referred to as \"Terms\") is to be considered as accepted by all users who use the Service. " },
+        { heading: "Section 2 (Definitions)", content: "User: All users who use the Service.\n\nAdministrator: The person who manages and operates the Service." },
+        { heading: "Section 3 (Acceptance of Terms)", content: "By using the Service, you agree to be bound by the Terms. If you do not agree to the Terms, you must not use the Service." },
+        { heading: "Section 4 (Use of Service)", content: "The Service is for personal use only and is not intended for commercial use." },
+        { heading: "Section 5 (Privacy Policy)", content: "Please refer to the Privacy Policy for information on how we collect, use, and disclose personal information." },
+        { heading: "Section 6 (Termination)", content: "The Terms are effective until terminated. The Administrator may terminate the Terms at any time, with or without cause." },
+        { heading: "Section 7 (Modification)", content: "The Administrator may modify the Terms at any time, with or without cause." },
+        { heading: "Section 8 (Governing Law)", content: "The Terms are governed by Japanese law." },
+        { heading: "Section 9 (Dispute Resolution)", content: "If you have any questions or concerns about the Terms, please contact the Administrator." }
       ],
       lastUpdated: "Last updated: April 28, 2025"
     },
     ja: {
       title: "利用規約",
       sections: [
-        { heading: "第1条（適用）", content: "この利用規約（以下、「本規約」といいます。）は、【サービス名】（以下、「本サービス」といいます。）の利用条件を定めるものです。" },
-        { heading: "第2条（利用登録）", content: "登録希望者は運営者の定める方法により利用登録を申請し、運営者がこれを承認することで利用登録が完了します。" },
-        { heading: "第3条（アカウント管理）", content: "ユーザーは自己責任でユーザーIDおよびパスワードを管理するものとします。" },
-        { heading: "第4条（禁止事項）", content: "ユーザーは法令違反やサービス運営妨害などを行ってはなりません。" },
-        { heading: "第5条（提供停止）", content: "一定の事由により、事前通知なくサービスの全部または一部を停止できます。" },
-        { heading: "第6条（利用制限・登録抹消）", content: "規約違反等の場合、サービスの利用制限または登録抹消が行われることがあります。" },
-        { heading: "第7条（免責事項）", content: "天災地変等による場合など、故意または重過失がない限り責任を負いません。" },
-        { heading: "第8条（サービス内容の変更）", content: "ユーザーへの通知なくサービス内容を変更・中止できるものとします。" },
-        { heading: "第9条（規約変更）", content: "運営者は、本規約を随時変更でき、変更後は掲示時点から効力を持ちます。" },
-        { heading: "第10条（準拠法・裁判管轄）", content: "本規約は日本法を準拠法とし、東京地方裁判所を専属的合意管轄とします。" }
+        { heading: "第1条（総則）", content: "この利用規約（以下、「本規約」といいます。）は、【phis】（以下、「本サービス」といいます。）ユーザーは本サービスを利用することで、本規約に同意したものとみなします。" },
+        { heading: "第2条（定義）", content: "「ユーザー」とは、本サービスを利用する全ての方を指します。「運営者」とは、本サービスを管理・運営するphisプロジェクト関係者を指します。" },
+        { heading: "第3条（サービス内容）", content: "本サービスはEC商品情報の検索、商品詳細の閲覧、リンク先ECサイトへの遷移等を提供します。本サービス上の情報は最新かつ正確であるよう努めますが、その内容を保証するものではありません。" },
+        { heading: "第4条（禁止事項）", content: "ユーザーは以下の行為を行ってはなりません。\n・法令または公序良俗に違反する行為\n・本サービスの運営を妨げる行為\n・不正アクセスや情報の改ざん\n・他のユーザーまたは第三者の権利を侵害する行為\n・自動化ツール等による大量アクセス" },
+        { heading: "第5条（知的財産権）", content: "本サービス上に掲載されている文章・画像・プログラム等の著作権は運営者または正当な権利者に帰属します。ユーザーは個人的な利用の範囲を超えてこれらを無断で使用することはできません。" },
+        { heading: "第6条（サービスの変更・中断・終了）", content: "運営者はユーザーへの事前通知なしに、本サービスの内容を変更・中断・終了できるものとします。" },
+        { heading: "第7条（免責事項）", content: "運営者は、サービスの利用または利用不能によって生じたいかなる損害についても責任を負いません。商品売買・契約等はユーザーと各ECサイトの責任で行うものとします。" },
+        { heading: "第8条（規約の変更）", content: "運営者は、必要と判断した場合、ユーザーに通知することなく本規約を変更できます。規約変更後にユーザーが本サービスを利用した場合、変更後の規約に同意したものとみなします。" },
+        { heading: "第9条（準拠法・管轄）", content: "本規約の準拠法は日本法とします。本サービスに関する一切の紛争については、運営者の所在地を管轄する裁判所を第一審の専属的合意管轄裁判所とします。" },
       ],
       lastUpdated: "最終更新日：2025年4月28日"
     }
@@ -403,16 +451,22 @@ export const messages = {
     ja: {
       title: "設定",
       heading: "設定",
-      overview: "Lorem ipsum dolor sit amet.",
-      sectionTitle: "設定概要",
-      sectionDescription: "タイムゾーン、カラーパレット、プロフィール画像などの設定を変更できます。"
+      description: "アカウント設定・ログイン",
+      about: "ログインにはPaypalアカウントが必要です。Paypalアカウントが未登録の場合は、PayPalログインから新規アカウント作成を行ってください。",
+      mail: "メール",
+      username: "ユーザー名",
+      cardchange: "クレジットカード変更",
+      addresschange: "住所変更",
     },
     en: {
       title: "Settings",
       heading: "Settings",
-      overview: "Lorem ipsum dolor sit amet.",
-      sectionTitle: "Settings overview",
-      sectionDescription: "Change your preferences like timezone, color palette and profile picture."
+      description: "Account settings and login can be made here.",
+      about: "To log in, you will need a PayPal account. If you don't have one, please create a new account using the PayPal login.",
+      mail: "Email",
+      username: "Username",
+      cardchange: "Credit card change",
+      addresschange: "Address change",
     }
   },
   messagesPage: {
@@ -581,12 +635,14 @@ export const messages = {
   products:{
     ja: {
       title: 'おすすめ',
+      ErrorLoad: '商品の読込失敗',
       ErrorProductNotFound: '商品が見つかりません',
       ErrorProductSearch: '商品検索に失敗しました',
       ErrorProductSuggest: '商品サジェスト取得に失敗しました'
     },
     en: {
       title: 'Recommended',
+      ErrorLoad: 'Failed to load products',
       ErrorProductNotFound: 'Product not found',
       ErrorProductSearch: 'Failed to search products',
       ErrorProductSuggest: 'Failed to fetch product suggestions'
@@ -598,6 +654,105 @@ export const messages = {
     },
     en: {
       title: 'Profile',
+    }
+  },
+  help:{
+    ja:{
+      title: 'よくある質問',
+      ErrorFaqNotFound: 'よくある質問が見つかりません',
+      ErrorFaqSearch: 'よくある質問検索に失敗しました',
+      ErrorFaqSuggest: 'よくある質問サジェスト取得に失敗しました'
+    },
+    en: {
+      title: 'FAQ',
+      ErrorFaqNotFound: 'FAQ not found',
+      ErrorFaqSearch: 'Failed to search FAQs',
+      ErrorFaqSuggest: 'Failed to fetch FAQ suggestions'
+    }
+  },
+  slideComponent:{
+    ja:{
+      open:"開く",
+      return:"← 戻る",
+      next: "次へ",
+    },
+    en:{
+      open:"Open",
+      return:"← Return",
+      next: "Next",
+    }
+  },
+  releases:{
+    ja: {
+      title: 'リリース',
+    },
+    en: {
+      title: 'Releases',
+    }
+  },
+  productSpec: {
+    ja: {
+      color: "カラー",
+      size: "サイズ",
+      brand: "ブランド",
+      category: "カテゴリ",
+      point: "ポイント",
+      shipping_from: "発送元",
+      country: "販売国",
+      review_count: "レビュー",
+      material: "素材",
+      model: "モデル",
+      type: "タイプ",
+      capacity: "容量",
+      weight: "重さ",
+      length: "長さ",
+      width: "幅",
+      height: "高さ",
+    },
+    en: {
+      color: "Color",
+      size: "Size",
+      brand: "Brand",
+      category: "Category",
+      shipping_from: "Shipping",
+      country: "Sold in",
+      review_count: "Review",
+      material: "Material",
+      model: "Model",
+      type: "Type",
+      capacity: "Capacity",
+      weight: "Weight",
+      length: "Length",
+      width: "Width",
+      height: "Height",
+    }
+  },
+  search: {
+    ja: {
+      noResult: "検索結果がありません",
+      ErrorSearch: "検索に失敗しました",
+      toggle: "切り替え",
+      FailedLoadImage: "画像取得失敗:",
+      ErrorLoadImage: "画像取得エラー:",
+      InputFreeWord: "検索ワードを入力",
+      SearchCategory: "カテゴリから探す",
+      SearchPopular: "人気検索ワード",
+      SearchAttention: "注目商品",
+      LogRecent: "最近の検索履歴",
+      SearchResult: "検索結果",
+    },
+    en: {
+      noResult: "No search results",
+      ErrorSearch: "Failed to search",
+      toggle: "Toggle",
+      FailedLoadImage: "Failed to load image:",
+      ErrorLoadImage: "Failed to load image:",
+      InputFreeWord: "Enter search word",
+      SearchCategory: "Search by category",
+      SearchPopular: "Popular search words",
+      SearchAttention: "Attention products",
+      LogRecent: "Recent search history",
+      SearchResult: "Search results",
     }
   }
 };

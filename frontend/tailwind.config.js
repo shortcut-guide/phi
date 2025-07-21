@@ -1,9 +1,11 @@
+const { iconsPlugin,getIconCollections } = require('@egoist/tailwindcss-icons');
+
 module.exports = {
   content: [
-    "./src/**/*.{astro,tsx,ts,js,jsx}",
-    "./components/**/*.{astro,tsx,ts,js,jsx}",
-    "./layouts/**/*.{astro,tsx,ts,js,jsx}",
-    "./pages/**/*.{astro,tsx,ts,js,jsx}",
+    "./src/**/*.{tsx,ts,js,jsx,scss,css}",
+    "./components/**/*.{tsx,ts,js,jsx}",
+    "./layouts/**/*.{tsx,ts,js,jsx}",
+    "./pages/**/*.{tsx,ts,js,jsx}",
     "./node_modules/tw-elements/js/**/*.js"
   ],
   theme: {
@@ -22,7 +24,6 @@ module.exports = {
   darkMode: "class",
   corePlugins:{
     aspectRatio: false,
-    fontSize: false,
   },
   plugins: [
     require('@tailwindcss/forms'),
@@ -36,5 +37,8 @@ module.exports = {
     require('tailwindcss-themer'),
     require('tailwindcss-3d'),
     require('tailwindcss-mixins'),
+    iconsPlugin({
+      collections: getIconCollections(["lucide"]),
+    })
   ],
 }

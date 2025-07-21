@@ -1,22 +1,47 @@
 {
-  "extends": "astro/tsconfigs/strict",
-  "include": [".astro/types.d.ts", "**/*"],
-  "exclude": ["public"],
+  "include": [
+    "next-env.d.ts","**/*.ts","**/*.tsx"
+  ],
+  "exclude": [
+    "public"
+  ],
   "compilerOptions": {
     "target": "ES2020",
     "module": "ESNext",
     "moduleResolution": "bundler",
-    "jsx": "react-jsx",
+    "jsx": "preserve",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
+  
     "baseUrl": ".",
     "outDir": "./public",
     "paths": {
-      "@/f/*": ["./src/*"],
-      "@/b/*": ["../backend/src/*"],
+      "@/f/*": [
+        "./src/*"
+      ],
+      "@/b/*": [
+        "../backend/src/*"
+      ],
+      "@/d/*":[
+        "./src/data/*"
+      ]
     },
-    "types": ["astro/client", "astro/test"],
-    "typeRoots": ["./src/types", "./node_modules/@types"]
+    "typeRoots": [
+      "./src/types",
+      "./node_modules/@types"
+    ],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "noEmit": true,
+    "incremental": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true
   },
   "ts-node": {
     "esm": true

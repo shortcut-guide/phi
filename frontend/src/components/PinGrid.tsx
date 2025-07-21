@@ -1,91 +1,190 @@
-// PinGrid.tsx
-import { useEffect, useRef } from 'react';
-import { trackGAEvent } from '@/f/utils/track';
+"use client";
 
-interface Item {
-  id: string;
-  imageUrl: string;
-  title: string;
+import { links } from "@/f/config/links";
+import { getLangObj } from "@/f/utils/getLangObj";
+import { useRouter, usePathname } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+
+function ProductModal({ product, onClose }: { product: any; onClose: () => void }) {
+  
+  useEffect(() => {
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", handleEsc);
+    return () => window.removeEventListener("keydown", handleEsc);
+  }, [onClose]);
+
+  return (
+    <div
+      style={{
+        position: "fixed",
+        inset: 0,
+        background: "rgba(0,0,0,0.35)",
+        zIndex: 1000,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+      onClick={onClose}
+    >
+      <div
+        style={{
+          background: "#fff",
+          borderRadius: "16px",
+          boxShadow: "0 8px 40px rgba(0,0,0,0.14)",
+          padding: 32,
+          minWidth: 340,
+          maxWidth: 500,
+          width: "90vw",
+          cursor: "default",
+        }}
+        onClick={e => e.stopPropagation()}
+      >
+        <img
+          src={product.image}
+          alt={product.title}
+          style={{
+            width: "100%",
+            aspectRatio: "1/1",
+            objectFit: "cover",
+            borderRadius: "12px",
+            marginBottom: 20,
+          }}
+        />
+        <div style={{ fontWeight: 700, fontSize: 24 }}>{product.title}</div>
+        <div style={{ color: "#c33", fontWeight: 600, margin: "12px 0 20px" }}>{product.price}</div>
+        <div style={{ fontSize: 16, color: "#444" }}>{product.description}</div>
+        <button
+          style={{
+            marginTop: 24,
+            padding: "10px 18px",
+            background: "#eee",
+            border: "none",
+            borderRadius: 8,
+            fontWeight: 600,
+            cursor: "pointer",
+            float: "right",
+          }}
+          onClick={onClose}
+        >×</button>
+      </div>
+    </div>
+  );
 }
+
+type Item = {
+  id: string;
+  title: string;
+  imageUrl: string;
+  price: string;
+  description: string;
+};
 
 interface Props {
-  items: Item[];
+  items?: Item[];
   loadMore: () => void;
   onSelect: (item: Item) => void;
+  enableInfiniteScroll?: boolean;
 }
 
-export function PinGrid({ items, loadMore, onSelect }: Readonly<Props>) {
+export function PinGrid({
+  items = [],
+  loadMore,
+  onSelect,
+  enableInfiniteScroll = false,
+}: Readonly<Props>) {
+  const url = getLangObj<typeof links.url>(links.url);
+  const router = useRouter();
+  const pathname = usePathname();
+  const [modalId, setModalId] = useState<string | null>(null);
   const loadRef = useRef<HTMLDivElement | null>(null);
-  const currentPage = Math.floor(items.length / 30); // 30件/ページで仮定
 
-  // 無限スクロール＋GA
   useEffect(() => {
-    if (!loadRef.current) return;
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) {
-        trackGAEvent("scroll_page_load", { page_number: currentPage + 1 }); // 次ページ読み込み時
-        loadMore();
-      }
-    });
-    observer.observe(loadRef.current);
-    return () => observer.disconnect();
-  }, [loadRef.current, currentPage]);
-
-  // スクロールして中央寄せ
-  useEffect(() => {
-    requestAnimationFrame(() => scrollToCenter(0)); // 初回中央寄せ
-  }, []);
-  
-  // 中央スクロール補助
-  const scrollToCenter = (index: number) => {
-    const el = document.querySelectorAll('[data-pin]')?.[index];
-    if (el) {
-      const rect = (el as HTMLElement).getBoundingClientRect();
-      const scrollTop = window.scrollY + rect.top - window.innerHeight / 2 + rect.height / 2;
-      window.scrollTo({ top: scrollTop, behavior: 'smooth' });
+    const id = pathname.split("/").pop();
+    if (pathname.startsWith(url.api.products) && id && items.find(p => p.id === id)) {
+      setModalId(id);
+    } else {
+      setModalId(null);
     }
+  }, [pathname]);
+
+  useEffect(() => {
+    if (!enableInfiniteScroll) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          loadMore();
+        }
+      },
+      { rootMargin: "200px" }
+    );
+    if (loadRef.current) {
+      observer.observe(loadRef.current);
+    }
+    return () => {
+      if (loadRef.current) {
+        observer.unobserve(loadRef.current);
+      }
+    };
+  }, [loadMore, enableInfiniteScroll]);
+
+  const openModal = (id: string) => {
+    router.push(`${url.api.products}${id}`, { scroll: false });
   };
 
-  // 商品クリック & 詳細パネル展開
-  const handleClick = (item: Item) => {
-    trackGAEvent("product_click", {
-      item_id: item.id,
-      item_name: item.title
-    });
-
-    trackGAEvent("product_expand", {
-      item_id: item.id,
-      expanded: true
-    });
-
-    onSelect(item);
+  const closeModal = () => {
+    router.push(url.api.products, { scroll: false });
   };
+
+  const modalProduct = items.find((p) => p.id === modalId);
 
   return (
     <>
-      <div className="columns-3 sm:columns-4 md:columns-5 lg:columns-6 xl:columns-7 gap-4 p-4">
-        {items.map((item) => (
-          <button
-            key={item.id}
-            data-pin
-            type="button"
-            className="mb-4 break-inside-avoid cursor-pointer w-full text-left bg-transparent border-none p-0"
-            onClick={() => handleClick(item)}
-            aria-label={`Select ${item.title}`}
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+          gap: "24px",
+          padding: "32px",
+        }}
+      >
+        {items.map((p) => (
+          <div
+            key={p.id}
+            style={{
+              borderRadius: "12px",
+              boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+              overflow: "hidden",
+              background: "#fff",
+              cursor: "pointer",
+              transition: "transform .18s",
+            }}
+            onClick={() => openModal(p.id)}
           >
-            <div className="block">
-              <img
-                src={item.imageUrl}
-                alt={item.title}
-                loading="lazy"
-                className="w-full rounded-lg shadow-md"
-              />
-              <div className="mt-1 text-sm text-center text-gray-700">{item.title}</div>
+            <img
+              src={p.imageUrl}
+              alt={p.title}
+              style={{
+                width: "100%",
+                aspectRatio: "1/1",
+                objectFit: "cover",
+                display: "block",
+              }}
+            />
+            <div style={{ padding: "16px" }}>
+              <div style={{ fontWeight: 600, fontSize: "1.1em" }}>{p.title}</div>
+              <div style={{ color: "#c33", marginTop: 4 }}>{p.price}</div>
             </div>
-          </button>
+          </div>
         ))}
       </div>
-      <div ref={loadRef} className="h-12" />
+      {modalProduct && (
+        <ProductModal
+          product={modalProduct}
+          onClose={closeModal}
+        />
+      )}
     </>
   );
 }
