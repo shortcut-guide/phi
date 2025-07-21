@@ -10,6 +10,7 @@ const locale = "ja_JP";
 
 type PaypalLoginProps = {
   lang: string;
+  onLoginSuccess?: (user: any) => void;
 };
 
 const paypalAuthUrl = [
@@ -21,13 +22,18 @@ const paypalAuthUrl = [
   `&locale=${locale}`
 ].join("");
 
-const PaypalLogin: React.FC<PaypalLoginProps> = ({ lang }) => (
-  <div>
-    <button
-      style={{ background: "#ffc439", border: "none", borderRadius: "4px", padding: "12px 24px", fontSize: "16px", fontWeight: "bold", color: "#222", cursor: "pointer"}}
-      onClick={() => window.location.href = paypalAuthUrl}
-    >{messages.login?.[lang]?.loginWithPayPal }</button>
-  </div>
-);
+const PaypalLogin: React.FC<PaypalLoginProps> = ({ lang }) => {
+  const handleLogin = () => {
+    window.location.href = paypalAuthUrl;
+  };
+  return (
+    <div>
+      <button
+        style={{ background: "#ffc439", border: "none", borderRadius: "4px", padding: "12px 24px", fontSize: "16px", fontWeight: "bold", color: "#222", cursor: "pointer"}}
+        onClick={handleLogin}
+      >{messages.login?.[lang]?.loginWithPayPal }</button>
+    </div>
+  );
+};
 
 export default PaypalLogin;
