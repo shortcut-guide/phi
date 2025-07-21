@@ -22,9 +22,6 @@ export const links = {
       new: "/settings/address/new"
     },
     product: "/product/",
-    paypal:{
-      sandbox: "https://www.sandbox.paypal.com/signin/authorize"
-    },
     edit: "/edit",
     api: {
       products: "/products/",

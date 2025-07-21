@@ -1,6 +1,7 @@
 /**
  * PayPalの認可コードをアクセストークンに交換する
  */
+
 export const exchangeCodeForToken = async (code: string) => {
   const credentials = btoa(`${process.env.PAYPAL_CLIENT_ID}:${process.env.PAYPAL_CLIENT_SECRET}`);
 
