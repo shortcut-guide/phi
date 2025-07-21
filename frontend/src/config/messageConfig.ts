@@ -452,13 +452,21 @@ export const messages = {
       title: "設定",
       heading: "設定",
       description: "アカウント設定・ログイン",
-      about: "ログインにはPaypalアカウントが必要です。Paypalアカウントが未登録の場合は、PayPalログインから新規アカウント作成を行ってください。"
+      about: "ログインにはPaypalアカウントが必要です。Paypalアカウントが未登録の場合は、PayPalログインから新規アカウント作成を行ってください。",
+      mail: "メール",
+      username: "ユーザー名",
+      cardchange: "クレジットカード変更",
+      addresschange: "住所変更",
     },
     en: {
       title: "Settings",
       heading: "Settings",
       description: "Account settings and login can be made here.",
-      about: "To log in, you will need a PayPal account. If you don't have one, please create a new account using the PayPal login."
+      about: "To log in, you will need a PayPal account. If you don't have one, please create a new account using the PayPal login.",
+      mail: "Email",
+      username: "Username",
+      cardchange: "Credit card change",
+      addresschange: "Address change",
     }
   },
   messagesPage: {

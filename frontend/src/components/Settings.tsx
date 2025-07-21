@@ -27,31 +27,29 @@ const Settings = ({lang}:{lang:string}) =>{
             {user && (
               <div className="mb-4 text-left space-y-2">
                 <div>
-                  <span className="font-bold">メール:</span> {user.email}
+                  <span className="font-bold">{t.email}:</span> {user.email}
                 </div>
                 <div>
-                  <span className="font-bold">ユーザー名:</span> {user.name}
+                  <span className="font-bold">{t.username}:</span> {user.name}
                 </div>
                 <div>
-                  <span className="font-bold">カード変更:</span>{" "}
                   <a
                     href={user.card_change_url}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-blue-600 underline"
                   >
-                    こちら
+                    {t.cardchange}
                   </a>
                 </div>
                 <div>
-                  <span className="font-bold">住所変更:</span>{" "}
                   <a
                     href={user.address_change_url}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-blue-600 underline"
                   >
-                    こちら
+                    {t.addresschange}
                   </a>
                 </div>
               </div>
