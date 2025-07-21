@@ -40,3 +40,5 @@ frontend/public/*
 .wrangler/
 
 frontend/.next/*
+
+.env.*
