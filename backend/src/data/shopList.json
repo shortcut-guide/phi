@@ -1,0 +1,46 @@
+{
+  "ja":{
+    "Amazon":{
+      "domain": "amazon.co.jp",
+      "affiliate": {
+        "enabled": true,
+        "tagParam": "tag",
+        "tagValue": "atai04-22"
+      }
+    },
+    "Rakuten":{
+      "domain": "rakuten.co.jp",
+      "affiliate": {
+        "enabled": false
+      }
+    },
+    "Yahoo":{
+      "domain": "shopping.yahoo.co.jp",
+      "affiliate": {
+        "enabled": false
+      }
+    }
+  },
+  "en":{
+    "Amazon":{
+      "domain": "amazon.com",
+      "affiliate": {
+        "enabled": true,
+        "tagParam": "tag",
+        "tagValue": "atai04-22"
+      }
+    },
+    "Rakuten":{
+      "domain": "rakuten.co.jp",
+      "affiliate": {
+        "enabled": false
+      }
+    },
+    "Yahoo":{
+      "domain": "shopping.yahoo.co.jp",
+      "affiliate": {
+        "enabled": false
+      }
+    }
+  }
+}
