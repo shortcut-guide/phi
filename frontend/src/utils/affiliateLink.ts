@@ -1,62 +1,82 @@
 // frontend/src/utils/affiliateLink.ts
 
-let cachedShopList: any = null;
+type AffiliateConfig = {
+  enabled: boolean;
+  tagParam?: string;
+  tagValue?: string;
+};
+
+type ShopDefinition = {
+  domain: string;
+  affiliate: AffiliateConfig;
+};
+
+type ShopListByLang = {
+  [shopName: string]: ShopDefinition;
+};
+
+type ShopList = {
+  [lang: string]: ShopListByLang;
+};
+
+type MatchResult = {
+  lang: string;
+  shopName: string;
+  shop: ShopDefinition;
+};
+
+let cachedShopList: ShopList | null = null;
 
 /**
- * shopListをAPIから取得・キャッシュ
+ * shopListをAPIから取得しキャッシュ
  */
-export async function fetchShopList(): Promise<any> {
+export async function fetchShopList(): Promise<ShopList> {
   if (cachedShopList) return cachedShopList;
-  const res = await fetch('/api/shoplist'); // 適宜修正
-  if (!res.ok) return {};
+  const res = await fetch("/api/shoplist");
+  if (!res.ok) throw new Error("Failed to fetch shop list");
   const json = await res.json();
-  cachedShopList = json.data || {};
+  cachedShopList = json.data as ShopList;
   return cachedShopList;
 }
 
 /**
- * ドメイン→言語・ショップ情報を動的判定
- * @param url 
- * @param shopList APIから取得したshopList
- * @returns { lang, shopDef } or null
+ * ドメイン一致するショップ定義を返す
  */
-function getShopDefinition(url: string, shopList: any): { lang: string, shopName: string, shopDef: any } | null {
+function matchShopDefinition(url: string, shopList: ShopList): MatchResult | null {
+  let u: URL;
   try {
-    const u = new URL(url);
-
-    // 全言語・全ショップでループ
-    for (const lang of Object.keys(shopList)) {
-      const shops = shopList[lang];
-      for (const shopName of Object.keys(shops)) {
-        const shopDef = shops[shopName];
-        if (shopDef.domain && u.hostname.endsWith(shopDef.domain)) {
-          return { lang, shopName, shopDef };
-        }
+    u = new URL(url);
+  } catch {
+    return null;
+  }
+  for (const [lang, shops] of Object.entries(shopList)) {
+    for (const [shopName, shop] of Object.entries(shops)) {
+      if (shop.domain && u.hostname.endsWith(shop.domain)) {
+        return { lang, shopName, shop };
       }
     }
-  } catch {}
+  }
   return null;
 }
 
 /**
- * 商品リンクをアフィリエイトリンクに変換（全てshopListの内容に準拠）
- * @param url 商品リンクURL
- * @returns 変換後URL（非同期: Promise<string>）
+ * アフィリエイトリンク変換
+ * - shopListの定義に従い、該当ドメインならパラメータ付与
+ * - enabled=falseや該当なしは元URL
  */
 export async function toAffiliateLink(url: string): Promise<string> {
-  try {
-    const shopList = await fetchShopList();
-    const shopDefInfo = getShopDefinition(url, shopList);
-    if (!shopDefInfo) return url;
+  const shopList = await fetchShopList();
+  const match = matchShopDefinition(url, shopList);
+  if (!match) return url;
 
-    const { shopDef } = shopDefInfo;
-    const u = new URL(url);
-
-    if (shopDef.affiliate?.enabled && shopDef.affiliate?.tagParam && shopDef.affiliate?.tagValue) {
-      u.searchParams.set(shopDef.affiliate.tagParam, shopDef.affiliate.tagValue);
-      return u.toString();
-    }
+  const { shop } = match;
+  if (!shop.affiliate?.enabled || !shop.affiliate.tagParam || !shop.affiliate.tagValue) {
     return url;
+  }
+  try {
+    const u = new URL(url);
+    u.searchParams.set(shop.affiliate.tagParam, shop.affiliate.tagValue);
+    return u.toString();
   } catch {
     return url;
   }
