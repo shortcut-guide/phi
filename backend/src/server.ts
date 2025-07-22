@@ -4,6 +4,7 @@ import cors from "cors";
 import { PaypalRoutes } from "@/b/routes/auth";
 import paypalOrderRoute from "@/b/routes/paypalOrderRoute";
 import faqRouter from "@/b/routes/faq";
+import shopListRouter from "@/b/routes/shoplist";
 
 const app = express();
 const PORT = 3002;
@@ -36,6 +37,7 @@ app.use(express.json());
 app.use("/auth", PaypalRoutes);
 app.use("/api/paypal/order", paypalOrderRoute);
 app.use("/api/faq", faqRouter);
+app.use("/api/shopList", shopListRouter);
 
 app.listen(PORT, () => {
   console.log(`🚀 Server is running on port ${PORT}`);
