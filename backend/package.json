@@ -14,6 +14,7 @@
         "d1:deploy:products": "cd src/d1-worker/products && wrangler deploy --config wrangler-production.toml",
         "d1:deploy:searchlogs": "cd src/d1-worker/searchlogs && wrangler deploy --config wrangler-production.toml",
         "d1:deploy:profile": "cd src/d1-worker/profile && wrangler deploy --config wrangler-production.toml",
+        "all:deploy": "npm run node:start && npm run d1:start && npm run d1:deploy:products && npm run d1:deploy:searchlogs && npm run d1:deploy:profile",
         "test": "node --max-old-space-size=4096 --experimental-vm-modules node_modules/.bin/jest --config ./jest.config.mjs"
     },
     "dependencies": {
