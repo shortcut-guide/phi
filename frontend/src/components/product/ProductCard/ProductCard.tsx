@@ -6,6 +6,7 @@ import ProductCardReview from "@/f/components/product/ProductCard/ProductCardRev
 import ProductCardSpecGrid from "@/f/components/product/ProductCard/ProductCardSpecGrid";
 import { useTabbedKeys } from "@/f/components/product/TabbedSpec/useTabbedKeys";
 import { useActiveTabs } from "@/f/components/product/TabbedSpec/useActiveTabs";
+import { toAffiliateLink } from "@/f/utils/affiliateLink";
 import { messages } from "@/f/config/messageConfig";
 import type { ProductCardProps } from "./ProductCard.types";
 
@@ -17,12 +18,25 @@ const ProductCard: React.FC<ProductCardProps> = ({
   lang,
   ...rest
 }) => {
+  const [affiliateUrl, setAffiliateUrl] = useState(product.ec_data.url);
   const [modalOpen, setModalOpen] = useState(false);
   const dict = messages.productSpec?.[lang] ?? {};
   const ecData = product.ec_data || {};
-
   const tabbedKeys = useTabbedKeys(ecData);
   const [activeTabs, setActiveTabs] = useActiveTabs(tabbedKeys, ecData);
+
+  useEffect(() => {
+    let isCancelled = false;
+
+    // 非同期でアフィリエイトリンクを取得
+    toAffiliateLink(product.shopUrl).then((convertedUrl) => {
+      if (!isCancelled) setAffiliateUrl(convertedUrl);
+    });
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [product.shopUrl]);
 
   return (
     <>
@@ -41,7 +55,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
         <div className="py-1 px-4">
           {product.name && (
             <h2 className="text-[0.6875em] font-semibold mb-1 line-clamp-2 leading-tight">
-              {product.name}
+              <a href={affiliateUrl} target="_blank" rel="noopener noreferrer">
+                {product.name}
+              </a>
             </h2>
           )}
           <ProductCardReview
@@ -79,7 +95,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
             <div className="p-6">
               {product.name && (
                 <h2 className="text-[0.6875em] font-bold text-left mb-1">
-                  {product.name}
+                  <a href={affiliateUrl} target="_blank" rel="noopener noreferrer">
+                    {product.name}
+                  </a>
                 </h2>
               )}
               <ProductCardReview
