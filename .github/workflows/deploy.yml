@@ -45,8 +45,8 @@ jobs:
             git fetch origin
             git reset --hard origin/${{ steps.vars.outputs.branch }}
             cd backend
-            npm install
-            pm2 restart ${{ steps.vars.outputs.dir }} || pm2 start npm --name "${{ steps.vars.outputs.dir }}" -- start
+            yarn install --frozen-lockfile
+            npm run all:deploy
           EOF
 
       - name: Build frontend and deploy
@@ -54,10 +54,8 @@ jobs:
           ssh -i key.pem -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << EOF
             set -e
             cd /var/www/${{ steps.vars.outputs.dir }}/frontend
-            npm install
-            npm run build
-            # Astro build 出力は通常 ./dist 以下
-            cp -r public/* /var/www/${{ steps.vars.outputs.dir }}/frontend/public/
+            yarn install --frozen-lockfile
+            npm run start
           EOF
 
       - name: Deploy maintenance
