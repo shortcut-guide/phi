@@ -12,8 +12,9 @@ const Settings = ({lang}:{lang:string}) =>{
   const t = (messages.settings as any)[lang] ?? {};
 
   useEffect(() => {
+    const API_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
     // ログイン済みならCookie経由で自動取得
-    fetch("/api/me")
+    fetch(`${API_URL}/auth/me`, { credentials: "include" })
       .then(res => res.ok ? res.json() : null)
       .then(data => {
         if (data && data.user) setUser(data.user);

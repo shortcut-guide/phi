@@ -16,7 +16,6 @@ const callbackHandler = async (req: Request, res: Response): Promise<void> => {
     if (stateRaw) {
       try {
         const state = JSON.parse(decodeURIComponent(stateRaw));
-        // ここで絶対URLかどうか判定し、そのままリダイレクト
         if (state.redirectTo && typeof state.redirectTo === "string") {
           redirectTo = state.redirectTo;
         }
@@ -30,10 +29,11 @@ const callbackHandler = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
+// PayPalコールバック
 router.post("/callback", callbackHandler);
 router.get("/callback", callbackHandler);
 
-// /api/auth/me GET route
+// 認証状態取得
 router.get("/me", (req: Request, res: Response) => {
   const token = req.cookies?.token;
   if (!token) {
@@ -42,13 +42,14 @@ router.get("/me", (req: Request, res: Response) => {
   }
   try {
     const payload = jwt.verify(token, process.env.JWT_SECRET!);
+    // 必要に応じてpayloadを整形
     res.json({ user: payload });
   } catch {
     res.status(401).json({ error: "Invalid token" });
   }
 });
 
-// /api/auth/logout POST route
+// ログアウト
 router.post("/logout", (req: Request, res: Response) => {
   res.clearCookie("token", { path: "/" });
   res.json({ success: true });
