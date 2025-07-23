@@ -1,5 +1,3 @@
-// frontend/src/components/LoginBtnReact.tsx
-
 import React, { useEffect, useState } from "react";
 import { messages } from "@/f/config/messageConfig";
 import { links } from "@/f/config/links";
@@ -25,27 +23,28 @@ function getCookie(name: string) {
 const PaypalLogin: React.FC<PaypalLoginProps> = ({ lang, onLoginSuccess }) => {
   const [user, setUser] = useState<any>(null);
 
-  // cookieチェック → 認証済み判定
   useEffect(() => {
     const checkAuth = async () => {
       const jwt = getCookie("token");
+      console.log("jwt",jwt);
       if (!jwt) {
         setUser(null);
         return;
       }
-      // 認証APIへ
       try {
         const res = await fetch("/api/auth/me", { credentials: "include" });
+        console.log("auth/me status", res.status);
         if (res.ok) {
           const data = await res.json();
-          setUser(data.user);
-          onLoginSuccess && onLoginSuccess(data.user);
+          console.log("auth/me payload", data);
+          setUser(data);
+          onLoginSuccess && onLoginSuccess(data);
         } else {
-          // JWT無効
           setUser(null);
+          console.log("auth/me error", res.status);
         }
-      } catch {
-        // cookie消えていたらリロードで再認証促進
+      } catch (e) {
+        console.error("auth/me fetch error", e);
         window.location.reload();
       }
     };
@@ -55,7 +54,7 @@ const PaypalLogin: React.FC<PaypalLoginProps> = ({ lang, onLoginSuccess }) => {
   const handleLogin = () => {
     const state = encodeURIComponent(
       JSON.stringify({
-        redirectTo: window.location.origin + window.location.pathname + window.location.search
+        redirectTo: window.location.origin + window.location.pathname + window.location.search,
       })
     );
     const paypalAuthUrl =
@@ -70,12 +69,10 @@ const PaypalLogin: React.FC<PaypalLoginProps> = ({ lang, onLoginSuccess }) => {
   };
 
   const handleLogout = () => {
-    // サーバー側でcookieを削除するAPIを呼ぶ
-    fetch("/api/auth/logout", { method: "POST", credentials: "include" })
-      .then(() => {
-        setUser(null);
-        window.location.reload();
-      });
+    fetch("/api/auth/logout", { method: "POST", credentials: "include" }).then(() => {
+      setUser(null);
+      window.location.reload();
+    });
   };
 
   if (user) {
