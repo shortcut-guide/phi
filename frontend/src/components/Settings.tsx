@@ -1,5 +1,5 @@
 import Head from "next/head";
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { useRouter } from 'next/router';
 import { messages } from "@/f/config/messageConfig";
 import DefaultLayout from "@/f/layouts/DefaultLayout";
@@ -10,6 +10,15 @@ const Settings = ({lang}:{lang:string}) =>{
   const router = useRouter();
   if (router.isFallback) return <div>Loading...</div>;
   const t = (messages.settings as any)[lang] ?? {};
+
+  useEffect(() => {
+    // ログイン済みならCookie経由で自動取得
+    fetch("/api/me")
+      .then(res => res.ok ? res.json() : null)
+      .then(data => {
+        if (data && data.user) setUser(data.user);
+      });
+  }, []);
 
   return (
     <>
