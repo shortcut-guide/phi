@@ -27,9 +27,18 @@ export const handlePaypalCallback = async (code: string) => {
   return {
     success: true,
     user: {
-      email: userInfo.email,
-      name: userInfo.name || `${userInfo.given_name ?? ""} ${userInfo.family_name ?? ""}`.trim(),
-      card_name: null,
+      id: userInfo.user_id,
+      name: userInfo.name,
+      payer_id: userInfo.payer_id,
+      address:{
+        street_address: userInfo.address.street_address,
+        locality: userInfo.address.locality,
+        region: userInfo.address.region,
+        postal_code: userInfo.address.postal_code,
+        contry: userInfo.address.contry
+      },
+      verified_account: userInfo.verified_account,
+      emails:userInfo.emails.value,
       card_change_url: PAYPAL_CARDS_URL,
       address_change_url: PAYPAL_ADDRESS_URL,
     },
