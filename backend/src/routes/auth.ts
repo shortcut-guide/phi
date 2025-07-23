@@ -1,4 +1,5 @@
 import { Router, Request, Response } from "express";
+import jwt from "jsonwebtoken";
 import { handlePaypalCallback } from "@/b/controllers/paypalController";
 
 const router = Router();
@@ -31,5 +32,26 @@ const callbackHandler = async (req: Request, res: Response): Promise<void> => {
 
 router.post("/callback", callbackHandler);
 router.get("/callback", callbackHandler);
+
+// /api/auth/me GET route
+router.get("/me", (req: Request, res: Response) => {
+  const token = req.cookies?.token;
+  if (!token) {
+    res.status(401).json({ error: "Unauthorized" });
+    return;
+  }
+  try {
+    const payload = jwt.verify(token, process.env.JWT_SECRET!);
+    res.json({ user: payload });
+  } catch {
+    res.status(401).json({ error: "Invalid token" });
+  }
+});
+
+// /api/auth/logout POST route
+router.post("/logout", (req: Request, res: Response) => {
+  res.clearCookie("token", { path: "/" });
+  res.json({ success: true });
+});
 
 export const PaypalRoutes = router;
