@@ -7,7 +7,7 @@ const app = express();
 const PORT = 3002;
 
 app.use(express.json());
-app.use("/api/auth/paypal", PaypalRoutes);
+app.use("/auth/paypal", PaypalRoutes);
 app.use("/api/faq", faqRouter);
 
 app.listen(PORT, () => {

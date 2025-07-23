@@ -12,28 +12,31 @@ export const exchangeCodeForToken = async (code: string) => {
       "Content-Type": "application/x-www-form-urlencoded",
     },
     body: new URLSearchParams({
-      grant_type: "authorization_code",
+      grant_type: "client_credentials",
       code,
     }),
   });
-
-  if (!res.ok) throw new Error("Failed to exchange authorization code for token");
-
-  return res.json();
+  const json = await res.json();
+  return json;
 };
 
 /**
  * アクセストークンを使ってPayPalユーザー情報を取得する
  */
 export const getPaypalUserInfo = async (accessToken: string) => {
-  const res = await fetch(`${process.env.PAYPAL_USERINFO_URL}`, {
+  const url = process.env.PAYPAL_USERINFO_URL!;
+  const res = await fetch(url, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
   });
 
-  if (!res.ok) throw new Error("Failed to get PayPal user info");
+  if (!res.ok) {
+    const text = await res.text();
+    console.error("PayPal token error:", text);
+    throw new Error("Failed to exchange authorization code for token: " + text);
+  }
 
   return res.json();
 };
