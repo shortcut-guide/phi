@@ -7,17 +7,34 @@ import faqRouter from "@/b/routes/faq";
 const app = express();
 const PORT = 3002;
 
+// 複数origin許可
+const whitelist = [
+  "http://localhost:3001",
+  "http://127.0.0.1:3001",
+  "http://192.168.0.70:3001"
+  "http://localhost:3002",
+  "http://127.0.0.1:3002",
+  "http://192.168.0.70:3002"
+];
+
 app.use(cors({
-  origin: [
-    "http://127.0.0.1:3001"
-  ],
+  origin: function(origin, callback) {
+    // CORS preflight（OPTIONS）では origin===undefined になるので許可
+    if (!origin) return callback(null, true);
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   credentials: true,
 }));
+
 app.use(cookieParser());
 app.use(express.json());
 app.use("/auth", PaypalRoutes);
 app.use("/api/faq", faqRouter);
 
 app.listen(PORT, () => {
-  console.log(`🚀 Server is running`);
+  console.log(`🚀 Server is running on port ${PORT}`);
 });

@@ -41,7 +41,7 @@ router.get("/me", (req: Request, res: Response) => {
   }
   try {
     const payload = jwt.verify(token, process.env.JWT_SECRET!);
-    res.json({ user: payload });
+    res.json(payload);
   } catch {
     res.status(401).json({ error: "Invalid token" });
   }
