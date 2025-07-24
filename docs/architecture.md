@@ -2977,6 +2977,7 @@ graph TD
   C -- 記録済み --> E[showHelp = false]
 ```
 
+---
 
 # 言語別HTMLキャッシュ × Cloudflare KV
 ```mermaid
@@ -3025,6 +3026,8 @@ brew services start redis
 ```
 redis-cli ping
 ```
+
+---
 
 # Amazonログイン
 1. Amazon Developer Console 設定
