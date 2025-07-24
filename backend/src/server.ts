@@ -2,6 +2,7 @@ import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import { PaypalRoutes } from "@/b/routes/auth";
+import paypalOrderRoute from "@/b/routes/paypalOrderRoute";
 import faqRouter from "@/b/routes/faq";
 
 const app = express();
@@ -33,6 +34,7 @@ app.use(cors({
 app.use(cookieParser());
 app.use(express.json());
 app.use("/auth", PaypalRoutes);
+app.use("/api/paypal/order", paypalOrderRoute);
 app.use("/api/faq", faqRouter);
 
 app.listen(PORT, () => {

@@ -3064,3 +3064,101 @@ sequenceDiagram
     Amazon-->>Backend: access_token, profile情報
     Backend-->>Frontend: セッション発行 or JWT発行
 ```
+
+---
+
+# Paypalにおける決済
+PayPalに商品を事前登録する必要はありません。
+代わりに、支払い作成（/v2/checkout/orders）時に 商品情報（名前・価格など）をリクエストボディに含める方式です。
+
+## POST /v2/checkout/orders のリクエスト
+```
+POST /v2/checkout/orders
+Authorization: Bearer <ACCESS_TOKEN>
+Content-Type: application/json
+```
+
+```
+{
+  "intent": "CAPTURE",
+  "purchase_units": [
+    {
+      "reference_id": "PRODUCT-001",
+      "description": "プレミアム猫缶セット",
+      "amount": {
+        "currency_code": "JPY",
+        "value": "2980",
+        "breakdown": {
+          "item_total": {
+            "currency_code": "JPY",
+            "value": "2980"
+          }
+        }
+      },
+      "items": [
+        {
+          "name": "猫缶A（マグロ）",
+          "unit_amount": {
+            "currency_code": "JPY",
+            "value": "1490"
+          },
+          "quantity": "1"
+        },
+        {
+          "name": "猫缶B（サーモン）",
+          "unit_amount": {
+            "currency_code": "JPY",
+            "value": "1490"
+          },
+          "quantity": "1"
+        }
+      ]
+    }
+  ],
+  "application_context": {
+    "brand_name": "Phis EC",
+    "locale": "ja-JP",
+    "shipping_preference": "NO_SHIPPING",
+    "user_action": "PAY_NOW",
+    "return_url": "https://phis.jp/paypal/success",
+    "cancel_url": "https://phis.jp/paypal/cancel"
+  }
+}
+```
+
+```mermaid
+sequenceDiagram
+  participant User
+  participant Frontend
+  participant Backend
+  participant PayPal
+
+  User->>Frontend: 商品購入クリック
+  Frontend->>Backend: /api/paypal/create-order
+  Backend->>PayPal: POST /v2/checkout/orders
+  PayPal-->>Backend: approval_link, order_id
+  Backend-->>Frontend: approval_link
+  Frontend->>User: PayPal画面へ遷移
+  User->>PayPal: 支払い承認
+  PayPal-->>Frontend: return_urlにリダイレクト
+  Frontend->>Backend: /api/paypal/capture-order?token=xxx
+  Backend->>PayPal: POST /v2/checkout/orders/:id/capture
+  PayPal-->>Backend: 決済成功情報
+  Backend-->>Frontend: 完了表示
+```
+
+## 注意点
+| 項目     | 内容                                   |
+| ------ | ------------------------------------ |
+| 商品登録   | 不要。API内 `purchase_units.items` に直接記述 |
+| 価格     | `amount.value` に税込みで指定               |
+| 商品複数   | `items[]` に配列で渡す（最大10件）              |
+| 商品画像   | 表示できない（PayPal画面に画像を出すことは不可）          |
+| ユーザー情報 | `application_context` で言語、戻り先URLなど設定 |
+
+## 関連API
+| API                               | 説明                 |
+| --------------------------------- | ------------------ |
+| `/v2/checkout/orders`             | 注文作成（Create Order） |
+| `/v2/checkout/orders/:id/capture` | 支払い確定（Capture）     |
+| `/v2/checkout/orders/:id`         | 注文情報取得             |
