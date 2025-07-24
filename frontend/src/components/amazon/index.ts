@@ -1,0 +1,1 @@
+export { default as LoginBtnAmazon } from "@/f/components/amazon/LoginBtnAmazon"

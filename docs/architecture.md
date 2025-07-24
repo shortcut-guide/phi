@@ -3025,3 +3025,39 @@ brew services start redis
 ```
 redis-cli ping
 ```
+
+# Amazonログイン
+1. Amazon Developer Console 設定
+2. OAuth認証処理の導入
+3. バックエンド /auth/amazon & /auth/amazon/callback 実装
+4. ユーザー情報の取得
+5. フロントエンドログインボタン設置
+
+## Amazon Developer Console 設定
+1. https://developer.amazon.com/login にてログイン
+2. 新規Security Profile作成
+3. Web Settings に以下を登録：
+```
+Allowed Return URLs:
+  http://localhost:3000/auth/amazon/callback
+  https://phis.jp/auth/amazon/callback
+```
+
+## 認証フロー構成
+```mermaid
+sequenceDiagram
+    participant User
+    participant Frontend
+    participant Backend
+    participant Amazon
+
+    User->>Frontend: Amazon Loginボタン押下
+    Frontend->>Backend: /auth/amazon にリダイレクト
+    Backend->>Amazon: OAuth認証開始
+    Amazon-->>User: 認証画面表示
+    User->>Amazon: 認証許可
+    Amazon->>Backend: /auth/amazon/callback (code付き)
+    Backend->>Amazon: codeをtokenに交換
+    Amazon-->>Backend: access_token, profile情報
+    Backend-->>Frontend: セッション発行 or JWT発行
+```

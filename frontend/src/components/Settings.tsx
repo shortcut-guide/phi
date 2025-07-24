@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { messages } from "@/f/config/messageConfig";
 import DefaultLayout from "@/f/layouts/DefaultLayout";
 import LoginBtn from "@/f/components/LoginBtn";
+import LoginBtnAmazon from "@/f/components/amazon/";
 
 const Settings = ({lang}:{lang:string}) =>{
   const [user, setUser] = useState(null);
@@ -69,6 +70,9 @@ const Settings = ({lang}:{lang:string}) =>{
             {!user && (
               <div className="flex flex-col items-center gap-4">
                 <LoginBtn lang={lang} onLoginSuccess={setUser} />
+              </div>
+              <div className="flex flex-col items-center gap-4">
+                <LoginBtnAmazon />
               </div>
             )}
           </div>

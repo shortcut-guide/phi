@@ -1,6 +1,7 @@
 import { Router, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { handlePaypalCallback } from "@/b/controllers/paypalController";
+import { amazonAuth, amazonCallback } from "@/b/controllers/amazonController";
 
 const router = Router();
 
@@ -31,6 +32,9 @@ const callbackHandler = async (req: Request, res: Response): Promise<void> => {
 
 router.post("/paypal/callback", callbackHandler);
 router.get("/paypal/callback", callbackHandler);
+
+app.get("/amazon", amazonAuth);
+app.get("/amazon/callback", amazonCallback);
 
 // 認証状態取得API
 router.get("/me", (req: Request, res: Response) => {
