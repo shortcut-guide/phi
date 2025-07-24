@@ -1,4 +1,3 @@
-import puppeteer from 'puppeteer';
 export const links = {
   assets:{
     logo: "/assets/phis_logo",
