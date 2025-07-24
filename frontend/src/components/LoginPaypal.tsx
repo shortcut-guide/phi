@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { messages } from "@/f/config/messageConfig";
 import { links } from "@/f/config/links";
 import { getLangObj } from "@/f/utils/getLangObj";
-const url = getLangObj<typeof links.url>(links.url);
 
+const url = getLangObj<typeof links.url>(links.url);
 const clientId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
 const paypalBaseUrl = process.env.NEXT_PUBLIC_PAYPAL_URL;
 const redirectUri = process.env.NEXT_PUBLIC_REDIRECT_URI;
@@ -80,7 +80,7 @@ const PaypalLogin: React.FC<PaypalLoginProps> = ({ lang, onLoginSuccess }) => {
       <div>
         <span>
           {user.name
-            ? `${user.name} でログイン中`
+            ? `${user.name} ${loggedIn}`
             : messages.login?.[lang]?.loggedIn}
         </span>
         <button
@@ -96,7 +96,7 @@ const PaypalLogin: React.FC<PaypalLoginProps> = ({ lang, onLoginSuccess }) => {
           }}
           onClick={handleLogout}
         >
-          {messages.login?.[lang]?.logout || "ログアウト"}
+          {messages.login?.[lang]?.logout}
         </button>
       </div>
     );
@@ -117,7 +117,7 @@ const PaypalLogin: React.FC<PaypalLoginProps> = ({ lang, onLoginSuccess }) => {
         }}
         onClick={handleLogin}
       >
-        {messages.login?.[lang]?.loginWithPayPal || "PayPalでログイン"}
+        {messages.login?.[lang]?.loginWithPayPal}
       </button>
     </div>
   );

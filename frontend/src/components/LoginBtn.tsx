@@ -1,4 +1,4 @@
-import PaypalLogin from '@/f/components/LoginBtnReact';
+import PaypalLogin from '@/f/components/LoginPaypal';
 
 type Props = {
   lang: string;

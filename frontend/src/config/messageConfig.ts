@@ -2,9 +2,13 @@ export const messages = {
   login:{
     ja:{
       loginWithPayPal: "PayPalログイン",
+      loginAmazon: "Amazonでログイン",
+      loggedIn: "ログイン中"
     },
     en:{
       loginWithPayPal: "PayPal Login",
+      loginAmazon: "Amazon Login",
+      loggedIn: "Logged In"
     },
   },
   alt:{
