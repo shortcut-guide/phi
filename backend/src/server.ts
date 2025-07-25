@@ -34,7 +34,7 @@ app.use(cors({
 
 app.use(cookieParser());
 app.use(express.json());
-app.use("/auth", PaypalRoutes);
+app.use("/api/auth", PaypalRoutes);
 app.use("/api/paypal/order", paypalOrderRoute);
 app.use("/api/faq", faqRouter);
 app.use("/api/shopList", shopListRouter);

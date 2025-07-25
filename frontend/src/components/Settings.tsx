@@ -1,24 +1,33 @@
 import Head from "next/head";
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from 'next/router';
 import { messages } from "@/f/config/messageConfig";
 import DefaultLayout from "@/f/layouts/DefaultLayout";
 import LoginBtn from "@/f/components/LoginBtn";
-import LoginBtnAmazon from "@/f/components/amazon/";
+import { LoginBtnAmazon } from "@/f/components/amazon";
 
-const Settings = ({lang}:{lang:string}) =>{
-  const [user, setUser] = useState(null);
+const Settings = ({ lang }: { lang: string }) => {
+  const [paypalUser, setPaypalUser] = useState(null);
+  const [amazonUser, setAmazonUser] = useState(null);
   const router = useRouter();
   if (router.isFallback) return <div>Loading...</div>;
   const t = (messages.settings as any)[lang] ?? {};
 
   useEffect(() => {
     const API_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-    // ログイン済みならCookie経由で自動取得
-    fetch(`${API_URL}/auth/me`, { credentials: "include" })
+
+    // PayPal
+    fetch(`${API_URL}/api/auth/me`, { credentials: "include" })
       .then(res => res.ok ? res.json() : null)
       .then(data => {
-        if (data && data.user) setUser(data.user);
+        if (data && data.user) setPaypalUser(data.user);
+      });
+
+    // Amazon（例：APIエンドポイントや実装に応じて適宜修正）
+    fetch(`${API_URL}/api/auth/amazon/me`, { credentials: "include" })
+      .then(res => res.ok ? res.json() : null)
+      .then(data => {
+        if (data && data.user) setAmazonUser(data.user);
       });
   }, []);
 
@@ -34,46 +43,68 @@ const Settings = ({lang}:{lang:string}) =>{
             <p className="text-1xl text-gray-600 mb-8 text-left">{t.description}</p>
             <p className="text-1xl text-gray-600 mb-8 text-left">{t.about}</p>
 
-            {/* ログイン済みなら情報表示 */}
-            {user && (
-              <div className="mb-4 text-left space-y-2">
+            {/* PayPal ログイン済みなら情報表示 */}
+            {paypalUser && (
+              <div className="mb-4 text-left space-y-2 shadow-xl rounded-xl p-8 border border-gray-100">
+                <h2>Paypal</h2>
                 <div>
-                  <span className="font-bold">{t.email}:</span> {user.email}
+                  <span className="font-bold">メール:</span> {paypalUser.emails?.[0]?.value}
                 </div>
                 <div>
-                  <span className="font-bold">{t.username}:</span> {user.name}
+                  <span className="font-bold">ユーザー名:</span> {paypalUser.name}
                 </div>
                 <div>
+                  <span className="font-bold">カード変更:</span>{" "}
                   <a
-                    href={user.card_change_url}
+                    href={paypalUser.card_change_url}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-blue-600 underline"
                   >
-                    {t.cardchange}
+                    こちら
                   </a>
                 </div>
                 <div>
+                  <span className="font-bold">PayPal住所変更:</span>{" "}
                   <a
-                    href={user.address_change_url}
+                    href={paypalUser.address_change_url}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-blue-600 underline"
                   >
-                    {t.addresschange}
+                    こちら
                   </a>
                 </div>
               </div>
             )}
 
-            {/* 未ログインならログインボタン */}
-            {!user && (
-              <div className="flex flex-col items-center gap-4">
-                <LoginBtn lang={lang} onLoginSuccess={setUser} />
+            {/* Amazon ログイン済みなら情報表示（Amazon APIで取得した情報に応じて調整） */}
+            {amazonUser && (
+              <div className="mb-4 text-left space-y-2 shadow-xl rounded-xl p-8 border border-gray-100">
+                <h2>Amazon</h2>
+                <div>
+                  <span className="font-bold">メール:</span> {amazonUser.email}
+                </div>
+                <div>
+                  <span className="font-bold">ユーザー名:</span> {amazonUser.name}
+                </div>
               </div>
-              <div className="flex flex-col items-center gap-4">
-                <LoginBtnAmazon />
-              </div>
+            )}
+
+            {/* 未ログインの場合のみログインボタンを表示 */}
+            {(!paypalUser || !amazonUser) && (
+              <>
+                {!paypalUser && (
+                  <div className="flex justify-center items-center mb-4 space-y-4 shadow-xl rounded-xl p-8 border border-gray-100">
+                    <LoginBtn lang={lang} onLoginSuccess={setPaypalUser} />
+                  </div>
+                )}
+                {!amazonUser && (
+                  <div className="flex justify-center items-center mb-4 space-y-4 shadow-xl rounded-xl p-8 border border-gray-100">
+                    <LoginBtnAmazon lang={lang} />
+                  </div>
+                )}
+              </>
             )}
           </div>
         </div>

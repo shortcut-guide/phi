@@ -33,8 +33,8 @@ const callbackHandler = async (req: Request, res: Response): Promise<void> => {
 router.post("/paypal/callback", callbackHandler);
 router.get("/paypal/callback", callbackHandler);
 
-app.get("/amazon", amazonAuth);
-app.get("/amazon/callback", amazonCallback);
+router.get("/amazon", amazonAuth);
+router.get("/amazon/callback", amazonCallback);
 
 // 認証状態取得API
 router.get("/me", (req: Request, res: Response) => {

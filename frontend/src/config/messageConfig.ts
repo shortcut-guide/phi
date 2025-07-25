@@ -456,7 +456,6 @@ export const messages = {
       title: "設定",
       heading: "設定",
       description: "アカウント設定・ログイン",
-      about: "ログインにはPaypalアカウントが必要です。Paypalアカウントが未登録の場合は、PayPalログインから新規アカウント作成を行ってください。",
       mail: "メール",
       username: "ユーザー名",
       cardchange: "クレジットカード変更",

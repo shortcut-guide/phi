@@ -1,7 +1,7 @@
 // backend/src/controllers/amazonController.ts
 import { Request, Response } from "express";
 import fetch from "node-fetch";
-import { jwtSign } from "@tsndr/cloudflare-worker-jwt";
+import cloudflareJwt from "@tsndr/cloudflare-worker-jwt";
 
 const CLIENT_ID = process.env.AMAZON_CLIENT_ID!;
 const CLIENT_SECRET = process.env.AMAZON_CLIENT_SECRET!;
@@ -41,7 +41,11 @@ export async function amazonCallback(req: Request, res: Response) {
   const profile = await profileRes.json();
 
   // 3. JWT発行
-  const jwt = await jwtSign({ sub: profile.user_id, email: profile.email }, process.env.JWT_SECRET!);
-  res.cookie("jwt", jwt, { httpOnly: true, secure: true, sameSite: "lax" });
+  const token = await cloudflareJwt.sign(
+    { sub: profile.user_id, email: profile.email },
+    process.env.JWT_SECRET!
+  );
+
+  res.cookie("jwt", token, { httpOnly: true, secure: true, sameSite: "lax" });
   res.redirect("/");
 }

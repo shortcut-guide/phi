@@ -7,6 +7,7 @@ const url = getLangObj<typeof links.url>(links.url);
 const clientId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
 const paypalBaseUrl = process.env.NEXT_PUBLIC_PAYPAL_URL;
 const redirectUri = process.env.NEXT_PUBLIC_REDIRECT_URI;
+const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL;
 const scope = "openid profile email";
 const locale = "ja_JP";
 
@@ -25,14 +26,8 @@ const PaypalLogin: React.FC<PaypalLoginProps> = ({ lang, onLoginSuccess }) => {
 
   useEffect(() => {
     const checkAuth = async () => {
-      const jwt = getCookie("token");
-      console.log("jwt",jwt);
-      if (!jwt) {
-        setUser(null);
-        return;
-      }
       try {
-        const res = await fetch("/api/auth/me", { credentials: "include" });
+        const res = await fetch(`${apiBase}/api/auth/me`, { credentials: "include" });
         console.log("auth/me status", res.status);
         if (res.ok) {
           const data = await res.json();
@@ -69,7 +64,7 @@ const PaypalLogin: React.FC<PaypalLoginProps> = ({ lang, onLoginSuccess }) => {
   };
 
   const handleLogout = () => {
-    fetch("/api/auth/logout", { method: "POST", credentials: "include" }).then(() => {
+    fetch(`${apiBase}/api/auth/logout`, { method: "POST", credentials: "include" }).then(() => {
       setUser(null);
       window.location.reload();
     });
@@ -80,7 +75,7 @@ const PaypalLogin: React.FC<PaypalLoginProps> = ({ lang, onLoginSuccess }) => {
       <div>
         <span>
           {user.name
-            ? `${user.name} ${loggedIn}`
+            ? `${user.name} ${messages.login?.[lang]?.loggedIn}`
             : messages.login?.[lang]?.loggedIn}
         </span>
         <button
