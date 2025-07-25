@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FlexibleImages } from "@/f/components/product/FlexibleImages";
 import { DescriptionBlock } from "@/f/components/product/DescriptionBlock";
 import { PricePanel } from "@/f/components/product/PricePanel";
