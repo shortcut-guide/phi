@@ -8,6 +8,7 @@ import { LoginBtnAmazon } from "@/f/components/amazon";
 
 const Settings = ({ lang }: { lang: string }) => {
   const [paypalUser, setPaypalUser] = useState(null);
+  const [paypalUrl, setPaypalUrl] = useState(null);
   const [amazonUser, setAmazonUser] = useState(null);
   const router = useRouter();
   if (router.isFallback) return <div>Loading...</div>;
@@ -17,14 +18,15 @@ const Settings = ({ lang }: { lang: string }) => {
     const API_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
     // PayPal
-    fetch(`${API_URL}/api/auth/me`, { credentials: "include" })
+    fetch(`${API_URL}/auth/me`, { credentials: "include" })
       .then(res => res.ok ? res.json() : null)
       .then(data => {
         if (data && data.user) setPaypalUser(data.user);
+        if (data && data.paypal_url) setPaypalUrl(data.paypal_url);
       });
 
     // Amazon（例：APIエンドポイントや実装に応じて適宜修正）
-    fetch(`${API_URL}/api/auth/amazon/me`, { credentials: "include" })
+    fetch(`${API_URL}/auth/amazon/me`, { credentials: "include" })
       .then(res => res.ok ? res.json() : null)
       .then(data => {
         if (data && data.user) setAmazonUser(data.user);
@@ -45,37 +47,45 @@ const Settings = ({ lang }: { lang: string }) => {
 
             {/* PayPal ログイン済みなら情報表示 */}
             {paypalUser && (
-              <div className="mb-4 text-left space-y-2 shadow-xl rounded-xl p-8 border border-gray-100">
+              <>
                 <h2>Paypal</h2>
-                <div>
-                  <span className="font-bold">メール:</span> {paypalUser.emails?.[0]?.value}
-                </div>
-                <div>
-                  <span className="font-bold">ユーザー名:</span> {paypalUser.name}
-                </div>
-                <div>
-                  <span className="font-bold">カード変更:</span>{" "}
-                  <a
-                    href={paypalUser.card_change_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-600 underline"
-                  >
-                    こちら
-                  </a>
-                </div>
-                <div>
-                  <span className="font-bold">PayPal住所変更:</span>{" "}
-                  <a
-                    href={paypalUser.address_change_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-600 underline"
-                  >
-                    こちら
-                  </a>
-                </div>
-              </div>
+                <ul className="mb-4 text-left space-y-2 shadow-xl rounded-xl p-8 border border-gray-100 overflow-x-auto">
+                  <li>
+                    <span className="font-bold">メール:</span>
+                    <span className="block break-all">{paypalUser.emails?.[0]?.value}</span>
+                  </li>
+                  <li>
+                    <span className="block font-bold">ユーザー名:</span> {paypalUser.name}
+                  </li>
+                  {paypalUrl && (
+                    <>
+                      <li>
+                        <span className="font-bold">カード変更:</span>{" "}
+                        <a
+                          href={paypalUrl.card}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-600 underline"
+                        >
+                          こちら
+                        </a>
+                      </li>
+                      
+                      <li>
+                        <span className="font-bold">PayPal住所変更:</span>{" "}
+                        <a
+                          href={paypalUrl.address}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-600 underline"
+                        >
+                          こちら
+                        </a>
+                      </li>
+                    </>
+                  )}
+                </ul>
+              </>
             )}
 
             {/* Amazon ログイン済みなら情報表示（Amazon APIで取得した情報に応じて調整） */}

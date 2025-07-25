@@ -20,7 +20,7 @@ const ForgotPasswordPage = ({ lang }: Props) => {
   const [email, setEmail] = useState("");
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const res = await fetch('/api/auth/request-reset', {
+    const res = await fetch('/auth/request-reset', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email }),

@@ -1150,7 +1150,7 @@ sequenceDiagram
     participant MailServer as メールサーバ
 
     User ->> Frontend: 再設定リクエスト（メールアドレス）
-    Frontend ->> Backend: POST /api/auth/request-reset
+    Frontend ->> Backend: POST /auth/request-reset
     Backend ->> DB: リセットトークン生成・保存
     Backend ->> MailServer: リセットリンクを送信
     MailServer -->> User: リセットリンク受信
@@ -1339,11 +1339,11 @@ curl -v [https://api-m.sandbox.paypal.com/v1/oauth2/token](https://api-m.sandbox
 sequenceDiagram
     participant PayPal
     participant Frontend (/callback.ts)
-    participant Backend (/api/auth/paypal/callback)
+    participant Backend (/auth/paypal/callback)
     participant D1 (user_profiles など)
 
     PayPal ->> Frontend: ?code=xxx
-    Frontend ->> Backend: POST /api/auth/paypal/callback (codeを送信)
+    Frontend ->> Backend: POST /auth/paypal/callback (codeを送信)
     Backend ->> PayPal: codeからaccess_token取得
     Backend ->> PayPal: ユーザー情報取得（email, name）
     Backend ->> D1: user_profiles に保存 or ログイン
@@ -1357,12 +1357,12 @@ sequenceDiagram
 sequenceDiagram
     participant PayPal
     participant Frontend(callback.ts)
-    participant API(/api/auth/paypal/callback)
+    participant API(/auth/paypal/callback)
     participant Controller(paypalController.ts)
     participant D1(user_profiles)
 
     PayPal ->> Frontend: /callback?code=XXX
-    Frontend ->> API: POST /api/auth/paypal/callback { code }
+    Frontend ->> API: POST /auth/paypal/callback { code }
     API ->> Controller: handlePaypalCallback(code)
     Controller ->> PayPal: token exchange
     Controller ->> PayPal: get userinfo
@@ -2624,7 +2624,7 @@ sequenceDiagram
     participant MailServer as メールサーバ
 
     User ->> Frontend: 再設定リクエスト（メールアドレス）
-    Frontend ->> Backend: POST /api/auth/request-reset
+    Frontend ->> Backend: POST /auth/request-reset
     Backend ->> DB: リセットトークン生成・保存
     Backend ->> MailServer: リセットリンクを送信
     MailServer -->> User: リセットリンク受信
@@ -2805,11 +2805,11 @@ curl -v https://api-m.sandbox.paypal.com/v1/oauth2/token \
 sequenceDiagram
     participant PayPal
     participant Frontend (/callback.ts)
-    participant Backend (/api/auth/paypal/callback)
+    participant Backend (/auth/paypal/callback)
     participant D1 (user_profiles など)
 
     PayPal ->> Frontend: ?code=xxx
-    Frontend ->> Backend: POST /api/auth/paypal/callback (codeを送信)
+    Frontend ->> Backend: POST /auth/paypal/callback (codeを送信)
     Backend ->> PayPal: codeからaccess_token取得
     Backend ->> PayPal: ユーザー情報取得（email, name）
     Backend ->> D1: user_profiles に保存 or ログイン
@@ -2822,12 +2822,12 @@ sequenceDiagram
 sequenceDiagram
     participant PayPal
     participant Frontend(callback.ts)
-    participant API(/api/auth/paypal/callback)
+    participant API(/auth/paypal/callback)
     participant Controller(paypalController.ts)
     participant D1(user_profiles)
 
     PayPal ->> Frontend: /callback?code=XXX
-    Frontend ->> API: POST /api/auth/paypal/callback { code }
+    Frontend ->> API: POST /auth/paypal/callback { code }
     API ->> Controller: handlePaypalCallback(code)
     Controller ->> PayPal: token exchange
     Controller ->> PayPal: get userinfo

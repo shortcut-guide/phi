@@ -27,7 +27,7 @@ const PaypalLogin: React.FC<PaypalLoginProps> = ({ lang, onLoginSuccess }) => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const res = await fetch(`${apiBase}/api/auth/me`, { credentials: "include" });
+        const res = await fetch(`${apiBase}/auth/me`, { credentials: "include" });
         console.log("auth/me status", res.status);
         if (res.ok) {
           const data = await res.json();
@@ -64,7 +64,7 @@ const PaypalLogin: React.FC<PaypalLoginProps> = ({ lang, onLoginSuccess }) => {
   };
 
   const handleLogout = () => {
-    fetch(`${apiBase}/api/auth/logout`, { method: "POST", credentials: "include" }).then(() => {
+    fetch(`${apiBase}/auth/logout`, { method: "POST", credentials: "include" }).then(() => {
       setUser(null);
       window.location.reload();
     });
