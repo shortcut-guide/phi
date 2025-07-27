@@ -4,6 +4,7 @@ import { DescriptionBlock } from "@/f/components/product/DescriptionBlock";
 import { PricePanel } from "@/f/components/product/PricePanel";
 import ProductCardReview from "@/f/components/product/ProductCard/ProductCardReview";
 import ProductCardSpecGrid from "@/f/components/product/ProductCard/ProductCardSpecGrid";
+import PricePanelModal from "@/f/components/product/PricePanel/PricePanelModal";
 import { useTabbedKeys } from "@/f/components/product/TabbedSpec/useTabbedKeys";
 import { useActiveTabs } from "@/f/components/product/TabbedSpec/useActiveTabs";
 import { toAffiliateLink } from "@/f/utils/affiliateLink";
@@ -20,7 +21,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
 }) => {
   const [affiliateUrl, setAffiliateUrl] = useState(product.ec_data.url);
   const [modalOpen, setModalOpen] = useState(false);
-  const dict = messages.productSpec?.[lang] ?? {};
+  const productSpec = messages.productSpec?.[lang] ?? {};
   const ecData = product.ec_data || {};
   const tabbedKeys = useTabbedKeys(ecData);
   const [activeTabs, setActiveTabs] = useActiveTabs(tabbedKeys, ecData);
@@ -71,7 +72,36 @@ const ProductCard: React.FC<ProductCardProps> = ({
               {product.point.toLocaleString()} pt
             </div>
           )}
-          <PricePanel product={product} />
+          {(() => {
+            const findBasePrice = () => {
+              const groups = [
+                ecData.size,
+                ecData.product?.size,
+                ecData.product?.color,
+                ecData.product
+              ];
+
+              for (const group of groups) {
+                if (group && typeof group === "object") {
+                  for (const key in group) {
+                    const entry = group[key];
+                    if (
+                      entry &&
+                      typeof entry === "object" &&
+                      "price" in entry &&
+                      typeof entry.price !== "undefined" &&
+                      Number(entry.price) === Number(product.price)
+                    ) {
+                      return entry.base_price;
+                    }
+                  }
+                }
+              }
+              return undefined;
+            };
+            const basePrice = findBasePrice();
+            return <PricePanel product={{ ...product, base_price: basePrice }} />;
+          })()}
           {children}
         </div>
       </div>
@@ -108,7 +138,36 @@ const ProductCard: React.FC<ProductCardProps> = ({
                 className="mb-2 text-[0.6875em]"
               />
               <div className="mb-2 text-center">
-                <PricePanel product={product} />
+                {(() => {
+                  const findBasePrice = () => {
+                    const groups = [
+                      ecData.size,
+                      ecData.product?.size,
+                      ecData.product?.color,
+                      ecData.product
+                    ];
+
+                    for (const group of groups) {
+                      if (group && typeof group === "object") {
+                        for (const key in group) {
+                          const entry = group[key];
+                          if (
+                            entry &&
+                            typeof entry === "object" &&
+                            "price" in entry &&
+                            typeof entry.price !== "undefined" &&
+                            Number(entry.price) === Number(product.price)
+                          ) {
+                            return entry.base_price;
+                          }
+                        }
+                      }
+                    }
+                    return undefined;
+                  };
+                  const basePrice = findBasePrice();
+                  return <PricePanelModal product={{ ...product, base_price: basePrice }} />;
+                })()}
               </div>
               <DescriptionBlock text={product.description} />
               <DescriptionBlock text={ecData.description} />
@@ -117,7 +176,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
                 tabbedKeys={tabbedKeys}
                 activeTabs={activeTabs}
                 setActiveTabs={setActiveTabs}
-                dict={dict}
+                dict={productSpec}
               />
             </div>
           </div>

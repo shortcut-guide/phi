@@ -85,7 +85,7 @@ const SearchPage = () => {
     const results = fallbackProducts.filter((p) => {
       const ec: Record<string, any> = p.ec_data || {};
       const name = p.name?.toLowerCase() || "";
-      const id = p.id?.toLowerCase() || "";
+      const id = String(p.id ?? "").toLowerCase();
       const desc = ec.description?.toLowerCase() || "";
       const platform = p.platform?.toLowerCase() || "";
       const shipping = ec.shipping_from?.toLowerCase() || "";
