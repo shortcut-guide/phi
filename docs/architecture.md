@@ -3078,54 +3078,6 @@ Authorization: Bearer <ACCESS_TOKEN>
 Content-Type: application/json
 ```
 
-```
-{
-  "intent": "CAPTURE",
-  "purchase_units": [
-    {
-      "reference_id": "PRODUCT-001",
-      "description": "プレミアム猫缶セット",
-      "amount": {
-        "currency_code": "JPY",
-        "value": "2980",
-        "breakdown": {
-          "item_total": {
-            "currency_code": "JPY",
-            "value": "2980"
-          }
-        }
-      },
-      "items": [
-        {
-          "name": "猫缶A（マグロ）",
-          "unit_amount": {
-            "currency_code": "JPY",
-            "value": "1490"
-          },
-          "quantity": "1"
-        },
-        {
-          "name": "猫缶B（サーモン）",
-          "unit_amount": {
-            "currency_code": "JPY",
-            "value": "1490"
-          },
-          "quantity": "1"
-        }
-      ]
-    }
-  ],
-  "application_context": {
-    "brand_name": "Phis EC",
-    "locale": "ja-JP",
-    "shipping_preference": "NO_SHIPPING",
-    "user_action": "PAY_NOW",
-    "return_url": "https://phis.jp/paypal/success",
-    "cancel_url": "https://phis.jp/paypal/cancel"
-  }
-}
-```
-
 ```mermaid
 sequenceDiagram
   participant User
