@@ -11,8 +11,13 @@ const PricePanelModal: React.FC<Props> = ({ product }) => {
   const currencyApiCode = currency.code || currencyCode || "JPY";
   const currencySymbol = currency.symbol;
   const [rate, setRate] = useState(1);
+  const isJpyToJpy = currencyApiCode === "JPY";
 
   useEffect(() => {
+    if (isJpyToJpy) {
+      setRate(1);
+      return;
+    }
     fetch(`https://api.exchangerate-api.com/v4/latest/${currencyApiCode}`)
       .then((res) => res.json())
       .then((data) => {
@@ -21,7 +26,7 @@ const PricePanelModal: React.FC<Props> = ({ product }) => {
         else setRate(1);
       })
       .catch(() => setRate(1));
-  }, [currencyApiCode]);
+  }, [currencyApiCode, isJpyToJpy]);
 
   const basePriceRaw = product.base_price ?? ecData.base_price;
   const priceRaw = product.price ?? ecData.price;
@@ -30,21 +35,35 @@ const PricePanelModal: React.FC<Props> = ({ product }) => {
 
   if (basePrice === undefined && price === undefined) return null;
 
+  // 円換算価格を計算
+  const convertToJpy = (amount: number) => {
+    if (isJpyToJpy) return amount;
+    return Math.round(amount * rate);
+  };
+
+  // 元通貨価格表示（円以外の場合のみ）
+  const renderOriginalPrice = (amount: number) => {
+    if (isJpyToJpy) return null;
+    return (
+      <span className="ml-1 text-[0.6875em] text-gray-500">
+        ({currencyApiCode} {amount.toLocaleString()})
+      </span>
+    );
+  };
+
   return (
-    <div className="flex flex-col items-center mt-3 text-xs font-bold">
-      {typeof price === "number" && (
-        <div>
-          <span>{currencySymbol}{price.toLocaleString()} {currency.label}</span>
-          <span className="mx-2">→</span>
-          <span>¥{Math.round(price * rate).toLocaleString()}</span>
-        </div>
+    <div className="flex items-baseline space-x-2 mt-4">
+      {price !== undefined && (
+        <span className="text-xs font-bold flex items-baseline">
+          <span>¥{convertToJpy(price).toLocaleString()}</span>
+          {renderOriginalPrice(price)}
+        </span>
       )}
-      {typeof basePrice === "number" && price !== basePrice && (
-        <div className="text-gray-500 line-through">
-          <span>{currencySymbol}{basePrice.toLocaleString()} {currency.label}</span>
-          <span className="mx-2">→</span>
-          <span>¥{Math.round(basePrice * rate).toLocaleString()}</span>
-        </div>
+      {basePrice !== undefined && basePrice !== price && (
+        <span className="text-[0.6875em] text-gray-700 flex items-baseline line-through">
+          <span>¥{convertToJpy(basePrice).toLocaleString()}</span>
+          {renderOriginalPrice(basePrice)}
+        </span>
       )}
     </div>
   );

@@ -28,12 +28,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
   useEffect(() => {
     let isCancelled = false;
-
-    // 非同期でアフィリエイトリンクを取得
     toAffiliateLink(product.shopUrl).then((convertedUrl) => {
       if (!isCancelled) setAffiliateUrl(convertedUrl);
     });
-
     return () => {
       isCancelled = true;
     };
@@ -52,8 +49,14 @@ const ProductCard: React.FC<ProductCardProps> = ({
         }}
         {...rest}
       >
-        {ecData.images && <FlexibleImages images={ecData.images} />}
-        <div className="py-1 px-4">
+        {/* FlexibleImages部分をdivでラップしクリック伝播を停止 */}
+        <div
+          onClick={(e) => e.stopPropagation()}
+          className="relative"
+        >
+          {ecData.product.images && <FlexibleImages images={ecData.product.images} />}
+        </div>
+        <div className="py-0 pl-3 pr-1">
           {product.name && (
             <h2 className="text-[0.6875em] font-semibold mb-1 line-clamp-2 leading-tight">
               <a href={affiliateUrl} target="_blank" rel="noopener noreferrer">
@@ -68,7 +71,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
             url={ecData.url}
           />
           {typeof product.point === "number" && (
-            <div className="text-[0.625em] text-blue-500 font-medium mb-1">
+            <div className="text-[0.625em] font-medium mb-1">
               {product.point.toLocaleString()} pt
             </div>
           )}
@@ -80,7 +83,6 @@ const ProductCard: React.FC<ProductCardProps> = ({
                 ecData.product?.color,
                 ecData.product
               ];
-
               for (const group of groups) {
                 if (group && typeof group === "object") {
                   for (const key in group) {
@@ -100,7 +102,38 @@ const ProductCard: React.FC<ProductCardProps> = ({
               return undefined;
             };
             const basePrice = findBasePrice();
-            return <PricePanel product={{ ...product, base_price: basePrice }} />;
+            return (
+              <div className="flex items-center justify-between">
+                <PricePanel product={{ ...product, base_price: basePrice }} />
+                <button
+                  type="button"
+                  className="w-6 h-6 flex items-center justify-center mb-1 mr-1"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setModalOpen(true);
+                  }}
+                  aria-label="商品詳細を表示"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="4 4 16 16"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                    className="w-6 h-6"
+                    aria-hidden="true"
+                  >
+                    <path
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M13 17 L17 17 L17 13"
+                    />
+                  </svg>
+                </button>
+              </div>
+            );
           })()}
           {children}
         </div>
@@ -116,9 +149,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
               >
                 ×
               </button>
-              {ecData.images && (
+              {ecData.product.images && (
                 <div className="flex justify-center items-center bg-gray-100 rounded-t-xl p-4">
-                  <FlexibleImages images={ecData.images} />
+                  <FlexibleImages images={ecData.product.images} />
                 </div>
               )}
             </div>
@@ -131,10 +164,10 @@ const ProductCard: React.FC<ProductCardProps> = ({
                 </h2>
               )}
               <ProductCardReview
-                rate={ecData.review_rate}
-                count={ecData.review_count}
-                reviewLink={ecData.review_link}
-                url={ecData.url}
+                rate={ecData.product.review_rate}
+                count={ecData.product.review_count}
+                reviewLink={ecData.product.review_link}
+                url={ecData.product.url}
                 className="mb-2 text-[0.6875em]"
               />
               <div className="mb-2 text-center">
@@ -146,20 +179,18 @@ const ProductCard: React.FC<ProductCardProps> = ({
                       ecData.product?.color,
                       ecData.product
                     ];
-
                     for (const group of groups) {
-                      if (group && typeof group === "object") {
-                        for (const key in group) {
-                          const entry = group[key];
-                          if (
-                            entry &&
-                            typeof entry === "object" &&
-                            "price" in entry &&
-                            typeof entry.price !== "undefined" &&
-                            Number(entry.price) === Number(product.price)
-                          ) {
-                            return entry.base_price;
-                          }
+                      if (!group && typeof group !== "object") continue;
+                      for (const key in group) {
+                        const entry = group[key];
+                        if (
+                          entry &&
+                          typeof entry === "object" &&
+                          "price" in entry &&
+                          typeof entry.price !== "undefined" &&
+                          Number(entry.price) === Number(product.price)
+                        ) {
+                          return entry.base_price;
                         }
                       }
                     }

@@ -23,7 +23,7 @@ const FlexibleImages: React.FC<FlexibleImagesProps> = ({ images }) => {
     return (
       <div>
         <ImageSlider images={activeImages} />
-        <div className="flex gap-2 mt-1 overflow-x-auto whitespace-nowrap scrollbar-hide" style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
+        <div className="flex gap-2 my-1 overflow-x-auto whitespace-nowrap scrollbar-hide" style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
           {childKeys.map((child) => (
             <button
               key={child}

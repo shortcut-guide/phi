@@ -32,20 +32,20 @@ const PricePanel: React.FC<Props> = ({ product }) => {
   if (basePrice === undefined && price === undefined) return null;
 
   return (
-    <div className="flex mt-3 text-xs font-bold">
+    <ul className="flex items-center mt-1">
       {typeof price === "number" && (
-        <div id="price">
+        <li id="price" className="text-xs font-bold leading-1">
           {currencySymbol}
           {Math.round(price * rate).toLocaleString()}
-        </div>
+        </li>
       )}
       {typeof basePrice === "number" && price !== basePrice && (
-        <div id="base_price" className="ml-2 text-gray-500 line-through">
+        <li id="base_price" className="text-[0.6875em] ml-2 text-gray-500 line-through leading-1">
           {currencySymbol}
           {Math.round(basePrice * rate).toLocaleString()}
-        </div>
+        </li>
       )}
-    </div>
+    </ul>
   );
 };
 
