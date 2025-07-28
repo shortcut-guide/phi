@@ -27,7 +27,7 @@ const ProductCardSpecGrid: React.FC<Props> = ({
           key !== "description" &&
           key !== "base_price" &&
           key !== "price" &&
-          key !== "valiation" &&
+          key !== "variation" &&
           value !== undefined &&
           value !== null
       )
