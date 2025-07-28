@@ -69,6 +69,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
             count={ecData.review_count}
             reviewLink={ecData.review_link}
             url={ecData.url}
+            lang={lang}
           />
           {typeof product.point === "number" && (
             <div className="text-[0.625em] font-medium mb-1">
@@ -168,6 +169,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
                 count={ecData.product.review_count}
                 reviewLink={ecData.product.review_link}
                 url={ecData.product.url}
+                lang={lang}
                 className="mb-2 text-[0.6875em]"
               />
               <div className="mb-2 text-center">

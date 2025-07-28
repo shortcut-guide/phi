@@ -1,6 +1,7 @@
 import React from "react";
 import StarIcon from "@/f/components/icons/StarIcon";
 import ReviewLinkIcon from "@/f/components/icons/ReviewLinkIcon";
+import { messages } from "@/f/config/messageConfig";
 
 type Props = {
   rate?: number;
@@ -8,6 +9,7 @@ type Props = {
   reviewLink?: string;
   url?: string;
   className?: string;
+  lang?: string;
 };
 
 const ProductCardReview: React.FC<Props> = ({
@@ -16,7 +18,9 @@ const ProductCardReview: React.FC<Props> = ({
   reviewLink,
   url,
   className = "",
+  lang
 }) => {
+  const productSpec = messages.productSpec?.[lang] ?? {};
   if (typeof rate !== "number" || typeof count !== "number") return null;
   return (
     <div className={`flex items-center text-[0.625em] text-gray-500 ${className}`}>
@@ -32,7 +36,7 @@ const ProductCardReview: React.FC<Props> = ({
           target="_blank"
           rel="noopener noreferrer"
           className="text-blue-500 ml-2"
-          aria-label="レビューを見る"
+          aria-label={productSpec.review_look}
           onClick={(e) => e.stopPropagation()}
         >
           <ReviewLinkIcon />
