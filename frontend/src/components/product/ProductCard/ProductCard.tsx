@@ -7,6 +7,7 @@ import ProductCardSpecGrid from "@/f/components/product/ProductCard/ProductCardS
 import PricePanelModal from "@/f/components/product/PricePanel/PricePanelModal";
 import { useTabbedKeys } from "@/f/components/product/TabbedSpec/useTabbedKeys";
 import { useActiveTabs } from "@/f/components/product/TabbedSpec/useActiveTabs";
+import { AddToCartButton } from "@/f/components/product/CartButton";
 import { toAffiliateLink } from "@/f/utils/affiliateLink";
 import { messages } from "@/f/config/messageConfig";
 import type { ProductCardProps } from "./ProductCard.types";
@@ -21,7 +22,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
 }) => {
   const [affiliateUrl, setAffiliateUrl] = useState(product.ec_data.url);
   const [modalOpen, setModalOpen] = useState(false);
-  const productSpec = messages.productSpec?.[lang] ?? {};
+  const t_productSpec = messages.productSpec?.[lang] ?? {};
   const ecData = product.ec_data || {};
   const tabbedKeys = useTabbedKeys(ecData);
   const [activeTabs, setActiveTabs] = useActiveTabs(tabbedKeys, ecData);
@@ -112,7 +113,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
                     e.stopPropagation();
                     setModalOpen(true);
                   }}
-                  aria-label={productSpec.detail_view}
+                  aria-label={t_productSpec.detail_view}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -140,15 +141,16 @@ const ProductCard: React.FC<ProductCardProps> = ({
       </div>
       {modalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
+          <button
+            className="absolute top-3 right-3 text-gray-400 hover:text-gray-700 text-2xl font-bold z-10"
+            onClick={() => setModalOpen(false)}
+            aria-label="close"
+          >
+            ×
+          </button>
+          {/* スクロール領域 */}
           <div className="relative bg-white rounded-xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-0">
             <div className="relative">
-              <button
-                className="absolute top-3 right-3 text-gray-400 hover:text-gray-700 text-2xl font-bold z-10"
-                onClick={() => setModalOpen(false)}
-                aria-label="閉じる"
-              >
-                ×
-              </button>
               {ecData.product.images && (
                 <div className="flex justify-center items-center bg-gray-100 rounded-t-xl p-4">
                   <FlexibleImages images={ecData.product.images} />
@@ -207,8 +209,12 @@ const ProductCard: React.FC<ProductCardProps> = ({
                 tabbedKeys={tabbedKeys}
                 activeTabs={activeTabs}
                 setActiveTabs={setActiveTabs}
-                dict={productSpec}
+                dict={t_productSpec}
               />
+            </div>
+            {/* フッター固定カートボタン */}
+            <div className="border-t px-6 py-3 bg-white sticky bottom-0 left-0 w-full rounded-b-xl">
+              <AddToCartButton onClick={() => alert("カートに追加: " + product.name)} lang={lang} />
             </div>
           </div>
         </div>

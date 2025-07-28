@@ -736,6 +736,20 @@ export const messages = {
       detail_view: "View Product Details",
     }
   },
+  addtocart:{
+    ja: {
+      addToCart: "カートに入れる",
+      addedToCart: "カートに追加しました",
+      errorAddToCart: "カートへの追加に失敗しました",
+      viewCart: "カートを見る"
+    },
+    en: {
+      addToCart: "Add to Cart",
+      addedToCart: "Added to cart",
+      errorAddToCart: "Failed to add to cart",
+      viewCart: "View Cart"
+    }
+  },
   search: {
     ja: {
       noResult: "検索結果がありません",
