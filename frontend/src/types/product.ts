@@ -1,7 +1,7 @@
 export type EcData = {
   images?: string[] | Record<string, any>;
   description?: string;
-  review_rate?: number;
+  rating?: number;
   review_count?: number;
   review_link?: string;
   url?: string;

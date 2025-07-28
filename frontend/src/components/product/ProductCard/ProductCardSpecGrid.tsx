@@ -20,7 +20,6 @@ const ProductCardSpecGrid: React.FC<Props> = ({
   dict,
 }) => (
   <div className="mb-2 grid grid-cols-2 gap-2">
-    {/* ProductCardSpecGrid */}
     {Object.entries(ecData.product)
       .filter(
         ([key, value]) =>

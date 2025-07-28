@@ -704,6 +704,7 @@ export const messages = {
       country: "販売国",
       review_count: "レビュー",
       review_look: "レビューを見る",
+      rating: "評価",
       material: "素材",
       model: "モデル",
       type: "タイプ",
@@ -712,6 +713,7 @@ export const messages = {
       length: "長さ",
       width: "幅",
       height: "高さ",
+      detail_view: "商品詳細を表示",
     },
     en: {
       color: "Color",
@@ -722,6 +724,7 @@ export const messages = {
       country: "Sold in",
       review_count: "Review",
       review_look: "See Review",
+      rating: "Rating",
       material: "Material",
       model: "Model",
       type: "Type",
@@ -730,6 +733,7 @@ export const messages = {
       length: "Length",
       width: "Width",
       height: "Height",
+      detail_view: "View Product Details",
     }
   },
   search: {

@@ -7,7 +7,6 @@ type Props = {
   rate?: number;
   count?: number;
   reviewLink?: string;
-  url?: string;
   className?: string;
   lang?: string;
 };
@@ -16,11 +15,13 @@ const ProductCardReview: React.FC<Props> = ({
   rate,
   count,
   reviewLink,
-  url,
   className = "",
   lang
 }) => {
+  // Use the messages configuration to get the label for review look
   const productSpec = messages.productSpec?.[lang] ?? {};
+  
+  // If rate or count is not a number, return null
   if (typeof rate !== "number" || typeof count !== "number") return null;
   return (
     <div className={`flex items-center text-[0.625em] text-gray-500 ${className}`}>
@@ -32,7 +33,7 @@ const ProductCardReview: React.FC<Props> = ({
       </div>
       {reviewLink && (
         <a
-          href={reviewLink.startsWith("http") ? reviewLink : `${url}${reviewLink}`}
+          href={reviewLink}
           target="_blank"
           rel="noopener noreferrer"
           className="text-blue-500 ml-2"

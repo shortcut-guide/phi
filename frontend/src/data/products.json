@@ -20,7 +20,7 @@
         "point": 21,
         "shipping_from": "Amazon",
         "country": "JP",
-        "review_rate": 3.9,
+        "rating": 3.9,
         "review_count": 3000,
         "review_link": "#:~:text=カスタマーレビュー,-星",
         "size":{
@@ -101,7 +101,7 @@
         "point": 0,
         "shipping_from": "Amazon",
         "country": "JP",
-        "review_rate": 4.3,
+        "rating": 4.3,
         "review_count": 240,
         "review_link": "#:~:text=カスタマーレビュー,-星",
         "size":{
@@ -165,7 +165,8 @@
         "security_deposit": 2903.28
       },
       "product":{
-        "review_rate": 0,
+        "url": "phis",
+        "rating": 0,
         "review_count": "2000+",
         "review_link": "#:~:text=%E7%9C%8B%E4%BA%86%E5%8F%88%E7%9C%8B-,%E7%94%A8%E6%88%B7%E8%AF%84%E4%BB%B7,-%E5%85%A8%E9%83%A8(2000%2B)",
         "color":{

@@ -65,10 +65,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
             </h2>
           )}
           <ProductCardReview
-            rate={ecData.review_rate}
-            count={ecData.review_count}
-            reviewLink={ecData.review_link}
-            url={ecData.url}
+            rate={ecData.product?.rating}
+            count={ecData.product?.review_count}
+            reviewLink={ecData.product?.review_link}
             lang={lang}
           />
           {typeof product.point === "number" && (
@@ -113,7 +112,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
                     e.stopPropagation();
                     setModalOpen(true);
                   }}
-                  aria-label="商品詳細を表示"
+                  aria-label={productSpec.detail_view}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -165,10 +164,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
                 </h2>
               )}
               <ProductCardReview
-                rate={ecData.product.review_rate}
-                count={ecData.product.review_count}
-                reviewLink={ecData.product.review_link}
-                url={ecData.product.url}
+                rate={ecData.product?.rating}
+                count={ecData.product?.review_count}
+                reviewLink={ecData.product?.review_link}
                 lang={lang}
                 className="mb-2 text-[0.6875em]"
               />
