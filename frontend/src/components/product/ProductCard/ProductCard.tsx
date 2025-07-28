@@ -139,15 +139,32 @@ const ProductCard: React.FC<ProductCardProps> = ({
           {children}
         </div>
       </div>
+      {/* モーダルの表示制御 */}
       {modalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
-          <button
-            className="absolute top-3 right-3 text-gray-400 hover:text-gray-700 text-2xl font-bold z-10"
-            onClick={() => setModalOpen(false)}
-            aria-label="close"
-          >
-            ×
-          </button>
+          <div className="absolute top-0 right-1 mt-1 w-6 h-6 z-20 flex items-center justify-center">
+            <button
+              className="text-black hover:text-gray-700 text-2xl font-bold z-10 flex items-center justify-center"
+              onClick={() => setModalOpen(false)}
+              aria-label="close"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                className="w-6 h-6"
+                width={24}
+                height={24}
+              >
+                <circle cx="12" cy="12" r="12" fill="currentColor" opacity="0.7" />
+                <path
+                  d="M8 8L16 16M16 8L8 16"
+                  stroke="#fff"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
+              </svg>
+            </button>
+          </div>
           {/* スクロール領域 */}
           <div className="relative bg-white rounded-xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-0">
             <div className="relative">
