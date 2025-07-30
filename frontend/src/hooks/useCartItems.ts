@@ -1,4 +1,4 @@
-// frontend/src/f/hooks/useCartItems.ts
+// frontend/src/hooks/useCartItems.ts
 
 import { useState } from "react";
 
