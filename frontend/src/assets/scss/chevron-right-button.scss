@@ -1,0 +1,18 @@
+// chevron-right-button.scss
+
+.chevron-anim {
+  opacity: 0.5;
+  transform: translateX(0px);
+  transition: none;
+}
+
+.chevron1 {
+  animation: chevron-slide1 1.2s linear infinite;
+}
+
+@keyframes chevron-slide1 {
+  0%   { opacity: 1;   transform: translateX(0px);}
+  30%  { opacity: 0.7; transform: translateX(10px);}
+  60%  { opacity: 0.2; transform: translateX(20px);}
+  100% { opacity: 0;   transform: translateX(32px);}
+}

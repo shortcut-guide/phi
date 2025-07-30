@@ -92,13 +92,13 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images }) => {
               src={src}
               alt=""
               className="object-contain rounded-lg bg-gray-50 snap-center min-w-full max-w-full transition-transform duration-500 hover:scale-105"
-              style={{ height: "8rem", width: "100%" }}
+              style={{ width: "100%" }}
               draggable={false}
             />
           )
         )}
         <div className="absolute bottom-1 right-1 p-0.5 pointer-events-none">
-          <ChevronRightIcon />
+          <ChevronRightIcon width={64} height={20} />
         </div>
       </div>
     </div>
