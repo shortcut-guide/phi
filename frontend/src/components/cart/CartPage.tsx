@@ -18,8 +18,7 @@ const CartPage: React.FC = () => {
       {/* 代理購入案内 */}
       {hasOwnShop && hasOtherShop && (
         <section className="mt-8 p-4 bg-yellow-100 rounded-xl">
-          <h2 className="font-bold mb-2">複数ショップから購入の場合</h2>
-          <p className="mb-2">一括購入や代理購入がおすすめです。</p>
+          <p className="mb-2">複数ショップから購入の場、代理購入がおすすめです。</p>
           {/* 代理購入UI追加エリア */}
         </section>
       )}
