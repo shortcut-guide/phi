@@ -8,7 +8,7 @@ type ChevronRightIconProps = {
 
 const ChevronRightIcon: React.FC<ChevronRightIconProps> = ({
   className = "",
-  width = 64,
+  width = 40,
   height = 20
 }) => (
   <>
