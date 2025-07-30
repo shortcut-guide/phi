@@ -17,18 +17,19 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images }) => {
       videoRefs.current[idx]?.pause();
       setPlayingIndex(null);
     } else {
-      // 他の動画が再生中なら停止
       if (playingIndex !== null) {
         videoRefs.current[playingIndex]?.pause();
-        videoRefs.current[playingIndex]?.currentTime && (videoRefs.current[playingIndex]!.currentTime = 0);
+        videoRefs.current[playingIndex]!.currentTime = 0;
       }
       videoRefs.current[idx]?.play();
       setPlayingIndex(idx);
     }
   };
 
-  return !images?.length ? null : (
-    <div className="overflow-hidden w-full py-2">
+  if (!images?.length) return null;
+
+  return (
+    <div className="overflow-hidden w-full">
       <div
         className="relative flex flex-nowrap overflow-x-auto scrollbar-hide snap-x snap-mandatory scroll-smooth"
         style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
@@ -37,10 +38,14 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images }) => {
           isVideo(src) ? (
             <div
               key={i}
-              className="relative object-contain rounded-lg bg-gray-50 snap-center min-w-full max-w-full transition-transform duration-500"
+              className="relative rounded-lg bg-gray-50 snap-center aspect-square transition-transform duration-500"
               style={{
-                aspectRatio: "1/1", // ここを好みで 1/1, 16/9, 4/3 などに
+                aspectRatio: "1 / 1",
                 width: "100%",
+                minWidth: "100%",
+                maxWidth: "227px",
+                maxHeight: "227px",
+                flex: "0 0 100%",
                 cursor: "pointer",
                 overflow: "hidden"
               }}
@@ -78,7 +83,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images }) => {
                     justifyContent: "center",
                   }}
                 >
-                  {/* 再生アイコン 左上 corner 小さく */}
+                  {/* 再生アイコン */}
                   <svg width={24} height={24} viewBox="0 0 24 24">
                     <circle cx="12" cy="12" r="12" fill="rgba(0,0,0,0.5)" />
                     <polygon points="9,7 17,12 9,17" fill="#fff" />
@@ -87,18 +92,34 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images }) => {
               )}
             </div>
           ) : (
-            <img
+            <div
               key={i}
-              src={src}
-              alt=""
-              className="object-contain rounded-lg bg-gray-50 snap-center min-w-full max-w-full transition-transform duration-500 hover:scale-105"
-              style={{ width: "100%" }}
-              draggable={false}
-            />
+              className="relative rounded-lg bg-gray-50 snap-center aspect-square transition-transform duration-500 hover:scale-105"
+              style={{
+                width: "100%",
+                minWidth: "100%",
+                flex: "0 0 100%",
+                aspectRatio: "1 / 1",
+                maxWidth: "227px",
+                maxHeight: "227px"
+              }}
+            >
+              <img
+                src={src}
+                alt=""
+                style={{
+                  height: "100%",
+                  objectFit: "cover",
+                  display: "block",
+                  margin: "0 auto",
+                }}
+                draggable={false}
+              />
+            </div>
           )
         )}
         <div className="absolute bottom-1 right-1 p-0.5 pointer-events-none">
-          <ChevronRightIcon width={64} height={20} />
+          <ChevronRightIcon width={30} height={10} />
         </div>
       </div>
     </div>

@@ -3113,4 +3113,58 @@ sequenceDiagram
 | --------------------------------- | ------------------ |
 | `/v2/checkout/orders`             | 注文作成（Create Order） |
 | `/v2/checkout/orders/:id/capture` | 支払い確定（Capture）     |
-| `/v2/checkout/orders/:id`         | 注文情報取得             |
+| `/v2/checkout/orders/:id`         | 注文情報取得
+
+```
+backend/
+├── controllers/
+│   └── paypalOrderController.ts     ✅ ロジック制御
+├── models/
+│   └── paypalOrderModel.ts          ✅ オプション：データ保存処理
+├── routes/
+│   └── paypalOrderRoute.ts          ✅ APIルート定義
+```
+
+## カートページ設計
+
+### 目的
+- ユーザーが商品をカートに追加し、購入前に内容を確認・修正できるようにする。
+- EC毎のカート管理と、アフィリエイト対応（Amazon, 楽天等）を両立。
+
+---
+
+### 要件
+- 商品ごとにバリエーション選択・数量変更が可能
+- 各ECサイト別にカートを分離
+- 小計、送料、合計金額の表示（ECにより非対応の場合は表示無し）
+- 各商品の削除、全削除が可能
+- 購入ボタンを押すと各ECサイトのカート／購入ページへ遷移
+- ログイン不要（ゲスト利用可）
+- カート内容はlocalStorageで管理（将来的にサーバー同期可能性あり）
+- カート内商品がアフィリエイトリンク経由の場合、その情報も明示
+
+---
+
+### データ構造例
+
+```json
+{
+  "ec_carts": {
+    "amazon": [
+      {
+        "asin": "B09XXXX",
+        "variation": {"color": "red", "size": "M"},
+        "quantity": 2,
+        "affiliate": true
+      }
+    ],
+    "rakuten": [
+      {
+        "product_id": "xxx",
+        "variation": {},
+        "quantity": 1,
+        "affiliate": false
+      }
+    ]
+  }
+}

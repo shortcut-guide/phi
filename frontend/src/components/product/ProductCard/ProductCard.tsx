@@ -166,10 +166,10 @@ const ProductCard: React.FC<ProductCardProps> = ({
             </button>
           </div>
           {/* スクロール領域 */}
-          <div className="relative bg-white rounded-xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-0">
+          <div className="relative bg-white rounded-xl shadow-2xl max-w-lg w-full h-full max-h-[90vh] overflow-y-auto p-0">
             <div className="relative">
               {ecData.product.images && (
-                <div className="flex justify-center items-center bg-gray-100 rounded-t-xl p-4">
+                <div className="flex justify-center items-center bg-gray-100 rounded-t-xl">
                   <FlexibleImages images={ecData.product.images} />
                 </div>
               )}
@@ -231,7 +231,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
             </div>
             {/* フッター固定カートボタン */}
             <div className="border-t px-6 py-3 bg-white sticky bottom-0 left-0 w-full rounded-b-xl">
-              <AddToCartButton onClick={() => alert("カートに追加: " + product.name)} lang={lang} />
+              <AddToCartButton lang={lang} />
             </div>
           </div>
         </div>
