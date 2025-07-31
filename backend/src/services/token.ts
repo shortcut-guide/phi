@@ -8,6 +8,25 @@ export async function getAccessToken() {
     },
     body: "grant_type=client_credentials",
   });
-  const json = await res.json();
+
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Failed to get access token: ${res.status} ${text}`);
+  }
+
+  // 型定義
+  type PayPalTokenResponse = {
+    access_token: string;
+    token_type: string;
+    expires_in: number;
+    [key: string]: unknown;
+  };
+
+  const json = (await res.json()) as PayPalTokenResponse;
+
+  if (!json.access_token) {
+    throw new Error("No access_token in PayPal response");
+  }
+
   return json.access_token;
 }

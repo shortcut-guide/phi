@@ -31,7 +31,7 @@ export async function amazonCallback(req: Request, res: Response) {
 
   const tokenJson = await tokenRes.json();
   const access_token = tokenJson.access_token;
-  if (!access_token) return res.status(401).send("Token error");
+  if (!access_token) res.status(401).send("Token error");
 
   // 2. プロフィール取得
   const profileRes = await fetch("https://api.amazon.com/user/profile", {

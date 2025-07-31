@@ -1,3 +1,4 @@
+import { Request, Response } from "express";
 import { exchangeCodeForToken, getPaypalUserInfo } from "@/b/services/paypal";
 import { generateJWT } from "@/b/utils/jwt";
 import { links } from "@/b/config/links";
@@ -31,4 +32,11 @@ export const handlePaypalCallback = async (code: string) => {
       address: url.paypalAddress
     }
   };
+};
+
+// CSRFトークン発行API（cookie方式）
+export const getCSRFToken = (req: Request, res: Response) => {
+  // ルートでcsrfProtectionミドルウェアを利用していれば、req.csrfToken()が有効
+  const token = req.csrfToken();
+  res.json({ token });
 };

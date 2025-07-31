@@ -1,10 +1,13 @@
-import { Router, Request, Response } from "express";
+import express, { Router, Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import { handlePaypalCallback } from "@/b/controllers/paypalController";
+import csrf from "csurf";
+import { handlePaypalCallback, getCSRFToken } from "@/b/controllers/paypalController";
 import { amazonAuth, amazonCallback } from "@/b/controllers/amazonController";
 
 const router = Router();
 
+const csrfProtection = csrf({ cookie: true });
+router.get("/csrf", csrfProtection, getCSRFToken);
 const callbackHandler = async (req: Request, res: Response): Promise<void> => {
   try {
     const code = req.query.code as string;
@@ -33,8 +36,8 @@ const callbackHandler = async (req: Request, res: Response): Promise<void> => {
 router.post("/paypal/callback", callbackHandler);
 router.get("/paypal/callback", callbackHandler);
 
-router.get("/amazon", amazonAuth);
-router.get("/amazon/callback", amazonCallback);
+router.get("/amazon", amazonAuth as express.RequestHandler);
+router.get("/amazon/callback", amazonCallback as express.RequestHandler);
 
 // 認証状態取得API
 router.get("/me", (req: Request, res: Response) => {

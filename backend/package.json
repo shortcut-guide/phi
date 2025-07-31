@@ -6,7 +6,7 @@
     "scripts": {
         "clean": "rimraf public",
         "node:build": "node esbuild.config.mjs",
-        "node:dev": "nodemon --ext ts --ignore public/ --exec \"tsc && node public/server.js\"",
+        "node:dev": "dotenv -e .env.development -- nodemon --ext ts --ignore public/ --exec \"tsc && node public/server.js\"",
         "node:start": "npm run clean && npm run node:build && dotenv -e .env.production -- node public/server.js",
         "d1:build": "npm run clean && node --experimental-json-modules esbuild.config.mjs",
         "d1:start": "npm run d1:build && dotenv -e .env.production -- node public/d1Server.js",
@@ -27,6 +27,7 @@
         "cookie-parser": "^1.4.7",
         "cors": "^2.8.5",
         "crypto": "^1.0.1",
+        "csurf": "^1.11.0",
         "dayjs": "^1.11.13",
         "dotenv": "^17.2.0",
         "express": "^4.21.2",

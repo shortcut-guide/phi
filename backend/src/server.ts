@@ -1,6 +1,7 @@
 import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import csrf from "csurf";
 import { PaypalRoutes } from "@/b/routes/auth";
 import paypalOrderRoute from "@/b/routes/paypalOrderRoute";
 import faqRouter from "@/b/routes/faq";
@@ -40,6 +41,9 @@ app.use("/api/paypal/order", paypalOrderRoute);
 app.use("/api/faq", faqRouter);
 app.use("/api/shopList", shopListRouter);
 app.use("/api/cart", cartRoute);
+
+// csurfの初期化（cookieにトークン保存）
+const csrfProtection = csrf({ cookie: true });
 
 app.listen(PORT, () => {
   console.log(`🚀 Server is running on port ${PORT}`);
