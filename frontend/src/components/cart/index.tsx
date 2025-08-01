@@ -19,12 +19,6 @@ const Cart: React.FC<Props> = ({ lang }) => {
       {groups.map((group) => (
         <CartShopSection products={group} lang={lang} />
       ))}
-      {/* 代理購入案内 */}
-      {hasOwnShop && hasOtherShop && (
-        <section className="mt-8 p-4 bg-yellow-100 rounded-xl">
-          <p className="mb-2">{t.description}</p>
-        </section>
-      )}
     </div>
   );
 };
