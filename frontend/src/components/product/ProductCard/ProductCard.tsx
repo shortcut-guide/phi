@@ -231,7 +231,11 @@ const ProductCard: React.FC<ProductCardProps> = ({
             </div>
             {/* フッター固定カートボタン */}
             <div className="border-t px-6 py-3 bg-white sticky bottom-0 left-0 w-full rounded-b-xl">
-              <AddToCartButton lang={lang} />
+              <AddToCartButton
+                lang={lang}
+                product={product}
+                quantity={1}
+              />
             </div>
           </div>
         </div>

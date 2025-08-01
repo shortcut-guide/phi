@@ -522,14 +522,18 @@ export const messages = {
   },
   cartPage:{
     ja: {
+      title: "カート",
       description: "複数ショップから購入の場、代理購入がおすすめです。",
       success: "決済完了",
-      error: "エラーが発生しました"
+      error: "エラーが発生しました",
+      empty: "カートに商品はありません",
     },
     en: {
+      title: "Cart",
       description: "Recommended for purchasing from multiple shops and proxy purchases.",
       success: "Payment successful",
-      error: "An error occurred"
+      error: "An error occurred",
+      empty: "Your cart is empty",
     }
   },
   cartShopAction:{
@@ -767,13 +771,21 @@ export const messages = {
       addToCart: "カートに入れる",
       addedToCart: "カートに追加しました",
       errorAddToCart: "カートへの追加に失敗しました",
-      viewCart: "カートを見る"
+      viewCart: "カートを見る",
+      errorFailed: "カートの取得に失敗しました",
+      errorAddToCartFailed: "カートへの追加に失敗しました",
+      errorViewCart: "カートの表示に失敗しました",
+      errorCart: "エラーが発生しました。再度追加を行うか、時間をおいて試して下さい",
     },
     en: {
       addToCart: "Add to Cart",
       addedToCart: "Added to cart",
       errorAddToCart: "Failed to add to cart",
-      viewCart: "View Cart"
+      viewCart: "View Cart",
+      errorFailed: "Failed to retrieve cart",
+      errorAddToCartFailed: "Failed to add to cart",
+      errorViewCart: "Failed to view cart",
+      errorCart: "An error occurred. Please try adding again or wait a moment and try again.",
     }
   },
   search: {

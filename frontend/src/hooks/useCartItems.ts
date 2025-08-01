@@ -1,19 +1,14 @@
-// frontend/src/hooks/useCartItems.ts
+import { useState, useEffect } from "react";
 
-import { useState } from "react";
+export function useCartItems() {
+  const [items, setItems] = useState([]);
 
-/**
- * カート商品の配列を返すフック
- * 実運用ではContextやグローバル状態管理から取得する設計にリファクタ可
- * ここではサンプルとしてダミーデータを返却
- */
-export type CartItem = {
-  product: any;
-  count: number;
-};
+  useEffect(() => {
+    fetch("/add/cart")
+      .then((res) => res.json())
+      .then((data) => setItems(Array.isArray(data.cartItems) ? data.cartItems : []))
+      .catch(() => setItems([]));
+  }, []);
 
-// 最低限のダミー実装
-export function useCartItems(): CartItem[] {
-  const [items] = useState<CartItem[]>([]);
   return items;
 }

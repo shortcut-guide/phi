@@ -4,11 +4,10 @@ import PaypalButton from "@/f/components/payment/PaypalButton";
 type Props = {
   isOwnShop: boolean;
   cartAddUrl?: string;
-  items: { product: any; count: number }[];
-  shop: string;
+  items: any;
 };
 
-const CartShopAction: React.FC<Props> = ({ isOwnShop, cartAddUrl, items, shop }) => {
+const CartShopAction: React.FC<Props> = ({ items }) => {
   if (isOwnShop)
     return (
       <div className="mt-4">
