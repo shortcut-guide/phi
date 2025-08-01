@@ -9,7 +9,6 @@ type Props = {
 };
 
 const Cart: React.FC<Props> = ({ lang }) => {
-  const t = (messages.cartPage as any)[lang] ?? {};
   const cartItems = useCartItems();
   const groups = useMemo(() => GroupCartItems(cartItems), [cartItems]);
 
