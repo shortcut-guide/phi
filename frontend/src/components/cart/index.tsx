@@ -15,7 +15,6 @@ const Cart: React.FC<Props> = ({ lang }) => {
 
   return (
     <div className="max-w-2xl mx-auto py-8">
-      <h1 className="text-xl font-bold mb-6">{t.title}</h1>
       {groups.map((group) => (
         <CartShopSection products={group} lang={lang} />
       ))}

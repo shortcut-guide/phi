@@ -8,10 +8,9 @@ export const getServerSideProps = withLangMessagesSSR("index");
 
 type Props = {
   lang: string;
-  t?: any;
 }
 
-const Index = ({ lang, t }: Props) => (
+const Index = ({ lang }: Props) => (
   <Home lang={lang} />
 );
 
