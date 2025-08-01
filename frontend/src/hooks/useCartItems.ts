@@ -14,7 +14,6 @@ export type CartItem = {
 
 // 最低限のダミー実装
 export function useCartItems(): CartItem[] {
-  // サンプル: ローカルストレージやContext未導入の場合
   const [items] = useState<CartItem[]>([]);
   return items;
 }

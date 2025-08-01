@@ -522,10 +522,14 @@ export const messages = {
   },
   cartPage:{
     ja: {
-      description: "複数ショップから購入の場、代理購入がおすすめです。"
+      description: "複数ショップから購入の場、代理購入がおすすめです。",
+      success: "決済完了",
+      error: "エラーが発生しました"
     },
     en: {
-      description: "Recommended for purchasing from multiple shops and proxy purchases."
+      description: "Recommended for purchasing from multiple shops and proxy purchases.",
+      success: "Payment successful",
+      error: "An error occurred"
     }
   },
   cartShopAction:{
@@ -550,16 +554,6 @@ export const messages = {
       quantity: "Quantity",
       remove: "Remove",
       empty: "Your cart is empty",
-    }
-  },
-  cartPage: {
-    ja: {
-      success: "決済完了",
-      error: "エラーが発生しました"
-    },
-    en: {
-      success: "Payment successful",
-      error: "An error occurred"
     }
   },
   notFoundPage: {
