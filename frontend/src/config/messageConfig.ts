@@ -538,7 +538,7 @@ export const messages = {
   },
   cartShopAction:{
     ja: {
-      addcart: (shop: string) => `まとめて${shop}のカートに入れる`,
+      addcart: (shop: string) => `${shop}のカートに入れる`,
     },
     en: {
       addcart: (shop: string) => `Add to ${shop} Cart`,

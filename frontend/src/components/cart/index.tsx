@@ -12,14 +12,12 @@ const Cart: React.FC<Props> = ({ lang }) => {
   const t = (messages.cartPage as any)[lang] ?? {};
   const cartItems = useCartItems();
   const groups = useMemo(() => GroupCartItems(cartItems), [cartItems]);
-  const hasOwnShop = groups.some((g) => g.isOwnShop);
-  const hasOtherShop = groups.some((g) => !g.isOwnShop);
 
   return (
     <div className="max-w-2xl mx-auto py-8">
       <h1 className="text-xl font-bold mb-6">{t.title}</h1>
       {groups.map((group) => (
-        <CartShopSection products={group} lang={lang} ownShop={group.isOwnShop} />
+        <CartShopSection products={group} lang={lang} />
       ))}
       {/* 代理購入案内 */}
       {hasOwnShop && hasOtherShop && (

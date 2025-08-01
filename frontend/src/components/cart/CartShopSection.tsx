@@ -14,7 +14,7 @@ const CartShopSection: React.FC<Props> = ({ products, lang }) => (
         <CartItemRow key={product.id} item={product} lang={lang} />
       ))}
     </ul>
-    <CartShopAction items={products} />
+    <CartShopAction items={products} lang={lang} />
   </section>
 );
 
