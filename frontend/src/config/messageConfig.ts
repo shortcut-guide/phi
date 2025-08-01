@@ -520,6 +520,38 @@ export const messages = {
       modalBody: "You can use this component to include a form that adds a new media item to the list."
     }
   },
+  cartPage:{
+    ja: {
+      description: "複数ショップから購入の場、代理購入がおすすめです。"
+    },
+    en: {
+      description: "Recommended for purchasing from multiple shops and proxy purchases."
+    }
+  },
+  cartShopAction:{
+    ja: {
+      addcart: (shop: string) => `まとめて${shop}のカートに入れる`,
+    },
+    en: {
+      addcart: (shop: string) => `Add to ${shop} Cart`,
+    }
+  },
+  cartItem:{
+    ja:{
+      variation: "バリエーション",
+      price: "価格",
+      quantity: "数量",
+      remove: "削除",
+      empty: "カートに商品はありません",
+    },
+    en: {
+      variation: "Variation",
+      price: "Price",
+      quantity: "Quantity",
+      remove: "Remove",
+      empty: "Your cart is empty",
+    }
+  },
   cartPage: {
     ja: {
       success: "決済完了",
