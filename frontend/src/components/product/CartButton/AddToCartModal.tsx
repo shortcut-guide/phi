@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { messages } from "@/f/config/messageConfig";
 
 type Product = {
   id: string;
@@ -30,9 +31,12 @@ const getInitialVariation = (variation?: Record<string, string[]>) => {
 
 const AddToCartModal: React.FC<AddToCartModalProps> = ({
   product,
+  lang,
   onClose,
   onSubmit,
 }) => {
+  const t = messages.addtocart?.[lang] ?? {};
+
   const [groups, setGroups] = useState<VariationSelection[]>([
     {
       variations: getInitialVariation(product.variation),
@@ -82,7 +86,7 @@ const AddToCartModal: React.FC<AddToCartModalProps> = ({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
       <div className="bg-white rounded-2xl shadow-xl p-6 w-full max-w-lg relative">
-        <h2 className="text-lg font-bold mb-4">オプション選択</h2>
+        <h2 className="text-lg font-bold mb-4">{t.option}</h2>
         {groups.map((group, idx) => (
           <div
             key={idx}
@@ -108,7 +112,7 @@ const AddToCartModal: React.FC<AddToCartModalProps> = ({
                 </div>
               ))}
             <div className="mb-2">
-              <label className="block text-sm font-semibold mb-1">個数</label>
+              <label className="block text-sm font-semibold mb-1">{t.quantity}</label>
               <input
                 type="number"
                 min={1}
@@ -124,7 +128,7 @@ const AddToCartModal: React.FC<AddToCartModalProps> = ({
                 type="button"
                 onClick={() => handleRemoveGroup(idx)}
                 className="absolute top-2 right-2 text-red-500 text-lg"
-                title="削除"
+                title={t.delete}
               >
                 ×
               </button>
@@ -137,7 +141,7 @@ const AddToCartModal: React.FC<AddToCartModalProps> = ({
             onClick={handleAddGroup}
             className="text-sm text-blue-600 underline"
           >
-            バリエーションを追加
+            {t.addToValiation}
           </button>
         </div>
         <div className="flex justify-end gap-2">
@@ -146,14 +150,14 @@ const AddToCartModal: React.FC<AddToCartModalProps> = ({
             onClick={onClose}
             className="px-4 py-2 rounded-xl bg-gray-200"
           >
-            キャンセル
+            {t.addToCancel}
           </button>
           <button
             type="button"
             onClick={handleSubmit}
             className="px-4 py-2 rounded-xl bg-blue-600 text-white"
           >
-            カートに追加
+            {t.addToCart}
           </button>
         </div>
       </div>

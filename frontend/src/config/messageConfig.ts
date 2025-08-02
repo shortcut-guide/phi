@@ -769,7 +769,12 @@ export const messages = {
   addtocart:{
     ja: {
       addToCart: "カートに入れる",
+      addToCancel: "キャンセル",
       addedToCart: "カートに追加しました",
+      addToValiation: "他の種類を追加",
+      delete: "削除",
+      quantity: "個数",
+      option: "オプション選択",
       errorAddToCart: "カートへの追加に失敗しました",
       viewCart: "カートを見る",
       errorFailed: "カートの取得に失敗しました",
