@@ -1,13 +1,25 @@
 import { useState, useEffect } from "react";
 
+// 保存時と同じキーにする
+const CART_KEY = "cart_items_v1";
+
 export function useCartItems() {
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState<any[]>([]);
 
   useEffect(() => {
-    fetch("/add/cart")
-      .then((res) => res.json())
-      .then((data) => setItems(Array.isArray(data.cartItems) ? data.cartItems : []))
-      .catch(() => setItems([]));
+    if (typeof window === "undefined") return;
+
+    try {
+      const data = window.localStorage.getItem(CART_KEY);
+      if (!data) {
+        setItems([]);
+        return;
+      }
+      const parsed = JSON.parse(data);
+      setItems(Array.isArray(parsed) ? parsed : []);
+    } catch {
+      setItems([]);
+    }
   }, []);
 
   return items;

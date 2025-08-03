@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { messages } from "@/f/config/messageConfig";
 import AddToCartModal from "./AddToCartModal";
+import { addToCart, CartItem } from "@/f/utils/cartStorage";
 
 type VariationSelection = {
   variations: Record<string, string>;
@@ -25,32 +26,27 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({
   const t = messages.addtocart?.[lang] ?? {};
   const [open, setOpen] = useState(false);
 
-  const handleAddToCart = async (items: VariationSelection[]) => {
+  const handleAddToCart = (items: VariationSelection[]) => {
     try {
-      const res = await fetch("/add/cart/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({
-          items: items.map(i => ({
-            productId: product.id,
-            variations: i.variations,
-            quantity: i.quantity,
-          })),
-        }),
+      const addedCart = items.map(i => ({
+        productId: product.id,
+        variations: i.variations,
+        quantity: i.quantity,
+      }));
+
+      let cartResult: CartItem[] = [];
+      addedCart.forEach(item => {
+        cartResult = addToCart(item);
       });
-      const data = await res.json();
-      if (data.success) {
-        onSuccess?.(data.cartItems);
-        alert(t.addedToCart);
-      } else {
-        throw new Error(data.error || t.errorAddToCartFailed);
-      }
+
+      onSuccess?.(cartResult);
+      alert(t.addedToCart);
     } catch (err) {
       onError?.(err);
       alert(t.errorCart);
     }
   };
+
   return (
     <>
       <button
