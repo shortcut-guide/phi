@@ -10,6 +10,7 @@ type VariationSelection = {
 type AddToCartButtonProps = {
   lang: string;
   product: any;
+  quantity?: number;
   onSuccess?: (result: any) => void;
   onError?: (error: any) => void;
 };
@@ -17,6 +18,7 @@ type AddToCartButtonProps = {
 const AddToCartButton: React.FC<AddToCartButtonProps> = ({
   lang,
   product,
+  quantity = 1,
   onSuccess,
   onError,
 }) => {
@@ -49,7 +51,6 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({
       alert(t.errorCart);
     }
   };
-
   return (
     <>
       <button
@@ -57,11 +58,11 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({
         onClick={() => setOpen(true)}
         className="w-full bg-[#FF9900] hover:bg-[#FFB84D] text-white font-bold rounded-xl py-2 mt-2 text-base tracking-wide transition"
       >
-        {t.addToCart ?? "カートに入れる"}
+        {t.addToCart}
       </button>
       {open && (
         <AddToCartModal
-          product={product}
+          items={product}
           lang={lang}
           onClose={() => setOpen(false)}
           onSubmit={items => {

@@ -4,7 +4,11 @@ import { messages } from "@/f/config/messageConfig";
 type Product = {
   id: string;
   name: string;
-  variation?: Record<string, string[]>;
+  contry: string;
+  currency: string;
+  platform: string;
+  price: number;
+  ec_data?: Record<string, any>;
 };
 
 type VariationSelection = {
@@ -13,33 +17,56 @@ type VariationSelection = {
 };
 
 type AddToCartModalProps = {
-  product: Product;
+  items: Product;
   lang?: string;
   onClose: () => void;
   onSubmit: (items: VariationSelection[]) => void;
 };
 
-const getInitialVariation = (variation?: Record<string, string[]>) => {
-  const initial: Record<string, string> = {};
-  if (variation) {
-    Object.entries(variation).forEach(([key, values]) => {
-      initial[key] = values[0] || "";
-    });
+type NormalizedVariation = {
+  label: string;
+  options: string[];
+};
+
+const getVariationList = (variation: Record<string, any> | undefined): NormalizedVariation[] => {
+  console.log("getVariationList:", variation);
+  if (!variation) return [];
+  // Amazon型
+  if (Object.values(variation).every(v => Array.isArray(v))) {
+    return Object.entries(variation).map(([label, options]) => ({
+      label,
+      options: options as string[],
+    }));
   }
+  // Taobao型
+  if (Object.values(variation).every(v => typeof v === "object" && v !== null && !Array.isArray(v))) {
+    return [{
+      label: "variation",
+      options: Object.keys(variation),
+    }];
+  }
+  return [];
+};
+
+const getInitialVariation = (variationList: NormalizedVariation[]): Record<string, string> => {
+  const initial: Record<string, string> = {};
+  variationList.forEach(v => {
+    initial[v.label] = v.options[0] || "";
+  });
   return initial;
 };
 
 const AddToCartModal: React.FC<AddToCartModalProps> = ({
-  product,
+  items,
   lang,
   onClose,
   onSubmit,
 }) => {
   const t = messages.addtocart?.[lang] ?? {};
-
+  const variationList = getVariationList(items.ec_data?.product?.variation);
   const [groups, setGroups] = useState<VariationSelection[]>([
     {
-      variations: getInitialVariation(product.variation),
+      variations: getInitialVariation(variationList),
       quantity: 1,
     },
   ]);
@@ -49,7 +76,7 @@ const AddToCartModal: React.FC<AddToCartModalProps> = ({
     key: string,
     value: string
   ) => {
-    setGroups((prev) =>
+    setGroups(prev =>
       prev.map((g, i) =>
         i === idx
           ? { ...g, variations: { ...g.variations, [key]: value } }
@@ -59,28 +86,29 @@ const AddToCartModal: React.FC<AddToCartModalProps> = ({
   };
 
   const handleQuantityChange = (idx: number, quantity: number) => {
-    setGroups((prev) =>
+    setGroups(prev =>
       prev.map((g, i) => (i === idx ? { ...g, quantity } : g))
     );
   };
 
   const handleAddGroup = () => {
-    setGroups((prev) => [
+    setGroups(prev => [
       ...prev,
       {
-        variations: getInitialVariation(product.variation),
+        variations: getInitialVariation(variationList),
         quantity: 1,
       },
     ]);
   };
 
   const handleRemoveGroup = (idx: number) => {
-    setGroups((prev) => prev.filter((_, i) => i !== idx));
+    setGroups(prev => prev.filter((_, i) => i !== idx));
   };
 
   const handleSubmit = () => {
-    // 空quantityやvariationチェックをここで追加してもOK
-    onSubmit(groups.filter((g) => g.quantity > 0));
+    const sendItems = groups.filter(g => g.quantity > 0);
+    console.log("AddToCart submit:", sendItems);
+    onSubmit(sendItems);
   };
 
   return (
@@ -88,50 +116,52 @@ const AddToCartModal: React.FC<AddToCartModalProps> = ({
       <div className="bg-white rounded-2xl shadow-xl p-6 w-full max-w-lg relative">
         <h2 className="text-lg font-bold mb-4">{t.option}</h2>
         {groups.map((group, idx) => (
-          <div
-            key={idx}
-            className="mb-4 border rounded-xl p-4 bg-gray-50 relative"
-          >
-            {product.variation &&
-              Object.entries(product.variation).map(([key, options]) => (
-                <div key={key} className="mb-2">
-                  <label className="block text-sm font-semibold mb-1">{key}</label>
-                  <select
-                    className="border rounded p-1 w-full"
-                    value={group.variations[key]}
-                    onChange={(e) =>
-                      handleVariationChange(idx, key, e.target.value)
-                    }
-                  >
-                    {options.map((opt) => (
-                      <option key={opt} value={opt}>
+          <div key={idx} className="mb-4 border rounded-xl p-4 bg-gray-50 relative">
+            {/* variation選択肢生成（ラジオボタン見た目カスタム） */}
+            {variationList.map(({ label, options }) =>
+              options.length === 0 ? null : (
+                <div key={label} className="mb-2">
+                  <label className="block text-sm font-semibold mb-1">
+                    {label === "variation" ? t.variationLabel || "種類" : label}
+                  </label>
+                  <div className="flex flex-wrap gap-2">
+                    {options.map(opt => (
+                      <label
+                        key={opt}
+                        className={`relative cursor-pointer rounded px-3 py-1 border 
+                          ${group.variations[label] === opt ? "border-blue-500 font-bold bg-blue-50" : "border-gray-300 bg-white"}
+                          transition`}
+                      >
+                        <input
+                          type="radio"
+                          name={`variation-${label}-${idx}`}
+                          value={opt}
+                          checked={group.variations[label] === opt}
+                          onChange={() => handleVariationChange(idx, label, opt)}
+                          className="absolute opacity-0 w-0 h-0 pointer-events-none"
+                          tabIndex={-1}
+                        />
                         {opt}
-                      </option>
+                      </label>
                     ))}
-                  </select>
+                  </div>
                 </div>
-              ))}
+              )
+            )}
             <div className="mb-2">
               <label className="block text-sm font-semibold mb-1">{t.quantity}</label>
               <input
                 type="number"
                 min={1}
                 value={group.quantity}
-                onChange={(e) =>
+                onChange={e =>
                   handleQuantityChange(idx, Math.max(1, Number(e.target.value)))
                 }
                 className="border rounded p-1 w-24"
               />
             </div>
             {groups.length > 1 && (
-              <button
-                type="button"
-                onClick={() => handleRemoveGroup(idx)}
-                className="absolute top-2 right-2 text-red-500 text-lg"
-                title={t.delete}
-              >
-                ×
-              </button>
+              <button type="button" onClick={() => handleRemoveGroup(idx)} className="absolute top-2 right-2 text-red-500 text-lg" title={t.delete}>×</button>
             )}
           </div>
         ))}
