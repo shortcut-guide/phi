@@ -32,15 +32,14 @@ export default {
       const body = await request.json() as {
         id: string;
         name: string;
-        shop_name: string;
         platform: string;
-        base_price: number;
+        price: number;
         ec_data: string;
       };
-      const { id, name, shop_name, platform, base_price, ec_data } = body;
+      const { id, name, platform, price, ec_data } = body;
       await env.PRODUCTS_DB.prepare(
-        `INSERT INTO products (id, name, shop_name, platform, base_price, ec_data) VALUES (?, ?, ?, ?, ?, ?, ?)`
-      ).bind(id, name, shop_name, platform, base_price, ec_data).run();
+        `INSERT INTO products (id, name, platform, price, ec_data) VALUES (?, ?, ?, ?, ?, ?, ?)`
+      ).bind(id, name, platform, price, ec_data).run();
       return json({ status: "ok" });
     }
 

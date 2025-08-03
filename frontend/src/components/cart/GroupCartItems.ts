@@ -8,7 +8,7 @@ export type CartGroup = {
 export const GroupCartItems = (cartItems: CartItem[]): CartGroup[] => {
   const groups: { [shop: string]: CartGroup } = {};
   for (const { product, count } of cartItems) {
-    const shop = product.shop_name ?? "Unknown Shop";
+    const shop = product.ec_data.shop.name ?? "Unknown Shop";
     if (!groups[shop]) {
       groups[shop] = {
         shop,
