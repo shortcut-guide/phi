@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useEffect } from "react";
 import CartShopSection from "./CartShopSection";
 import { GroupCartItems } from "./GroupCartItems";
 import { getCart, CartItem } from "@/f/utils/cartStorage";
@@ -13,8 +13,9 @@ const Cart: React.FC<Props> = ({ lang }) => {
   // cartItemsの取得・グループ化を一度のuseMemoに統合
   const { groups } = useMemo(() => {
     const cartItems = getCart();
-    return { groups: GroupCartItems(cartItems) };
+    return { groups: cartItems };
   }, []);
+
   return (
     <div className="max-w-2xl mx-auto py-8">
       {groups.length === 0 ? (
@@ -22,9 +23,7 @@ const Cart: React.FC<Props> = ({ lang }) => {
           {t.empty}
         </div>
       ) : (
-        groups.map((group) => (
-          <CartShopSection products={group} lang={lang} />
-        ))
+        <CartShopSection items={groups} lang={lang} />
       )}
     </div>
   );

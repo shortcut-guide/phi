@@ -3,19 +3,21 @@ import CartItemRow from "./CartItemRow";
 import CartShopAction from "./CartShopAction";
 
 type Props = {
-  products: any;
+  items: any;
   lang: string;
 };
 
-const CartShopSection: React.FC<Props> = ({ products, lang }) => (
-  <section className="mb-8">
-    <ul className="divide-y">
-      {products.map(({ product }) => (
-        <CartItemRow key={product.id} item={product} lang={lang} />
-      ))}
-    </ul>
-    <CartShopAction items={products} lang={lang} />
-  </section>
-);
+const CartShopSection: React.FC<Props> = ({ items, lang }) => {
+  return (
+    <section className="mb-8">
+      <ul className="divide-y">
+        {items.map(item => (
+          <CartItemRow item={item} lang={lang} />
+        ))}
+      </ul>
+      <CartShopAction items={items} lang={lang} />
+    </section>
+  );
+};
 
 export default CartShopSection;

@@ -6,6 +6,7 @@ export type CartGroup = {
 export const GroupCartItems = (cartItems): CartGroup[] => {
   if (!cartItems || cartItems.length === 0) return [];
   const groups: { [shop: string]: CartGroup } = {};
+  console.log("Grouping cart items:", cartItems);
   for (const { product, count } of cartItems) {
     const shop = product.ec_data.shop.name ?? "Unknown Shop";
     if (!groups[shop]) {

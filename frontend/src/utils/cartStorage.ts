@@ -1,7 +1,7 @@
 // frontend/src/utils/cartStorage.ts
 
 export type CartItem = {
-  productId: string;
+  products: any;
   variations: Record<string, string>;
   quantity: number;
 };
@@ -27,7 +27,7 @@ export const saveCart = (items: CartItem[]) => {
 export const addToCart = (item: CartItem) => {
   const cart = getCart();
   const idx = cart.findIndex(
-    c => c.productId === item.productId && JSON.stringify(c.variations) === JSON.stringify(item.variations)
+    c => c.products.id === item.products.id && JSON.stringify(c.variations) === JSON.stringify(item.variations)
   );
   if (idx !== -1) {
     cart[idx].quantity += item.quantity;

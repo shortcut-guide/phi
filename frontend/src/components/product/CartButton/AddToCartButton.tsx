@@ -29,7 +29,7 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({
   const handleAddToCart = (items: VariationSelection[]) => {
     try {
       const addedCart = items.map(i => ({
-        productId: product.id,
+        products: product,
         variations: i.variations,
         quantity: i.quantity,
       }));

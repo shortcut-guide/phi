@@ -8,6 +8,32 @@ type CartItemRowProps = {
 
 const CartItemRow: React.FC<CartItemRowProps> = ({ item, lang }) => {
   const t = (messages.cartItem as any)[lang] ?? {};
+  const products = item.products;
+  if (!products) return null;
+  const productId = products.id;
+  const productName = products.name;
+  const productPlatForm = products.platform;
+  const productPrice = products.price;
+  
+  const ec_data = products.ec_data;
+  const product = ec_data.product;
+  const description = product.description;
+
+  const images = Array.isArray(product.images)
+    ? product.images.filter((img: string) =>
+        typeof img === "string" &&
+        (img.toLowerCase().endsWith(".png") ||
+          img.toLowerCase().endsWith(".jpg") ||
+          img.toLowerCase().endsWith(".jpeg"))
+      )
+    : [];
+
+
+  const quantity = item.quantity;
+  if (!quantity || quantity <= 0) return null;
+
+  const variations = item.variations;
+  if (!variations) return null;
 
   const handleRemove = async () => {
     try {
@@ -30,22 +56,24 @@ const CartItemRow: React.FC<CartItemRowProps> = ({ item, lang }) => {
 
   return (
     <tr>
+      {Array.isArray(images) && images.length > 0 ? (
+        <td>
+          <img src={images[0]} style={{ width: 64, height: 64, objectFit: "cover" }} />
+        </td>
+      ) : null}
       <td>
-        <img src={item.image} alt={item.title} style={{ width: 64, height: 64, objectFit: "cover" }} />
-      </td>
-      <td>
-        <div>{item.title}</div>
-        {item.variation && (
+        <div>{productName}</div>
+        {variations && (
           <div className="text-xs text-gray-500">
-            {t.cartItem.variation}: {item.variation}
+            {t.cartItem.variation}: {variations.variation}
           </div>
         )}
       </td>
       <td>
-        {t.cartItem.price}: ¥{item.price.toLocaleString()}
+        {t.cartItem.price}: ¥{productPrice.toLocaleString()}
       </td>
       <td>
-        {t.cartItem.quantity}: {item.quantity}
+        {t.cartItem.quantity}: {quantity}
       </td>
       <td>
         <button
