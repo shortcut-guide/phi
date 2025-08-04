@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import CartShopSection from "./CartShopSection";
 import { GroupCartItems } from "./GroupCartItems";
-import { useCartItems } from "@/f/hooks/useCartItems";
+import { getCart, CartItem } from "@/f/utils/cartStorage";
 import { messages } from "@/f/config/messageConfig";
 
 type Props = {
@@ -9,10 +9,12 @@ type Props = {
 };
 
 const Cart: React.FC<Props> = ({ lang }) => {
-  const t = (messages.cartPage as any)[lang] ?? {};
-  const cartItems = useCartItems();
-  const groups = useMemo(() => GroupCartItems(cartItems), [cartItems]);
-
+  const t = useMemo(() => (messages.cartPage as any)[lang] ?? {}, [lang]);
+  // cartItemsの取得・グループ化を一度のuseMemoに統合
+  const { groups } = useMemo(() => {
+    const cartItems = getCart();
+    return { groups: GroupCartItems(cartItems) };
+  }, []);
   return (
     <div className="max-w-2xl mx-auto py-8">
       {groups.length === 0 ? (

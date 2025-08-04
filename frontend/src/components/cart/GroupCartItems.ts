@@ -1,11 +1,10 @@
-type CartItem = { product: any; count: number };
-
 export type CartGroup = {
-  items: { product: any; count: number }[];
+  items: any;
   shop: string;
 };
 
-export const GroupCartItems = (cartItems: CartItem[]): CartGroup[] => {
+export const GroupCartItems = (cartItems): CartGroup[] => {
+  if (!cartItems || cartItems.length === 0) return [];
   const groups: { [shop: string]: CartGroup } = {};
   for (const { product, count } of cartItems) {
     const shop = product.ec_data.shop.name ?? "Unknown Shop";

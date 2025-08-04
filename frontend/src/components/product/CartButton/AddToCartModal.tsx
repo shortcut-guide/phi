@@ -29,7 +29,7 @@ type NormalizedVariation = {
 };
 
 const getVariationList = (variation: Record<string, any> | undefined): NormalizedVariation[] => {
-  console.log("getVariationList:", variation);
+
   if (!variation) return [];
   // Amazon型
   if (Object.values(variation).every(v => Array.isArray(v))) {
@@ -107,7 +107,6 @@ const AddToCartModal: React.FC<AddToCartModalProps> = ({
 
   const handleSubmit = () => {
     const sendItems = groups.filter(g => g.quantity > 0);
-    console.log("AddToCart submit:", sendItems);
     onSubmit(sendItems);
   };
 
