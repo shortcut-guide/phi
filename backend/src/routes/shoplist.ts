@@ -10,6 +10,7 @@ router.get("/", (req, res) => {
     const shops = getShopList(lang);
     res.json(shops);
   } catch (err) {
+    console.error(err);
     res.status(500).json({ message: "ショップリストデータの読み込みに失敗しました。" });
   }
 });
