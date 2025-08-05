@@ -52,7 +52,7 @@ export async function createOrder(req, res) {
         }
       ],
       application_context: {
-        brand_name: "Phis EC",
+        brand_name: "Phi EC",
         locale: "ja-JP",
         shipping_preference: "NO_SHIPPING",
         user_action: "PAY_NOW",

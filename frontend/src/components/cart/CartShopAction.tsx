@@ -10,7 +10,7 @@ type Props = {
 const CartShopAction: React.FC<Props> = ({ items,lang }) => {
   const t = (messages.cartShopAction as any)[lang] ?? {};
   
-  if (items.ec_data.shop.name === "phis") {
+  if (items.ec_data.shop.name === "phi") {
     return (
       <div className="mt-4">
         <PaypalButton items={items} />

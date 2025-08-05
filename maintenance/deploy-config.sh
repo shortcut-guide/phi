@@ -8,17 +8,17 @@ cp "$SCRIPT_PATH" "$TMP_SCRIPT"
 
 
 # 一時ディレクトリでsparse-checkoutして maintenance/ ディレクトリのみを展開
-sudo rm -rf /tmp/phis-temp
+sudo rm -rf /tmp/phi-temp
 # ✅ 修正（直接展開）
-sudo git clone --filter=blob:none --no-checkout "https://x-access-token:${GH_TOKEN_WRITE}@github.com/shortcut-guide/phis.git" /tmp/phis-temp
-cd /tmp/phis-temp
+sudo git clone --filter=blob:none --no-checkout "https://x-access-token:${GH_TOKEN_WRITE}@github.com/shortcut-guide/phi.git" /tmp/phi-temp
+cd /tmp/phi-temp
 sudo git sparse-checkout init --cone
 sudo git sparse-checkout set .
 sudo git checkout develop
 
 sudo rm -rf /var/www/maintenance
 sudo mkdir -p /var/www/maintenance
-sudo mv -r /tmp/phis-temp/maintenance* /var/www/maintenance
+sudo mv -r /tmp/phi-temp/maintenance* /var/www/maintenance
 
 sudo mv "$TMP_SCRIPT" /var/www/maintenance/deploy-config.sh
 sudo chmod +x /var/www/maintenance/deploy-config.sh

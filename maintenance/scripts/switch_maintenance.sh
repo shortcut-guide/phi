@@ -3,9 +3,9 @@ set -e
 
 ACTION=$1
 
-LIVE_CONF="/etc/nginx/sites-enabled/phis.conf"
-MAINTENANCE_CONF="/etc/nginx/sites-available/phis.maintenance.conf"
-LIVE_AVAILABLE="/etc/nginx/sites-available/phis.live.conf"
+LIVE_CONF="/etc/nginx/sites-enabled/phi.conf"
+MAINTENANCE_CONF="/etc/nginx/sites-available/phi.maintenance.conf"
+LIVE_AVAILABLE="/etc/nginx/sites-available/phi.live.conf"
 
 if [ "$ACTION" == "start_maintenance" ]; then
   echo "🔧 Switching to maintenance mode..."

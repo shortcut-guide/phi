@@ -6,7 +6,7 @@ export type CartItem = {
   quantity: number;
 };
 
-const CART_KEY = "phis.jp_cart_items";
+const CART_KEY = "phi.jp_cart_items";
 
 export const getCart = (): CartItem[] => {
   if (typeof window === "undefined") return [];

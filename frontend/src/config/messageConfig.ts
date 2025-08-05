@@ -41,10 +41,10 @@ export const messages = {
   },
   index:{
     ja:{
-      title: "phis"
+      title: "phi"
     },
     en:{
-      title: "phis"
+      title: "phi"
     }
   },
   nav:{
@@ -165,7 +165,7 @@ export const messages = {
       { title: "運営責任者", description: "福井 太星" },
       { title: "所在地", description: "〒107-0061 東京都港区北青山1-6-4" },
       { title: "電話番号", description: "070-6648-8093 ※お電話での問い合わせは受け付けておりません。" },
-      { title: "メールアドレス", description: "phis.shop.dev@gmail.com" },
+      { title: "メールアドレス", description: "phi.shop.dev@gmail.com" },
       { title: "販売価格", description: "各商品ページに記載" },
       { title: "商品代金以外の必要料金", description: "消費税、関税、送料（商品ページに記載）、振込手数料（銀行振込の場合）、決済手数料" },
       { title: "支払方法", description: "クレジットカード決済、銀行振込、コンビニ決済" },
@@ -180,7 +180,7 @@ export const messages = {
         { "title": "Responsible Person", "description": "Taisei Fukui" },
         { "title": "Address", "description": "1-6-4 Kita-Aoyama, Minato-ku, Tokyo 107-0061, Japan" },
         { "title": "Phone Number", "description": "070-6648-8093 (Please note that we do not accept inquiries by phone.)" },
-        { "title": "Email Address", "description": "phis.shop.dev@gmail.com" },
+        { "title": "Email Address", "description": "phi.shop.dev@gmail.com" },
         { "title": "Sales Price", "description": "Listed on each product page." },
         { "title": "Additional Fees", "description": "Consumption tax, customs duties, shipping fees (as listed on product pages), bank transfer fees (for bank transfers), and payment processing fees." },
         { "title": "Payment Methods", "description": "Credit card, bank transfer, convenience store payment." },
@@ -220,8 +220,8 @@ export const messages = {
     ja: {
       title: "利用規約",
       sections: [
-        { heading: "第1条（総則）", content: "この利用規約（以下、「本規約」といいます。）は、【phis】（以下、「本サービス」といいます。）ユーザーは本サービスを利用することで、本規約に同意したものとみなします。" },
-        { heading: "第2条（定義）", content: "「ユーザー」とは、本サービスを利用する全ての方を指します。「運営者」とは、本サービスを管理・運営するphisプロジェクト関係者を指します。" },
+        { heading: "第1条（総則）", content: "この利用規約（以下、「本規約」といいます。）は、【phi】（以下、「本サービス」といいます。）ユーザーは本サービスを利用することで、本規約に同意したものとみなします。" },
+        { heading: "第2条（定義）", content: "「ユーザー」とは、本サービスを利用する全ての方を指します。「運営者」とは、本サービスを管理・運営するphiプロジェクト関係者を指します。" },
         { heading: "第3条（サービス内容）", content: "本サービスはEC商品情報の検索、商品詳細の閲覧、リンク先ECサイトへの遷移等を提供します。本サービス上の情報は最新かつ正確であるよう努めますが、その内容を保証するものではありません。" },
         { heading: "第4条（禁止事項）", content: "ユーザーは以下の行為を行ってはなりません。\n・法令または公序良俗に違反する行為\n・本サービスの運営を妨げる行為\n・不正アクセスや情報の改ざん\n・他のユーザーまたは第三者の権利を侵害する行為\n・自動化ツール等による大量アクセス" },
         { heading: "第5条（知的財産権）", content: "本サービス上に掲載されている文章・画像・プログラム等の著作権は運営者または正当な権利者に帰属します。ユーザーは個人的な利用の範囲を超えてこれらを無断で使用することはできません。" },

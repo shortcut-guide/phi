@@ -1,6 +1,6 @@
 /// <reference types="@cloudflare/workers-types" />
 import * as jwt from "@tsndr/cloudflare-worker-jwt";
-import key from "@/b/config/phis-455615-e98413c6f246.json";
+import key from "@/b/config/phi-455615-e98413c6f246.json";
 interface GoogleServiceAccount {
   private_key: string;
   client_email: string;

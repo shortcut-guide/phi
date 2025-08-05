@@ -17,7 +17,7 @@ const MainNavigation = ({ lang }: { lang: string }) =>{
           <div className="w-full h-[20px] flex items-center flex-col box-border">
             <ul className="w-full h-full flex flex-row justify-around items-center gap-2">
               <li className="h-full">
-                <Logo alt="phis admin" className="h-full text-gray-600 group-focus:text-gray-800 invert" />
+                <Logo alt="phi admin" className="h-full text-gray-600 group-focus:text-gray-800 invert" />
               </li>
               <li className="h-full">
                 <a href={url.search} aria-label={t.search} className="h-full border-none hover:bg-gray-100 focus:outline-none focus:bg-gray-200">

@@ -89,7 +89,7 @@ const PageList = ({ lang, page, items = [], t, fetchError }: Pins & { t: any }) 
         <meta property="og:description" content={ogDescription} />
         <meta property="og:image" content={ogImage} />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content={`https://phis.jp/${lang}/page/${page}`} />
+        <meta property="og:url" content={`https://phi.jp/${lang}/page/${page}`} />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={ogTitle} />
         <meta name="twitter:image" content={ogImage} />
@@ -104,7 +104,7 @@ const PageList = ({ lang, page, items = [], t, fetchError }: Pins & { t: any }) 
                 "@type": "Product",
                 name: p.title,
                 image: p.imageUrl,
-                url: `https://phis.jp/products/${p.id}`,
+                url: `https://phi.jp/products/${p.id}`,
               })),
             }),
           }}

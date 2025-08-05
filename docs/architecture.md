@@ -1,11 +1,11 @@
-# phis-admin
+# phi-admin
 
 ---
 
-ECサイト横断管理プラットフォーム「phis-admin」システム概要、機能一覧、システムアーキテクチャ、詳細機能仕様、収益化モデル、ディレクトリ構成、起動方法、デプロイ方法、Cloudflare D1データベース構造、各種API、フロントエンド構成、アナリティクス、認証、決済、画像圧縮、UI/UXに関する多岐にわたる情報を含んでいます。
+ECサイト横断管理プラットフォーム「phi-admin」システム概要、機能一覧、システムアーキテクチャ、詳細機能仕様、収益化モデル、ディレクトリ構成、起動方法、デプロイ方法、Cloudflare D1データベース構造、各種API、フロントエンド構成、アナリティクス、認証、決済、画像圧縮、UI/UXに関する多岐にわたる情報を含んでいます。
 
 ```markdown
-# phis-admin
+# phi-admin
 
 ---
 
@@ -203,12 +203,12 @@ npm run build && npm start
 ```
 
 ```
-> phis-admin@1.0.0 build
+> phi-admin@1.0.0 build
 > node esbuild.config.mjs
 
 (node:45200) ExperimentalWarning: Importing JSON modules is an experimental feature and might change at any time (Use `node --trace-warnings ...` to show where the warning was created)
 
-> phis-admin@1.0.0 start
+> phi-admin@1.0.0 start
 > node dist/src/d1Server.js
 ```
 
@@ -237,9 +237,9 @@ node    12345 user   20u  IPv4 0x12345678      0t0  TCP *:3000 (LISTEN)
 
 ```mermaid
 graph TD
-  A[Git Repo: develop] -->|push| R[bare repo (hooks/post-receive)] --> D1[/var/www/phis-develop]
-  B[Git Repo: staging] -->|push| R --> D2[/var/www/phis-staging]
-  C[Git Repo: main] -->|push| R --> D3[/var/www/phis-production]
+  A[Git Repo: develop] -->|push| R[bare repo (hooks/post-receive)] --> D1[/var/www/phi-develop]
+  B[Git Repo: staging] -->|push| R --> D2[/var/www/phi-staging]
+  C[Git Repo: main] -->|push| R --> D3[/var/www/phi-production]
 ```
 
 # システムデプロイ
@@ -724,7 +724,7 @@ rm -rf .wrangler/state/v3/d1
 # 本番 `curl`
 
 ```bash
-curl -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxZmVhNDUzOTA0MDJiODQxMGQ0ZTc5NGQ3MjRlMWUyYyIsImlhdCI6MTc1MTE0NTU1NiwiZXhwIjoxNzUxMTg4NzU2fQ.odQKu2HsaI6jiydSpPtH_fw5NgC6IH-Ho-UbYjYFtrs" [https://searchlogs.phis.workers.dev/searchlogs/popular](https://searchlogs.phis.workers.dev/searchlogs/popular)
+curl -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxZmVhNDUzOTA0MDJiODQxMGQ0ZTc5NGQ3MjRlMWUyYyIsImlhdCI6MTc1MTE0NTU1NiwiZXhwIjoxNzUxMTg4NzU2fQ.odQKu2HsaI6jiydSpPtH_fw5NgC6IH-Ho-UbYjYFtrs" [https://searchlogs.phi.workers.dev/searchlogs/popular](https://searchlogs.phi.workers.dev/searchlogs/popular)
 ```
 
 # トークン作成
@@ -1418,7 +1418,7 @@ sequenceDiagram
 
 -----
 
-# PDAPI (phis db api)
+# PDAPI (phi db api)
 
 ## CDN + API + SQL
 
@@ -1461,7 +1461,7 @@ graph TD
 ```
 
 ```bash
-node --loader ts-node/esm scripts/imageConvert.mts '/Users/higemaru/phis-admin/frontend/static/assets/sale.png'
+node --loader ts-node/esm scripts/imageConvert.mts '/Users/higemaru/phi-admin/frontend/static/assets/sale.png'
 ```
 
 \*注意点
@@ -1733,12 +1733,12 @@ npm run build && npm start
 ```
 
 ```
-> phis-admin@1.0.0 build
+> phi-admin@1.0.0 build
 > node esbuild.config.mjs
 
 (node:45200) ExperimentalWarning: Importing JSON modules is an experimental feature and might change at any time (Use `node --trace-warnings ...` to show where the warning was created)
 
-> phis-admin@1.0.0 start
+> phi-admin@1.0.0 start
 > node dist/src/d1Server.js
 ```
 
@@ -1760,9 +1760,9 @@ node    12345 user   20u  IPv4 0x12345678      0t0  TCP *:3000 (LISTEN)
 # git デプロイ
 ```mermaid
 graph TD
-  A[Git Repo: develop] -->|push| R[bare repo (hooks/post-receive)] --> D1[/var/www/phis-develop]
-  B[Git Repo: staging] -->|push| R --> D2[/var/www/phis-staging]
-  C[Git Repo: main] -->|push| R --> D3[/var/www/phis-production]
+  A[Git Repo: develop] -->|push| R[bare repo (hooks/post-receive)] --> D1[/var/www/phi-develop]
+  B[Git Repo: staging] -->|push| R --> D2[/var/www/phi-staging]
+  C[Git Repo: main] -->|push| R --> D3[/var/www/phi-production]
 ```
 
 # system deploy
@@ -2219,7 +2219,7 @@ rm -rf .wrangler/state/v3/d1
 
 # 本番 curl
 ```
-curl -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxZmVhNDUzOTA0MDJiODQxMGQ0ZTc5NGQ3MjRlMWUyYyIsImlhdCI6MTc1MTE0NTU1NiwiZXhwIjoxNzUxMTg4NzU2fQ.odQKu2HsaI6jiydSpPtH_fw5NgC6IH-Ho-UbYjYFtrs" https://searchlogs.phis.workers.dev/searchlogs/popular
+curl -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxZmVhNDUzOTA0MDJiODQxMGQ0ZTc5NGQ3MjRlMWUyYyIsImlhdCI6MTc1MTE0NTU1NiwiZXhwIjoxNzUxMTg4NzU2fQ.odQKu2HsaI6jiydSpPtH_fw5NgC6IH-Ho-UbYjYFtrs" https://searchlogs.phi.workers.dev/searchlogs/popular
 ```
 
 # トークン作成
@@ -2880,7 +2880,7 @@ sequenceDiagram
 
 ---
 
-# PDAPI(phis db api)
+# PDAPI(phi db api)
 ## CDN + API + SQL
 ```
 vps-app/
@@ -2920,7 +2920,7 @@ graph TD
 ```
 
 ```
-node --loader ts-node/esm scripts/imageConvert.mts '/Users/higemaru/phis-admin/frontend/static/assets/sale.png'
+node --loader ts-node/esm scripts/imageConvert.mts '/Users/higemaru/phi-admin/frontend/static/assets/sale.png'
 ```
 *注意点
 20250709時点ではassets/img では404になり、assets/ で200となる
@@ -3043,7 +3043,7 @@ redis-cli ping
 ```
 Allowed Return URLs:
   http://localhost:3000/auth/amazon/callback
-  https://phis.jp/auth/amazon/callback
+  https://phi.jp/auth/amazon/callback
 ```
 
 ## 認証フロー構成

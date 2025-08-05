@@ -1,6 +1,6 @@
 export const links = {
   assets:{
-    logo: "/assets/phis_logo",
+    logo: "/assets/phi_logo",
     searchingBar: "/assets/searching-bar",
     sale: "/assets/sale",
     new: "/assets/new",

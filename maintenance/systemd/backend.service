@@ -1,5 +1,5 @@
 [Unit]
-Description=Phis Backend Service
+Description=phi Backend Service
 After=network.target
 StartLimitIntervalSec=30
 StartLimitBurst=3
