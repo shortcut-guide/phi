@@ -42,8 +42,11 @@ const CartShopAction: React.FC<Props> = ({ items, lang }) => {
   };
 
   useEffect(() => {
-    fetchShopList().then(setShopList);
-  }, []);
+    fetchShopList(lang).then((data) => {
+      console.log("shopList API result:", data); // ←追加
+      setShopList(data);
+    });
+  }, [lang]);
 
   // アフィリエイトリンク生成（toAffiliateLink.tsのみを使用）
   useEffect(() => {

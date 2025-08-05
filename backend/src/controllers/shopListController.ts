@@ -12,6 +12,7 @@ export const getShopList = (lang?: string) => {
   const jsonData = fs.readFileSync(filePath, "utf-8");
   const result = JSON.parse(jsonData);
   if (lang && result[lang]) {
+    // console.log(result[lang]); // デバッグ用ログ
     return result[lang];
   }
   return result;

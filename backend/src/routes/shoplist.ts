@@ -7,6 +7,7 @@ const router = Router();
 router.get("/", (req, res) => {
   try {
     const lang = req.query.lang as string | undefined;
+    //console.log("Fetching shop list for language:", lang);
     const shops = getShopList(lang);
     res.json(shops);
   } catch (err) {

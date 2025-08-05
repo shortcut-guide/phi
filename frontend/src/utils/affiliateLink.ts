@@ -31,13 +31,13 @@ let cachedShopList: ShopList | null = null;
 /**
  * shopListをAPIから取得しキャッシュ
  */
-export async function fetchShopList(): Promise<ShopList> {
+export async function fetchShopList(lang = "ja"): Promise<ShopList> {
   if (cachedShopList) return cachedShopList;
   const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3000";
-  const res = await fetchWithTimeout(`${apiUrl}/api/shoplist`, 5000);
+  const res = await fetchWithTimeout(`${apiUrl}/api/shoplist?lang=${lang}`, 5000);
   if (!res.ok) throw new Error("Failed to fetch shop list");
   const json = await res.json();
-  cachedShopList = json.data as ShopList;
+  cachedShopList = json as ShopList;
   return cachedShopList;
 }
 
