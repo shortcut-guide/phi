@@ -1,20 +1,22 @@
 import React from "react";
 import { messages } from "@/f/config/messageConfig";
+import { getCart, setCart } from "@/f/utils/cartStorage";
 
-type CartItemRowProps = {
+interface CartItemRowProps {
   item: any;
   lang: string;
+  onCartUpdate: (updatedCart: any[]) => void;
 };
 
 const CartItemRow: React.FC<CartItemRowProps> = ({ item, lang }) => {
   const t = (messages.cartItem as any)[lang] ?? {};
   const products = item.products;
   if (!products) return null;
+
   const productId = products.id;
   const productName = products.name;
   const productPlatForm = products.platform;
   const productPrice = products.price;
-  
   const ec_data = products.ec_data;
   const product = ec_data.product;
   const description = product.description;
@@ -37,17 +39,19 @@ const CartItemRow: React.FC<CartItemRowProps> = ({ item, lang }) => {
 
   const handleRemove = async () => {
     try {
-      const response = await fetch('/api/cart/remove', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ id: item.id }),
-      });
-      if (!response.ok) {
-        throw new Error('Failed to remove item from cart');
-      }
-      window.location.reload();
+      const cart = getCart();
+      if(!Array.isArray(cart)) return;
+
+      const updatedCart = cart.filter(
+        (i: any) =>
+          !(i.product?.id === productId &&
+            JSON.stringify(i.variations) === JSON.stringify(variations)
+          )
+      );
+
+      setCart(updatedCart);
+      onCartUpdate(updatedCart);
+      
     } catch (error) {
       alert('Error removing item from cart');
       console.error(error);
@@ -56,13 +60,15 @@ const CartItemRow: React.FC<CartItemRowProps> = ({ item, lang }) => {
 
   return (
     <tr>
-      {Array.isArray(images) && images.length > 0 ? (
-        <td>
-          <img src={images[0]} style={{ width: 64, height: 64, objectFit: "cover" }} />
-        </td>
-      ) : null}
       <td>
-        <div>{productName}</div>
+        {images.length > 0 && (
+          <img src={images[0]} alt={productName} style={{ width: 64, height: 64, objectFit: "cover" }} />
+        )}
+      </td>
+      <td>
+        {productName}
+      </td>
+      <td>
         {variations && (
           <div className="text-xs text-gray-500">
             {t.cartItem.variation}: {variations.variation}
