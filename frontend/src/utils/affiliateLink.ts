@@ -1,4 +1,5 @@
 // frontend/src/utils/affiliateLink.ts
+import { fetchWithTimeout } from "@/f/utils/fetchTimeout";
 
 type AffiliateConfig = {
   enabled: boolean;
@@ -32,7 +33,8 @@ let cachedShopList: ShopList | null = null;
  */
 export async function fetchShopList(): Promise<ShopList> {
   if (cachedShopList) return cachedShopList;
-  const res = await fetch("/api/shoplist");
+  const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3000";
+  const res = await fetchWithTimeout(`${apiUrl}/api/shoplist`, 5000);
   if (!res.ok) throw new Error("Failed to fetch shop list");
   const json = await res.json();
   cachedShopList = json.data as ShopList;

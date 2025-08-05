@@ -37,12 +37,12 @@ export const getServerSideProps: GetServerSideProps<Pins> = async (ctx) => {
     const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3000";
     const res = await fetchWithTimeout(`${apiUrl}/api/pins`, 5000);
     if (!res.ok) {
-      fetchError = "データを取得できませんでした";
+      fetchError = "Failed to fetch pins";
     } else {
       allItems = await res.json();
     }
   } catch {
-    fetchError = "データを取得できませんでした";
+    fetchError = "Failed to fetch pins";
   }
 
   const offset = (page - 1) * limit;

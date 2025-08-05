@@ -6,19 +6,29 @@
         "enabled": true,
         "tagParam": "tag",
         "tagValue": "atai04-22"
-      }
+      },
+      "payment":false
     },
     "Rakuten":{
       "domain": "rakuten.co.jp",
       "affiliate": {
         "enabled": false
-      }
+      },
+      "payment":false
     },
     "Yahoo":{
       "domain": "shopping.yahoo.co.jp",
       "affiliate": {
         "enabled": false
-      }
+      },
+      "payment":false
+    },
+    "taobao":{
+      "domain": "taobao.com",
+      "affiliate": {
+        "enabled": false
+      },
+      "payment":true
     }
   },
   "en":{
@@ -28,19 +38,29 @@
         "enabled": true,
         "tagParam": "tag",
         "tagValue": "atai04-22"
-      }
+      },
+      "payment": false
     },
     "Rakuten":{
       "domain": "rakuten.co.jp",
       "affiliate": {
         "enabled": false
-      }
+      },
+      "payment": false
     },
     "Yahoo":{
       "domain": "shopping.yahoo.co.jp",
       "affiliate": {
         "enabled": false
-      }
+      },
+      "payment": false
+    },
+    "taobao":{
+      "domain": "taobao.com",
+      "affiliate": {
+        "enabled": false
+      },
+      "payment": true
     }
   }
 }

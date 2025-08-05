@@ -38,7 +38,7 @@ app.use(express.json());
 app.use("/auth", PaypalRoutes);
 app.use("/api/paypal/order", paypalOrderRoute);
 app.use("/api/faq", faqRouter);
-app.use("/api/shopList", shopListRouter);
+app.use("/api/shoplist", shopListRouter);
 
 // csurfの初期化（cookieにトークン保存）
 const csrfProtection = csrf({ cookie: true });
