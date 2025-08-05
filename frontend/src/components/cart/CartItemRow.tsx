@@ -1,6 +1,6 @@
 import React from "react";
 import { messages } from "@/f/config/messageConfig";
-import { getCart, setCart } from "@/f/utils/cartStorage";
+import { getCart, saveCart } from "@/f/utils/cartStorage";
 
 interface CartItemRowProps {
   item: any;
@@ -8,7 +8,7 @@ interface CartItemRowProps {
   onCartUpdate: (updatedCart: any[]) => void;
 };
 
-const CartItemRow: React.FC<CartItemRowProps> = ({ item, lang }) => {
+const CartItemRow: React.FC<CartItemRowProps> = ({ item, lang, onCartUpdate }) => {
   const t = (messages.cartItem as any)[lang] ?? {};
   const products = item.products;
   if (!products) return null;
@@ -49,7 +49,7 @@ const CartItemRow: React.FC<CartItemRowProps> = ({ item, lang }) => {
           )
       );
 
-      setCart(updatedCart);
+      saveCart(updatedCart);
       onCartUpdate(updatedCart);
       
     } catch (error) {
@@ -71,22 +71,22 @@ const CartItemRow: React.FC<CartItemRowProps> = ({ item, lang }) => {
       <td>
         {variations && (
           <div className="text-xs text-gray-500">
-            {t.cartItem.variation}: {variations.variation}
+            {t.variation}: {variations.variation}
           </div>
         )}
       </td>
       <td>
-        {t.cartItem.price}: ¥{productPrice.toLocaleString()}
+        {t.price}: ¥{productPrice.toLocaleString()}
       </td>
       <td>
-        {t.cartItem.quantity}: {quantity}
+        {t.quantity}: {quantity}
       </td>
       <td>
         <button
           className="px-2 py-1 bg-red-500 text-white rounded"
           onClick={handleRemove}
         >
-          {t.cartItem.remove}
+          {t.remove}
         </button>
       </td>
     </tr>

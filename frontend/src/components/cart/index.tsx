@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect } from "react";
+import React, { useMemo, useEffect, useState } from "react";
 import CartShopSection from "./CartShopSection";
 import { GroupCartItems } from "./GroupCartItems";
 import { getCart, CartItem } from "@/f/utils/cartStorage";
@@ -10,11 +10,15 @@ type Props = {
 
 const Cart: React.FC<Props> = ({ lang }) => {
   const t = useMemo(() => (messages.cartPage as any)[lang] ?? {}, [lang]);
-  // cartItemsの取得・グループ化を一度のuseMemoに統合
-  const { groups } = useMemo(() => {
-    const cartItems = getCart();
-    return { groups: cartItems };
+  const [groups, setGroups] = useState<CartItem[]>([]);
+
+  useEffect(() => {
+    setGroups(getCart());
   }, []);
+
+  const handleCartUpdate = (updatedCart: CartItem[]) => {
+    setGroups(updatedCart);
+  };
 
   return (
     <div className="max-w-2xl mx-auto py-8">
@@ -23,7 +27,7 @@ const Cart: React.FC<Props> = ({ lang }) => {
           {t.empty}
         </div>
       ) : (
-        <CartShopSection items={groups} lang={lang} />
+        <CartShopSection items={groups} lang={lang} onCartUpdate={handleCartUpdate} />
       )}
     </div>
   );
