@@ -59,37 +59,29 @@ const CartItemRow: React.FC<CartItemRowProps> = ({ item, lang, onCartUpdate }) =
   };
 
   return (
-    <tr>
-      <td>
-        {images.length > 0 && (
+    <div className="flex gap-3 py-4 border-b last:border-none">
+      {images.length > 0 && (
           <img src={images[0]} alt={productName} style={{ width: 64, height: 64, objectFit: "cover" }} />
         )}
-      </td>
-      <td>
-        {productName}
-      </td>
-      <td>
+      <div className="flex-1">
+        <div className="text-sm font-medium truncate mb-1">{productName}</div>
         {variations && (
           <div className="text-xs text-gray-500">
             {t.variation}: {variations.variation}
           </div>
         )}
-      </td>
-      <td>
-        {t.price}: ¥{productPrice.toLocaleString()}
-      </td>
-      <td>
-        {t.quantity}: {quantity}
-      </td>
-      <td>
+        <div className="flex items-end gap-2">
+          <span className="text-lg font-bold text-gray-900">{t.price}: ¥{productPrice.toLocaleString()}円</span>
+        </div>
+        <div className="text-xs mt-1 text-gray-500">{t.quantity} {quantity}</div>
         <button
           className="px-2 py-1 bg-red-500 text-white rounded"
           onClick={handleRemove}
         >
           {t.remove}
         </button>
-      </td>
-    </tr>
+      </div>
+    </div>
   );
 };
 
