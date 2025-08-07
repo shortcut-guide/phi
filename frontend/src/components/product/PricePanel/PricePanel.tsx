@@ -1,28 +1,17 @@
 import React, { useState, useEffect } from "react";
 import type { Product } from "@/f/types/product";
 import { useCurrencyInfo } from "@/f/components/product/PricePanel/useCurrencyInfo";
+import { useExchangeRate } from "@/f/utils/useExchangeRate";
 
 type Props = { product: Product };
 
 const PricePanel: React.FC<Props> = ({ product }) => {
   const ecData = product.ec_data || {};
   const currencyCode = product.currency;
-  // 常に円表記
   const currencySymbol = "¥";
   const currency = useCurrencyInfo(currencyCode);
   const currencyApiCode = currency.code || currencyCode || "JPY";
-  const [rate, setRate] = useState(1);
-
-  useEffect(() => {
-    fetch(`https://api.exchangerate-api.com/v4/latest/${currencyApiCode}`)
-      .then((res) => res.json())
-      .then((data) => {
-        const jpyRate = data.rates?.JPY;
-        if (typeof jpyRate === "number") setRate(jpyRate);
-        else setRate(1);
-      })
-      .catch(() => setRate(1));
-  }, [currencyApiCode]);
+  const { rate } = useExchangeRate(currencyApiCode, "JPY");
 
   const basePriceRaw = product.base_price ?? ecData.base_price;
   const priceRaw = product.price ?? ecData.price;
