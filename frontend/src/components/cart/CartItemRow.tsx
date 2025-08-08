@@ -65,18 +65,21 @@ const CartItemRow: React.FC<CartItemRowProps> = ({ item, lang, onCartUpdate }) =
 
   useEffect(() => {
     const q = getProductQuantity(item);
-    if (q && q !== inputQuantity) {
+    // item.quantityが変わった場合のみinputQuantityを更新
+    if (typeof q === "number" && q !== inputQuantity) {
       setInputQuantity(q < 1 ? 1 : q);
     }
-  }, [item]);
+  }, [item.quantity]);
 
-  const updateQuantityInCart = async (newQuantity: number) => {
+  const updateQuantityInCart = (newQuantity: number) => {
+    setInputQuantity(newQuantity);
     try {
       const cart = getCart();
       if (!Array.isArray(cart)) return;
       const updatedCart = cart.map((i: any) => {
+        // ここでproductsもvariationsも厳密一致に修正
         if (
-          i.product?.id === productId &&
+          JSON.stringify(i.products) === JSON.stringify(products) &&
           JSON.stringify(i.variations) === JSON.stringify(variations)
         ) {
           return {
@@ -98,22 +101,17 @@ const CartItemRow: React.FC<CartItemRowProps> = ({ item, lang, onCartUpdate }) =
     const v = e.target.value.replace(/[^0-9]/g, '');
     let q = parseInt(v, 10);
     if (isNaN(q) || q < 1) q = 1;
-    setInputQuantity(q);
     updateQuantityInCart(q);
   };
 
   const handleDecrease = () => {
     if (inputQuantity > 1) {
-      const newQ = inputQuantity - 1;
-      setInputQuantity(newQ);
-      updateQuantityInCart(newQ);
+      updateQuantityInCart(inputQuantity - 1);
     }
   };
 
   const handleIncrease = () => {
-    const newQ = inputQuantity + 1;
-    setInputQuantity(newQ);
-    updateQuantityInCart(newQ);
+    updateQuantityInCart(inputQuantity + 1);
   };
 
   const handleRemove = async () => {
