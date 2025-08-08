@@ -146,8 +146,9 @@ const CartItemRow: React.FC<CartItemRowProps> = ({ item, lang, onCartUpdate }) =
         {variations && (
           <div className="text-[0.6875em] text-gray-500 mb-1">{variations.variation}</div>
         )}
+        {productPlatForm && <div className="text-[0.6875em] text-gray-400 mb-1">({productPlatForm})</div>}
         <div className="flex items-end gap-2 mb-1">
-          <span className="text-[0.6875em] font-bold">{currencySymbol}{Math.round(price * rate).toLocaleString()}</span>
+          <span className="text-xs font-bold">{currencySymbol}{Math.round(price * rate).toLocaleString()}</span>
         </div>
         <div className="flex items-center gap-1 mt-1">
           <span className="text-[0.6875em]">{t.quantity}</span>
@@ -179,18 +180,17 @@ const CartItemRow: React.FC<CartItemRowProps> = ({ item, lang, onCartUpdate }) =
             aria-label={t.IncreaseQuantity}
             type="button"
           >+</button>
+          <button
+            className="ml-2 p-2 hover:bg-gray-100 rounded transition"
+            aria-label={t.RemoveFromCart}
+            onClick={handleRemove}
+            type="button"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-gray-600 hover:text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 7h12M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3m2 0v13a2 2 0 01-2 2H8a2 2 0 01-2-2V7h12z" />
+            </svg>
+          </button>
         </div>
-        {productPlatForm && <div className="text-[0.6875em] text-gray-400">({productPlatForm})</div>}
-        <button
-          className="ml-2 p-2 hover:bg-gray-100 rounded transition"
-          aria-label={t.RemoveFromCart}
-          onClick={handleRemove}
-          type="button"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-gray-600 hover:text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M6 7h12M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3m2 0v13a2 2 0 01-2 2H8a2 2 0 01-2-2V7h12z" />
-          </svg>
-        </button>
       </div>
     </div>
   );
