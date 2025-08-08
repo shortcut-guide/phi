@@ -11,11 +11,11 @@ type Props = {
 const CartShopSection: React.FC<Props> = ({ items, lang, onCartUpdate }) => {
   return (
     <section className="mb-8">
-      <ul className="divide-y">
+      <div className="divide-y">
         {items.map(item => (
           <CartItemRow item={item} lang={lang} onCartUpdate={onCartUpdate} />
         ))}
-      </ul>
+      </div>
       <CartShopAction items={items} lang={lang} />
     </section>
   );

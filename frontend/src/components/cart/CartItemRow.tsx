@@ -135,7 +135,7 @@ const CartItemRow: React.FC<CartItemRowProps> = ({ item, lang, onCartUpdate }) =
   };
 
   return (
-    <div className="flex gap-3 py-4 border-b last:border-none">
+    <div className="flex gap-3 py-4 border-t last:border-none">
       {images.length > 0 && (
         <img src={images[0]} alt={productName} className="w-20 h-20 object-cover rounded bg-gray-100" style={{ minWidth: 80, minHeight: 80 }} />
       )}
