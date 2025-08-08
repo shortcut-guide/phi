@@ -15,7 +15,7 @@ const CartPage = ({ lang }: Props) => {
   const t = (messages.cartPage as any)[lang] ?? {};
   return (
     <DefaultLayout lang={lang} title={t.title}>
-      <h1 className="text-2xl font-bold mb-6">{t.title}</h1>
+      <h1 className="text-2xl font-bold mt-4 px-4">{t.title}</h1>
       <Cart lang={lang} />
     </DefaultLayout>
   );

@@ -21,7 +21,7 @@ const Cart: React.FC<Props> = ({ lang }) => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto py-8">
+    <div className="max-w-2xl mx-auto py-8 px-4">
       {groups.length === 0 ? (
         <div className="flex items-center justify-center h-40 text-gray-500 text-lg">
           {t.empty}

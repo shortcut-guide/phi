@@ -551,6 +551,9 @@ export const messages = {
       quantity: "数量",
       remove: "削除",
       empty: "カートに商品はありません",
+      DecreasQuantity: "数量を減らす",
+      IncreaseQuantity: "数量を増やす",
+      RemoveFromCart: "カートから削除"
     },
     en: {
       variation: "Variation",
@@ -558,6 +561,9 @@ export const messages = {
       quantity: "Quantity",
       remove: "Remove",
       empty: "Your cart is empty",
+      DecreasQuantity: "Decrease quantity",
+      IncreaseQuantity: "Increase quantity",
+      RemoveFromCart: "Remove from cart"
     }
   },
   notFoundPage: {
