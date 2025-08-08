@@ -117,11 +117,12 @@ const CartItemRow: React.FC<CartItemRowProps> = ({ item, lang, onCartUpdate }) =
   const handleRemove = async () => {
     try {
       const cart = getCart();
-      if(!Array.isArray(cart)) return;
+      if (!Array.isArray(cart)) return;
 
       const updatedCart = cart.filter(
         (i: any) =>
-          !(i.product?.id === productId &&
+          !(
+            JSON.stringify(i.products) === JSON.stringify(products) &&
             JSON.stringify(i.variations) === JSON.stringify(variations)
           )
       );
