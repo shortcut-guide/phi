@@ -73,14 +73,38 @@ const CartShopAction: React.FC<Props> = ({ items, lang }) => {
   const uniqueShopNames = Array.from(new Set(shopNames));
   const groupedItems = groupItemsByShop(items);
 
-  // ショップごとのpayment判定
+  // --- Platform/ShopConfig helper functions ---
+  const getPlatformFromItem = (it: any): string => {
+    return (
+      it?.products?.platform ||
+      it?.platform ||
+      it?.products?.ec_data?.product?.platform ||
+      it?.ec_data?.product?.platform ||
+      ""
+    );
+  };
+
+  const resolveShopConfigByPlatform = (platform: string) => {
+    if (!platform) return undefined;
+    const cap = platform.charAt(0).toUpperCase() + platform.slice(1).toLowerCase();
+    const candidates = Array.from(new Set([platform, platform.toLowerCase(), platform.toUpperCase(), cap]));
+
+    for (const k of candidates) {
+      if (shopList?.[lang]?.[k]) return shopList[lang][k];
+    }
+    for (const k of candidates) {
+      if (shopList?.[k]) return shopList[k];
+    }
+    return undefined;
+  };
+
+  // ショップごとのpayment判定（platform→shopConfig.payment で判定）
   const paymentMap: Record<string, boolean> = {};
   uniqueShopNames.forEach((shopName) => {
-    const shopConfig =
-      shopList[lang]?.[shopName] ||
-      shopList[lang]?.[shopName.toLowerCase()] ||
-      shopList[lang]?.[shopName.toUpperCase()];
-    paymentMap[shopName] = !!shopConfig?.payment;
+    const itemsOfShop = groupedItems[shopName] || [];
+    const platform = itemsOfShop.length ? getPlatformFromItem(itemsOfShop[0]) : "";
+    const shopConfig = resolveShopConfigByPlatform(platform);
+    paymentMap[shopName] = !!(shopConfig && typeof shopConfig.payment === "boolean" ? shopConfig.payment : false);
   });
 
   // PayPal決済用の商品
