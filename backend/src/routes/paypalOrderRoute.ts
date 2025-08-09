@@ -1,10 +1,9 @@
-// backend/routes/paypalOrderRoute.ts
 import express from "express";
-import { createOrder, captureOrder } from "../controllers/paypalOrderController";
+import { createOrder, captureOrder } from "@/b/controllers/paypalOrderController";
 
 const router = express.Router();
 
-router.post("/paypal/create-order", createOrder);
-router.post("/paypal/capture-order/:orderId", captureOrder);
+router.post("/", createOrder);
+router.post("/:orderId", captureOrder);
 
 export default router;

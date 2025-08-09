@@ -136,7 +136,7 @@ const CartShopAction: React.FC<Props> = ({ items, lang }) => {
       {/* PayPal決済 */}
       {paypalItems.length > 0 && (
         <div>
-          <PaypalButton items={paypalItems} />
+          <PaypalButton items={paypalItems} lang={lang} />
         </div>
       )}
       {/* アフィリエイトリンク */}

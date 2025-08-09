@@ -24,7 +24,7 @@ const AddressSettingsPage = ({ lang, profile }: Props) => {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const lang = typeof context.params?.lang === "string" ? context.params.lang : "ja";
-  const apiUrl = process.env.PUBLIC_API_BASE_URL || "";
+  const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "";
   let profile: any[] = [];
 
   try {

@@ -14,7 +14,7 @@ type Profile = {
 
 const ProfileForm = ({ lang }: Props) => {
   const url = getLangObj<typeof links.url>(links.url);
-  const apiUrl = process.env.PUBLIC_API_BASE_URL;
+  const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
   const t = ((messages.profileForm as any)[lang]) ?? {};
   const [nickname, setNickname] = useState("");
   const [bio, setBio] = useState("");

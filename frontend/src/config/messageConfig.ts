@@ -628,6 +628,18 @@ export const messages = {
       expand: "Expand Details"
     }
   },
+  paymentButton:{
+    ja:{
+      paypal: "PayPalで支払う",
+      amazon: "Amazonで支払う",
+      credit: "クレジットカードで支払う",
+    },
+    en:{
+      paypal: "Pay with PayPal",
+      amazon: "Pay with Amazon",
+      credit: "Pay with Credit Card",
+    }
+  },
   paymentMethodList: {
     ja:{
       paypal: 'Paypal',
