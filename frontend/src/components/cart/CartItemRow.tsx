@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { messages } from "@/f/config/messageConfig";
 import { getCart, saveCart } from "@/f/utils/cartStorage";
 import {
@@ -54,6 +54,9 @@ const CartItemRow: React.FC<CartItemRowProps> = ({ item, lang, onCartUpdate }) =
     const q = getProductQuantity(item);
     return !q || q < 1 ? 1 : q;
   });
+  const safeRate = useMemo(() => (typeof rate === "number" && isFinite(rate) ? rate : 1), [rate]);
+  const unitJPY = useMemo(() => Math.round(((price ?? 0) as number) * safeRate), [price, safeRate]);
+  const subtotalJPY = useMemo(() => Math.max(1, inputQuantity) * unitJPY, [inputQuantity, unitJPY]);
 
   useEffect(() => {
     let ignore = false;
@@ -149,7 +152,8 @@ const CartItemRow: React.FC<CartItemRowProps> = ({ item, lang, onCartUpdate }) =
         )}
         {productPlatForm && <div className="text-[0.6875em] text-gray-400 mb-1">({productPlatForm})</div>}
         <div className="flex items-end gap-2 mb-1">
-          <span className="text-xs font-bold">{currencySymbol}{Math.round(price * rate).toLocaleString()}</span>
+          <span className="text-xs font-bold">{currencySymbol}{subtotalJPY.toLocaleString()}</span>
+          <span className="text-[0.6875em] text-gray-500">({currencySymbol}{unitJPY.toLocaleString()} × {inputQuantity})</span>
         </div>
         <div className="flex items-center gap-1 mt-1">
           <span className="text-[0.6875em]">{t.quantity}</span>
