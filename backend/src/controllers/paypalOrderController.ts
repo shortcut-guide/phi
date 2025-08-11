@@ -51,9 +51,8 @@ function pickSingleCurrencyOrError(items: any[]) {
 }
 
 async function getAccessToken(): Promise<string> {
-  if (!CLIENT_ID || !CLIENT_SECRET) {
-    throw new Error("Missing PayPal credentials");
-  }
+  if (!CLIENT_ID || !CLIENT_SECRET) throw new Error("Missing PayPal credentials");
+  
   const auth = Buffer.from(`${CLIENT_ID}:${CLIENT_SECRET}`).toString("base64");
   const res = await fetch(`${links.url.paypalToken}`, {
     method: "POST",
@@ -74,15 +73,11 @@ async function getAccessToken(): Promise<string> {
 export async function createOrder(req: any, res: any) {
   try {
     const rawItems = Array.isArray(req.body?.items) ? req.body.items : [];
-    if (!rawItems.length) {
-      return res.status(400).json({ error: "No items provided" });
-    }
+    if (!rawItems.length) return res.status(400).json({ error: "No items provided" });
 
     const items = normalizeItems(rawItems);
     const currency_code = pickSingleCurrencyOrError(items);
-    if (!currency_code) {
-      return res.status(400).json({ error: "Mixed currencies are not supported in a single order." });
-    }
+    if (!currency_code) return res.status(400).json({ error: "Mixed currencies are not supported in a single order." });
 
     const itemTotal = items.reduce((sum, it) => {
       const val = Number(it.unit_amount.value);
@@ -138,17 +133,15 @@ export async function createOrder(req: any, res: any) {
 export async function captureOrder(req: any, res: any) {
   try {
     const { orderId } = req.params;
-    if (!orderId) {
-      return res.status(400).json({ error: "orderId is required" });
-    }
+    if (!orderId) return res.status(400).json({ error: "orderId is required" });
+    
     const token = await getAccessToken();
-
     const response = await fetch(`${links.url.paypalOrder}/${orderId}/capture`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
-      },
+      }
     });
 
     const data = await response.json();

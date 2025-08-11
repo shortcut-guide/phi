@@ -15,27 +15,22 @@ const PaypalButton: React.FC<PaypalButtonProps> = ({ items, lang, onSuccess, onE
     return (items || []).map((it) => {
       const p = it?.product ?? {};
       const name = String(p?.name ?? p?.title ?? "Item");
-      const currency =
-        (p?.currency ??
-          p?.ec_data?.product?.currency ??
-          p?.ec_data?.currency ??
-          "JPY").toString().toUpperCase();
       const priceRaw =
         p?.price ??
         p?.unit_price ??
         p?.ec_data?.product?.price ??
         p?.ec_data?.price ??
         0;
-      const price = Number(priceRaw);
+      const unitBase = Number(priceRaw);
+      const unitJPY = Number.isFinite(unitBase) ? Math.max(0, Math.round(unitBase)) : 0; // UIと同様に四捨五入
       const quantityNum = Number(it?.count ?? it?.quantity ?? 1);
-      const quantity =
-        Number.isFinite(quantityNum) && quantityNum > 0 ? Math.floor(quantityNum) : 1;
-
+      const quantity = Number.isFinite(quantityNum) && quantityNum > 0 ? Math.floor(quantityNum) : 1;
+      // subtotalJPY = unitJPY * quantity はサーバー側で item_total に集計される
       return {
         name,
         unit_amount: {
-          currency_code: currency,
-          value: String(Number.isFinite(price) ? price : 0),
+          currency_code: "JPY",
+          value: String(unitJPY),
         },
         quantity: String(quantity),
       };

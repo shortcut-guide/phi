@@ -5,8 +5,8 @@ export const links = {
         paypalAddress: "https://www.paypal.com/myaccount/settings/address",
         paypalSuccess: "/paypal/success",
         paypalCancel: "/paypal/cancel",
-        paypalToken: paypalApi+"/v1/oauth2/token",
-        paypalOrder: paypalApi+"/v2/checkout/orders",
-        paypalUserInfo: paypalApi+"/v1/identity/oauth2/userinfo?schema=paypalv1.1",
+        paypalToken: `${paypalApi}/v1/oauth2/token`,
+        paypalOrder: `${paypalApi}/v2/checkout/orders`,
+        paypalUserInfo: `${paypalApi}/v1/identity/oauth2/userinfo?schema=paypalv1.1`,
     }
 }

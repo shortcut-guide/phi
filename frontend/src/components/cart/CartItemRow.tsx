@@ -12,7 +12,7 @@ import {
   getProductObject,
   getProductVariations,
   getProductQuantity,
-  getProductId
+  getProductId,
 } from "@/f/utils/cartItemUtils";
 import { useCurrencyInfo } from "@/f/components/product/PricePanel/useCurrencyInfo";
 import { useExchangeRate } from "@/f/utils/useExchangeRate";
@@ -34,14 +34,11 @@ const CartItemRow: React.FC<CartItemRowProps> = ({ item, lang, onCartUpdate }) =
   const productPlatForm = getProductPlatform(products);
   const product = getProductObject(products);
   const description = getProductDescription(products);
-
   const price = getProductPrice(products);
   const currencySymbol = getCurrencySymbol();
   const currencyApiCode = getCurrencyApiCode(products);
-
   const currency = useCurrencyInfo(currencyApiCode);
   const { rate } = useExchangeRate(currency.code || currencyApiCode, "JPY");
-
   const images = getProductImages(product);
   const variations = getProductVariations(item);
   if (!variations) return null;
@@ -60,15 +57,16 @@ const CartItemRow: React.FC<CartItemRowProps> = ({ item, lang, onCartUpdate }) =
 
   useEffect(() => {
     let ignore = false;
-    translateName(productName, 'ja', 'en').then(result => {
+    translateName(productName, "ja", "en").then((result) => {
       if (!ignore) setTranslatedName(result);
     });
-    return () => { ignore = true; };
+    return () => {
+      ignore = true;
+    };
   }, [productName]);
 
   useEffect(() => {
     const q = getProductQuantity(item);
-    // item.quantityが変わった場合のみinputQuantityを更新
     if (typeof q === "number" && q !== inputQuantity) {
       setInputQuantity(q < 1 ? 1 : q);
     }
@@ -80,14 +78,13 @@ const CartItemRow: React.FC<CartItemRowProps> = ({ item, lang, onCartUpdate }) =
       const cart = getCart();
       if (!Array.isArray(cart)) return;
       const updatedCart = cart.map((i: any) => {
-        // ここでproductsもvariationsも厳密一致に修正
         if (
           JSON.stringify(i.products) === JSON.stringify(products) &&
           JSON.stringify(i.variations) === JSON.stringify(variations)
         ) {
           return {
             ...i,
-            quantity: newQuantity
+            quantity: newQuantity,
           };
         }
         return i;
@@ -95,13 +92,13 @@ const CartItemRow: React.FC<CartItemRowProps> = ({ item, lang, onCartUpdate }) =
       saveCart(updatedCart);
       onCartUpdate(updatedCart);
     } catch (error) {
-      alert('Error updating quantity');
+      alert("Error updating quantity");
       console.error(error);
     }
   };
 
   const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const v = e.target.value.replace(/[^0-9]/g, '');
+    const v = e.target.value.replace(/[^0-9]/g, "");
     let q = parseInt(v, 10);
     if (isNaN(q) || q < 1) q = 1;
     updateQuantityInCart(q);
@@ -121,7 +118,6 @@ const CartItemRow: React.FC<CartItemRowProps> = ({ item, lang, onCartUpdate }) =
     try {
       const cart = getCart();
       if (!Array.isArray(cart)) return;
-
       const updatedCart = cart.filter(
         (i: any) =>
           !(
@@ -129,11 +125,10 @@ const CartItemRow: React.FC<CartItemRowProps> = ({ item, lang, onCartUpdate }) =
             JSON.stringify(i.variations) === JSON.stringify(variations)
           )
       );
-
       saveCart(updatedCart);
       onCartUpdate(updatedCart);
     } catch (error) {
-      alert('Error removing item from cart');
+      alert("Error removing item from cart");
       console.error(error);
     }
   };
@@ -141,19 +136,36 @@ const CartItemRow: React.FC<CartItemRowProps> = ({ item, lang, onCartUpdate }) =
   return (
     <div className="flex gap-3 py-4 border-t last:border-none">
       {images.length > 0 && (
-        <img src={images[0]} alt={productName} className="w-20 h-20 object-cover rounded bg-gray-100" style={{ minWidth: 80, minHeight: 80 }} />
+        <img
+          src={images[0]}
+          alt={productName}
+          className="w-20 h-20 object-cover rounded bg-gray-100"
+          style={{ minWidth: 80, minHeight: 80 }}
+        />
       )}
       <div className="flex-1 min-w-0">
         <div className="text-[0.6875em] font-semibold mb-1 line-clamp-2 leading-tight">
           {translatedName}
         </div>
         {variations && (
-          <div className="text-[0.6875em] text-gray-500 mb-1">{variations.variation}</div>
+          <div className="text-[0.6875em] text-gray-500 mb-1">
+            {variations.variation}
+          </div>
         )}
-        {productPlatForm && <div className="text-[0.6875em] text-gray-400 mb-1">({productPlatForm})</div>}
+        {productPlatForm && (
+          <div className="text-[0.6875em] text-gray-400 mb-1">
+            ({productPlatForm})
+          </div>
+        )}
         <div className="flex items-end gap-2 mb-1">
-          <span className="text-xs font-bold">{currencySymbol}{subtotalJPY.toLocaleString()}</span>
-          <span className="text-[0.6875em] text-gray-500">({currencySymbol}{unitJPY.toLocaleString()} × {inputQuantity})</span>
+          <span className="text-xs font-bold">
+            {currencySymbol}
+            {subtotalJPY.toLocaleString()}
+          </span>
+          <span className="text-[0.6875em] text-gray-500">
+            ({currencySymbol}
+            {unitJPY.toLocaleString()} × {inputQuantity})
+          </span>
         </div>
         <div className="flex items-center gap-1 mt-1">
           <span className="text-[0.6875em]">{t.quantity}</span>
@@ -163,7 +175,9 @@ const CartItemRow: React.FC<CartItemRowProps> = ({ item, lang, onCartUpdate }) =
             aria-label={t.DecreasQuantity}
             type="button"
             disabled={inputQuantity <= 1}
-          >–</button>
+          >
+            –
+          </button>
           <input
             type="number"
             className="w-12 px-1 py-0.5 text-center border rounded"
@@ -184,15 +198,28 @@ const CartItemRow: React.FC<CartItemRowProps> = ({ item, lang, onCartUpdate }) =
             onClick={handleIncrease}
             aria-label={t.IncreaseQuantity}
             type="button"
-          >+</button>
+          >
+            +
+          </button>
           <button
             className="ml-2 p-2 hover:bg-gray-100 rounded transition"
             aria-label={t.RemoveFromCart}
             onClick={handleRemove}
             type="button"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-gray-600 hover:text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M6 7h12M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3m2 0v13a2 2 0 01-2 2H8a2 2 0 01-2-2V7h12z" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-6 h-6 text-gray-600 hover:text-red-500"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M6 7h12M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3m2 0v13a2 2 0 01-2 2H8a2 2 0 01-2-2V7h12z"
+              />
             </svg>
           </button>
         </div>
