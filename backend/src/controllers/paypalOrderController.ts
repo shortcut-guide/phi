@@ -21,8 +21,6 @@ function normalizeItems(rawItems: any[]) {
     const qtyNum = Number(it?.quantity ?? it?.count ?? 1);
     const quantity = String(Number.isFinite(qtyNum) && qtyNum > 0 ? Math.floor(qtyNum) : 1);
 
-    console.log(it);
-
     const currency_code = String(
       it?.unit_amount?.currency_code || it?.currency_code || "JPY"
     ).toUpperCase();
