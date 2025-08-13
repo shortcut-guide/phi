@@ -663,6 +663,28 @@ export const messages = {
       deleteError: 'Failed to delete item',
     }
   },
+  paypalSuccess: {
+    ja: {
+      title: "お支払いが完了しました",
+      descWithItems: "お支払いは完了しましたが、カート内にまだ商品が残っています。",
+      descEmpty: "お支払いが完了しました。カートに商品は残っていません。",
+      goCart: "カートへ移動",
+      continue: "買い物を続ける",
+      close: "閉じる",
+      itemsRemain: "残り {count} 件",
+      loading: "読み込み中…"
+    },
+    en: {
+      title: "Payment Completed",
+      descWithItems: "Your payment is complete, but there are still items left in your cart.",
+      descEmpty: "Your payment is complete. Your cart is empty.",
+      goCart: "Go to Cart",
+      continue: "Continue Shopping",
+      close: "Close",
+      itemsRemain: "Remaining {count}",
+      loading: "Loading…"
+    }
+  },
   addressList: {
     ja:{
       title: '配送先一覧',

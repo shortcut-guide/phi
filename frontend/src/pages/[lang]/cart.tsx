@@ -5,7 +5,7 @@ import { messages } from "@/f/config/messageConfig";
 import { withLangMessagesSSR } from "@/f/utils/withLangSSR";
 
 // SSR: ログ＆安全props返却
-export const getServerSideProps = withLangMessagesSSR("index");
+export const getServerSideProps = withLangMessagesSSR("cart");
 
 type Props = {
   lang: string;
