@@ -1,3 +1,4 @@
+// /frontend/src/components/LoginBtn.tsx
 import PaypalLogin from '@/f/components/LoginPaypal';
 
 type Props = {
@@ -6,7 +7,7 @@ type Props = {
 };
 
 const PaypalLoginWrapper = ({ lang, onLoginSuccess }: Props) => {
-  return <PaypalLogin lang={lang} onLoginSuccess={onLoginSuccess} />;
+  return <PaypalLogin lang={lang} onComplete={() => onLoginSuccess} />;
 };
 
 export default PaypalLoginWrapper;
