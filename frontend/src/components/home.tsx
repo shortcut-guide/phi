@@ -16,7 +16,6 @@ const Home = ({ lang }: { lang: string }) => {
   if (router.isFallback) return <div>Loading...</div>;
 
   const isPageRoute = router.query.page !== undefined;
-
   const [items, setItems] = useState<any[]>(initialItems);
   const [currentPage, setCurrentPage] = useState(initialPage || 1);
   const [clientError, setClientError] = useState<string | undefined>(fetchError);
