@@ -30,13 +30,13 @@ const MainNavigation = ({ lang }: { lang: string }) =>{
                 </a>
               </li>
               <li className="h-full">
-                <a href={url.releases} aria-label={t.new} className="h-full border-none hover:bg-gray-100 focus:outline-none focus:bg-gray-200">
-                  <Picture src={asset.new} alt={alt.new} className="w-full h-full object-contain" />
+                <a href={url.messages} aria-label={t.message} className="h-full border-none hover:bg-gray-100 focus:outline-none focus:bg-gray-200">
+                  <Picture src={asset.message} alt={alt.message} className="w-full h-full object-contain" />
                 </a>
               </li>
               <li className="h-full">
-                <a href={url.messages} aria-label={t.message} className="h-full border-none hover:bg-gray-100 focus:outline-none focus:bg-gray-200">
-                  <Picture src={asset.message} alt={alt.message} className="w-full h-full object-contain" />
+                <a href={url.cart} aria-label={t.cart} className="h-full border-none hover:bg-gray-100 focus:outline-none focus:bg-gray-200">
+                  <Picture src={asset.cart} alt={alt.cart} className="w-full h-full object-contain" />
                 </a>
               </li>
               <li className="h-full">

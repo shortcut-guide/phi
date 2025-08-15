@@ -3,8 +3,8 @@ export const links = {
     logo: "/assets/phi_logo",
     searchingBar: "/assets/searching-bar",
     sale: "/assets/sale",
-    new: "/assets/new",
     message: "/assets/message",
+    cart: "/assets/cart",
     option: "/assets/option"
   },
   url:{
@@ -21,6 +21,7 @@ export const links = {
       new: "/settings/address/new"
     },
     product: "/product/",
+    cart: "/cart",
     edit: "/edit",
     api: {
       products: "/products/",
