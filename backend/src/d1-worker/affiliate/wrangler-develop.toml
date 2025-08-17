@@ -1,0 +1,10 @@
+name = "affiliate"
+compatibility_date = "2025-08-17"
+compatibility_flags = ["nodejs_compat"]
+main = "../worker.ts"
+account_id = "1fea45390402b8410d4e794d724e1e2c"
+
+[[d1_databases]]
+binding = "AFFILIATE_DB"
+database_name = "affiliate"
+database_id = "7a2d98db-06ec-46b7-98fa-7f12f0b3e655"

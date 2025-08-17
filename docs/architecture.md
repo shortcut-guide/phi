@@ -3168,3 +3168,51 @@ backend/
     ]
   }
 }
+```
+
+# affillate links
+ D1トラッキングDB
+
+作成したファイル
+
+SQL（ローカル参照用）
+create_table_affiliate_clicks.sql
+Cloudflare D1 初期化（Worker内）
+create_tables.ts（D1でテーブルとインデックスを作成する関数）
+seed.ts（サンプルデータ、任意）
+wrangler-develop.toml（develop用のwrangler設定（binding名: AFFILIATE_DB））
+Worker拡張
+worker.ts に
+Env に AFFILIATE_DB?: D1Database を追加
+管理用エンドポイント /affiliate/init（POST/PUT）と /affiliate/health を追加（テーブル作成・ヘルスチェック用）
+
+## 既存APIとの関連
+Express側の affiliate ルート／コントローラは既に追加済み（クリックログのログ出力まで）。必要ならここでD1へINSERTする実装を追加できます。
+
+## 使い方（手順）
+
+Cloudflare D1 データベース作成
+
+Cloudflare ダッシュボードで新規 D1 データベース（例: affiliate）を作成してください。
+作成後に得られる database_id を控える。
+wrangler設定（開発／本番）
+
+wrangler-develop.toml の database_id コメントを外して production/staging の ID を設定するか、
+既存プロジェクトのルート wrangler.toml に AFFILIATE_DB バインディングを追加してください（binding 名は AFFILIATE_DB）。
+デプロイ／ローカル初期化
+
+Worker をデプロイ（or ローカル実行）したら、D1バインディングが有効な Worker の URL に対して:
+POST /affiliate/init を実行すると createAffiliateTables が実行され、テーブルとインデックスが作成されます。
+GET /affiliate/health でバインディング有無を確認できます。
+注意: 現在 Worker はリクエスト先頭で Authorization(Bearer) を期待する処理が入っています。管理用途で init 実行する場合は Bearer トークンを付与するか、Worker 側で init の auth を緩める必要があります（必要であれば対応します）。
+クリック記録連携（選択）
+
+現状 Express の saveAffiliateClick はクリックをログ出力してリダイレクトするのみです。クリックをD1へ保存する方法は主に2つあります：
+Express側から Cloudflare D1 REST API（または管理Workerの専用エンドポイント）を呼んでINSERTする
+クリックを管理Workerへ POST し、Worker内で env.AFFILIATE_DB.prepare(...).run() して保存する
+どちらにするか指示ください。どちらでも実装します（セキュリティ・認証の設計相談可）。
+
+## 注意点 / 推奨
+initエンドポイントは保護必須（認証/管理者のみ）。現状のWorker要求認証のままなら問題ありませんが、init公開は避けてください。
+本番では Cloudflare D1 の database_id を wrangler.toml に確実に設定してください。
+購入照合（Amazonレポートとの突合）はバッチ処理（cron）で別途実装する必要があります。

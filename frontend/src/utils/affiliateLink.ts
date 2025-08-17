@@ -62,21 +62,47 @@ function matchShopDefinition(url: string, shopList: ShopList): MatchResult | nul
 }
 
 /**
+ * Amazon URLからASINを抽出
+ */
+function extractAmazonASIN(u: URL): string | null {
+  // common patterns: /dp/ASIN, /gp/product/ASIN, ?ASIN=...
+  const dp = u.pathname.match(/\/dp\/([A-Z0-9]{10})/i);
+  if (dp) return dp[1];
+  const gp = u.pathname.match(/\/gp\/product\/([A-Z0-9]{10})/i);
+  if (gp) return gp[1];
+  const q = u.searchParams.get('ASIN') || u.searchParams.get('asin');
+  if (q && /^[A-Z0-9]{10}$/i.test(q)) return q;
+  // sometimes the ASIN is the last path segment
+  const last = u.pathname.split('/').filter(Boolean).pop();
+  if (last && /^[A-Z0-9]{10}$/i.test(last)) return last;
+  return null;
+}
+
+/**
  * アフィリエイトリンク変換
- * - shopListの定義に従い、該当ドメインならパラメータ付与
- * - enabled=falseや該当なしは元URL
+ * - Amazonは直接tagを付与せず、当サービスのリダイレクトAPI(/api/affiliate/redirect)を経由してクリックを記録
+ * - その他は従来通りtagParam/tagValueを付与して返却
  */
 export async function toAffiliateLink(url: string): Promise<string> {
   const shopList = await fetchShopList();
   const match = matchShopDefinition(url, shopList);
   if (!match) return url;
 
-  const { shop } = match;
+  const { shop, lang, shopName } = match;
   if (!shop.affiliate?.enabled || !shop.affiliate.tagParam || !shop.affiliate.tagValue) {
     return url;
   }
   try {
     const u = new URL(url);
+    // Amazon系サイトは当サーバのリダイレクトAPI経由にする
+    if (u.hostname.includes('amazon')) {
+      const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000';
+      const asin = extractAmazonASIN(u);
+      const redirectUrl = `${apiUrl}/api/affiliate/redirect?target=${encodeURIComponent(url)}&lang=${encodeURIComponent(lang)}&shop=${encodeURIComponent(shopName)}${asin ? `&asin=${encodeURIComponent(asin)}` : ''}`;
+      return redirectUrl;
+    }
+
+    // それ以外は既存のtag付与を行う
     u.searchParams.set(shop.affiliate.tagParam, shop.affiliate.tagValue);
     return u.toString();
   } catch {

@@ -1,6 +1,7 @@
 import type { ExecutionContext } from '@cloudflare/workers-types';
 import type { D1Database } from '@cloudflare/workers-types';
 import { getDriveFile } from "@/b/services/drive";
+import { createAffiliateTables } from "@/b/d1-worker/affiliate/create_tables";
 
 export default {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
@@ -121,6 +122,21 @@ export default {
       }
     }
 
+    // --- Affiliate D1 初期化（管理用エンドポイント、保護推奨） ---
+    if ((request.method === "POST" || request.method === "PUT") && url.pathname === "/affiliate/init") {
+      if (!env.AFFILIATE_DB) return json({ error: "AFFILIATE_DB binding not configured" }, 500);
+      try {
+        await createAffiliateTables(env.AFFILIATE_DB);
+        return json({ status: "ok" });
+      } catch (e) {
+        return json({ error: String(e) }, 500);
+      }
+    }
+
+    if (request.method === "GET" && url.pathname === "/affiliate/health") {
+      return json({ ok: !!env.AFFILIATE_DB });
+    }
+
     return new Response("Not found", { status: 404 });
   }
 };
@@ -145,4 +161,5 @@ interface Env {
   PROFILE_DB: D1Database;
   SEARCHLOGS_DB: D1Database;
   DRIVE_KV: KVNamespace;
+  AFFILIATE_DB?: D1Database; // optional binding for affiliate tracking
 }

@@ -6,6 +6,7 @@ import { PaypalRoutes } from "@/b/routes/auth";
 import paypalOrderRoute from "@/b/routes/paypalOrderRoute";
 import faqRouter from "@/b/routes/faq";
 import shopListRouter from "@/b/routes/shoplist";
+import affiliateRouter from "@/b/routes/affiliate";
 
 const app = express();
 const PORT = 3002;
@@ -39,6 +40,7 @@ app.use("/auth", PaypalRoutes);
 app.use("/api/paypal/create-order", paypalOrderRoute);
 app.use("/api/faq", faqRouter);
 app.use("/api/shoplist", shopListRouter);
+app.use("/api/affiliate", affiliateRouter);
 
 // csurfの初期化（cookieにトークン保存）
 const csrfProtection = csrf({ cookie: true });
