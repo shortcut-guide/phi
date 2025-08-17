@@ -15,11 +15,13 @@ function buildTrackingUrl(target: string, shopName: string) {
     // shops は言語に紐づくため全言語から探す
     for (const lang of Object.keys(shops)) {
       const list: any = (shops as any)[lang];
-      if (list && list[shopName] && list[shopName].affiliate && list[shopName].affiliate.enabled) {
-        const cfg = list[shopName].affiliate;
-        if (cfg.tagParam && cfg.tagValue) {
-          u.searchParams.set(cfg.tagParam, cfg.tagValue);
-          return u.toString();
+      for (const [key, val] of Object.entries(list)) {
+        if (key.toLowerCase() === shopName.toLowerCase() && val?.affiliate?.enabled) {
+          const cfg = (val as any).affiliate;
+          if (cfg.tagParam && cfg.tagValue) {
+            u.searchParams.set(cfg.tagParam, cfg.tagValue);
+            return u.toString();
+          }
         }
       }
     }

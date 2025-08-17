@@ -3216,3 +3216,43 @@ Express側から Cloudflare D1 REST API（または管理Workerの専用エン�
 initエンドポイントは保護必須（認証/管理者のみ）。現状のWorker要求認証のままなら問題ありませんが、init公開は避けてください。
 本番では Cloudflare D1 の database_id を wrangler.toml に確実に設定してください。
 購入照合（Amazonレポートとの突合）はバッチ処理（cron）で別途実装する必要があります。
+
+## テスト
+### 例: ASIN を付けた amazon URL を target に渡す
+```
+curl -i "http://localhost:3000/api/affiliate/redirect?target=https%3A%2F%2Fwww.amazon.co.jp%2Fdp%2FB08N5WRWNW&lang=ja&shop=amazon&asin=B08N5WRWNW"
+```
+
+### 実際にリダイレクト先まで追う（最終遷移先を確認）
+```
+curl -L -v "http://localhost:3000/api/affiliate/redirect?target=https%3A%2F%2Fwww.amazon.co.jp%2Fdp%2FB08N5WRWNW&lang=ja&shop=amazon&asin=B08N5WRWNW"
+```
+
+## ユーザー情報（クッキーや JWT）を付けてテスト
+```
+curl -L -v --cookie "jwt=YOUR_JWT_HERE" "http://localhost:3000/api/affiliate/redirect?target=<ENCODED_TARGET>&lang=ja&shop=amazon&asin=B08N5WRWNW"
+```
+
+## Amazon URL バリエーション（ASIN 抽出テスト）
+### パターン例：
+https://www.amazon.co.jp/dp/ASIN
+https://www.amazon.co.jp/gp/product/ASIN
+URL クエリに ASIN
+上記それぞれを target に入れ、ASIN が渡される/ログに出るか確認する。
+フロント → サーバ 経路での E2E
+フロント側（toAffiliateLink）を動かして、生成されたリンクをクリックし、ブラウザの Network タブで /api/affiliate/redirect リクエストとレスポンス（Location）を確認する。
+これでフロントの ASIN 抽出／リダイレクト生成が正しいかも同時に確認できる。
+
+## D1（または worker 側）との連携確認（必要なら）
+Worker 側でテーブル作成 API を用意している場合（例: /affiliate/init）、先に init を実行しておく：
+クリックが DB に書き込まれる実装を行っているなら、リクエスト実行後に DB レコードを確認（Cloudflare D1 コンソール、または worker の確認エンドポイント）。
+
+## 自動テスト（ユニット / 統合）
+コントローラ単位のテスト: affiliateController.saveAffiliateClick を Jest でモック req/res を使って呼び出し、res.redirect が期待通りの URL を受け取るか assert。
+E2E: Playwright / Cypress 等でリンククリックから最終遷移まで確認する。
+
+## チェックポイント（期待される挙動）
+Amazon リンクは当エンドポイントに来る（target パラメータ）。
+レスポンスは 302 で、Location ヘッダがトラッキングタグ付きの Amazon URL（あるいは shopList に応じた URL）を返す。
+リクエストに ASIN があればコントローラ側で取得できる（ログや DB に残る設計ならそこで確認）。
+JWT / クッキーを付けると、ユーザー識別情報がログ/DBに保存される（実装次第）。
