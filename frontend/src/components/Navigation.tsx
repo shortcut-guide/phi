@@ -25,8 +25,8 @@ const MainNavigation = ({ lang }: { lang: string }) =>{
                 </a>
               </li>
               <li className="h-full">
-                <a href={url.sale} aria-label={t.sale} className="h-full border-none hover:bg-gray-100 focus:outline-none focus:bg-gray-200">
-                  <Picture src={asset.sale} alt={alt.sale} className="w-full h-full object-contain" />
+                <a href={url.cart} aria-label={t.cart} className="h-full border-none hover:bg-gray-100 focus:outline-none focus:bg-gray-200">
+                  <Picture src={asset.cart} alt={alt.cart} className="w-full h-full object-contain" />
                 </a>
               </li>
               <li className="h-full">
@@ -35,8 +35,8 @@ const MainNavigation = ({ lang }: { lang: string }) =>{
                 </a>
               </li>
               <li className="h-full">
-                <a href={url.cart} aria-label={t.cart} className="h-full border-none hover:bg-gray-100 focus:outline-none focus:bg-gray-200">
-                  <Picture src={asset.cart} alt={alt.cart} className="w-full h-full object-contain" />
+                <a href={url.sale} aria-label={t.sale} className="h-full border-none hover:bg-gray-100 focus:outline-none focus:bg-gray-200">
+                  <Picture src={asset.sale} alt={alt.sale} className="w-full h-full object-contain" />
                 </a>
               </li>
               <li className="h-full">
