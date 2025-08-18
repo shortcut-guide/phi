@@ -548,6 +548,16 @@ export const messages = {
       loadPayment:"Loading payment methods..."
     }
   },
+  cartShopSection:{
+    ja: {
+      shopetc: "その他",
+      noncart: "カートに商品がありません",
+    },
+    en: {
+      shopetc: "Others",
+      noncart: "Your cart is empty",
+    }
+  },
   cartItem:{
     ja:{
       variation: "バリエーション",
