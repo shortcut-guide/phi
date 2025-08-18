@@ -134,7 +134,7 @@ const CartItemRow: React.FC<CartItemRowProps> = ({ item, lang, onCartUpdate }) =
   };
 
   return (
-    <div className="flex gap-3 py-4 border-t last:border-none">
+    <div className="flex gap-3 pb-4 border-t last:border-none">
       {images.length > 0 && (
         <img
           src={images[0]}
