@@ -70,9 +70,6 @@ const CartShopAction: React.FC<Props> = ({ items, lang }) => {
   }
 
   const shopNames = getShopNames(items).filter(Boolean);
-  const uniqueShopNames = Array.from(new Set(shopNames));
-  const groupedItems = groupItemsByShop(items);
-
   // --- Platform/ShopConfig helper functions ---
   const getPlatformFromItem = (it: any): string => {
     return (
@@ -98,89 +95,40 @@ const CartShopAction: React.FC<Props> = ({ items, lang }) => {
     return undefined;
   };
 
-  // ショップごとのpayment判定（platform→shopConfig.payment で判定）
-  const paymentMap: Record<string, boolean> = {};
-  uniqueShopNames.forEach((shopName) => {
-    const itemsOfShop = groupedItems[shopName] || [];
-    const platform = itemsOfShop.length ? getPlatformFromItem(itemsOfShop[0]) : "";
-    const shopConfig = resolveShopConfigByPlatform(platform);
-    paymentMap[shopName] = !!(shopConfig && typeof shopConfig.payment === "boolean" ? shopConfig.payment : false);
-  });
+  // items はこのコンポーネントに渡されたショップ単位の配列である想定
+  const firstItem = (items && items.length > 0) ? items[0] : null;
+  const shopName = firstItem?.ec_data?.shop?.name || firstItem?.products?.ec_data?.shop?.name || firstItem?.shop?.name || "";
+  const platform = firstItem ? getPlatformFromItem(firstItem) : "";
+  const platformLabel = platform ? platform.charAt(0).toUpperCase() + platform.slice(1).toLowerCase() : shopName;
+  const shopConfig = resolveShopConfigByPlatform(platform);
+  const isPayPal = !!(shopConfig && typeof shopConfig.payment === "boolean" ? shopConfig.payment : false);
+  const affiliateUrl = affiliateUrls[0] || "#";
 
-  // PayPal決済用の商品
-  const paypalItems: CartItem[] = [];
-  uniqueShopNames.forEach((shopName) => {
-    if (paymentMap[shopName]) {
-      paypalItems.push(...(groupedItems[shopName] || []));
-    }
-  });
-
-  // アフィリエイト（payment:false）商品ごとに
-  const affiliateItems: {
-    item: CartItem;
-    idx: number;
-    shopName: string;
-    url: string;
-  }[] = [];
-  uniqueShopNames.forEach((shopName) => {
-    if (!paymentMap[shopName]) {
-      (groupedItems[shopName] || []).forEach((item, i) => {
-        const affiliateUrl = affiliateUrls[items.indexOf(item)] || "#";
-        affiliateItems.push({ item, idx: i, shopName, url: affiliateUrl });
-      });
-    }
-  });
-
-  // グループ単位でアクションボタンを表示（ショップごと）
   return (
-    <div className="mt-4 flex flex-col gap-6">
-      {uniqueShopNames.map((shopName) => {
-        const itemsOfShop = groupedItems[shopName] || [];
-        if (!itemsOfShop.length) return null;
-        const platform = getPlatformFromItem(itemsOfShop[0]) || "";
-        const platformLabel = platform
-          ? platform.charAt(0).toUpperCase() + platform.slice(1).toLowerCase()
-          : shopName;
-        const isPayPal = paymentMap[shopName];
-        const affiliateUrl = affiliateUrls[items.indexOf(itemsOfShop[0])] || "#";
+    <div className="mt-0">
+      <div className="shadow-sm">
+        <div className="flex items-center">
+          <div className="text-[0.6875em] font-semibold">{platformLabel}</div>
+          <div className="text-[0.6875em] text-gray-500 ml-2">{shopName}</div>
+        </div>
 
-        return (
-          <div key={shopName} className="border p-4 rounded bg-white shadow-sm">
-            <div className="flex items-center justify-between">
-              <div className="text-lg font-semibold">{platformLabel}</div>
-              <div className="text-sm text-gray-500">{shopName}</div>
-            </div>
-
-            <div className="mt-3 space-y-2">
-              {itemsOfShop.map((it, idx) => (
-                <div key={idx} className="text-sm text-gray-700">
-                  {it?.products?.ec_data?.product?.title ||
-                    it?.ec_data?.product?.title ||
-                    it?.title ||
-                    `Item ${idx + 1}`}
-                </div>
-              ))}
-            </div>
-
-            <div className="mt-4">
-              {isPayPal ? (
-                <PaypalButton items={itemsOfShop} lang={lang} />
-              ) : (
-                <a
-                  href={affiliateUrl}
-                  className="px-4 py-2 bg-orange-500 text-white rounded font-bold inline-block"
-                  target="_blank"
-                  rel="noopener"
-                >
-                  {typeof t.affiliateCheckout === "function"
-                    ? t.affiliateCheckout(platformLabel)
-                    : `${platformLabel}で購入`}
-                </a>
-              )}
-            </div>
-          </div>
-        );
-      })}
+        <div className="mt-2">
+          {isPayPal ? (
+            <PaypalButton items={items} lang={lang} />
+          ) : (
+            <a
+              href={affiliateUrl}
+              className="block w-full bg-orange-500 hover:bg-blue-900 text-white font-bold rounded py-2 text-center text-base tracking-wide transition"
+              target="_blank"
+              rel="noopener"
+            >
+              {typeof t.affiliateCheckout === "function"
+                ? t.affiliateCheckout(platformLabel)
+                : t.shopBuy(platformLabel)}
+            </a>
+          )}
+        </div>
+      </div>
     </div>
   );
 

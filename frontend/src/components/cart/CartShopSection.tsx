@@ -9,14 +9,50 @@ type Props = {
 };
 
 const CartShopSection: React.FC<Props> = ({ items, lang, onCartUpdate }) => {
+  // グループ化ユーティリティ
+  const getShopName = (item: any) =>
+    item?.ec_data?.shop?.name || item?.products?.ec_data?.shop?.name || item?.shop?.name || "";
+
+  const groupItemsByShop = (cartItems: any[]) => {
+    const map: Record<string, any[]> = {};
+    (cartItems || []).forEach((item) => {
+      const shopName = getShopName(item) || "その他";
+      if (!map[shopName]) map[shopName] = [];
+      map[shopName].push(item);
+    });
+    return map;
+  };
+
+  const grouped = groupItemsByShop(items || []);
+  const shopNames = Object.keys(grouped);
+
   return (
     <section className="mb-8">
-      <div className="divide-y">
-        {items.map(item => (
-          <CartItemRow item={item} lang={lang} onCartUpdate={onCartUpdate} />
-        ))}
+      <div className="space-y-6">
+        {shopNames.length === 0 ? (
+          <div className="text-gray-500">カートに商品がありません</div>
+        ) : (
+          shopNames.map((shopName) => (
+            <div key={shopName} className="border rounded bg-white p-4">
+
+              <div className="divide-y">
+                {grouped[shopName].map((item: any, idx: number) => (
+                  <CartItemRow
+                    key={item?.id ?? idx}
+                    item={item}
+                    lang={lang}
+                    onCartUpdate={onCartUpdate}
+                  />
+                ))}
+              </div>
+
+              <div className="m-0">
+                <CartShopAction items={grouped[shopName]} lang={lang} />
+              </div>
+            </div>
+          ))
+        )}
       </div>
-      <CartShopAction items={items} lang={lang} />
     </section>
   );
 };

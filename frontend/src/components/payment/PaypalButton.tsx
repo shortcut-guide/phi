@@ -101,7 +101,7 @@ const PaypalButton: React.FC<PaypalButtonProps> = ({ items, lang, onSuccess, onE
   return (
     <button
       type="button"
-      className="w-full bg-blue-700 hover:bg-blue-900 text-white font-bold rounded-xl py-2 text-base tracking-wide transition"
+      className="w-full bg-blue-700 hover:bg-blue-900 text-white font-bold rounded py-2 text-base tracking-wide transition"
       onClick={handlePay}
     >
       {t.paypal}

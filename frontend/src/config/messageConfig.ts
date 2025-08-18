@@ -539,10 +539,12 @@ export const messages = {
   cartShopAction:{
     ja: {
       addcart: (shop: string) => `${shop}のカートに入れる`,
+      shopBuy: (platformLabel: string) => `${platformLabel}で購入する`,
       loadPayment:"決済方法を取得中..."
     },
     en: {
       addcart: (shop: string) => `Add to ${shop} Cart`,
+      shopBuy: (platformLabel: string) => `Buy with ${platformLabel}`,
       loadPayment:"Loading payment methods..."
     }
   },
