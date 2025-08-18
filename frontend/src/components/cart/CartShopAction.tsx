@@ -65,7 +65,7 @@ const CartShopAction: React.FC<Props> = ({ items, lang }) => {
 
   if (!shopList) {
     return (
-      <div className="mt-4 text-gray-500 font-bold">決済方法を取得中...</div>
+      <div className="mt-4 text-gray-500 font-bold">{t.loadPayment}</div>
     );
   }
 
@@ -131,30 +131,59 @@ const CartShopAction: React.FC<Props> = ({ items, lang }) => {
     }
   });
 
+  // グループ単位でアクションボタンを表示（ショップごと）
   return (
-    <div className="mt-4 flex flex-col gap-4">
-      {/* PayPal決済 */}
-      {paypalItems.length > 0 && (
-        <div>
-          <PaypalButton items={paypalItems} lang={lang} />
-        </div>
-      )}
-      {/* アフィリエイトリンク */}
-      {affiliateItems.map(({ item, idx, shopName, url }) => (
-        <a
-          key={`${shopName}-${idx}`}
-          href={url}
-          className="px-4 py-2 bg-orange-500 text-white rounded font-bold block"
-          target="_blank"
-          rel="noopener"
-        >
-          {typeof t.affiliateCheckout === "function"
-            ? t.affiliateCheckout(shopName)
-            : `${shopName}で購入`}
-        </a>
-      ))}
+    <div className="mt-4 flex flex-col gap-6">
+      {uniqueShopNames.map((shopName) => {
+        const itemsOfShop = groupedItems[shopName] || [];
+        if (!itemsOfShop.length) return null;
+        const platform = getPlatformFromItem(itemsOfShop[0]) || "";
+        const platformLabel = platform
+          ? platform.charAt(0).toUpperCase() + platform.slice(1).toLowerCase()
+          : shopName;
+        const isPayPal = paymentMap[shopName];
+        const affiliateUrl = affiliateUrls[items.indexOf(itemsOfShop[0])] || "#";
+
+        return (
+          <div key={shopName} className="border p-4 rounded bg-white shadow-sm">
+            <div className="flex items-center justify-between">
+              <div className="text-lg font-semibold">{platformLabel}</div>
+              <div className="text-sm text-gray-500">{shopName}</div>
+            </div>
+
+            <div className="mt-3 space-y-2">
+              {itemsOfShop.map((it, idx) => (
+                <div key={idx} className="text-sm text-gray-700">
+                  {it?.products?.ec_data?.product?.title ||
+                    it?.ec_data?.product?.title ||
+                    it?.title ||
+                    `Item ${idx + 1}`}
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-4">
+              {isPayPal ? (
+                <PaypalButton items={itemsOfShop} lang={lang} />
+              ) : (
+                <a
+                  href={affiliateUrl}
+                  className="px-4 py-2 bg-orange-500 text-white rounded font-bold inline-block"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  {typeof t.affiliateCheckout === "function"
+                    ? t.affiliateCheckout(platformLabel)
+                    : `${platformLabel}で購入`}
+                </a>
+              )}
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
+
 };
 
 export default CartShopAction;

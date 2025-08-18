@@ -539,9 +539,11 @@ export const messages = {
   cartShopAction:{
     ja: {
       addcart: (shop: string) => `${shop}のカートに入れる`,
+      loadPayment:"決済方法を取得中..."
     },
     en: {
       addcart: (shop: string) => `Add to ${shop} Cart`,
+      loadPayment:"Loading payment methods..."
     }
   },
   cartItem:{
