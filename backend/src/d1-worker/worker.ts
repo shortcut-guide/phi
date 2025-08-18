@@ -133,6 +133,33 @@ export default {
       }
     }
 
+    // --- Affiliate クリック保存エンドポイント ---
+    if (request.method === "POST" && url.pathname === "/affiliate/click") {
+      if (!env.AFFILIATE_DB) return json({ error: "AFFILIATE_DB binding not configured" }, 500);
+      try {
+        const body = await request.json() as any;
+        const id = body.id || crypto.randomUUID();
+        const user_id = body.user_id || null;
+        const asin = body.asin || null;
+        const shop = body.shop || null;
+        const tracking_id = body.tracking_id || null;
+        const target_url = body.target_url || null;
+        const referer = body.referer || null;
+        const ip = body.ip || null;
+        const user_agent = body.user_agent || null;
+        const meta = body.meta ? JSON.stringify(body.meta) : null;
+
+        await env.AFFILIATE_DB.prepare(
+          `INSERT INTO affiliate_clicks (id, user_id, asin, shop, tracking_id, target_url, referer, ip, user_agent, meta)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+        ).bind(id, user_id, asin, shop, tracking_id, target_url, referer, ip, user_agent, meta).run();
+
+        return json({ status: "ok", id });
+      } catch (e) {
+        return json({ error: String(e) }, 500);
+      }
+    }
+
     if (request.method === "GET" && url.pathname === "/affiliate/health") {
       return json({ ok: !!env.AFFILIATE_DB });
     }
