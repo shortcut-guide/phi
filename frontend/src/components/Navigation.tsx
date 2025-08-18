@@ -24,21 +24,27 @@ const MainNavigation = ({ lang }: { lang: string }) =>{
                   <Picture src={asset.search} alt={alt.search} className="w-full h-full object-contain" />
                 </a>
               </li>
-              <li className="h-full">
-                <a href={url.sale} aria-label={t.sale} className="h-full border-none hover:bg-gray-100 focus:outline-none focus:bg-gray-200">
-                  <Picture src={asset.sale} alt={alt.sale} className="w-full h-full object-contain" />
-                </a>
-              </li>
-              <li className="h-full">
-                <a href={url.messages} aria-label={t.message} className="h-full border-none hover:bg-gray-100 focus:outline-none focus:bg-gray-200">
-                  <Picture src={asset.message} alt={alt.message} className="w-full h-full object-contain" />
-                </a>
-              </li>
+
+              {/* cart を sale の位置に移動（入れ替え） */}
               <li className="h-full">
                 <a href={url.cart} aria-label={t.cart} className="h-full border-none hover:bg-gray-100 focus:outline-none focus:bg-gray-200">
                   <Picture src={asset.cart} alt={alt.cart} className="w-full h-full object-contain" />
                 </a>
               </li>
+
+              <li className="h-full">
+                <a href={url.messages} aria-label={t.message} className="h-full border-none hover:bg-gray-100 focus:outline-none focus:bg-gray-200">
+                  <Picture src={asset.message} alt={alt.message} className="w-full h-full object-contain" />
+                </a>
+              </li>
+
+              {/* sale は元の cart の位置へ */}
+              <li className="h-full">
+                <a href={url.sale} aria-label={t.sale} className="h-full border-none hover:bg-gray-100 focus:outline-none focus:bg-gray-200">
+                  <Picture src={asset.sale} alt={alt.sale} className="w-full h-full object-contain" />
+                </a>
+              </li>
+
               <li className="h-full">
                 <a href={url.settings} aria-label={t.option} className="h-full border-none hover:bg-gray-100 focus:outline-none focus:bg-gray-200">
                   <Picture src={asset.option} alt={alt.option} className="w-full h-full object-contain" />
