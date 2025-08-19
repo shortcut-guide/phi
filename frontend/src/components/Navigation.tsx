@@ -24,8 +24,6 @@ const MainNavigation = ({ lang }: { lang: string }) =>{
                   <Picture src={asset.search} alt={alt.search} className="w-full h-full object-contain" />
                 </a>
               </li>
-
-              {/* cart を sale の位置に移動（入れ替え） */}
               <li className="h-full">
                 <a href={url.cart} aria-label={t.cart} className="h-full border-none hover:bg-gray-100 focus:outline-none focus:bg-gray-200">
                   <Picture src={asset.cart} alt={alt.cart} className="w-full h-full object-contain" />
