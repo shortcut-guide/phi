@@ -1,18 +1,35 @@
+// frontend/src/components/search/SearchBar.tsx
+import { useState, useEffect } from 'react';
+import { withLangMessagesSSR } from "@/f/utils/withLangSSR";
+import { messages } from "@/f/config/messageConfig";
+import { getLangObj } from "@/f/utils/getLangObj";
+
 // 検索APIのレスポンス型定義
+type Product = {
+  id: string | number;
+  name: string;
+  platform?: string;
+  price?: number;
+  currency?: string;
+  country?: string;
+  ec_data?: any;
+};
+
 type SearchApiResponse = {
-  results: string[];
+  results: Product[];
   suggestions: string[];
 };
 
+export const getServerSideProps = withLangMessagesSSR("index");
+
 // 検索API呼び出し関数
 // API例: /api/search?query=foo
-// レスポンス例: { results: ["商品A", "商品B"], suggestions: ["商品C"] }
+// レスポンス例: { results: [{id,name,...}, ...], suggestions: ["サジェスト1"] }
 export async function fetchSearchResults(query: string): Promise<SearchApiResponse> {
   try {
     const res = await fetch(`/api/search?query=${encodeURIComponent(query)}`);
     if (!res.ok) throw new Error('API error');
     const data = await res.json();
-    // 結果が期待通りでなければ空配列返す
     if (
       typeof data === "object" &&
       Array.isArray(data.results) &&
@@ -20,22 +37,19 @@ export async function fetchSearchResults(query: string): Promise<SearchApiRespon
     ) {
       return data as SearchApiResponse;
     }
-    // 型が合わない場合は空配列
     return { results: [], suggestions: [] };
   } catch {
     return { results: [], suggestions: [] };
   }
 }
-// frontend/src/components/search/SearchBar.tsx
-import { useState, useEffect } from 'react';
-import { withLangMessagesSSR } from "@/f/utils/withLangSSR";
-export const getServerSideProps = withLangMessagesSSR("index");
 
-export function SearchBar() {
+export function SearchBar({ lang }: { lang: string }) {
+  const t = getLangObj(messages.nav, lang);
   const [input, setInput] = useState('');
   const [suggestions, setSuggestions] = useState<string[]>([]);
-  const [results, setResults] = useState<string[]>([]);
+  const [results, setResults] = useState<Product[]>([]);
   const [logs, setLogs] = useState<string[]>([]);
+  const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL;  
 
   useEffect(() => {
     const fetchLogs = async () => {
@@ -66,8 +80,6 @@ export function SearchBar() {
       if ("suggestions" in res && Array.isArray(res.suggestions)) {
         setSuggestions(res.suggestions);
       }
-    } else if (Array.isArray(res)) {
-      setResults(res);
     } else {
       setResults([]);
     }
@@ -82,8 +94,6 @@ export function SearchBar() {
       if ("suggestions" in res && Array.isArray(res.suggestions)) {
         setSuggestions(res.suggestions);
       }
-    } else if (Array.isArray(res)) {
-      setResults(res);
     } else {
       setResults([]);
     }
@@ -129,7 +139,7 @@ export function SearchBar() {
           <ul className="list-disc list-inside bg-white border rounded shadow p-2 max-h-64 overflow-auto">
             {results.map((result, idx) => (
               <li key={idx} className="text-sm text-gray-800">
-                {result}
+                {result.name}
               </li>
             ))}
           </ul>

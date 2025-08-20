@@ -26,7 +26,7 @@ const Home = ({ lang }: { lang: string }) => {
 
   const loadPage = async (p: number, overwrite = false) => {
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000';
+      const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
       const res = await fetchWithTimeout(`${apiUrl}/api/products`, 5000);
       let more;
       if (!res.ok) {

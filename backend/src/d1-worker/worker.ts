@@ -29,19 +29,96 @@ export default {
       ).all();
       return json(results);
     }
-    if (request.method === "POST" && url.pathname === "/products") {
-      const body = await request.json() as {
-        id: string;
-        name: string;
-        platform: string;
-        price: number;
-        ec_data: string;
+
+    // --- Search API ---
+    // GET /search?query=foo
+    if (request.method === "GET" && url.pathname === "/search") {
+      const q = (url.searchParams.get("query") || "").trim();
+      const qLower = q.toLowerCase();
+      if (!qLower) return json({ results: [], suggestions: [] });
+
+      // helper to safe parse ec_data
+      const safeParse = (v: any) => {
+        if (!v) return v;
+        try {
+          return typeof v === 'string' ? JSON.parse(v) : v;
+        } catch (e) {
+          return v;
+        }
       };
-      const { id, name, platform, price, ec_data } = body;
-      await env.PRODUCTS_DB.prepare(
-        `INSERT INTO products (id, name, platform, price, ec_data) VALUES (?, ?, ?, ?, ?, ?, ?)`
-      ).bind(id, name, platform, price, ec_data).run();
-      return json({ status: "ok" });
+
+      // try FTS5-based search first for speed; if fails, fallback to LIKE
+      try {
+        // build FTS query (prefix search)
+        const tokens = qLower.split(/\s+/).filter(Boolean).map(t => `${t}*`).join(' ');
+        const { results } = await env.PRODUCTS_DB.prepare(
+          `SELECT p.id, p.name, p.platform, p.price, p.currency, p.country, p.ec_data, p.created_at, p.updated_at
+           FROM products_fts fts JOIN products p ON fts.rowid = p.rowid
+           WHERE products_fts MATCH ?
+           ORDER BY p.updated_at DESC
+           LIMIT 100`
+        ).bind(tokens).all();
+
+        const products = results.map((r: any) => ({
+          ...r,
+          ec_data: safeParse(r.ec_data)
+        }));
+
+        // suggestions: collect ec_data.search_terms and name tokens that include query
+        const suggestionsSet = new Set<string>();
+        for (const row of products) {
+          try {
+            const ec = row.ec_data;
+            if (ec && Array.isArray(ec.search_terms)) {
+              for (const s of ec.search_terms) {
+                if (typeof s === 'string' && s.toLowerCase().includes(qLower)) suggestionsSet.add(s);
+              }
+            }
+            if (row.name && typeof row.name === 'string') {
+              row.name.split(/[\s、。,\-\/&_]+/).forEach((tok: string) => {
+                if (tok && tok.toLowerCase().includes(qLower)) suggestionsSet.add(tok);
+              });
+            }
+          } catch (e) {}
+        }
+
+        const suggestions = Array.from(suggestionsSet).slice(0, 20);
+        return json({ results: products, suggestions });
+      } catch (e) {
+        // fallback to LIKE search
+        const like = `%${qLower}%`;
+        const { results } = await env.PRODUCTS_DB.prepare(
+          `SELECT id, name, platform, price, currency, country, ec_data, created_at, updated_at
+           FROM products
+           WHERE lower(name) LIKE ? OR lower(ec_data) LIKE ? OR id = ?
+           ORDER BY updated_at DESC
+           LIMIT 100`
+        ).bind(like, like, q).all();
+
+        const products = results.map((r: any) => ({
+          ...r,
+          ec_data: safeParse(r.ec_data)
+        }));
+
+        const suggestionsSet = new Set<string>();
+        for (const row of products) {
+          try {
+            const ec = row.ec_data;
+            if (ec && Array.isArray(ec.search_terms)) {
+              for (const s of ec.search_terms) {
+                if (typeof s === 'string' && s.toLowerCase().includes(qLower)) suggestionsSet.add(s);
+              }
+            }
+            if (row.name && typeof row.name === 'string') {
+              row.name.split(/[\s、。,\-\/&_]+/).forEach((tok: string) => {
+                if (tok && tok.toLowerCase().includes(qLower)) suggestionsSet.add(tok);
+              });
+            }
+          } catch (e) {}
+        }
+        const suggestions = Array.from(suggestionsSet).slice(0, 20);
+        return json({ results: products, suggestions });
+      }
     }
 
     // --- UserProfile API ---

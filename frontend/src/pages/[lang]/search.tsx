@@ -6,16 +6,17 @@ import fallbackProducts from "@/d/products.json";
 import { MasonryLayout } from "@/f/components/MasonryLayout";
 import { messages } from "@/f/config/messageConfig";
 
+const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 const logProductClick = async (productId: string) => {
   try {
-    await axios.post('/api/log/click', { clicked_product_id: productId });
+    await axios.post(`${apiUrl}/api/log/click`, { clicked_product_id: productId });
   } catch (err) {
     // エラー時は無視
   }
 };
 const logSearchInput = async (keyword: string) => {
   try {
-    await axios.post('/api/log/search-input', { keyword });
+    await axios.post(`${apiUrl}/api/log/search-input`, { keyword });
   } catch (err) {
     // エラー時は無視
   }
@@ -23,7 +24,7 @@ const logSearchInput = async (keyword: string) => {
 
 const logSearchResultClick = async (keyword: string, productId: string) => {
   try {
-    await axios.post('/api/log/search-result-click', { keyword, clicked_product_id: productId });
+    await axios.post(`${apiUrl}/api/log/search-result-click`, { keyword, clicked_product_id: productId });
   } catch (err) {
     // エラー時は無視
   }
@@ -43,7 +44,7 @@ const SearchPage = () => {
 
   useEffect(() => {
     // カテゴリ一覧取得（API失敗時は products.json を利用）
-    axios.get(`/api/search/categories`)
+    axios.get(`${apiUrl}/api/search/categories`)
       .then(res => setCategories(res.data))
       .catch(() => {
         if (Array.isArray(fallbackProducts)) {
@@ -61,10 +62,10 @@ const SearchPage = () => {
       });
 
     // 人気検索ワード取得
-    axios.get(`/api/search/popular`).then(res => setPopularWords(res.data));
+    axios.get(`${apiUrl}/api/search/popular`).then(res => setPopularWords(res.data));
 
     // 注目商品取得
-    axios.get(`/api/products/featured`).then(res => setFeaturedProducts(res.data));
+    axios.get(`${apiUrl}/api/products/featured`).then(res => setFeaturedProducts(res.data));
 
     // 検索履歴取得
     const local = localStorage.getItem("search_history");
@@ -72,7 +73,7 @@ const SearchPage = () => {
   }, []);
 
   const [searchResults, setSearchResults] = useState<any[]>([]);
-  const handleSearch = () => {
+  const handleSearch = async () => {
     if (!keyword.trim()) return;
     logSearchInput(keyword);
 
@@ -80,19 +81,31 @@ const SearchPage = () => {
     setHistory(updatedHistory);
     localStorage.setItem("search_history", JSON.stringify(updatedHistory));
 
-    const lower = keyword.toLowerCase();
+    // API 経由で検索
+    try {
+      const res = await axios.get(`${apiUrl}      sqlite3 backend/data/phis.db "SELECT name, type FROM sqlite_master WHERE type IN ('table','index') ORDER BY type;"/api/search?query=${encodeURIComponent(keyword)}`);
+      if (res.status === 200 && res.data && Array.isArray(res.data.results)) {
+        setSearchResults(res.data.results);
+        return;
+      }
+      // 不正なレスポンスは下でローカルフォールバック
+    } catch (err) {
+      // API エラーはフォールバックへ
+    }
 
-    const results = fallbackProducts.filter((p) => {
+    // フォールバック: ローカル products.json を使ったフィルタリング
+    const lower = keyword.toLowerCase();
+    const results = fallbackProducts.filter((p: any) => {
       const ec: Record<string, any> = p.ec_data || {};
       const name = p.name?.toLowerCase() || "";
       const id = String(p.id ?? "").toLowerCase();
       const desc = ec.description?.toLowerCase() || "";
       const platform = p.platform?.toLowerCase() || "";
-      const shipping = ec.shipping_from?.toLowerCase() || "";
+      const shipping = (ec.shipping_from || "").toLowerCase();
 
       const categoryHit = Array.isArray(ec.category) && ec.category.some((c: string) => c.toLowerCase().includes(lower));
-      const colorHit = ec.images?.color && Object.keys(ec.images.color).some(c => c.toLowerCase().includes(lower));
-      const sizeHit = ec.size && Object.keys(ec.size).some(s => s.toLowerCase().includes(lower));
+      const colorHit = ec.images?.color && Object.keys(ec.images.color).some((c: string) => c.toLowerCase().includes(lower));
+      const sizeHit = ec.size && Object.keys(ec.size).some((s: string) => s.toLowerCase().includes(lower));
       const priceHit = ec.size && Object.values(ec.size).some((sz: any) =>
         String(sz?.base_price || "").includes(lower) || String(sz?.price || "").includes(lower)
       );
